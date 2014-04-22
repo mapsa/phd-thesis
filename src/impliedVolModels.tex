@@ -1,0 +1,72 @@
+
+\chapter{Implied volatility models}
+
+\section{Black-Scholes formula}
+
+In finance, an option is a derivative, that is, a contract which gives the owner the right, but not the obligation to buy or sell an underlying asset at a given price called strike price. An option can be executed at any time before an expiration date previously defined no matter what price the underlying asset has. 
+
+The Black-Scholes formula~\cite{black1973}, developed in the early 1970's, Myron Scholes, Robert Merton and Fisher Black,  allows to determine an option value $V$ based on the underlying asset price $S(t)$ at a time $t$ and the following constant parameters: 
+
+\begin{description}
+\item [$\sigma$:] underlying asset price volatility which measures the standard deviation of the returns
+\item [$\mu$:] underlying asset drift which is a measure of the average rate of growth of the stock
+\item[$E$:] option strike or excersice price
+\item[$T$:] option date of expiry
+\item[$t$:] current time
+\item[$r$:] risk-free interest rate
+\end{description}
+
+\subsection{Stock price model}
+
+The Black-Scholes model assume that the underlying price $S$ follows a lognormal random walk:
+
+\begin{equation}\label{eq:stockprice}
+dS = \mu S dt + \sigma S dB
+\end{equation}
+
+\noindent where $B$ is a Brownian motion. This stochastic differential equation has two components: a deterministic term given by $\mu S dt$ and a random term given by $\sigma S dX$.
+
+\subsection{Brownian motion}
+
+A brownian motion $B$ (also called a Wiener process) is a stochastic process characterized by the three following properties:
+
+\begin{description}
+\item[Continuity:] $B(t)$ is a continuos function
+\item[Normal increments:]  $B(t)-B(s)$ has a normal distribution with mean $0$ and variance $t-s$.
+\item[Independence of increments:] for every choice of nonnegative real numbers $0 \leq s_1 <  t_1 \leq \cdots \leq s_n < t_n < \infty$, the increment random variables $W_{t_1} - W_{s_1}, \cdots, W_{t_n} - W_{s_n}$ are jointly independent.
+\end{description}
+
+\subsection{Stochastic differential equation}
+
+An stochastic differential integral has the form:
+
+
+\begin{equation}
+W(T)=\int_0^T f(t)dB(t) \, .
+\end{equation}
+
+\noindent This equations is also expressed in an abbreviate form:
+
+\begin{equation}
+dW = f(t) dB \, .
+\end{equation}
+
+\noindent Therefore, the integral form of the stock price model shown in equation (\ref{eq:stockprice}) is:
+
+\begin{equation}
+S(T)=\int_0^T \mu S(t) dt + \int_0^T \sigma S(t) dB(t)
+\end{equation}
+
+\subsection{Ito's Lemma}
+
+Ito's lemma is used to find the differential of a time dependent function of a stochastic process. In option pricing we need to find the option price $V(S(t))$ which depends on a stochastic stock price model $S(t)$. 
+$V(S,t)$ is required to be  differentiable function of $S$ and once differentiable function of $t$.
+
+
+
+
+
+%These are known or can be easily obtained from the market, excepting by volatility which must be estimated. However, rather than assuming a volatility a priori and computing option prices from it, the model can be used to estimate volatility at given prices, time to expiration and strike price. This obtained volatility is called the implied volatility of an option. Additionally, some models obtain implied volatility from futures (other derivative from prices). 
+
+
+ 
