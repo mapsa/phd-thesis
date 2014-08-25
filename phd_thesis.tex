@@ -1,0 +1,142 @@
+
+
+% Define the type of document and the packages to use.
+\documentclass[11pt,twoside]{amsbook}
+%\usepackage[latin1]{inputenc}
+%\usepackage{ramo,smcapt1}
+\usepackage[latin1]{inputenc}
+%\usepackage[dvipdfm]{hyperref}
+
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow} 
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{etex}
+\usepackage{comment}
+\usepackage{rotating}
+\usepackage{morefloats}
+\setlength{\rotFPtop}{0pt plus 1fil}
+\reserveinserts{18}
+\usepackage{morefloats}
+\usetikzlibrary{backgrounds,decorations.pathmorphing}
+\usetikzlibrary{arrows,positioning,shapes}
+\usetikzlibrary{calc}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.markings}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{epstopdf}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\usetikzlibrary{positioning}
+
+% Here in the include only statement, you can write the names of the
+% files that you want to have compiled. Only works for files that are
+% read in by \include not \input. Comment out the ones with \input if
+% you don't want them.
+% Example: \includeonly{abs,intro,conclu} to
+% compile only the abstract, introduction and conclusion.
+%\includeonly{abs,frabs,ack}
+
+\newcommand{\cambiaFont}[2]{{\fontencoding{T1}\fontfamily{#1}%
+\selectfont#2}}%
+%\setcounter{chapter}{-1}
+
+%\input{thesis_style.tex}
+
+\linespread{1.1}
+
+%\input{thesis_math_definitions}
+
+\numberwithin{section}{chapter}%
+\numberwithin{equation}{chapter}%
+\numberwithin{figure}{chapter}%
+
+\makeindex
+
+\begin{document}
+
+\frontmatter
+
+%\subjclass[2000]{Primary}
+%\renewcommand{\headrulewidth}{0pt}
+\input{thesis_title}
+%\input{firmas}
+
+%Dedication.  If the dedication is longer than a line or two,
+%    remove the centering instructions and the line break.
+\cleardoublepage%
+\thispagestyle{empty}
+\vspace*{13.5pc}
+\begin{center}
+ \emph{\large To my beloved family}\\[2pt]
+\end{center}
+\cleardoublepage
+
+
+%    Change page number to 6 if a dedication is present.
+\setcounter{page}{1}
+%\input{abstract.tex}
+
+
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{#1}}{}}
+\renewcommand{\sectionmark}[1]{\markright{\MakeUppercase{#1}}{}}
+%\renewcommand{\headrulewidth}{0pt}
+%\pagestyle{fancy}
+
+%\fancyfoot{}
+%\fancyfoot[CE,CO]{{\thepage}}%
+%\fancyhead[LO]{\it{\nouppercase{\rightmark}}}%
+%\fancyhead[RE]{\it{\nouppercase{\leftmark}}}%
+
+
+%%%%%%%%%%%%%%%%%%% MAIN MATTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mainmatter
+%\input{0_Abstract}
+%\input{1_Introduction}
+%\input{2_State}
+%\input{3_Proposal}
+%\input{4_Experimentation}
+%\input{5_Conclusion}
+
+%\input{3_batch_methods/3_batch_methods_main.tex}
+%\input{4_extensions/4_extensions_main.tex}
+%\input{5_final_chapter.tex}
+
+\include{src/contents}
+\input{src/1_Introduction}
+\input{src/impliedVolModels}
+\input{src/realizedVolModels}
+\input{src/mlModels}
+
+%%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+% Include appendix "chapters" here.
+
+%%%%%%%%%%%%%%%%%%% BACK MATTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\backmatter
+% Bibliography styles amsplain or harvard are also acceptable.
+\bibliographystyle{plain}
+%\bibliography{bib_DML}
+%    See note above about multiple indexes.
+\include{src/biblio}
+\printindex
+\end{document}
+
+%-----------------------------------------------------------------------
+% End of amsbook.template
+%-----------------------------------------------------------------------
+
