@@ -1,4 +1,0 @@
-phd-thesis
-==========
-
-PhD thesis
