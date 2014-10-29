@@ -1,0 +1,201 @@
+\chapter{Online VECM proposal}
+\section{\uppercase{Methodology}}
+\label{sec:methodology}
+\noindent 
+\subsection{Online VECM} \label{sec:proposal}
+
+Since VECM parameter estimation is computationally expensive, we propose an
+online version of VECM (OVECM).  OVECM considers only a sliding window of the
+most recent data. Moreover, since cointegration vectors represent long-run
+relationships which vary little in time, OVECM determines firstly if they require calculation. 
+
+OVECM also implements matrix optimizations in order to reduce execution time,
+such as updating matrices with new data, removing old data and introducing new
+cointegration vectors.
+
+Algorithm~\ref{alg:proposal} shows our OVECM proposal which considers the
+following:
+
+\begin{itemize}
+\item The function \texttt{getJohansen} returns cointegration vectors given by
+the Johansen method considering the trace statistic test at 95\%
+significance level.
+\item The function \texttt{vecMatrix} returns the matrices~(\ref{eq:vecA})
+and~(\ref{eq:vecB}) that allows VECM to be solved.
+\item The function \texttt{vecMatrixOnline} returns the
+matrices~(\ref{eq:vecA}) and~(\ref{eq:vecB}) aggregating new data and removing
+the old one, avoiding calculation of the matrix $\mathbf{A}$ from scratch.
+\item Out-of-sample outputs are saved in the variables 
+$\mathbf{Y}_{\text{true}}$ and $\mathbf{Y}_{\text{pred}}$.
+\item The model is solved using OLS.
+\item In-sample outputs are saved in the variables $\Delta
+\mathbf{y}_{\text{true}}$ and $\Delta \mathbf{y}_{\text{pred}}$.
+\item The function \texttt{mape} gets the in-sample MAPE for the $l$ time
+series.
+\item Cointegration vectors are obtained at the beginning and when they are required to be updated. This updating is decided based on the in-sample MAPE of the last $n$ inputs. The average of all
+MAPEs are stored in the variable $e$. If the average of MAPEs
+($\texttt{mean}(e)$) is above a certain error given by the mean\_error threshold, cointegration vectors are updated.
+\item If new cointegration vectors are required, the function
+\texttt{vecMatrixUpdate} only updates the corresponding columns of matrix
+$\mathbf{A}$ affected by those vectors (see equation~\ref{eq:vecA}).
+\end{itemize}
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
+$p$: number of past values \\
+$L$: sliding window size ($L<N$) \\
+$\text{mean\_error}$: MAPE threshold \\
+$n$: interpolation points to obtain MAPE \\
+\ENSURE  $\,$ \\
+$\{\mathbf{y}_{\text{pred}}[L+1],\dots,\mathbf{y}_{\text{pred}}[N]\}$: model predictions 
+\FOR { $i =0$ to $N-L$ }
+    \STATE $\mathbf{y}_i \gets \mathbf{y}[i:i+L]$
+	\IF {i = 0 }
+	    \STATE{$v \gets \texttt{getJohansen}(\mathbf{y}_i,p)$}
+	    \STATE{$[\mathbf{A} \quad \mathbf{B}] \gets
+        \texttt{vecMatrix}(\mathbf{y}_i,p,v)$}
+	\ELSE
+	    \STATE{$[\mathbf{A} \quad \mathbf{B}] \gets
+        \texttt{vecMatrixOnline}(\mathbf{y}_i,p,v,\mathbf{A},\mathbf{B})$}
+        %\STATE $\Delta \mathbf{Y}_{\text{true}}[i] \gets \mathbf{B}[-1,:]$
+        \STATE $\Delta \mathbf{Y}_{\text{pred}}[i] \gets \mathbf{A}[-1,:] \times \mathbf{X}$
+    \ENDIF
+    \STATE $\mathbf{X} \gets \texttt{OLS} (\mathbf{A},\mathbf{B})$%\mathbf{(A^\top A)^{-1}A^\top B}$
+    %\STATE $\Delta \mathbf{y}_{\text{true}} \gets \mathbf{B}[-n,:]$
+    %\STATE $\Delta \mathbf{y}_{\text{pred}} \gets \mathbf{A}[-n,:] \times \mathbf{X}$
+    \STATE $e \gets \texttt{mape}(\mathbf{B}[-n,:],\mathbf{A}[-n,:] \times \mathbf{X})$
+    %\STATE $e \gets \texttt{mape}(\Delta \mathbf{y}_{\text{true}}, \Delta
+    %\mathbf{y}_{\text{pred}})$
+    \IF {$\texttt{mean}(e) > \text{mean\_error}$}
+	    \STATE{$v \gets \texttt{getJohansen}(\mathbf{y}_i,p)$}
+	    \STATE{$\mathbf{A} \gets
+        \texttt{vecMatrixUpdate}(\mathbf{y}_i,p,v,\mathbf{A})$}
+        \STATE $\mathbf{X} \gets \texttt{OLS} (\mathbf{A},\mathbf{B})$%\mathbf{(A^\top A)^{-1}A^\top B}$
+        %\STATE $\mathbf{X} \gets \mathbf{(A^\top A)^{-1}A^\top B}$
+    \ENDIF
+\ENDFOR
+\STATE $\mathbf{Y}_{\text{true}} \gets \mathbf{Y}[L+1:N]$
+\STATE $\mathbf{Y}_{\text{pred}}\gets 
+\mathbf{Y}[L:N-1] +\Delta \mathbf{Y}_{\text{pred}}$
+%\STATE $\text{MAPE} \gets \texttt{mape}(\Delta \mathbf{Y}_{\text{true}}, \Delta
+%\mathbf{Y}_{\text{pred}})$
+\end{algorithmic}
+\caption{OVECM: Online VECM}
+\label{alg:proposal}
+\end{algorithm}
+
+
+
+Our proposal was compared against VECM and ARIMA. Both algorithms were adapted
+to an online context in order to get a reasonable comparison with our proposal
+(see algorithms \ref{alg:SLVECM} and \ref{alg:SLARIMA}). VECM and ARIMA are
+called with a sliding window of the most recent data, whereby the models are
+updated at every time step.
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
+$p$: number of past values \\
+$L$: sliding window size ($L<N$) \\
+\ENSURE  $\,$ \\
+$\{ \mathbf{y}_{\text{pred}}[L+1],\dots,\mathbf{y}_{\text{pred}}[N]\}$: model predictions 
+\FOR { $i =0$ to $N-L$ }
+    \STATE $\mathbf{y}_i \gets \mathbf{y}[i:i+L+1]$
+        \STATE $model = VECM(\mathbf{y}_i, p)$
+        \STATE $\mathbf{Y}_{\text{pred}}[i] = model.predict(\mathbf{y}[i+L])$
+\ENDFOR
+\STATE $\mathbf{Y}_{\text{true}} = \mathbf{y}[i+L+1:N] $
+\end{algorithmic}
+\caption{SLVECM: Sliding window VECM}
+\label{alg:SLVECM}
+\end{algorithm}
+
+Since we know out time series are I(1) SLARIMA is called with $d=1$. ARIMA is
+executed for every time series. 
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
+$p$: autoregressive order \\
+$d$: integrated order\\
+$q$: moving average order\\
+$L$: sliding window size ($L<N$) \\
+\ENSURE  $\,$ \\
+$\{ \mathbf{y}_{\text{pred}}[L+1],\dots,\mathbf{y}_{\text{pred}}[N]\}$: model predictions 
+\FOR { $i =0$ to $N-L$ }
+\FOR { $j =0$ to $l-1$ }
+    \STATE $\mathbf{y}_i \gets \mathbf{y}[i:i+L+1,j]$
+        \STATE $model = ARIMA(\mathbf{y}_i, (p,d,q))$
+        \STATE $\mathbf{Y}_{\text{pred}}[i,j] = model.predict(\mathbf{y}[i+L,j])$
+\ENDFOR
+\ENDFOR
+\STATE $\mathbf{Y}_{\text{true}} = \mathbf{y}[i+L+1:N,:] $
+\end{algorithmic}
+\caption{SLARIMA: Sliding window ARIMA}
+\label{alg:SLARIMA}
+\end{algorithm}
+
+Both OVECM and SLVECM time complexity is dominated by Johansen method which is
+$O(n^3)$. Thus, both algorithms order is $O(Cn^3)$ where $C$ is the number of
+iterations. 
+
+\subsection{Evaluation methods} \label{sec:evaluation}
+
+Forecast performance is evaluated using different methods. We have chosen three
+measures usually used:
+\begin{description}
+\item[MAPE] Mean Average Percent Error which presents forecast errors as a
+percentage.
+\begin{equation}\label{eq:MAPE}
+\text{MAPE} = \frac{1}{N} \sum_{t=1}^{N} 
+\frac{\left|\mathbf{y}_t-\hat{\mathbf{y}}_t\right|}{\left|\mathbf{y}_t\right|}
+ \times 100 
+\end{equation}
+\item[MAE] Mean Average Error which measures the distance between forecasts to the
+true value.
+\begin{equation}\label{eq:MAE}
+\text{MAE} = \frac{1}{N} \sum_{t=1}^{N} 
+\left| 
+\mathbf{y}_t-\hat{\mathbf{y}}_t
+\right| 
+\end{equation}
+\item[RMSE] Root Mean Square Error also measures the distance between forecasts
+to the true values but, unlike MAE, large deviations from the true value have a
+large impact on RMSE due to squaring forecast error.
+\begin{equation}\label{eq:RMSE}
+\text{RMSE} = \sqrt{
+\frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}}
+\end{equation}
+\end{description}
+
+
+\subsection{Model selection} \label{sec:pselection}
+Akaike Information Criterion (AIC) is often used in model selection where AIC
+with smaller values are preferred since they represent a trade-off between bias
+and variance.  AIC is obtained as follows:
+
+\begin{equation}
+\label{eq:aicformula}
+AIC = \underset{\text{bias}}{-\frac{2l}{N}} + 
+\underset{\text{variance}}{\frac{2k}{N}}
+\end{equation}
+
+\noindent where 
+
+\begin{description}
+\item[l] is the loglikelihood function
+\item[k] number of estimated parameters
+\item[N] number of observations
+\end{description}
+
+Loglikelihood function is obtained from the Residual Sum of Squares (RSS):
+
+\begin{equation}
+\label{eq:ll}
+l = -\frac{N}{2} \left(1 + ln(2\pi) + ln\left(\frac{RSS}{N}\right)\right) 
+\end{equation}
+

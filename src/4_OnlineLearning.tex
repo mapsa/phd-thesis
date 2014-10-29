@@ -1,0 +1,17 @@
+\chapter{Machine Learning Models}
+\section{Batch learning}
+\section{Online learning}
+\subsection{Online learning}
+
+Classic statistical theory of sequential prediction enforces strong assumptions on the statistical properties of the input sequence (for example, stationary stochastic process). However, these assumptions can be unknown or change over time. In online learning there is no previous assumption about the data and the sequence is allowed to be deterministic, stochastic or even adaptive.  
+
+Moreover, in case we receive data streams, ANN or SVM cannot introduce new information into the model without a re-training process, so we will have to use the same non-updated model until we decide to compute another one if it is possible.  Online learning algorithms allow one example at a time to be introduced into an existing model incrementally~\cite{vovk2005}. This is extremely important when the problem has large data streams and real-time forecasting must be done.  This is the most common scenario when we want to forecast a wide range of data such as stock prices and volatilities, electricity power, intrusion detection, web-mining, server load, etc.  Besides, many problems of high interest in machine learning can be treated as online ones and they can also use these types of algorithms.
+
+The online learning framework was first introduced in the perceptron algorithm~\cite{rosenblatt58}. There are several other widely used online methods such as passive-aggressive~\cite{crammerETall2006}, stochastic gradient descent~\cite{zhang2004}, aggregating algorithm~\cite{vovk2001} and the second order perceptron~\cite{cesa-bianchi2005}.  In~\cite{cesa-bianchi2006} an in-depth analysis of online learning is provided.
+
+The motivation for online learning is to obtain computational efficiency and tackle the shifting problem, i.e. that the distribution of the data is unknown or changes over time. Online learning algorithms can deal with this problem because they have a tracking ability which is a strategy based on retaining weak dependence on past examples by using two types of models: 
+
+\textit{a)} \textbf{memory boundedness:} consists of limiting the number of support vectors in order to improve computational efficiency. One example of this is the budget perceptron~\cite{crammeretal2004} which reduces the number of examples used for prediction. Alternatively, in the forgetron algorithm~\cite{dekeletal2008} the damage caused by removing old examples is discussed, which can be avoided by removing samples with small influences. Other examples are the sliding window kernel (RLS)~\cite{vanvaerenberghetal2006}, which only considers a sliding window of the most recent data, and in \cite{arce+salinas2012} is shown a variant of aggregating algorithm for regression~\cite{vovk2001} considering only a sliding window of the most recent data, optimising also common matrix operations.
+
+\textit{b)} \textbf{weight decay:} one example of this is the shifting perceptron algorithm which implements an exponential decaying scheme for the examples~\cite{cavallantietal2007}.
+Performance of an online learning algorithm is measured by the cumulative loss it suffers along its run on a sequence of examples. In order to minimize this loss, the learner may update the hypothesis after each round so as to be more accurate in later rounds.
