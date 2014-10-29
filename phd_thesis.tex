@@ -24,7 +24,8 @@
 \usepackage{graphicx}
 \usepackage{graphics}
 \usepackage{epstopdf}
-%\usepackage{algorithm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 %\usepackage{algpseudocode}
 %\newtheorem{theorem}{Theorem}[section]
 %\newtheorem{lemma}[theorem]{Lemma}
@@ -78,7 +79,7 @@
 
 %    Change page number to 6 if a dedication is present.
 \setcounter{page}{1}
-\input{src/0_Abstract.tex}
+\input{src/0_Abstract}
 %\input{src/acknowledgements.tex}
 
 
@@ -99,13 +100,12 @@
 %%%%%%%%%%%%%%%%%%% MAIN MATTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mainmatter
 \input{src/1_Introduction}
-\input{src/2_State}
-%\input{src/impliedVolModels}
-%\input{src/realizedVolModels}
-%\input{src/mlModels}
-%\input{3_Proposal}
-%\input{4_Experimentation}
-%\input{5_Conclusion}
+\input{src/2_Finance}
+\input{src/3_TimeSeries}
+\input{src/4_OnlineLearning}
+\input{src/5_Proposal}
+%\input{6_Experimentation}
+%\input{7_Conclusion}
 
 %%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
