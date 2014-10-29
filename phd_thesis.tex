@@ -1,5 +1,6 @@
 \documentclass[11pt,twoside]{amsbook}
-%\usepackage[latin1]{inputenc}
+\usepackage[left=4cm,top=3.5cm,bottom=3.5cm,right=3cm]{geometry}
+\usepackage[latin1]{inputenc}
 %\usepackage{ramo,smcapt1}
 %\usepackage[latin1]{inputenc}
 %%\usepackage[dvipdfm]{hyperref}
@@ -41,9 +42,9 @@
 
 \newcommand{\cambiaFont}[2]{{\fontencoding{T1}\fontfamily{#1}%
 \selectfont#2}}%
-%\setcounter{chapter}{-1}
+\setcounter{chapter}{-1}
 
-%\input{thesis_style.tex}
+\input{src/thesis_style.tex}
 
 \linespread{1.1}
 
@@ -62,7 +63,7 @@
 %\subjclass[2000]{Primary}
 %\renewcommand{\headrulewidth}{0pt}
 \input{src/thesis_title}
-%\input{firmas}
+\input{src/firmas}
 
 %Dedication.  If the dedication is longer than a line or two,
 %    remove the centering instructions and the line break.
@@ -77,8 +78,8 @@
 
 %    Change page number to 6 if a dedication is present.
 \setcounter{page}{1}
-%\input{abstract.tex}
-
+\input{src/0_Abstract.tex}
+%\input{src/acknowledgements.tex}
 
 
 \tableofcontents
@@ -88,8 +89,7 @@
 \renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{#1}}{}}
 \renewcommand{\sectionmark}[1]{\markright{\MakeUppercase{#1}}{}}
 %\renewcommand{\headrulewidth}{0pt}
-%\pagestyle{fancy}
-
+%\pagestyle{fancy
 %\fancyfoot{}
 %\fancyfoot[CE,CO]{{\thepage}}%
 %\fancyhead[LO]{\it{\nouppercase{\rightmark}}}%
@@ -98,12 +98,6 @@
 
 %%%%%%%%%%%%%%%%%%% MAIN MATTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mainmatter
-
-%\input{3_batch_methods/3_batch_methods_main.tex}
-%\input{4_extensions/4_extensions_main.tex}
-%\input{5_final_chapter.tex}
-
-%\input{src/0_Abstract}
 \input{src/1_Introduction}
 \input{src/2_State}
 %\input{src/impliedVolModels}
@@ -122,7 +116,7 @@
 
 \backmatter
 % Bibliography styles amsplain or harvard are also acceptable.
-\bibliographystyle{plain}
+\bibliographystyle{amsalpha}
 \bibliography{reference}
 %    See note above about multiple indexes.
 \printindex

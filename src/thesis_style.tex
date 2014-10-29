@@ -1,0 +1,52 @@
+\makeatletter
+\def\thickhrulefill{\leavevmode \leaders \hrule height 1ex \hfill \kern \z@}
+\def\@makechapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedleft \reset@font
+            \scshape \chaptername \, \thechapter
+        \par\nobreak
+        \interlinepenalty\@M
+    \Huge  #1\par\nobreak
+    %\vspace*{1\p@}%
+    \hrulefill
+    \par\nobreak
+    \vskip 100\p@
+  }}
+
+\def\@makeschapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedleft \reset@font
+            \scshape \vphantom{\chaptername \, \thechapter}
+        \par\nobreak
+        \interlinepenalty\@M
+    \Huge  #1\par\nobreak
+    %\vspace*{1\p@}%
+    \hrulefill
+    \par\nobreak
+    \vskip 100\p@
+  }}
+
+\makeatletter
+\def\section{\numberedsection}
+\def\numberedsection{\@ifnextchar[%]
+  \numberedsectionwithtwoarguments\numberedsectionwithoneargument}
+\def\numberedsectionwithoneargument#1{\numberedsectionwithtwoarguments[#1]{#1}}
+\def\numberedsectionwithtwoarguments[#1]#2{%
+  \ifhmode\par\fi
+  \removelastskip
+  \vskip 3ex\goodbreak
+  \refstepcounter{section}%
+  \begingroup
+  \noindent\leavevmode\large
+  \par \noindent \hrulefill
+  \vskip 2ex
+  \noindent \scshape{\thesection}. \ #2\par
+  \endgroup
+  \vskip 2ex\nobreak
+  \addcontentsline{toc}{section}{%
+    \protect\numberline{\thesection}%
+    \, \, \, \, #1}%
+  \markright{%
+    \thesection. \, #1}%
+  }
+\makeatother
