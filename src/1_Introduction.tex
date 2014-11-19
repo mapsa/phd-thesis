@@ -5,174 +5,40 @@
 "An individual economic variable, views as a time series, can wander extensively
 and yet some pairs of series may be expected to move so that they do not drift
 far apart."-Robert F. Engle and Clive W.J. Granger~\cite{engle1987}.\\
-In this introduction we present the scope, objectives, hypothesis and organization of this thesis.
+In this introduction we present the scope, objectives, hypothesis and
+organization of this thesis.
 
 
-\section{Introduction}
-A time series is a sequence S of historical measurements y t of an observable
-variable y at equal time intervals. Time series are studied for several purposes
-such as the forecasting of the future based on knowledge of the past, the un-
-derstanding of the phenomenon underlying the measures, or simply a succinct
-description of the salient features of the series. In this chapter we shall
-confine
-ourselves to the problem of forecasting. Forecasting future values of an
-observed
-time series plays an important role in nearly all fields of science and
-engineering,
-such as economics, finance, business intelligence, meteorology and telecommu-
-nication [43]. An important aspect of the forecasting task is represented by the
-size of the horizon. If the one-step forecasting of a time series is already a
-chal-
-lenging task, performing multi-step forecasting is more difficult [53] because
-of
+\section{Scope of this research}
 
-additional complications, like accumulation of errors, reduced accuracy, and in-
-creased uncertainty [58,49].
-The forecasting domain has been influenced, for a long time, by linear sta-
-tistical methods such as ARIMA models. However, in the late 1970s and early
-1980s, it became increasingly clear that linear models are not adapted to many
-real applications [25]. In the same period, several useful nonlinear time series
-models were proposed such as the bilinear model [44], the threshold autoregres-
-sive model [56,54,55] and the autoregressive conditional heteroscedastic (ARCH)
-model [22] (see [25] and [26] for a review). However, the analytical study of
-non-
-linear time series analysis and forecasting is still in its infancy compared to
-linear
-time series [25].
-In the last two decades, machine learning models have drawn attention and
-have established themselves as serious contenders to classical statistical
-models
-in the forecasting community [1,43,61]. These models, also called black-box or
-data-driven models [40], are examples of nonparametric nonlinear models which
-use only historical data to learn the stochastic dependency between the past and
-the future. For instance, Werbos found that Artificial Neural Networks (ANNs)
-outperform the classical statistical methods such as linear regression and Box-
-Jenkins approaches [59,60]. A similar study has been conducted by Lapedes and
-Farber [33] who conclude that ANNs can be successfully used for modeling and
-forecasting nonlinear time series. Later, other models appeared such as decision
-trees, support vector machines and nearest neighbor regression [29,3]. Moreover,
-the empirical accuracy of several machine learning models has been explored in a
-number of forecasting competitions under different data conditions (e.g. the
-NN3,
-NN5, and the annual ESTSP competitions [19,20,34,35]) creating interesting
-scientific debates in the area of data mining and forecasting [28,45,21].
+The stochastic behaviour of financial time series, its incrementing
+amount of data available and the need of performing accurate forecasting in
+short periods of time has motivated researchers to create efficient and fast
+algorithms. This study involves interdisciplinary knowledge such as: finance,
+scientific computing, high performance computing, machine learning, physics
+among others.
 
+Forecasting financial time series have been modeled using classical statistical
+models. More recently , machine learning models have been extensively used in
+forecasting. However, getting model parameters is a computational challenge.
+The computational complexity of machine learning algorithms has become a
+limiting factor for problems that require processing large volumes of data and
+where the response time is crucial.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Therefore, algorithms that process large amount of data in a short period of
+time are required.  Online learning algorithms have been developed to solve
+large-scale problems since they process an instance at a time, updating the
+model at each step incrementally. This is opposed to the batch algorithms where
+a phase of training that uses a large collection of historical data is first
+required and the resulting model is later used to predict.  
 
-The computational complexity of machine learning algorithms has become a limiting factor for problems that require processing large volumes of data and where the response time is crucial. An example of this is financial volatility time series forecast. 
-
-Currently, it is known that volatility is a process where many factors influence its behaviour. However, many models of volatility made forecasts based only on price returns. Examples are the ARFIMA, GARCH and stochastic volatility models. Machines learning methods have allowed a greater number of explanatory variables to be included, although in many cases, these increase calculation time. 
-
-Algorithms that process large amounts of data in a short time and are able to detect changes in the financial market are required to achieve fast and accurate responses. Online learning algorithms have been developed to solve large-scale problems since they process an instance at a time, updating the model at each step incrementally. This is opposed to the batch algorithms where a phase of training that uses a large collection of historical data is first required and the resulting model is later used to predict. 
-This thesis proposal is to design and develop an online learning algorithm that meets or improves the performance of current volatility algorithms and ensures rapid responses to large-scale problems. Model comparisons will be made by the SPA (superior predictive ability) test proposed by Hansen and
-Lunde~\cite{hansen+lunde2006}  that allows comparing of forecast models giving a relative measure of model performance with respect to one or more models.
-
-
-
-\section{The problem}
-
-In financial markets, volatility is one of the key elements to model the stochastic dynamic behaviour of financial assets. This is mainly because volatility gives a measure of uncertainty about future returns and it is often viewed as an indicator of the vulnerability of financial markets. It is also important as an input parameter in problems like derivative pricing, hedging and portfolio management. For example, in option pricing we need to known first the volatility of the underlying asset before pricing an option. 
-
-Besides, volatility provides important information for studying asset returns because the latter are largely uncorrelated and nonlinearly dependent. However, it has been found that volatility exhibits significant autocorrelation and predictable patterns~\cite{poon+granger2003} and  many models have been proposed to forecast its behaviour (see section ~\ref{sec:stylizedfacts}).
-
-The volatility of the data is due to a large number of factors affecting the market, with some of them directly measurable such as historical prices, trends, supply and demand. However, others such as monetary policies and news are not directly measurable and are included in other models out of the scope of this thesis. Figure~\ref{fig:VolFactorNews} shows the VIX index, the daily US implied stock market volatility, commonly known as the "financial fear factor" which is clearly affected by historical events.
-
-
-\begin{figure}[h]
- \centering
- \includegraphics[width=0.7\textwidth]{img/vol-factor-thenews.jpg}
- % vol-factor-thenews.jpg: 710x506 pixel, 72dpi, 25.05x17.85 cm, bb=0 0 710 506
- \caption{The news as volatility factor}
- \label{fig:VolFactorNews}
-\end{figure}
-
-
-Volatility models have been extensively studied~\cite{gatheral2006,poon+granger2003,knight2002} and some of  them include machine learning methods~\cite{hamidetal2004,donaldsonetal1997,shiyietal2008,shiyietal2010,gavrishchaka2006,vasilios2012}.  
-The stochastic behaviour of volatility and the large number of factors affecting it result in models with a large number of parameters and slow response time due to the computationally expensive routines. These expensive calculations could be avoided using online learning algorithms, which allow response time reduction and are therefore suitable for high frequency trading applications. 
-
-In this thesis, a model will be proposed based on online learning algorithms to forecast volatility in high frequency financial time series.
-The main problems to be deal with in this thesis are:
-
-\begin{itemize}
-   \item Although volatility is often predictable~\cite{poon+granger2003}, there are non-linear features~\cite{gatheral2006} to be considered in this proposal.
-    \item The number of factors affecting volatility has been studied~\cite{srinivasan2009} and some other unknown factors affect volatility and they should also be included.
-    \item The response time needs to be very fast and in order to ensure this, the proposed model will be presented as an online machine learning algorithm. 
-\end{itemize}
-
-
-
-
-
-\section{Scope of this Research}
-
-Cointegration concept was introduced by~\cite{engle1987} and implies that one or
-more linear combinations of non-stationary variables are stationary even though
-individually they are not.  Moreover ~\cite{stock+watson1988} observed that
-cointegration reflects the common stochastic trends providing a useful way to
-understand cointegration relationships. These common stochastic trends can be
-also interpreted as a long-run equilibrium relationships.
-
-This idea was inmediatly adopted in finance since it could represent their
-long-run relationship implied by economic theory~\cite{laietAl1991},
-\cite{lence+falk2005}.  Economic theory suggest that economic time series are
-mean-reverting process and therefore, it reflects the idea of that some set of
-variables cannot wander too far from each other. 
-
-On the other hand, the efficient markets hypothesis, also known as the random
-walk theory states that current stock prices fully reflect available
-information related to its value and there is no way to earn excess
-profits~\cite{fama1970}.  This means that if we have stock prices from a
-jointly efficient market, they cannot be
-cointegrated~\cite{granger1986},\cite{dwyer1992}. However, \cite{richards1995}
-claims that cointegration is directly at odds with market efficiency, even
-though, there is no evidende that cointegration among asset prices have
-implications about market efficiency~\cite{lence+falk2005}.
-
-Despite the fact that cointegration on closing daily rates of currency pairs has
-not been found \cite{coleman1990}, \cite{copeland1991}, different time series
-frequencies can have different behaviours~\cite{aldridge2009}. Pair trading is a
-very common example of cointegration application~\cite{herlemont2003} 
-but cointegration can also be extended to a larger set of
-variables~\cite{mukherjee1995},\cite{engle2004}.
-
-%So why do we care about cointegration? Someone else can probably give more
-%econometric applications, but in quantitative finance, cointegration forms the
-%basis of the pairs trading strategy: suppose we have two cointegrated stocks X
-%and Y, with the particular (for concreteness) cointegrating relationship X - 2Y
-%= Z, where Z is a stationary series of zero mean. For example, X could be
-%McDonald's, Y could be Burger King, and the cointegration relationship would
-%mean that X tends to be priced twice as high as Y, so that when X is more than
-%twice the price of Y, we expect X to move down or Y to move up in the near
-%future (and analogously, if X is less than twice the price of Y, we expect X to
-%move up or Y to move down). This suggests the following trading strategy: if X -
-%2Y > d, for some positive threshold d, then we should sell X and buy Y (since we
-%expect X to decrease in price and Y to increase), and similarly, if X - 2Y < -d,
-%then we should buy X and sell Y.
-
-
-Vector error correction model (VECM) introduces this long-run relationship
-among a set of cointegrated variables as an error correction term. VECM is a
-special case of the vector autorregresive model (VAR) model. VAR model
-expresses future values as a linear combination of variables past values.
-However, VAR model cannot be used with non-stationary variables. VECM is a
-linear model but in terms of variable differences. If cointegration exists,
-variable differences are stationary and they introduce an error correction term
-which adjusts coefficients to bring the variables back to equilibrium. In
-finance, many economic time series turn to be stationary when they are
-differentiated and cointegration restrictions often improves
-forecasting~\cite{duy1998}. Therefore, VECM has been widely adopted.
-
-Both VECM and VAR model parameters are obtained using ordinary least squares
-(OLS) method. OLS has two main problems: is sensitive to errors on input data
-and involves many calculations. The former problem is commonly solved using
-Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
-parameter that leads to an unbiased estimation with better generalization
-capability. The second problem of computational complexity depends on the number
-of past values and observations considered.  Recently, online learning
-algorithms have been proposed to solve problems with large data sets because of
-their simplicity and their ability to update the model when new data is
-available. 
+The specific scope of this study is to use financial time series features in
+order to design a forecasting algorithm which ensures accuracy and low response
+times. Cointegration is the main feature studied and it refers that one or more
+linear combinations of these variables are stationary even though individually
+they are not~\cite{engle87}.  Some models, such as the Vector Error Correction
+(VECM), take advantage of this property and describe the joint behaviour of
+several cointegrated variables.
 
 In this thesis, we propose an online formulation of the VECM called Onlive VECM
 (OVECM) based on consideration of only a sliding window of the most recent data.
@@ -188,15 +54,21 @@ optimal offline algorithm.
 
 
 \section{Research Objectives}
-The main motivation for this research is ...
+The main motivation for this research is the develpment of efficient methods for
+forecasting financial time series.
 
 The specific objectives of this research are,
 \begin{itemize}
-\item $\Large \mathcal{O}_1$: \emph{Especific Objective 1.}
-\item $\Large \mathcal{O}_2$: \emph{Especific Objective 2.}
-\item $\Large \mathcal{O}_3$: \emph{Especific Objective 3.}
-\item $\Large \mathcal{O}_4$: \emph{Especific Objective 4.}
-\item $\Large \mathcal{O}_5$: \emph{Especific Objective 5.}
+\item $\Large \mathcal{O}_1$: \emph{A review of the literature on time series
+analysis models including machine learning techniques.}
+\item $\Large \mathcal{O}_2$: \emph{Development of a set of know features of the
+studied time series and applied them to improve forecasting.}
+\item $\Large \mathcal{O}_3$: \emph{Development of parallel and efficient
+algorithms to ensure quick time responses.}
+\item $\Large \mathcal{O}_4$: \emph{Deep mathematical analysis of the proposal
+and financial concepts involved.}
+\item $\Large \mathcal{O}_5$: \emph{Design and implement representative set of
+experiments in order to show when and why proposal performs better.}
 \end{itemize}
 
 
