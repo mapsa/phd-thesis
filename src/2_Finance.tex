@@ -155,6 +155,58 @@ hours in GMT for London, New York, Sydney and Tokyo.
 
 \subsection{Price formation process}
 
+A trade consists at least of two orders: one to enter the market (buy order) and
+exit the market (sell order). Traders have different types of order they can
+execute:
+
+\begin{description}
+\item[Market order:] allow to buy or sell an asset at the current best price
+whatever that price is. The transaction price is determined by the market
+considering previous executed orders and volume requested.
+\item[Limit order:] allow to specify the price you want to buy or sell an asset.
+Depending on the market conditions, this type of orders can neven be executed.
+\item[Stop order:] are suitable for investors who are unable to monitor their
+investments for a period of time. Stop order allow to specify the price that a
+position should be closed called stop price. When the stop price is reached a
+market order is executed, this means that market price won't be exactly the same
+specified in the stop order.
+\end{description}
+
+In terms of commissions, limit order are more expensive than market orders and
+there is no certainty of execution.
+
+Moreover, all orders can specify other parameters such as: 
+
+\begin{description}
+\item[Fill or Kill:] is an order that must be executed inmediately or being
+cancelled, no partial fulfillments are allowed. 
+\item[Day:] the order is only valid during the day.
+\item[Good til canceled:] a order is active until the investor decides to cancel
+ir or the trade is executed.
+\end{description}
+
+In order to determine the execution price, buyers and sellers orders are placed
+in an order book which help to determine which order can be fulfilled.
+Figure~\ref{fig:orderbook} illustrates how buyers and sellers are ordered. The
+ask or offer price is the current lower price a seller is willing to accept for
+a good. The bid price corresponds to the current highest price a buyer is
+willing to pay for a good. Orders with the same price are prioritorized by
+arrival time and placed on top of the book.  The difference between ask and bid
+price is called spread.
+
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/orderbook}
+  \caption{Order book. Buyers and sellers are ordered according to the bid or
+  ask price and the market determines the mid-price and transacted volume.}
+  \label{fig:orderbook}
+\end{figure}
+
+Today, order books are available and they are a popular source of study among
+researchers. To determine the mid-price and spread modeling are some of the
+problems studied.
+
 
 \subsection{Efficient market hypothesis}
 
