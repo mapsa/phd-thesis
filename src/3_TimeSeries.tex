@@ -263,3 +263,63 @@ There are several known features exhibited by financial instruments called \text
  \item[Intraday effects] time of the day.
  \item[Overnight effects]
 \end{description}
+
+\begin{equation}
+ \label{eq:varmatrix}
+               \underbrace{ \left[ \begin{array}{c}
+                \mathbf{y}_{p+1} \\
+                \mathbf{y}_{p+2} \\
+                \vdots           \\
+                \mathbf{y}_N  
+               \end{array} \right]  }_{\substack{ \mathbf{B}^\top\\ (N-p) \times l}}   
+= 
+\underbrace{
+  \begin{bmatrix}
+    \phi_1 & \dots & \phi_p & \mathbf{c}   
+  \end{bmatrix}}_{\substack{ \mathbf{X}^\top\\ l \times  (l \times p+1)}}
+\underbrace{\begin{bmatrix}
+   \mathbf{y}_p     & \mathbf{y}_{p+1}  & \dots     & \mathbf{y}_{N-1}\\
+   \mathbf{y}_{p-1} & \mathbf{y}_{p}  & \dots     & \mathbf{y}_{N-2} \\
+   \vdots           & \vdots            & \ddots    & \vdots  \\
+   \mathbf{y}_{1}   & \mathbf{y}_{2}& \dots      & \mathbf{y}_{N-p} \\
+   1                &  1                & \dots      &             1 
+   \end{bmatrix}}_{\substack{ \mathbf{A}^\top\\  (l \times p+1) \times (N-p)}}
++
+\underbrace{\begin{bmatrix}
+              \mathbf{\epsilon}_{p+1}  \\ 
+              \mathbf{\epsilon}_{p+2}  \\ 
+               \vdots                 \\
+              \mathbf{\epsilon}_N     
+             \end{bmatrix}}_{\substack{\mathbf{E}^\top\\ (N-p) \times l }} 
+\end{equation}
+
+
+\begin{equation}
+ \label{eq:vecmatrix}
+\underbrace{
+      \begin{bmatrix}
+       \mathbf{\Delta y}_{p+1}  \\ 
+       \mathbf{\Delta y}_{p+2}  \\ 
+       \vdots                   \\ 
+       \mathbf{\Delta y}_N      
+      \end{bmatrix}}_{\mathbf{B} } =
+\arraycolsep=1.4pt  
+\underbrace{\begin{bmatrix}
+   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
+  \end{bmatrix}}_{\mathbf{X}^\top}
+\underbrace{\begin{bmatrix}
+ \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
+ \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
+ \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
+ \vdots                  & \vdots                 & \ddots&  \vdots                   \\
+ \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
+ 1                      & 1                       & \dots     & 1   
+ \end{bmatrix}}_{\mathbf{A}^\top}
++
+\underbrace{\begin{bmatrix}
+              \mathbf{\epsilon}_{p+1} \\ 
+              \mathbf{\epsilon}_{p+2} \\ 
+              \vdots \\ 
+              \mathbf{\epsilon}_N
+             \end{bmatrix}}_{\mathbf{E}^\top}
+\end{equation}
