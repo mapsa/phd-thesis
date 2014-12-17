@@ -1,6 +1,61 @@
 
-\chapter{Time Series}
+\chapter{Time Series models}
 
+\vspace{0.5cm} 
+ 
+A time series is a collection of observations in time (discrete or continuous).
+The analysis of time series main objective is to find possible internal
+structure in the data such as autocorrelation, trend or seasonal variation.
+Some of application and uses of time series analysis are data compression,
+explanatory variables (relationships with other variables, seasonal factors,
+etc.), signal processing, forecasting (predict future values). This chapter
+reviews the more relevant techniques in the rich and rapidly growing field of
+time series analysis.
+
+\section{Characteristics of Time Series}
+
+\subsection{Stationary }
+A strictly stationary times series $y_t$ is one for which the probabilistic behavior
+of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
+to that of the time shifted set, more precisely: \[ P\{y_{t_1} \leq
+c_1,\dots,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,\dots,y_{t_L+h} \leq c_k\}
+\quad \forall L \in \mathbb{N}, \forall h \in \mathbb{Z}\] \noindent where
+$c_1,\dots,c_L$ are constants.  This definition is too strong and difficult to
+assess it from a single data set. The weak version of this definition imposes
+conditions only on the two first two moments.
+
+A weakly stationary time series is a process which mean, variance and auto
+covariance do not change over time: \begin{eqnarray*} E(Y_t) &=& \mu  \quad
+\forall t \in \mathbb{N} \\ E(Y^2_t) &=& \sigma^2  \quad \forall t \in
+\mathbb{N} \\ \lambda(s,t)&=&\lambda(s+h,t+h) \quad \forall s,t \in \mathbb{N},
+\forall h \in \mathbb{Z} \end{eqnarray*}
+
+\noindent with $\lambda(s,t) = E[(y_s-\mu)(y_t - \mu)]$ 
+
+\subsection{Integration}
+
+Following Johansen \cite{johansen1995} we shall say that a stochastic process
+$Y_t$ which satisfies $Y_t-E(Y_t) = \sum_{i=0}^\infty C_i\,\varepsilon_{t-i}$ is
+called $I(0)$, and then we shall write $Y_t\sim I(0)$, whenever
+$\sum_{i=0}^\infty C_i \neq 0$ and $\sum_{i=0}^\infty C_i\,z^i$ converges for
+$z\in\mathbb{C}$ with $|z|<1$.  It is understood that the condition
+$\varepsilon_t\sim iid(0,\sigma^2)$ holds.
+
+A (vector) time series $\mathbf{y}_t$ is said to be {\em integrated of order\/}
+$d$, and then we shall write $\mathbf{y}_t\sim I(d)$, whenever after $d$ times
+(discrete) differentiation an stationary process is
+obtained~\cite{banerjee1993};
+more precisely, whenever
+$(1-L)^d\,\mathbf{y}_t\sim\text{I(0)}$, where $L$ is the usual lag operator:
+$(1-L)\,\mathbf{y}_t = \Delta\mathbf{y}_t = \mathbf{y}_t-\mathbf{y}_{t-1}$ for
+all $t$.  
+
+Note that this definition includes the scalar case as time series of
+vectors of dimension 1; in this scalar case we will write the time series in
+nonbold format.
+
+
+\subsection{Cointegration}
 Cointegration concept was introduced by~\cite{engle1987} and implies that one or
 more linear combinations of non-stationary variables are stationary even though
 individually they are not.  Moreover ~\cite{stock+watson1988} observed that
@@ -8,129 +63,52 @@ cointegration reflects the common stochastic trends providing a useful way to
 understand cointegration relationships. These common stochastic trends can be
 also interpreted as a long-run equilibrium relationships.
 
-This idea was inmediatly adopted in finance since it could represent their
-long-run relationship implied by economic theory~\cite{laietAl1991},
-\cite{lence+falk2005}.  Economic theory suggest that economic time series are
-mean-reverting process and therefore, it reflects the idea of that some set of
-variables cannot wander too far from each other. 
+Let $\mathbf{y}_t^\nu$, $\nu=1,\dots,p$, be a set of $p$ vector time series of
+order $I(1)$.  They are said to be {\em cointegrated\/} if a vector
+$\beta=[\beta(1),\dots,\beta(p)]^\top \in \mathbb{R}^p$ exists, such that the
+time series,
+\begin{equation}
+\mathbf{Z}_t:= 
+\sum_{\nu=1}^p \beta(\nu)\,\mathbf{y}_t^\nu\,\sim\,\text{I(0)}\,.
+\end{equation}
+
+In other words, a set of $I(1)$ time series is said to be cointegrated if a
+linear combination of them exists, which is I(0).
+
+The idea of cointegration was inmediatly adopted in finance since it could
+represent their long-run relationship implied by economic
+theory~\cite{laietAl1991}, \cite{lence+falk2005}.  Economic theory suggest that
+economic time series are mean-reverting process and therefore, it reflects the
+idea of that some set of variables cannot wander too far from each other. 
 
 On the other hand, the efficient markets hypothesis, also known as the random
-walk theory states that current stock prices fully reflect available
-information related to its value and there is no way to earn excess
-profits~\cite{fama1970}.  This means that if we have stock prices from a
-jointly efficient market, they cannot be
-cointegrated~\cite{granger1986},\cite{dwyer1992}. However, \cite{richards1995}
-claims that cointegration is directly at odds with market efficiency, even
-though, there is no evidende that cointegration among asset prices have
-implications about market efficiency~\cite{lence+falk2005}.
+walk theory states that current stock prices fully reflect available information
+related to its value and there is no way to earn excess profits~\cite{fama1970}.
+This means that if we have stock prices from a jointly efficient market, they
+cannot be cointegrated \cite{granger1986}, \cite{dwyer1992}. However,
+\cite{richards1995} claims that cointegration is directly at odds with market
+efficiency, even though, there is no evidende that cointegration among asset
+prices have implications about market efficiency~\cite{lence+falk2005}.
 
 Despite the fact that cointegration on closing daily rates of currency pairs has
 not been found \cite{coleman1990}, \cite{copeland1991}, different time series
 frequencies can have different behaviours~\cite{aldridge2009}. Pair trading is a
-very common example of cointegration application~\cite{herlemont2003} 
-but cointegration can also be extended to a larger set of
+very common example of cointegration application~\cite{herlemont2003} but
+cointegration can also be extended to a larger set of
 variables~\cite{mukherjee1995},\cite{engle2004}.
-\chapter{Time Series}
-\section{Implied volatility models}
-
-\section{Black-Scholes formula}
-
-In finance, an option is a derivative, that is, a contract which gives the owner the right, but not the obligation to buy or sell an underlying asset at a given price called strike price. An option can be executed at any time before an expiration date previously defined no matter what price the underlying asset has. 
-
-The Black-Scholes formula~\cite{black1973}, developed in the early 1970's, Myron Scholes, Robert Merton and Fisher Black,  allows to determine an option value $V$ based on the underlying asset price $S(t)$ at a time $t$ and the following constant parameters: 
-
-\begin{description}
-\item [$\sigma$:] underlying asset price volatility which measures the standard deviation of the returns
-\item [$\mu$:] underlying asset drift which is a measure of the average rate of growth of the stock
-\item[$E$:] option strike or excersice price
-\item[$T$:] option date of expiry
-\item[$t$:] current time
-\item[$r$:] risk-free interest rate
-\end{description}
-
-\subsection{Stock price model}
-
-The Black-Scholes model assume that the underlying price $S$ follows a lognormal random walk:
-
-\begin{equation}\label{eq:stockprice}
-dS = \mu S dt + \sigma S dB
-\end{equation}
-
-\noindent where $B$ is a Brownian motion. This stochastic differential equation has two components: a deterministic term given by $\mu S dt$ and a random term given by $\sigma S dX$.
-
-\subsection{Brownian motion}
-
-A brownian motion $B$ (also called a Wiener process) is a stochastic process characterized by the three following properties:
-
-\begin{description}
-\item[Continuity:] $B(t)$ is a continuos function
-\item[Normal increments:]  $B(t)-B(s)$ has a normal distribution with mean $0$ and variance $t-s$.
-\item[Independence of increments:] for every choice of nonnegative real numbers $0 \leq s_1 <  t_1 \leq \cdots \leq s_n < t_n < \infty$, the increment random variables $W_{t_1} - W_{s_1}, \cdots, W_{t_n} - W_{s_n}$ are jointly independent.
-\end{description}
-
-\subsection{Stochastic differential equation}
-
-An stochastic differential integral has the form:
-
-
-\begin{equation}
-W(T)=\int_0^T f(t)dB(t) \, .
-\end{equation}
-
-\noindent This equations is also expressed in an abbreviate form:
-
-\begin{equation}
-dW = f(t) dB \, .
-\end{equation}
-
-\noindent Therefore, the integral form of the stock price model shown in equation (\ref{eq:stockprice}) is:
-
-\begin{equation}
-S(T)=\int_0^T \mu S(t) dt + \int_0^T \sigma S(t) dB(t)
-\end{equation}
-
-\subsection{Ito's Lemma}
-
-Ito's lemma is used to find the differential of a time dependent function of a stochastic process. In option pricing we need to find the option price $V(S(t))$ which depends on a stochastic stock price model $S(t)$. 
-$V(S,t)$ is required to be  differentiable function of $S$ and once differentiable function of $t$.
 
 
 
+\subsection{Volatility}
 
-
-%These are known or can be easily obtained from the market, excepting by volatility which must be estimated. However, rather than assuming a volatility a priori and computing option prices from it, the model can be used to estimate volatility at given prices, time to expiration and strike price. This obtained volatility is called the implied volatility of an option. Additionally, some models obtain implied volatility from futures (other derivative from prices). 
-
-
- 
-\section{Realized Volatility Models}
-
-\section{GARCH}
-test
-\section{ARFIMA}
-\section{Stochastic Volatility}
-
-\section{Volatility definition}
-
-\begin{itemize}
-
-\item Is the size of the price movement.
-
-\item Variance is a measure of distribution of returns and is not neccesarily bound by any time period.
-Volatility is a measure of the standard deviation (square root of the variance) over a certain time interval. In finance, variance and volatility both gives you a sense of an asset's risk. Variance gives you a sense of the risk in the asset over its lifetime, while volatility gives you a sense of the movement of the asset in eg. the past month or the past year.
-
-
-\item The main underlying difference is in their definition. Variance has a fixed mathematical definition, however volatility does not as such. Volatility is said to be the measure of fluctuations of a process.
-
-Volatility is a subjective term, whereas variance is an objective term i.e. given the data you can definitely find the variance, while you can't find volatility just having the data. Volatility is associated with the process, and not with the data.
-
-In order to know the volatility you need to have an idea of the process i.e you need to have an observation of the dispersion of the process. All the different processes will have different methods to compute volatilities based on the underlying assumptions of the process.
-\end{itemize}
-
-
-
-\subsubsection{Types of volatility}
-
-The volatility of a stock is not directly observable~\cite{tsay2005,engle1993}. For example, daily volatility is not directly observable from only daily returns because there is only one observation in a trading day.  If intraday data is available, then volatility could be estimated. However, intraday returns are not the only explanatory variables for volatility and several estimators have been proposed. These estimators are observable variables that are related to the latent variable of interest called volatility proxies~\cite{devilderetal2007}. Examples of volatility proxies are the following: 
+The volatility of a stock is not directly observable~\cite{tsay2005,engle1993}.
+For example, daily volatility is not directly observable from only daily returns
+because there is only one observation in a trading day.  If intraday data is
+available, then volatility could be estimated. However, intraday returns are not
+the only explanatory variables for volatility and several estimators have been
+proposed. These estimators are observable variables that are related to the
+latent variable of interest called volatility proxies~\cite{devilderetal2007}.
+Examples of volatility proxies are the following: 
 
 
 \begin{description}%[leftmargin=0.4cm]\itemsep4pt
@@ -177,19 +155,52 @@ defined as:
 \end{eqnarray}
 
 
-Realized volatility has also been defined as the absolute value return or as the mean of the sum of intraday squared returns at short intervals of time. The majority of research carried out in the literature obtain the daily volatility as the daily squared returns as is shown in equation~(\ref{eq: ret 2}).  However, it has been proven that this measurement noise is too high for observing the true volatility process~\cite{andersen+bollerslev1998}. Hansen and Lunde~\cite{hansen+lunde2006} stated that the use of a noisy proxy could result in an inferior model being chosen as the best one. The realized volatility, as calculated by the cumulative sum of squared intraday returns and shown in equation (\ref{eq:rv}), is less noisy and doesn't lead to choosing an inferior model.   
+Realized volatility has also been defined as the absolute value return or as the
+mean of the sum of intraday squared returns at short intervals of time. The
+majority of research carried out in the literature obtain the daily volatility
+as the daily squared returns as is shown in equation~(\ref{eq: ret 2}).
+However, it has been proven that this measurement noise is too high for
+observing the true volatility process~\cite{andersen+bollerslev1998}. Hansen and
+Lunde~\cite{hansen+lunde2006} stated that the use of a noisy proxy could result
+in an inferior model being chosen as the best one. The realized volatility, as
+calculated by the cumulative sum of squared intraday returns and shown in
+equation (\ref{eq:rv}), is less noisy and doesn't lead to choosing an inferior
+model.   
 
 
-\item[implied volatility:] volatility not only can be extracted from returns but it can also be derived from option or future pricing models.  The volatility obtained corresponds to the market's prediction of future volatility. In finance, an option is a derivative, that is, a contract which gives the owner the right, but not the obligation to buy or sell an underlying asset at a given price called strike price. An option can be executed at any time before an expiration date previously defined no matter what price the underlying asset has. For example, the Black-Scholes model~\cite{black1973} determines the fair option value based on stock price, strike price, time to option expiration, the interest rate and volatility. These are known or can be easily obtained from the market, excepting by volatility which must be estimated. However, rather than assuming a volatility a priori and computing option prices from it, the model can be used to estimate volatility at given prices, time to expiration and strike 
-price. This obtained volatility is called the implied volatility of an option. Additionally, some models obtain implied volatility from futures (other derivative from prices). For instance, the Barone-Adesi and Whaley futures option model~\cite{baroneetal1987} is also used to determine future volatilities~\cite{hamidetal2004}. Higher implied volatility is indicative of greater price fluctuation in either direction. Implied volatility is found by determining the value which makes theoretical prices equal to market prices. In this way volatility is ``implied'' by the current market price of the stock.
+\item[implied volatility:] volatility not only can be extracted from returns but
+it can also be derived from option or future pricing models.  The volatility
+obtained corresponds to the market's prediction of future volatility. In
+finance, an option is a derivative, that is, a contract which gives the owner
+the right, but not the obligation to buy or sell an underlying asset at a given
+price called strike price. An option can be executed at any time before an
+expiration date previously defined no matter what price the underlying asset
+has. For example, the Black-Scholes model~\cite{black1973} determines the fair
+option value based on stock price, strike price, time to option expiration, the
+interest rate and volatility. These are known or can be easily obtained from the
+market, excepting by volatility which must be estimated. However, rather than
+assuming a volatility a priori and computing option prices from it, the model
+can be used to estimate volatility at given prices, time to expiration and
+strike price. This obtained volatility is called the implied volatility of an
+option. Additionally, some models obtain implied volatility from futures (other
+derivative from prices). For instance, the Barone-Adesi and Whaley futures
+option model~\cite{baroneetal1987} is also used to determine future
+volatilities~\cite{hamidetal2004}. Higher implied volatility is indicative of
+greater price fluctuation in either direction. Implied volatility is found by
+determining the value which makes theoretical prices equal to market prices. In
+this way volatility is ``implied'' by the current market price of the stock.
 
 \end{description}
 
 
-For trading strategies, the interest is centred in forecasting realized volatility over the life of an option and to take advantage when this volatility differs from the implied volatility. This is called volatility arbitrage. For example, a trader will buy an option and hedge the underlying asset if the implied volatility is under the realized volatility. 
+For trading strategies, the interest is centred in forecasting realized
+volatility over the life of an option and to take advantage when this volatility
+differs from the implied volatility. This is called volatility arbitrage. For
+example, a trader will buy an option and hedge the underlying asset if the
+implied volatility is under the realized volatility. 
 
 
-\section{Volatility methods}
+\subsubsection{Volatility methods}
 
 In the existing literature, there are four main classes of asset
 return volatility models: the general autoregressive conditional
@@ -215,54 +226,442 @@ $\alpha_0,\alpha_1,\beta_1 \geq 0$ are required to ensure that the
 variance will never be negative and $\alpha_1+\beta_1 <1$ is needed to
 guarantee a weakly stationary process~\cite{nelson1990}.
 
-Since the introduction of the GARCH models, several extensions have been proposed, but none of them seems to beat the GARCH(1,1) model~\cite{lunde+hansen2005}. Despite its popularity, GARCH models have several limitations: firstly, a time series model may be non-linear in mean and/or non-linear in variance, but ARCH and GARCH models are non-linear in variance, but not in mean. Besides, GARCH models often fail to capture highly irregular phenomena, like wild market fluctuations.  
+Since the introduction of the GARCH models, several extensions have been
+proposed, but none of them seems to beat the GARCH(1,1)
+model~\cite{lunde+hansen2005}. Despite its popularity, GARCH models have several
+limitations: firstly, a time series model may be non-linear in mean and/or
+non-linear in variance, but ARCH and GARCH models are non-linear in variance,
+but not in mean. Besides, GARCH models often fail to capture highly irregular
+phenomena, like wild market fluctuations.  
 
-SV models explain how volatility varies in a random fashion. These models are useful because they explain why options with different strikes and expirations dates have different Black-Scholes implied volatilities, phenomenon known as the volatility smile. This is useful because the Black-Scholes model assumes that the volatility of the underlying asset is constant which is not always true. There are several SV models and the most well-known and popular is the Heston model~\cite{heston1993}. Additional information about SV models can be found in~\cite{shephard1995}. 
+SV models explain how volatility varies in a random fashion. These models are
+useful because they explain why options with different strikes and expirations
+dates have different Black-Scholes implied volatilities, phenomenon known as the
+volatility smile. This is useful because the Black-Scholes model assumes that
+the volatility of the underlying asset is constant which is not always true.
+There are several SV models and the most well-known and popular is the Heston
+model~\cite{heston1993}. Additional information about SV models can be found
+in~\cite{shephard1995}. 
 
-The realized volatility constructed from high frequency intraday returns gave rise to the realized volatility models mainly because the realized volatility series is much more homoskedastic and seems to be a long memory process~\cite{andersonetal2003}. For realized volatility, the autoregressive fractionally integrated moving average (ARFIMA) process emerged as a standard model~\cite{chenetal2010} and many variations have been studied, but all of them produce similar forecasting results to the ARFIMA(1,d,1) model~\cite{koopmanetal2005}.  
+The realized volatility constructed from high frequency intraday returns gave
+rise to the realized volatility models mainly because the realized volatility
+series is much more homoskedastic and seems to be a long memory
+process~\cite{andersonetal2003}. For realized volatility, the autoregressive
+fractionally integrated moving average (ARFIMA) process emerged as a standard
+model~\cite{chenetal2010} and many variations have been studied, but all of them
+produce similar forecasting results to the ARFIMA(1,d,1)
+model~\cite{koopmanetal2005}.  
 
-On the other hand, machine learning based models, especially artificial neural networks (ANN) and support vector machines (SVM) have arisen as an alternative to forecast volatility. ANN is a statistical technique inspired by biological neural networks which is capable of changing its structure based on external or internal information during a training phase~\cite{sammut2011}. SVM are supervised learning models for classification analysis which recognize patterns finding a separating hyperplane. An extension for regression analysis is known as support vector regression (SVR). 
+On the other hand, machine learning based models, especially artificial neural
+networks (ANN) and support vector machines (SVM) have arisen as an alternative
+to forecast volatility. ANN is a statistical technique inspired by biological
+neural networks which is capable of changing its structure based on external or
+internal information during a training phase~\cite{sammut2011}. SVM are
+supervised learning models for classification analysis which recognize patterns
+finding a separating hyperplane. An extension for regression analysis is known
+as support vector regression (SVR). 
 
-Since machine learning models and in particular ANN do not require assumptions about the data (gaussianity for example) and allow more explanatory variables than returns to be included, they have become widely used in solving financial problems, specially volatility forecasting~\cite{hamidetal2004,donaldsonetal1997}. There are also many works focused on the using of SVM in volatility forecasting~\cite{shiyietal2008,shiyietal2010,gavrishchaka2006,vasilios2012}. 
+Since machine learning models and in particular ANN do not require assumptions
+about the data (gaussianity for example) and allow more explanatory variables
+than returns to be included, they have become widely used in solving financial
+problems, specially volatility
+forecasting~\cite{hamidetal2004,donaldsonetal1997}. There are also many works
+focused on the using of SVM in volatility
+forecasting~\cite{shiyietal2008,shiyietal2010,gavrishchaka2006,vasilios2012}. 
 
-However, just as with ANN, SVMs have scalability problems because their training process is computationally intensive and it is done in batch mode. The scalability problem worsens when new additional training data is available and a re-training process from scratch needs to be done. This problem can be avoided using online machine learning algorithms that allow one instance at a time to be processed with low computationally expensive calculations.
+However, just as with ANN, SVMs have scalability problems because their training
+process is computationally intensive and it is done in batch mode. The
+scalability problem worsens when new additional training data is available and a
+re-training process from scratch needs to be done. This problem can be avoided
+using online machine learning algorithms that allow one instance at a time to be
+processed with low computationally expensive calculations.
 
 
+%\section{Black-Scholes formula}
+%
+%In finance, an option is a derivative, that is, a contract which gives the owner
+%the right, but not the obligation to buy or sell an underlying asset at a given
+%price called strike price. An option can be executed at any time before an
+%expiration date previously defined no matter what price the underlying asset
+%has. 
+%
+%The Black-Scholes formula~\cite{black1973}, developed in the early 1970's, Myron
+%Scholes, Robert Merton and Fisher Black,  allows to determine an option value
+%$V$ based on the underlying asset price $S(t)$ at a time $t$ and the following
+%constant parameters: 
+%
+%\begin{description}
+%\item [$\sigma$:] underlying asset price volatility which measures the standard
+%deviation of the returns
+%\item [$\mu$:] underlying asset drift which is a measure of the average rate of
+%growth of the stock
+%\item[$E$:] option strike or excersice price
+%\item[$T$:] option date of expiry
+%\item[$t$:] current time
+%\item[$r$:] risk-free interest rate
+%\end{description}
+%
+%\subsection{Stock price model}
+%
+%The Black-Scholes model assume that the underlying price $S$ follows a lognormal random walk:
+%
+%\begin{equation}\label{eq:stockprice}
+%dS = \mu S dt + \sigma S dB
+%\end{equation}
+%
+%\noindent where $B$ is a Brownian motion. This stochastic differential equation
+%has two components: a deterministic term given by $\mu S dt$ and a random term
+%given by $\sigma S dX$.
+%
+%\subsection{Brownian motion}
+%
+%A brownian motion $B$ (also called a Wiener process) is a stochastic process
+%characterized by the three following properties:
+%
+%\begin{description}
+%\item[Continuity:] $B(t)$ is a continuos function
+%\item[Normal increments:]  $B(t)-B(s)$ has a normal distribution with mean $0$
+%and variance $t-s$.
+%\item[Independence of increments:] for every choice of nonnegative real numbers
+%$0 \leq s_1 <  t_1 \leq \cdots \leq s_n < t_n < \infty$, the increment random
+%variables $W_{t_1} - W_{s_1}, \cdots, W_{t_n} - W_{s_n}$ are jointly
+%independent.
+%\end{description}
+%
+%\subsection{Stochastic differential equation}
+%
+%An stochastic differential integral has the form:
+%
+%
+%\begin{equation}
+%W(T)=\int_0^T f(t)dB(t) \, .
+%\end{equation}
+%
+%\noindent This equations is also expressed in an abbreviate form:
+%
+%\begin{equation}
+%dW = f(t) dB \, .
+%\end{equation}
+%
+%\noindent Therefore, the integral form of the stock price model shown in
+%equation (\ref{eq:stockprice}) is:
+%
+%\begin{equation}
+%S(T)=\int_0^T \mu S(t) dt + \int_0^T \sigma S(t) dB(t)
+%\end{equation}
+%
+%\subsection{Ito's Lemma}
+%
+%Ito's lemma is used to find the differential of a time dependent function of a
+%stochastic process. In option pricing we need to find the option price $V(S(t))$
+%which depends on a stochastic stock price model $S(t)$.  $V(S,t)$ is required to
+%be  differentiable function of $S$ and once differentiable function of $t$.
+%
+%
+%
+%
+%
+%%These are known or can be easily obtained from the market, excepting by
+%volatility which must be estimated. However, rather than assuming a volatility
+%a priori and computing option prices from it, the model can be used to estimate
+%volatility at given prices, time to expiration and strike price. This obtained
+%volatility is called the implied volatility of an option. Additionally, some
+%models obtain implied volatility from futures (other derivative from prices). 
+%
+%
+% 
+%\section{Realized Volatility Models}
+%
+%\section{GARCH} test \section{ARFIMA} \section{Stochastic Volatility}
+%
+%\section{Volatility definition}
+%
+%\begin{itemize}
+%
+%\item Is the size of the price movement.
+%
+%\item Variance is a measure of distribution of returns and is not neccesarily
+%bound by any time period.  Volatility is a measure of the standard deviation
+%(square root of the variance) over a certain time interval. In finance,
+%variance and volatility both gives you a sense of an asset's risk. Variance
+%gives you a sense of the risk in the asset over its lifetime, while volatility
+%gives you a sense of the movement of the asset in eg. the past month or the
+%past year.
+%
+%
+%\item The main underlying difference is in their definition. Variance has a
+%fixed mathematical definition, however volatility does not as such. Volatility
+%is said to be the measure of fluctuations of a process.
+%
+%Volatility is a subjective term, whereas variance is an objective term i.e.
+%given the data you can definitely find the variance, while you can't find
+%volatility just having the data. Volatility is associated with the process, and
+%not with the data.
+%
+%In order to know the volatility you need to have an idea of the process i.e you
+%need to have an observation of the dispersion of the process. All the different
+%processes will have different methods to compute volatilities based on the
+%underlying assumptions of the process.  \end{itemize}
+%
 
-\section{Stylized facts}
-\label{sec:stylizedfacts}
 
-There are several known features exhibited by financial instruments called \textit{stylized facts}, which have been empirically studied and some of them have been documented only recently. The importance of \textit{stylized facts} is that they allow to improve volatility models showing that it is possible to model volatility dynamic.
+\subsection{Vector Autorregresive Models}\label{sec:varvec}
 
-\begin{description}
- \item[Dependence] Volatility is said to be a long-memory process because its autocorrelation function exhibits long-range dependence. The returns autocorrelation function is shown in figure \ref{fig:returnacf} and it shows how the correlations are significant even for very long lags, this imply that the dependence between events that are far apart diminishes very slowly with increasing time.
- Moreover, volatility tends to cluster, i.e. high volatility periods are generally followed by high volatility periods.
- 
- \begin{figure}[h]
- \centering
- \includegraphics[scale=0.5]{plots/spy_returns_acf.pdf}
- % spy_returns_dist.pdf: 504x504 pixel, 72dpi, 17.78x17.78 cm, bb=0 0 504 504
- \caption{SPY returns ACF}
- \label{fig:returnacf}
-\end{figure}
+%VECM is a special case of VAR model and both describe the joint behaviour
+%of a set of variables.
 
- \item[Returns distribution] The returns distribution has fat tails, i.e. the number of extreme events (either positive or negative) returns is larger than what is hypothesized by common data generation process (generally normal distribution assumption). In the markets, fat tails are an undesirable feature because of the additional risk they imply.
- In the figure \ref{fig:returndist} is shown the SPY returns distribution based on daily dates from the period 1st July 1998 to 4th April 2013. The distribution was compared against the normal distribution which clearly doesn't fit the data.  
- 
- 
- \begin{figure}[h]
- \centering
- \includegraphics[scale=0.5]{plots/spy_returns_dist.pdf}
- % spy_returns_dist.pdf: 504x504 pixel, 72dpi, 17.78x17.78 cm, bb=0 0 504 504
- \caption{SPY returns distribution}
- \label{fig:returndist}
-\end{figure}
+The VAR($p$) model is a general framework describing the behaviour of a
+set of $l$ endogenous variables as a linear combination of their last $p$
+values, where $l,p\in\mathbb{N}$. 
+In our case, each one of these $l$ variables is a scalar time series
+$y_{\lambda,t}$, $\lambda=1,\dots,l$, and we represent them all together
+at time $t$ by the the vector time series:
+\begin{equation}
+\label{eq:variables}
+\mathbf{y}_t = 
+\begin{bmatrix} y_{1,t} & y_{2,t} & \dots & y_{l,t} \end{bmatrix}^\top.
+\end{equation}
+\noindent
+Notice that the vectors $\mathbf{y}_t$ are assumed to be $l$-dimensional.
 
- \item[Volume] refers to the level of trading activity in a market.
- \item[Calendar effects] days of week, weekend, holidays.
- \item[Intraday effects] time of the day.
- \item[Overnight effects]
-\end{description}
+The VAR($p$) model describes the behaviour of a dependent variable in terms of
+its own lagged values and the lags of the others variables in the system. The
+model with $p$ lags is formulated as the system of $N$:
+\begin{align}
+\label{eq:var}
+\mathbf{y}_t 
+= \boldsymbol{\Phi}_1 \mathbf{y}_{t-1} +
+  \boldsymbol{\Phi}_2 \mathbf{y}_{t-2} + \dots +
+  \boldsymbol{\Phi}_p\mathbf{y}_{t-p} +
+  \mathbf{c} + \boldsymbol{\epsilon}_t \nonumber \\
+t=p+1,\dots,N,
+\end{align}
+\noindent where 
+$\boldsymbol{\Phi}_1, \boldsymbol{\Phi}_2,\dots,\boldsymbol{\Phi}_p$
+are $l\times l$-matrices of real coefficients,
+$\boldsymbol{\epsilon}_{p+1},
+ \boldsymbol{\epsilon}_{p+2}, \dots, \boldsymbol{\epsilon}_N$ 
+are error terms, $\mathbf{c}$ is a constant vector and $N$ is the total
+number of samples.
+
+Notice that, regarding our notation of section (\ref{sec:coint}),
+we have here 
+$\mathbf{y}_t^0 = \mathbf{y}_t$,
+$\mathbf{y}_t^\nu = \mathbf{y}_{t-\nu}$ and
+the $\lambda$-th component of the vector time series $\mathbf{y}_t^\nu$
+is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
+$\lambda=1,\dots,l$.
+Transposing each equation of the system (\ref{eq:var}) we can write
+the VAR($p$) model in block-matrix form as:
+\begin{equation}\label{eq:vareq}
+\mathbf{B} = \mathbf{A} \mathbf{X} + \mathbf{E} \, , 
+\end{equation}
+%%
+\noindent where:
+%%
+\begin{alignat}{2}
+\mathbf{B}
+&= \begin{bmatrix}
+   \mathbf{y}_{p+1}^\top \\
+   \mathbf{y}_{p+2}^\top \\
+   \vdots \\
+   \mathbf{y}_N^\top
+   \end{bmatrix}_{(N-p)\times l}
+&\quad
+\mathbf{A}
+&= \begin{pmat}[{...|}]
+   \mathbf{y}_p^\top & \mathbf{y}_{p-1}^\top & \dots 
+                    & \mathbf{y}_1^\top & 1 \cr
+   \mathbf{y}_{p+1}^\top & \mathbf{y}_p^\top & \dots
+                       & \mathbf{y}_2^\top & 1 \cr
+   \vdots & \vdots & \ddots & \vdots & \vdots \cr
+   \mathbf{y}_{N-1}^\top & \mathbf{y}_{N-2}^\top & \dots 
+                       & \mathbf{y}_{N-p}^\top & 1 \cr
+   \end{pmat}_{(N-p)\times(pl+1)} \\
+\mathbf{X}
+&= \begin{bmatrix}
+   \boldsymbol{\Phi}_1^\top \\
+   \boldsymbol{\Phi}_2^\top \\
+   \vdots \\
+   \boldsymbol{\Phi}_p^\top \\
+   \mathbf{c}^\top
+   \end{bmatrix}_{(pl+1)\times l}
+&\quad
+\mathbf{E}
+&= \begin{bmatrix}
+   \boldsymbol{\epsilon}_{p+1}^\top \\
+   \boldsymbol{\epsilon}_{p+2}^\top \\
+   \vdots \\
+   \boldsymbol{\epsilon}_N^\top \\
+   \end{bmatrix}_{(N-p)\times l}
+\end{alignat}
+Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+can be solved with respect to $\mathbf{X}$ using the ordinary least
+squares estimation.
+
+VECM is a special form of a VAR model for I(1) variables that are also
+cointegrated~\cite{banerjee1993}.
+
+It is obtained re-writing equation (\ref{eq:var}) in terms of the new
+variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
+The VECM model, expressed in terms those differences, takes the form:
+\begin{equation}\label{eq:vec}
+\Delta \mathbf{y}_t 
+= \boldsymbol{\Omega}\,\mathbf{y}_{t-1}
+  + \sum_{i=1}^{p-1} \boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+where the coefficients matrices $\boldsymbol{\Phi}_i^*$ and 
+$\boldsymbol{\Omega}$, expressed in terms of the matrices
+$\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
+\begin{align*}
+\boldsymbol{\Phi}_i^* 
+&:= -\sum_{j=i+1}^{p}\boldsymbol{\Phi}_j\,, \\
+\boldsymbol{\Omega}
+&:= -\left( \mathbb{I} - \boldsymbol{\Phi}_1 - \dots 
+    - \boldsymbol{\phi}_p \right)\,. 
+\end{align*}
+The following well known properties of the matrix $\boldsymbol{\Omega}$
+\cite{johansen1995} will be useful in the sequel:
+\begin{itemize}
+\item
+If $\boldsymbol{\Omega} = \mathbf{0}$, there is no cointegration.
+\item 
+If $rank(\boldsymbol{\Omega})=l$, i.e., if $\boldsymbol{\Omega}$ has
+full rank, then the time series are not I(1) but stationary.
+\item
+If $rank(\boldsymbol{\Omega})=r$, $0<r<l$, then there is cointegration
+and the matrix $\boldsymbol{\Omega}$ can be expressed as
+$\boldsymbol{\Omega}=\boldsymbol{\alpha\beta}^\top$, where $\boldsymbol{\alpha}$
+and $\boldsymbol{\beta}$ are
+$l\times r$ matrices and
+$\text{rank}(\boldsymbol{\alpha})=\text{rank}(\boldsymbol{\beta})=r$.
+\item
+The columns of $\boldsymbol{\beta}$ contains the cointegration vectors and the rows of
+$\boldsymbol{\alpha}$ correspond with the adjusted vectors. 
+$\boldsymbol{\beta}$ is obtained by Johansen procedure~\cite{johansen1988},
+whereas $\boldsymbol{\alpha}$ has to be determined as a variable in the VECM.
+\end{itemize}
+It is worth noticing that the factorization of the matrix
+$\boldsymbol\Omega$ is not unique, since for any $r \times r$
+nonsingular matrix $\mathbf{H}$, $\boldsymbol{\alpha}^*:=\boldsymbol{\alpha}\mathbf{H}$,
+and $\boldsymbol{\beta}^*=\boldsymbol{\beta}(\mathbf{H}^{-1})^\top$ we have
+$\boldsymbol{\alpha\beta}^\top=\boldsymbol{\alpha}^*(\boldsymbol{\beta}^*)^\top$.
+If cointegration exists, then equation (\ref{eq:vec}) can be written
+as follows:
+\begin{equation}\label{eq:vecfull}
+\Delta\mathbf{y}_t 
+= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
+  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+which is a VAR model but for time series differences.
+
+
+Transposing each equation of the system (\ref{eq:vecfull}) we can write
+the VECM($p$) model in block-matrix form as:
+\begin{equation}\label{eq:vareq}
+\mathbf{B} = 
+\mathbf{A} \mathbf{X} + 
+\mathbf{E} \, , 
+\end{equation}
+%
+\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
+dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
++1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
+%
+\begin{alignat}{3}
+\mathbf{B}
+&= \begin{bmatrix}
+   \Delta\mathbf{y}_{p+1}^\top \\
+   \Delta\mathbf{y}_{p+2}^\top \\
+   \vdots \\
+   \Delta\mathbf{y}_N^\top
+   \end{bmatrix}
+&\quad
+\mathbf{X}
+&= \begin{bmatrix}
+   \boldsymbol{\alpha}^\top \\
+   \boldsymbol{\Phi}_1^{*\top} \\
+   \boldsymbol{\Phi}_2^{*\top} \\
+   \vdots \\
+   \boldsymbol{\Phi}_{p-1}^{*\top} \\
+   \mathbf{c}^\top
+   \end{bmatrix}
+&\quad
+\mathbf{E}
+&= \begin{bmatrix}
+   \boldsymbol{\epsilon}_{p+1}^\top \\
+   \boldsymbol{\epsilon}_{p+2}^\top \\
+   \vdots \\
+   \boldsymbol{\epsilon}_N^\top \\
+   \end{bmatrix}
+\end{alignat}
+\noindent and 
+\begin{align}
+\mathbf{A}
+&= \begin{pmat}[{....|}]
+   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
+                    & \Delta\mathbf{y}_2^\top & 1 \cr
+   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
+                       & \Delta\mathbf{y}_3^\top & 1 \cr
+   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
+   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
+                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
+   \end{pmat}\, .
+\end{align}
+Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+can be solved with respect to $\mathbf{X}$ using the ordinary least
+squares estimation.
+
+\subsection{Ordinary Least Squares method}
+
+The solution $\widehat{\mathbf{A}}$ to
+equation~(\ref{eq:vareq}) can be obtained by the ordinary least squares (OLS)
+method. $\widehat{\mathbf{X}}$ is the solution of the quadratic optimization problem
+\begin{equation*}
+\widehat{\mathbf{X}} = \underset{\mathbf{X}}{\text{Arg\;min}}
+\|\mathbf{A}\mathbf{X}-\mathbf{B}\|_2^2
+\end{equation*}
+\noindent for which the solution $\widehat{\mathbf{X}}$ is well-known:
+\begin{equation*}
+\label{eq:MP}
+\widehat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{B}
+\end{equation*}
+\noindent where $\mathbf{A}^{\!\!+}$ is the Moore-Penrose pseudo-inverse
+which, when $\mathbf{A}$ is full rank, can be written as follows: 
+\begin{equation}
+\label{eq:pseudoinverse}
+\mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
+\end{equation}
+when $\mathbf{A}$ is not full rank, i.e
+$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
+always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+More generally, the pseudo-inverse is best computed using the compact
+singular value decomposition (SVD) of $\mathbf{A}$ which is:
+%\begin{equation}
+%    \label{eq:compactsvd}
+%    \underset{m \times n}{\mathbf{A}}=
+%    \underset{m \times k}{\mathbf{U_1}} \enskip
+%    \underset{k \times k}{\Sigma_1} \enskip
+%    \underset{k \times n}{\mathbf{V}_1^{\top}} \, .
+%\end{equation}
+\begin{equation*}
+    \label{eq:compactsvd}
+    \mathbf{A}=
+    \mathbf{U_1}
+    \boldsymbol \Sigma_1
+    \mathbf{V}_1^{\top} \, .
+\end{equation*}
+Pseudo-inverse can then be written as follows:
+\begin{equation*}
+\label{eq:pseudoinversesvd}
+\mathbf{A}^{\!\!+} = \mathbf{V}_1 \boldsymbol \Sigma_1^{-1} \mathbf{U}_1^\top \, .
+\end{equation*}
+
+
 
 \begin{equation}
  \label{eq:varmatrix}
@@ -294,32 +693,128 @@ There are several known features exhibited by financial instruments called \text
 \end{equation}
 
 
-\begin{equation}
- \label{eq:vecmatrix}
-\underbrace{
-      \begin{bmatrix}
-       \mathbf{\Delta y}_{p+1}  \\ 
-       \mathbf{\Delta y}_{p+2}  \\ 
-       \vdots                   \\ 
-       \mathbf{\Delta y}_N      
-      \end{bmatrix}}_{\mathbf{B} } =
-\arraycolsep=1.4pt  
-\underbrace{\begin{bmatrix}
-   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
-  \end{bmatrix}}_{\mathbf{X}^\top}
-\underbrace{\begin{bmatrix}
- \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
- \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
- \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
- \vdots                  & \vdots                 & \ddots&  \vdots                   \\
- \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
- 1                      & 1                       & \dots     & 1   
- \end{bmatrix}}_{\mathbf{A}^\top}
-+
-\underbrace{\begin{bmatrix}
-              \mathbf{\epsilon}_{p+1} \\ 
-              \mathbf{\epsilon}_{p+2} \\ 
-              \vdots \\ 
-              \mathbf{\epsilon}_N
-             \end{bmatrix}}_{\mathbf{E}^\top}
-\end{equation}
+%\begin{equation}
+% \label{eq:vecmatrix}
+%\underbrace{
+%      \begin{bmatrix}
+%       \mathbf{\Delta y}_{p+1}  \\ 
+%       \mathbf{\Delta y}_{p+2}  \\ 
+%       \vdots                   \\ 
+%       \mathbf{\Delta y}_N      
+%      \end{bmatrix}}_{\mathbf{B} } =
+%\arraycolsep=1.4pt  
+%\underbrace{\begin{bmatrix}
+%   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
+%  \end{bmatrix}}_{\mathbf{X}^\top}
+%\underbrace{\begin{bmatrix}
+% \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
+% \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
+% \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
+% \vdots                  & \vdots                 & \ddots&  \vdots                   \\
+% \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
+% 1                      & 1                       & \dots     & 1   
+% \end{bmatrix}}_{\mathbf{A}^\top}
+%+
+%\underbrace{\begin{bmatrix}
+%              \mathbf{\epsilon}_{p+1} \\ 
+%              \mathbf{\epsilon}_{p+2} \\ 
+%              \vdots \\ 
+%              \mathbf{\epsilon}_N
+%             \end{bmatrix}}_{\mathbf{E}^\top}
+%\end{equation}
+
+
+%VECMs may be estimated by Stata’s vec command. These models
+%
+%are employed because many economic time series appear to be
+%
+%‘first-difference stationary,’ with their levels exhibiting unit root or
+%
+%nonstationary behavior. Conventional regression estimators, including
+%
+%VARs, have good properties when applied to covariance-stationary
+%
+%time series, but encounter difficulties when applied to nonstationary or
+%
+%integrated processes.
+%
+%These difficulties were illustrated by Granger and Newbold
+%
+%(J. Econometrics, 1974) when they introduced the concept of spurious
+%
+%regressions. If you have two independent random walk processes, a
+%
+%regression of one on the other will yield a significant coefficient, even
+%
+%though they are not related in any way.
+%
+%
+%This insight, and Nelson and Plosser’s findings (J. Mon. Ec., 1982) that
+%
+%unit roots might be present in a wide variety of macroeconomic series
+%
+%in levels or logarithms, gave rise to the industry of unit root testing, and
+%
+%the implication that variables should be rendered stationary by
+%
+%differencing before they are included in an econometric model.
+%
+%Further theoretical developments by Granger and Engle in their
+%
+%celebrated paper (Econometrica, 1987) raised the possibility that two
+%
+%or more integrated, nonstationary time series might be cointegrated, so
+%
+%that some linear combination of these series could be stationary even
+%
+%though each series is not.
+%
+%
+%
+%If two series are both integrated (of order one, or I(1)) we could model
+%
+%their interrelationship by taking first differences of each series and
+%
+%including the differences in a VAR or a structural model.
+%
+%However, this approach would be suboptimal if it was determined that
+%
+%these series are indeed cointegrated. In that case, the VAR would only
+%
+%express the short-run responses of these series to innovations in each
+%
+%series. This implies that the simple regression in first differences is
+%
+%misspecified.
+%
+%If the series are cointegrated, they move together in the long run. A
+%
+%VAR in first differences, although properly specified in terms of
+%
+%covariance-stationary series, will not capture those long-run
+%
+%tendences.
+%
+%Accordingly, the VAR concept may be extended to the vector
+%
+%error-correction model, or VECM, where there is evidence of
+%
+%cointegration among two or more series. The model is fit to the first
+%
+%differences of the nonstationary variables, but a lagged error-correction
+%
+%term is added to the relationship.
+%
+%In the case of two variables, this term is the lagged residual from the
+%
+%cointegrating regression, of one of the series on the other in levels. It
+%
+%expresses the prior disequilibrium from the long-run relationship, in
+%
+%which that residual would be zero.
+%
+%In the case of multiple variables, there is a vector of error-correction
+%
+%terms, of length equal to the number of cointegrating relationships, or
+%
+%cointegrating vectors, among the series.
