@@ -33,8 +33,63 @@ covariance do not change over time: \begin{eqnarray*} E(Y_t) &=& \mu  \quad
 
 \noindent with $\lambda(s,t) = E[(Y_s-\mu)(Y_t - \mu)]$ 
 
-In finance, a shock represents an unexpected change in a variable or a in its error term in a particular time period. For stationary time series, shocks to the system will gradually die away. That is, a shock during time $t$ will have a smaller effect in time $t+1$, a smaller effect on $t+2$ and so on. For non-stationary data, the persistence of shocks will always be infinite. The use of non-stationary data can lead to spurious regressions. If two stationary variables are generated as independent random series and are trending over time, when one of those variables is regressed on the other, they could have a high $R^2$ even if the two are totally unrelated. So, if standard regression techniques are applied to non-stationary data, it could look good under standard measures but valueless \cite{brooks2002}.
+In finance, a shock represents an unexpected change in a variable or a in its
+error term in a particular time period. For stationary time series, shocks to
+the system will gradually die away. That is, a shock during time $t$ will have a
+smaller effect in time $t+1$, a smaller effect on $t+2$ and so on. For
+non-stationary data, the persistence of shocks will always be infinite. The use
+of non-stationary data can lead to spurious regressions. Spurious regression
+dates back to Yule in 1926 \cite{yule1926} If two stationary
+variables are generated as independent random series and are trending over time,
+when one of those variables is regressed on the other, they could have a high
+$R^2$ even if the two are totally unrelated. So, if standard regression
+techniques are applied to non-stationary data, it could look good under standard
+measures but valueless \cite{brooks2002}.
 
+\texttt{Example of spurious regression} An example is shown below. Two random walks series $x_1t$ and $x_2t$ with a small drift ($\alpha=0.09$) are generated and
+then regressed one on the other:
+ \begin{equation}
+ x_i,t = \alpha + x_{i,t-1} + \epsilon_i,t  \qquad \text{where} \qquad \mathcal{N}(0,1), \quad i=1,2
+ \end{equation}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/spurious1}
+  \caption{Two random walks time series $x_1,t$ and $x_2,t$}
+  \label{fig:spurious1}
+\end{figure}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/spurious2}
+  \caption{Regression between two random walks time series}
+  \label{fig:spurious2}
+\end{figure}
+
+These two random walks, which are independent by construction, appear to be related with a $R^2=0.883$. However, what it is happening is that they are drifting in the same direction. Drift can be removed using returns or first differences.
+If after taking returns or first differences the regression fit is still good we will say that the variables are cointegrated, this means that both series may drift but their residuals will not. A more formal definition of cointegration is given in the section \ref{sec:cointegration}.
+
+%                            OLS Regression Results                            
+%==============================================================================
+%Dep. Variable:                      y   R-squared:                       0.883
+%Model:                            OLS   Adj. R-squared:                  0.882
+%Method:                 Least Squares   F-statistic:                     742.2
+%Date:                Fri, 06 Feb 2015   Prob (F-statistic):           1.61e-47
+%Time:                        06:07:47   Log-Likelihood:                -218.03
+%No. Observations:                 100   AIC:                             440.1
+%Df Residuals:                      98   BIC:                             445.3
+%Df Model:                           1                                         
+%==============================================================================
+%                 coef    std err          t      P>|t|      [95.0% Conf. Int.]
+%------------------------------------------------------------------------------
+%x1             0.8883      0.033     27.243      0.000         0.824     0.953
+%const          2.6726      0.405      6.606      0.000         1.870     3.475
+%==============================================================================
+%Omnibus:                        4.133   Durbin-Watson:                   0.363
+%Prob(Omnibus):                  0.127   Jarque-Bera (JB):                4.145
+%Skew:                          -0.469   Prob(JB):                        0.126
+%Kurtosis:                       2.662   Cond. No.                         23.3
+%==============================================================================
 
 \subsection{Integration}
 
@@ -59,7 +114,7 @@ vectors of dimension 1; in this scalar case we will write the time series in
 non-bold format.
 
 
-\subsection{Cointegration}
+\subsection{Cointegration} \label{sec:cointegration}
 Cointegration concept was introduced by Engle in 1987 \cite{engle1987} and implies that one or
 more linear combinations of non-stationary variables are stationary even though
 individually they are not.  
