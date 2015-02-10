@@ -83,7 +83,7 @@ Apart from a stochastic trend, many economic financial time series seem to invol
 Other less common forms of non-stationarity are structural break in mean and structural break in variance. 
 
 \newpage
-\subsection{Spurious regression}
+\subsection{Spurious regression} \label{sec:spurious}
 The use
 of non-stationary data can lead to spurious regressions. Spurious regression
 dates back to Yule in 1926 \cite{yule1926} If two stationary
@@ -162,7 +162,7 @@ vectors of dimension 1; in this scalar case we will write the time series in
 non-bold format.
 
 
-\subsection{Cointegration} \label{sec:cointegration}
+\subsection{Cointegration} \label{sec:coint}
 Cointegration concept was introduced by Engle in 1987 \cite{engle1987} and implies that one or
 more linear combinations of non-stationary variables are stationary even though
 individually they are not.  
@@ -247,6 +247,7 @@ a\epsilon_{2t} - \epsilon_{3t} \sim \text{I(0)}
 
 then, both processes are said to be cointegrated. 
 
+
 If we add a I(0) process
 $\mathbf{X}_{3t} = \epsilon_{4t}$  we find that there exists two cointegration
 vectors now: $\begin{bmatrix}a &-1& 0\end{bmatrix}$ and $\begin{bmatrix}0
@@ -278,29 +279,30 @@ a\epsilon_{2t} - \epsilon_{3t} \\
   \label{fig:cointex}
 \end{figure}
 
-
-This example shows how cointegration vectors describes the stable relations
-between the processes by linear relations that are more stationary than the
-original process. Cointegration vectors can be obtained using the Johansen method which gives with a certain probability the number of significant vectors. Figure \cite{fig:cointvectors1} shows the linear combinations obtained using cointegration vectors given by Johansen method. The method confirm that only two vectors are found and the third one given doesn't result in a I(0) process.
-
-
 \begin{figure}[!h]
   \centering
  \begin{minipage}{\textwidth} %[b][\textheight][s]
   \centering
-  \includegraphics[width=0.8\textwidth]{img/coint-example2} 
+  \includegraphics[width=0.9\textwidth]{img/coint-example2} 
    \caption{Time series linear combination using the first cointegration vector }
-   \includegraphics[width=0.8\textwidth]{img/coint-example3} 
+    \label{fig:cointvectors3}
+   \includegraphics[width=0.9\textwidth]{img/coint-example3} 
     \caption{Time series linear combination using the second cointegration vector}
-    \includegraphics[width=0.8\textwidth]{img/coint-example4}
+     \label{fig:cointvectors4}
+    \includegraphics[width=0.9\textwidth]{img/coint-example4}
  \caption{Time series linear combination using the third cointegration vector}
-  \label{fig:cointvectors1}
+   \label{fig:cointvectors5}
 \end{minipage}
 \end{figure}
 
 
-\section{Unit root tests}
+This example shows how cointegration vectors describes the stable relations
+between the processes by linear relations that are more stationary than the
+original process. Cointegration vectors can be obtained using the Johansen method which gives with a certain probability the number of significant vectors. Figures    
+\ref{fig:cointvectors3}, \ref{fig:cointvectors4}  and \ref{fig:cointvectors5}  shows the linear combinations obtained using cointegration vectors given by Johansen method. The method confirm that only two vectors are found and the third one given doesn't result in a I(0) process.
 
+
+\section{Unit root tests}
 Many economic and financial time series exhibit trending behaviour or non-stationary behaviour in the mean or variance. An important econometric task is to determine the type of non-stationary. For trend stationary I(0) time series a time-trend regression is appropriate. For I(1) time series taking first differences transforms it into a stationary one.  For cointegration to determine if time series are I(1) is mandatory to model their long-run relationship. In order to determine if a time series is an a I(1) or I(0) process unit root tests are used. Several tests have been developed but the most widely used is an extension of the Dickey and Fuller test \cite{dickey1979} called the Augmented Dickey-Fuller (ADF) test developed in 1984 by Said and Dickey in 1984\cite{said1984}.
 
 The ADF test tests the null hypothesis that a time series $y_t$ is I(1) against the alternative that it is I(0), assuming that the dynamics in the data have an ARMA structure. The ADF test is based on estimating the test regression:
@@ -318,6 +320,7 @@ The test statistic is the following:
 \[
 \text{ADF}_t = \frac{\hat{\phi} -1}{SE(\phi)}
 \]
+\noindent where SE is the standard error.
 
 The $\text{ADF}_t$ statistic is based on the least squares estimates of equation \ref{eq:adftest}.
 
@@ -893,9 +896,31 @@ dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 \end{align}
 Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
 can be solved with respect to $\mathbf{X}$ using the ordinary least
-squares estimation.
+squares estimation (see section \ref{sec:OLS}).
 
-\subsection{Ordinary Least Squares method}
+VECM models are employed because many economic time series appear to be first-difference stationary, i.e. I(1)
+
+Conventional regression estimators, including VARs, have good properties when applied to covariance-stationary time series, but encounter difficulties when applied to non stationary or integrated processes.
+
+These difficulties were illustrated by Granger and Newbold in 1974 \cite{granger1974} when they introduced the concept of spurious regressions (see section \ref{sec:spurious}). In 1982, Nelson and Plosser  \cite{nelson1982} showed that unit roots might be present in a wide variety of macroeconomic series
+in levels or logarithms. This finding gave rise to the industry of unit root testing, and
+the implication that variables should be rendered stationary by
+differencing before they are included in an econometric model.
+Further theoretical developments by Granger and Engle in 1987 \cite{engle87} raised the possibility that two or more integrated, non stationary time series might be cointegrated, so that some linear combination of these series could be stationary even though each series were not. 
+
+If two series are both integrated (of order one, or I(1)) we could model
+their interrelationship by taking first differences of each series and
+including the differences in a VAR or a structural model.
+However, this approach would be suboptimal if it was determined that
+these series are indeed cointegrated. In that case, the VAR only
+express the short-run responses of these series to innovations in each
+series. This implies that the simple regression in first differences is
+misspecified.
+If the series are cointegrated, they move together in the long-run. A
+VAR in first differences will not capture those long-run tendences.
+VECM fit to the first differences of the non stationary variables, but a lagged error-correction term is added to the relationship representing the long-run relationship.
+
+\subsection{Ordinary Least Squares method} \label{sec:OLS}
 
 The solution $\widehat{\mathbf{A}}$ to
 equation~(\ref{eq:vareq}) can be obtained by the ordinary least squares (OLS)
@@ -941,159 +966,3 @@ Pseudo-inverse can then be written as follows:
 \end{equation*}
 
 
-
-\begin{equation}
- \label{eq:varmatrix}
-               \underbrace{ \left[ \begin{array}{c}
-                \mathbf{y}_{p+1} \\
-                \mathbf{y}_{p+2} \\
-                \vdots           \\
-                \mathbf{y}_N  
-               \end{array} \right]  }_{\substack{ \mathbf{B}^\top\\ (N-p) \times l}}   
-= 
-\underbrace{
-  \begin{bmatrix}
-    \phi_1 & \dots & \phi_p & \mathbf{c}   
-  \end{bmatrix}}_{\substack{ \mathbf{X}^\top\\ l \times  (l \times p+1)}}
-\underbrace{\begin{bmatrix}
-   \mathbf{y}_p     & \mathbf{y}_{p+1}  & \dots     & \mathbf{y}_{N-1}\\
-   \mathbf{y}_{p-1} & \mathbf{y}_{p}  & \dots     & \mathbf{y}_{N-2} \\
-   \vdots           & \vdots            & \ddots    & \vdots  \\
-   \mathbf{y}_{1}   & \mathbf{y}_{2}& \dots      & \mathbf{y}_{N-p} \\
-   1                &  1                & \dots      &             1 
-   \end{bmatrix}}_{\substack{ \mathbf{A}^\top\\  (l \times p+1) \times (N-p)}}
-+
-\underbrace{\begin{bmatrix}
-              \mathbf{\epsilon}_{p+1}  \\ 
-              \mathbf{\epsilon}_{p+2}  \\ 
-               \vdots                 \\
-              \mathbf{\epsilon}_N     
-             \end{bmatrix}}_{\substack{\mathbf{E}^\top\\ (N-p) \times l }} 
-\end{equation}
-
-
-%\begin{equation}
-% \label{eq:vecmatrix}
-%\underbrace{
-%      \begin{bmatrix}
-%       \mathbf{\Delta y}_{p+1}  \\ 
-%       \mathbf{\Delta y}_{p+2}  \\ 
-%       \vdots                   \\ 
-%       \mathbf{\Delta y}_N      
-%      \end{bmatrix}}_{\mathbf{B} } =
-%\arraycolsep=1.4pt  
-%\underbrace{\begin{bmatrix}
-%   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
-%  \end{bmatrix}}_{\mathbf{X}^\top}
-%\underbrace{\begin{bmatrix}
-% \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
-% \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
-% \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
-% \vdots                  & \vdots                 & \ddots&  \vdots                   \\
-% \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
-% 1                      & 1                       & \dots     & 1   
-% \end{bmatrix}}_{\mathbf{A}^\top}
-%+
-%\underbrace{\begin{bmatrix}
-%              \mathbf{\epsilon}_{p+1} \\ 
-%              \mathbf{\epsilon}_{p+2} \\ 
-%              \vdots \\ 
-%              \mathbf{\epsilon}_N
-%             \end{bmatrix}}_{\mathbf{E}^\top}
-%\end{equation}
-
-
-%VECMs may be estimated by Stata’s vec command. These models
-%
-%are employed because many economic time series appear to be
-%
-%‘first-difference stationary,’ with their levels exhibiting unit root or
-%
-%nonstationary behavior. Conventional regression estimators, including
-%
-%VARs, have good properties when applied to covariance-stationary
-%
-%time series, but encounter difficulties when applied to nonstationary or
-%
-%integrated processes.
-%
-%These difficulties were illustrated by Granger and Newbold
-%
-%(J. Econometrics, 1974) when they introduced the concept of spurious
-%
-%regressions. If you have two independent random walk processes, a
-%
-%regression of one on the other will yield a significant coefficient, even
-%
-%though they are not related in any way.
-%
-%
-%This insight, and Nelson and Plosser’s findings (J. Mon. Ec., 1982) that
-%
-%unit roots might be present in a wide variety of macroeconomic series
-%
-%in levels or logarithms, gave rise to the industry of unit root testing, and
-%
-%the implication that variables should be rendered stationary by
-%
-%differencing before they are included in an econometric model.
-%
-%Further theoretical developments by Granger and Engle in their
-%
-%celebrated paper (Econometrica, 1987) raised the possibility that two
-%
-%or more integrated, nonstationary time series might be cointegrated, so
-%
-%that some linear combination of these series could be stationary even
-%
-%though each series is not.
-%
-%
-%
-%If two series are both integrated (of order one, or I(1)) we could model
-%
-%their interrelationship by taking first differences of each series and
-%
-%including the differences in a VAR or a structural model.
-%
-%However, this approach would be suboptimal if it was determined that
-%
-%these series are indeed cointegrated. In that case, the VAR would only
-%
-%express the short-run responses of these series to innovations in each
-%
-%series. This implies that the simple regression in first differences is
-%
-%misspecified.
-%
-%If the series are cointegrated, they move together in the long run. A
-%
-%VAR in first differences, although properly specified in terms of
-%
-%covariance-stationary series, will not capture those long-run
-%
-%tendences.
-%
-%Accordingly, the VAR concept may be extended to the vector
-%
-%error-correction model, or VECM, where there is evidence of
-%
-%cointegration among two or more series. The model is fit to the first
-%
-%differences of the nonstationary variables, but a lagged error-correction
-%
-%term is added to the relationship.
-%
-%In the case of two variables, this term is the lagged residual from the
-%
-%cointegrating regression, of one of the series on the other in levels. It
-%
-%expresses the prior disequilibrium from the long-run relationship, in
-%
-%which that residual would be zero.
-%
-%In the case of multiple variables, there is a vector of error-correction
-%
-%terms, of length equal to the number of cointegrating relationships, or
-%
-%cointegrating vectors, among the series.
