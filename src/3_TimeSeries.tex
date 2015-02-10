@@ -305,10 +305,21 @@ Many economic and financial time series exhibit trending behaviour or non-statio
 
 The ADF test tests the null hypothesis that a time series $y_t$ is I(1) against the alternative that it is I(0), assuming that the dynamics in the data have an ARMA structure. The ADF test is based on estimating the test regression:
 
+\begin{equation}
+\label{eq:adftest}
+y_t = \boldsymbol{\beta}^\top \mathbb{D}_t + \phi y_{t-1} + \sum_{j=1}^p \Psi_j \Delta y_{t-j} + \epsilon_t
+\end{equation}
+
+\noindent where $\mathbb{D}_t$ is a vector of deterministic terms. Lag length $p$ has to be determined when applying the test, Akaike Information Criteria (AIC) is commonly used to determine it.
+The p-lagged difference terms $\Delta y_{t-j}$ are used to approximate an ARMA process and the value of $p$ is set so that the error $\epsilon_t$ is serially uncorrelated. 
+Under the null hypothesis, $y_t$ is I(1) which implies that $\phi=1$. 
+The test statistic is the following:
+
 \[
-y_t = \boldsymbol{\beta}^\top
+\text{ADF}_t = \frac{\hat{\phi} -1}{SE(\phi)}
 \]
 
+The $\text{ADF}_t$ statistic is based on the least squares estimates of equation \ref{eq:adftest}.
 
 \section{Stylized facts of asset returns}
 \label{sec:stylizedfacts}
