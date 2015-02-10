@@ -138,13 +138,6 @@ If after taking returns or first differences the regression fit is still good we
 %Kurtosis:                       2.662   Cond. No.                         23.3
 %==============================================================================
 
-\subsection{Unit root tests}
-
-
-
-
-
-
 \newpage
 \subsection{Integration}
 
@@ -305,7 +298,17 @@ original process. Cointegration vectors can be obtained using the Johansen metho
 \end{minipage}
 \end{figure}
 
-\newpage
+
+\section{Unit root tests}
+
+Many economic and financial time series exhibit trending behaviour or non-stationary behaviour in the mean or variance. An important econometric task is to determine the type of non-stationary. For trend stationary I(0) time series a time-trend regression is appropriate. For I(1) time series taking first differences transforms it into a stationary one.  For cointegration to determine if time series are I(1) is mandatory to model their long-run relationship. In order to determine if a time series is an a I(1) or I(0) process unit root tests are used. Several tests have been developed but the most widely used is an extension of the Dickey and Fuller test \cite{dickey1979} called the Augmented Dickey-Fuller (ADF) test developed in 1984 by Said and Dickey in 1984\cite{said1984}.
+
+The ADF test tests the null hypothesis that a time series $y_t$ is I(1) against the alternative that it is I(0), assuming that the dynamics in the data have an ARMA structure. The ADF test is based on estimating the test regression:
+
+\[
+y_t = \boldsymbol{\beta}^\top
+\]
+
 
 \section{Stylized facts of asset returns}
 \label{sec:stylizedfacts}
@@ -957,10 +960,6 @@ Pseudo-inverse can then be written as follows:
              \end{bmatrix}}_{\substack{\mathbf{E}^\top\\ (N-p) \times l }} 
 \end{equation}
 
-
-\section{Unit root tests}
-
-\section{Johansen method}
 
 %\begin{equation}
 % \label{eq:vecmatrix}
