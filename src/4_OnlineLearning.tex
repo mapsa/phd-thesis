@@ -1,22 +1,37 @@
 \chapter{Machine Learning Models}
-Machine learning is a scientific discipline focused on the development of algorithms focused on learning from examples. This idea has become central to the design of search engines, robots systems and forecasts applications which process large data sets. However, machines require an extended training period when developing algorithms to predict future behaviour such as financial time series forecasting where new data is available in a short period of time.  Online machine learning techniques tackle this problems and allow to update the model with new data or to compute a new model using less data and in a short period of time.
-
+Machine learning is a scientific discipline focused on the development of algorithms focused on learning from examples. This idea has become central to the design of search engines, robots systems and forecasts applications which process large data sets. However, machines require an extended training period when developing algorithms to predict future behaviour such as financial time series forecasting where new data is available in a short period of time.  Online machine learning techniques tackle this problem and allow to update the model with new data or to compute a new model using less data allowing to give a response in a short period of time.
 
 \vspace{0.5cm} 
 
 \section{Introduction}
+Machine Learning (ML) studies computer algorithms for learning
+something such as to complete a task, to make accurate predictions or to behave intelligently. The learning is always based on samples and the objective is about to do better in the future based on the past experiences in an automatic way. ML is a subarea of artificial intelligence and broadly intersects with other fields such as statistics, mathematics, physics and computer science. 
+There are many examples of machine learning problems: time series forecasting, image processing, face detection, spam filtering, weather prediction, search engines, among many others.
 
-There are three types of Machine Learning (ML) classified depending on the nature of the learning input or output available to a learning system.
+ML models are often more accurate than what can be created through direct programming. The reason is that ML models are data driven and are able to examine large amounts of data.
+
+There are three types of ML classified depending on the nature of the learning input or output available to a learning system.
 \begin{description}
-\item[supervised learning] also known as classification or regression \cite{bishop2006}, the input data  is a pair which contains the example input and its desired outputs (also called labels). The goal is to learn a general rule that maps inputs to outputs.
- Its two mainstream approaches are: support vector machines (SVMs) \cite{vapnik1998} and ensemble learning \cite{breiman1998}.
-\item[unsupervised learning] also known as clustering \cite{ben2005} and reinforcement learning \cite{sutton1998}.
+\item[supervised learning]  the input data is a tuple which contains the example input and its desired outputs (also called labels). The list of tuples is called the training set. The concept of supervised learning comes from the supervisor, acting as a teacher in the learning process. The goal is to learn a general rule that maps inputs to outputs optimising a target function. There are two related problem types in supervised learning: classification and regression problems \cite{bishop2006}. Its two mainstream approaches are: support vector machines (SVMs) \cite{vapnik1998} and ensemble learning \cite{breiman1998}. Furthermore supervised learning can be categorised into offline or batch learning and online learning (see section \ref{sec:batch} and \ref{sec:online}). 
+\item[unsupervised learning] also known as clustering \cite{ben2005}. In this type of learning no labels are given and the system has to find a structure on its own, discovering hidden patterns in data.
+\item[reinforcement learning] is the problem faced by an agent that must learn 
+through trial-and-error interactions with a dynamic environment. It is based on programming agents by reward and punishment without needing to specify how the task is to be achieved \cite{sutton1998}.
 \end{description}
 
 All three types of problems can be viewed as optimization problems. The ML core task is to define a learning criterion, i.e the function to be optimized. 
 
-\section{Batch learning}
-\section{Online learning}
+\section{Batch learning} \label{sec:batch}
+
+Batch learning, also called statistical or offline learning, is a supervised machine learning framework. In batch learning, there is a data set available where the learner can build the internal model without any limits in accessing the data. There is time enough to carefully analyse the dataset, build large predictive models and combine them in a sophisticated way. 
+
+%%% Learning problem. Ac;a ma;ana, formulas y descripcion de tallada del problema de aprendizaje
+
+
+\section{Online learning} \label{sec:online}
+
+In contrast to offline learning, online learning has access to a sample only once. The goal is the same, predicting targets as accurate as possible. For example, stock market prediction can be seen as online learning. The algorithm makes a prediction of the stock, little time after the real stock price is available, this information can be incorporated to the learner to further improve the prediction accuracy. In general, there is very much data available in an online learning setup, the data set grows continuously. Offline learning has equal or superior accuracy compared to online learning when the same amount of data is used.
+
+
 \subsection{Online learning}
 
 Classic statistical theory of sequential prediction enforces strong assumptions on the statistical properties of the input sequence (for example, stationary stochastic process). However, these assumptions can be unknown or change over time. In online learning there is no previous assumption about the data and the sequence is allowed to be deterministic, stochastic or even adaptive.  
@@ -30,4 +45,6 @@ The motivation for online learning is to obtain computational efficiency and tac
 \textit{a)} \textbf{memory boundedness:} consists of limiting the number of support vectors in order to improve computational efficiency. One example of this is the budget perceptron~\cite{crammeretal2004} which reduces the number of examples used for prediction. Alternatively, in the forgetron algorithm~\cite{dekeletal2008} the damage caused by removing old examples is discussed, which can be avoided by removing samples with small influences. Other examples are the sliding window kernel (RLS)~\cite{vanvaerenberghetal2006}, which only considers a sliding window of the most recent data, and in \cite{arce+salinas2012} is shown a variant of aggregating algorithm for regression~\cite{vovk2001} considering only a sliding window of the most recent data, optimising also common matrix operations.
 
 \textit{b)} \textbf{weight decay:} one example of this is the shifting perceptron algorithm which implements an exponential decaying scheme for the examples~\cite{cavallantietal2007}.
-Performance of an online learning algorithm is measured by the cumulative loss it suffers along its run on a sequence of examples. In order to minimize this loss, the learner may update the hypothesis after each round so as to be more accurate in later rounds.
+Performance of an online learning algorithm is measured by the cumulative loss it suffers along its run on a sequence of examples. In order to minimise this loss, the learner may update the hypothesis after each round so as to be more accurate in later rounds.
+
+%%% Measure error
