@@ -45,6 +45,89 @@ A learning algorithm $\mathcal{A}$ takes as input a data set $S \in \mathcal{S}$
 S &\rightarrow &\mathcal{A}(S) = f_S
 \end{eqnarray*}
 
+\noindent where $\mathcal{H}$ is called the hypothesis space, is the space of functions that the algorithm is allowed to search. The selection of $f_S$ is based on a loss function $V(f(x),y)$ which expected risk has to be minimised.
+
+\[
+E[V(f(x),y)] = \int V(f(x),y) dp(x,y)
+\]
+
+\noindent $V(f(x),y)$ denote the price paid for mistakes. Therefore, $V(f(x),y)=0$ if$f(x)=y$.
+
+For regression, the most common loss function is square loss or L2 loss function:
+\begin{equation}
+\label{eq:l2loss}
+V(f(x),y) = (f(x)-y)^2
+\end{equation}
+\noindent another option is the L1 loss
+\begin{equation}
+\label{eq:l1loss}
+V(f(x),y) = |f(x)-y| \, .
+\end{equation}
+\noindent the choice of loss function here gives rise to several well-known learning algorithms such as regularised least squares and support vector machines. %verificar esto7776
+
+Since the true distribution is unknown and only training samples are available, the objective is to estimate a function $\hat{f}$ through empirical risk (training error) minimisation (ERM): 
+
+\begin{equation} 
+\label{eq:erm}
+R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y)
+\end{equation}
+
+
+Since ERM is an ill-posed problem, Tikhonov introduced a regularisation which ensures well-posedness and generalisation of ERM by constraining the hypothesis space $\mathcal{H}$ usually called regularised ERM or Tikhonov regularisation.
+
+Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a fixed positive parameter $\lambda$ the following:
+
+\begin{equation} 
+\label{eq:rerm}
+R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
+\end{equation}
+
+\noindent where $\mathcal{R}(f)$ is the regulariser, a penalisation on $f$.
+
+In all learning algorithms that are trained from example data, there is a tradeoff \cite{dietterich2003} between three factors:
+\begin{description}
+\item[Complexity of the hypothesis class] for best generalisation, we should adjust the complexity of the learner model $\hat{f}$ to the complexity of the data $f$. In polynomial regression, the complexity parameter is the order of the fitted polynomial, and therefore we need to find a way to choose the best order that minimises the generalisation error, that is, tune the complexity of the model to best fit the complexity of the function inherent in the data.
+\item[Generalisation accuracy on new examples] is the capability of the algorithm to generate the right output for an input instance outside the training set.
+\item[The amount of training data]  generally generalisation accuracy increases as the amount of training data increases.
+\end{description}
+
+Very complex models will fit the training data better (low bias) but it could overfit it and generalise poorly (high variance), this is also called the bias-variance tradeoff.  Generalisation accuracy can sometimes be improved with more training data. The figure \ref{fig:tradeoff} illustrates how generalisation accuracy depends on the complexity of the model and the amount of training data.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/3tradeoff}
+  \caption{Triple tradeoff in empirical learning}
+  \label{fig:tradeoff}
+\end{figure}
+
+
+% Revisar!!!! _========================================
+
+The bias-variance tradeoff
+
+Finding an \hat{f} that generalizes to points outside of the training set can be done with any of the countless algorithms used for supervised learning. It turns out that whichever function \hat{f} we select, we can decompose its expected error on an unseen sample x as follows:[3]:34[4]:223
+
+
+\begin{align}
+\mathrm{E}\Big[\big(y - \hat{f}(x)\big)^2\Big]
+ & = \mathrm{Bias}\big[\hat{f}(x)\big]^2 + \mathrm{Var}\big[\hat{f}(x)\big] + \sigma^2 \\
+\end{align}
+Where:
+
+
+\begin{align}
+ \mathrm{Bias}\big[\hat{f}(x)\big] = \mathrm{E}\big[\hat{f}(x)\big] - f(x)
+\end{align}
+and
+
+
+\begin{align}
+\mathrm{Var}\big[\hat{f}(x)\big] = \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big] 
+\end{align}
+
+
+% Revisar!!!! _========================================
+
 \section{Batch and Online learning} \label{sec:onoffline}
 
 Batch learning, also called statistical or offline learning, is a supervised machine learning framework. In batch learning, there is a data set available where the learner can build the internal model without any limits in accessing the data. There is time enough to carefully analyse the dataset, build large predictive models and combine them in a sophisticated way. 
