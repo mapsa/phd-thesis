@@ -72,18 +72,7 @@ Since the true distribution is unknown and only training samples are available, 
 R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y)
 \end{equation}
 
-
-Since ERM is an ill-posed problem, Tikhonov introduced a regularisation which ensures well-posedness and generalisation of ERM by constraining the hypothesis space $\mathcal{H}$ usually called regularised ERM or Tikhonov regularisation.
-
-Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a fixed positive parameter $\lambda$ the following:
-
-\begin{equation} 
-\label{eq:rerm}
-R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
-\end{equation}
-
-\noindent where $\mathcal{R}(f)$ is the regulariser, a penalisation on $f$.
-
+\subsection{Learning algorithms}
 In all learning algorithms that are trained from example data, there is a tradeoff \cite{dietterich2003} between three factors:
 \begin{description}
 \item[Complexity of the hypothesis class] for best generalisation, we should adjust the complexity of the learner model $\hat{f}$ to the complexity of the data $f$. In polynomial regression, the complexity parameter is the order of the fitted polynomial, and therefore we need to find a way to choose the best order that minimises the generalisation error, that is, tune the complexity of the model to best fit the complexity of the function inherent in the data.
@@ -100,14 +89,11 @@ Very complex models will fit the training data better (low bias) but it could ov
   \label{fig:tradeoff}
 \end{figure}
 
-
-% Revisar!!!! _========================================
-
 \subsection{The bias-variance tradeoff}
 
 Models learning error can be split into two main components: error due to bias and error due to variance. Bias measures how far off in general these models' predictions are from the correct value. Variance is taken as the variability of a model prediction for a given data point.
 
-If we have a learning model $\hat{f}$, its expected error on an unseen sample $x$ can be decomposed as follows:
+If we have a learning model $\hat{f}$, its expected generalisation error on an unseen or testing sample $x$ can be decomposed as follows:
 
 \begin{align}
 \mathrm{E}\Big[\big(y - \hat{f}(x)\big)^2\Big]
@@ -119,12 +105,58 @@ If we have a learning model $\hat{f}$, its expected error on an unseen sample $x
  \mathrm{Var}\big[\hat{f}(x)\big] &= \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big] 
 \end{align*}
 
+
 Bias is introduced by the model selection. Therefore the model building process is repeated (through resampling) and substantially different averages of prediction values are obtained, bias will be high. The error due to variance is the amount by which the prediction, over one training set, differs from the expected predicted value, over all the training sets. Variance measures how inconsistent are the predictions from one another, over different training sets, not whether they are accurate or not.
+
+This generalisation error is unknown, but it can be estimated using a training sample, a testing sample or by estimating the model complexity. Figure \ref{fig:traintesterror} shows prediction error for training and testing sample.  In general, in the training sample prediction error is decreasing with more complex models but it overfit the data and it is not a good model for the test data. Figure \ref{fig:bvtradeoff} shows how testing error can be decomposed into bias and variance components. The best model will be the one has a balance between bias and variance.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/model_complexity}
+  \caption{Training and test error}
+  \label{fig:traintesterror}
+\end{figure}
+
 
 The objective is to simultaneously reduce bias and variance as much as possible in order to obtain as accurate model as is feasible.  However, there is a tradeoff to be made when selecting models. Models that exhibit small variance and high bias underfit the truth target.  Models that exhibit high variance and low bias overfit the truth target.
 
+This bias-variance tradeoff is the reason why in order to obtain the best model, data is usually broken in three subsets: training set, validation set and testing set. Training set is used to determine the model, validation set is used to estimate the generalisation error and finally testing set is used to estimate the accuracy of the model. Usually the partition is 50\% for training set, 25\% for validation and 25\% for testing purposes. This procedure can be extended to a Cross Validation (CV) procedure \cite{geisser1975}, usually used when the amount of data is limited. Various splitting strategies lead to various CV estimates. In K-fold cross-validation the training data is divided randomly into K distinct subsets, then the network is trained using K-1 subsets, and tested on the remaining subset. The process of training and testing is then repeated for each of the K possible choices of the subset omitted from the training. The average performance on the K omitted subsets is then our estimate of the generalisation performance.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/biasvariancetradeoff}
+  \caption{Bias variance tradeoff}
+  \label{fig:bvtradeoff}
+\end{figure}
+
+Another way to control the complexity of the model is to include in the optimisation function not only the generalisation error but a penalisation of high complex models. 
 
 
+\subsection{Regularization}
+Since ERM is an ill-posed problem, Tikhonov introduced a regularisation which ensures well-posedness and generalisation of ERM, i.e prevents overfit, by constraining the hypothesis space $\mathcal{H}$ usually called regularised ERM or Tikhonov regularisation.
+
+Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a fixed positive parameter $\lambda$ the following:
+
+\begin{equation} 
+\label{eq:rerm}
+R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
+\end{equation}
+
+\noindent where $\mathcal{R}(f)$ is the regulariser, a penalisation on $f$.
+
+One example of regularisation in linear models is ridge regression, which is a regularised least squares method.
+The least squares (LS) method is a well known way to solve a regression
+problem. 
+LS method consists of minimising the sum of squared errors:
+
+%\begin{eqnarray*}
+%\label{eq:problem2}
+% J(\mathbf{\phi}) &=& \sum_{t=1}^N (f(\mathbf{x}_t)-y_t)^2 
+% = \sum_{t=1}^N (\mathbf{\phi}^\intercal {\mathbf{x}}_t-y_t)^2 
+% = \| \mathbf{X}\mathbf{\phi} - \mathbf{Y} \|_2^2 
+%\end{eqnarray*}
+
+% Aca seguir agregando slides.tex
 
 \section{Batch and Online learning} \label{sec:onoffline}
 
