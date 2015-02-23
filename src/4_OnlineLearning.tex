@@ -103,30 +103,28 @@ Very complex models will fit the training data better (low bias) but it could ov
 
 % Revisar!!!! _========================================
 
-The bias-variance tradeoff
+\subsection{The bias-variance tradeoff}
 
-Finding an \hat{f} that generalizes to points outside of the training set can be done with any of the countless algorithms used for supervised learning. It turns out that whichever function \hat{f} we select, we can decompose its expected error on an unseen sample x as follows:[3]:34[4]:223
+Models learning error can be split into two main components: error due to bias and error due to variance. Bias measures how far off in general these models' predictions are from the correct value. Variance is taken as the variability of a model prediction for a given data point.
 
+If we have a learning model $\hat{f}$, its expected error on an unseen sample $x$ can be decomposed as follows:
 
 \begin{align}
 \mathrm{E}\Big[\big(y - \hat{f}(x)\big)^2\Big]
- & = \mathrm{Bias}\big[\hat{f}(x)\big]^2 + \mathrm{Var}\big[\hat{f}(x)\big] + \sigma^2 \\
+ & = \mathrm{Bias}\big[\hat{f}(x)\big]^2 + \mathrm{Var}\big[\hat{f}(x)\big] + \sigma^2
 \end{align}
-Where:
+\noindent where:
+\begin{align*}
+ \mathrm{Bias}\big[\hat{f}(x)\big] &= \mathrm{E}\big[\hat{f}(x)\big] - f(x) \\
+ \mathrm{Var}\big[\hat{f}(x)\big] &= \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big] 
+\end{align*}
+
+Bias is introduced by the model selection. Therefore the model building process is repeated (through resampling) and substantially different averages of prediction values are obtained, bias will be high. The error due to variance is the amount by which the prediction, over one training set, differs from the expected predicted value, over all the training sets. Variance measures how inconsistent are the predictions from one another, over different training sets, not whether they are accurate or not.
+
+The objective is to simultaneously reduce bias and variance as much as possible in order to obtain as accurate model as is feasible.  However, there is a tradeoff to be made when selecting models. Models that exhibit small variance and high bias underfit the truth target.  Models that exhibit high variance and low bias overfit the truth target.
 
 
-\begin{align}
- \mathrm{Bias}\big[\hat{f}(x)\big] = \mathrm{E}\big[\hat{f}(x)\big] - f(x)
-\end{align}
-and
 
-
-\begin{align}
-\mathrm{Var}\big[\hat{f}(x)\big] = \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big] 
-\end{align}
-
-
-% Revisar!!!! _========================================
 
 \section{Batch and Online learning} \label{sec:onoffline}
 
