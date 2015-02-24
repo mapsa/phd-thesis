@@ -144,29 +144,135 @@ R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
 
 \noindent where $\mathcal{R}(f)$ is the regulariser, a penalisation on $f$.
 
-One example of regularisation in linear models is ridge regression, which is a regularised least squares method.
+\subsection{Ridge Regression}
+One example of regularisation in linear models is Ridge Regression (RR), which is a regularised least squares method.
 The least squares (LS) method is a well known way to solve a regression
 problem. 
 LS method consists of minimising the sum of squared errors:
 
-%\begin{eqnarray*}
-%\label{eq:problem2}
-% J(\mathbf{\phi}) &=& \sum_{t=1}^N (f(\mathbf{x}_t)-y_t)^2 
-% = \sum_{t=1}^N (\mathbf{\phi}^\intercal {\mathbf{x}}_t-y_t)^2 
-% = \| \mathbf{X}\mathbf{\phi} - \mathbf{Y} \|_2^2 
-%\end{eqnarray*}
+\begin{eqnarray*}
+\label{eq:lsm}
+ J(\mathbf{\phi}) =& \sum_{t=1}^N (f(\mathbf{x}_t)-y_t)^2 \\
+ =& \sum_{t=1}^N (\mathbf{\phi}^\top {\mathbf{x}}_t-y_t)^2 \\
+ =& \| \mathbf{X}\mathbf{\phi} - \mathbf{Y} \|_2^2 
+\end{eqnarray*}
 
-% Aca seguir agregando slides.tex
+The optimal solution for $\mathbf{\phi}$ is:
+\begin{equation*}
+\mathbf{\phi}=(\mathbf{X}^\top
+\mathbf{X})^{-1}\mathbf{X}^\top \mathbf{Y}
+\end{equation*}
 
-\section{Batch and Online learning} \label{sec:onoffline}
+In order to avoid the singularity of the matrix $\mathbf{X}^\top \mathbf{X}$, a regularisation term is introduced: 
 
-Batch learning, also called statistical or offline learning, is a supervised machine learning framework. In batch learning, there is a data set available where the learner can build the internal model without any limits in accessing the data. There is time enough to carefully analyse the dataset, build large predictive models and combine them in a sophisticated way. 
+\begin{equation*}
+\label{eq:problem} 
+J(\mathbf{\phi}) =  \| \mathbf{X}\mathbf{\phi} - \mathbf{Y} \|_2^2  + \lambda
+ \| \mathbf{\phi}\| ^2
+\end{equation*}
+
+\noindent which optimal solution $\mathbf{\phi}_*$ is well known: 
+
+\begin{equation*}
+\label{eq:optsolRR}
+\mathbf{\phi}_*=(\mathbf{X}^\top \mathbf{X}+\lambda \mathbb{I})^{-1}\mathbf{X}^\top y \, ,
+\end{equation*}
+
+\texttt{Demo}
+\begin{eqnarray*}
+J(\mathbf{\phi}) &=&  \| \mathbf{X}\mathbf{\phi} - \mathbf{Y} \|_2^2  + \lambda
+ \| \mathbf{\phi}\| ^2 \\
+ &=&  \sum_{t=1}^N (\mathbf{\phi}^\top {\bf x}_t-y_t)^2 + \lambda \sum_{i=1}^p \phi_i^2 \\
+ &=& (\phi^\top x_1-y_1)^2 + \dots + (\phi^\top x_N-y_N)^2 + \lambda (\phi_1^2+\dots+\phi_p^2)
+\end{eqnarray*}
+\noindent taking derivatives
+ \begin{eqnarray*}
+ \frac{\partial J(\mathbf{\phi})}{\partial \phi_1}&=& 
+ 2(\phi^\top \mathbf{x}_1-y_1)\mathbf{x}_{11} + \dots + 2(\phi^\top \mathbf{x}_N-y_N)\mathbf{x}_{N1} + 2\lambda \phi_1 \\
+ &=& 2\mathbf{x}_1^\top(\mathbf{X}\phi-\mathbf{Y}) + 2\lambda\phi_1\\
+& \vdots &\\
+  \frac{\partial J(\mathbf{\phi})}{\partial \phi_p}&=& 
+ 2\mathbf{x}_p^\top(\mathbf{X}\phi-\mathbf{Y}) + 2\lambda\phi_p 
+\end{eqnarray*}
+
+Then we have that:
+\begin{eqnarray*}
+\frac{\partial J(\mathbf{\phi})}{\partial \phi}&=& 
+ 2\mathbf{X}^\top(\mathbf{X}\phi-\mathbf{Y}) + 2\lambda\phi
+\end{eqnarray*}
+Since $\frac{\partial J(\mathbf{\phi})}{\partial \phi}=0$ we have:
+\begin{eqnarray*}
+2\mathbf{X}^\top(\mathbf{X}\phi-\mathbf{Y}) + 2\lambda\phi&=&0 \\
+\mathbf{X}^\top\mathbf{X}\phi - \mathbf{X}^\top\mathbf{Y} + \lambda\phi &=& 0\\
+(\mathbf{X}^\top\mathbf{X}+\lambda\mathbb{I})\phi &=&  \mathbf{X}^\top\mathbf{Y} \\
+\phi &=& (\mathbf{X}^\top\mathbf{X}+\lambda\mathbb{I})^{-1}  \mathbf{X}^\top\mathbf{Y}
+\end{eqnarray*}
 
 
-In contrast to offline learning, online learning has access to a sample only once. The goal is the same, predicting targets as accurate as possible. For example, stock market prediction can be seen as online learning. The algorithm makes a prediction of the stock, little time after the real stock price is available, this information can be incorporated to the learner to further improve the prediction accuracy. In general, there is very much data available in an online learning setup, the data set grows continuously. Offline learning has equal or superior accuracy compared to online learning when the same amount of data is used.
+When $\mathbf{X}$ is orthonormal then $\mathbf{X}^\top \mathbf{X} =\mathbb{I}$ and there is a simple relation between the ridge estimator and the OLS estimator:
+\begin{eqnarray*}
+\phi_* (\lambda) &=& (\mathbf{X}^\top \mathbf{X}+\lambda \mathbb{I})^{-1}\mathbf{X}^\top \mathbf{Y} \\
+ &=& (\mathbb{I} + \lambda \mathbb{I})^{-1} \mathbf{X}^\top \mathbf{Y} \\
+ &=&(1+\lambda)^{-1} \mathbb{I} \mathbf{X}^\top \mathbf{Y} \\
+ &=&(1+\lambda)^{-1} (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{Y} \\
+ &=&(1+\lambda)^{-1} \phi
+\end{eqnarray*}
+
+\subsection{Machine learning algorithms}
+In recent years many successful machine learning applications have been developed. Artificial neural network (ANN) and Support Vector Machines (SVM) have been some of the most popularly used machine learning algorithm. Historically, SVMs emerged after ANN.
+
+ANN is inspired by biological learning systems even though it does not mimic it fully. ANN are organised into layers and have unidirectional connections between the layers, feed-forward network is the most used. 
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/ffn}
+  \caption{Feed-forward neural network}
+  \label{fig:ffn}
+\end{figure}
+
+SVM on the other hand is a relatively new learning algorithm. It can be
+similarly used to learn target functions. However, unlike ANN, it is very well founded
+based on theory in statistical learning [2]. The major difference between SVM and ANN
+is in the error optimization. In ANN, the aim of learning is to obtain a set of weight
+values which minimize the training error while in SVM the training error is set to
+minimum while training adjust the capacity of the machine. During training, SVM
+learned the parameters a?s and the number of support vectors which is equivalent to the
+number of hidden units in ANN.
+the nodes are artificial
+neurons and directed edges are connections between neuron outputs and neuron inputs.
+The main characteristics of neural networks are that they have the ability to learn
+complex nonlinear input-output relationships, they use sequential training procedures and
+they adapt themselves to the data.
 
 
-\subsection{Online learning}
+
+
+Support Vector Machine (SVM) was introduced in 1992 by Vapnik and his coworkers
+[3]. In its original form, SVM is a training algorithm for linear classification.
+Only later it was used for regression, principal component analysis, novelty detection and
+also for non-linear case. SVM tunes the capacity of the classification function by
+maximizing the margin between the training patterns and the decision boundary. The
+solution is expressed as a linear combination of supporting patterns, which are the subset
+of training patterns close to the decision boundary, called the support vectors. 
+
+For nonlinear
+case, SVM mapped the data sets of input space into a higher dimensional feature
+space, which is linear and the large-margin learning algorithm is then applied. However,
+the mapping can be implicitly done by kernel functions. In the high dimensional feature
+space, simpler and linear hyper plane classifiers that have maximal margin between the
+classes can be obtained.
+
+
+\subsection{Kernel methods}
+
+Kernel functions may be used to introduce a nonlinear separation
+in input space despite the linear classifier in decision space
+
+\section{Online learning} \label{sec:onoffline}
+
+Online learning is a supervised machine learning framework that is useful when we have sequential access to a sample only once.  This differs from the classical batch learning, where there is an entire data set available and the learner can build the internal model without any limits in accessing the data. In batch learning, there is time enough to carefully analyse the dataset, build large predictive models and combine them in a sophisticated way. 
+
+In only learning the goal is the same as batch learning, predicting targets as accurate as possible. For example, stock market prediction can be seen as online learning. The algorithm makes a prediction of the stock, little time after the real stock price is available, this information can be incorporated to the learner to further improve the prediction accuracy. In general, there is too much data available in an online learning setup, the data set grows continuously. Offline learning has equal or superior accuracy compared to online learning when the same amount of data is used.
 
 Classic statistical theory of sequential prediction enforces strong assumptions on the statistical properties of the input sequence (for example, stationary stochastic process). However, these assumptions can be unknown or change over time. In online learning there is no previous assumption about the data and the sequence is allowed to be deterministic, stochastic or even adaptive.  
 
