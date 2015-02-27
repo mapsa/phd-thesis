@@ -97,14 +97,42 @@ If we have a learning model $\hat{f}$, its expected generalisation error on an u
 
 \begin{align}
 \mathrm{E}\Big[\big(y - \hat{f}(x)\big)^2\Big]
- & = \mathrm{Bias}\big[\hat{f}(x)\big]^2 + \mathrm{Var}\big[\hat{f}(x)\big] + \sigma^2
+ & = \mathrm{Bias}(\hat{f}(x))^2 + \mathrm{Var}(\hat{f}(x)) + \sigma^2
 \end{align}
 \noindent where:
 \begin{align*}
- \mathrm{Bias}\big[\hat{f}(x)\big] &= \mathrm{E}\big[\hat{f}(x)\big] - f(x) \\
- \mathrm{Var}\big[\hat{f}(x)\big] &= \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big] 
+ \mathrm{Bias}(\hat{f}(x)) &= \mathrm{E}\big[\hat{f}(x)\big] - f(x) \\
+ \mathrm{Var}(\hat{f}(x)) &= \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big] 
 \end{align*}
 
+
+\textbf{Demo}\quad
+
+\begin{eqnarray*}
+E[(y-\hat{f}(\mathbf{x}))^2] & =&
+E[(y-f(\mathbf{x})+f(\mathbf{x})-\hat{f}(\mathbf{x}))^2] \\
+&=& E[(B-f(\mathbf{x}))^2] +
+E[(f(\mathbf{x})-\hat{f}(\mathbf{x}))^2] + \dots \\
+& &
+2\cancelto{0}{E[y-f(\mathbf{x})]}E[f(\mathbf{x})-\hat{f}(\mathbf{x})] \\
+&=& \sigma^2 + MSE(\hat{f}(\mathbf{x}))
+\end{eqnarray*}
+
+\noindent where 
+
+\begin{eqnarray*}
+    MSE(\hat{f}(\mathbf{x})) &=&
+    E[f(\mathbf{x})-\hat{f}(\mathbf{x}))]^2 \\
+    &=& E[f(\mathbf{x})-E[\hat{f}(\mathbf{x})] +
+    E[\hat{f}(\mathbf{x})]-\hat{f}(\mathbf{x}))]^2 \\
+    &=&  E[(f(\mathbf{x})-E[\hat{f}(\mathbf{x})])^2] +
+      E[(\hat{f}(\mathbf{x})-E[\hat{f}(\mathbf{x})])^2] + \dots\\
+    & & E[(f(\mathbf{x})-E[\hat{f}(\mathbf{x})])] 
+    \cancelto{0}{E[(\hat{f}(\mathbf{x})-E[\hat{f}(\mathbf{x})])]} \\
+    &=& Bias(\hat{f}(\mathbf{x}))^2 + Var(\hat{f}(\mathbf{x}))
+\end{eqnarray*}
+
+$\blacksquare$
 
 Bias is introduced by the model selection. Therefore the model building process is repeated (through resampling) and substantially different averages of prediction values are obtained, bias will be high. The error due to variance is the amount by which the prediction, over one training set, differs from the expected predicted value, over all the training sets. Variance measures how inconsistent are the predictions from one another, over different training sets, not whether they are accurate or not.
 
@@ -171,14 +199,11 @@ l}{\mathbf{\mathbf{X}}} = \underset{m \times l}{\mathbf{Y}}
 \end{equation}
 
 The optimal solution for $\mathbf{\mathbf{X}}$ is:
-\begin{equation*}
+\begin{equation}
+\label{eq:MP}
 \mathbf{\mathbf{X}}= \mathbf{A}^+ \mathbf{Y}
-%(\mathbf{X}^\top\mathbf{X}
-%\mathbf{X})^{-1}\mathbf{X}^\top \mathbf{Y}
-\end{equation*}
+\end{equation}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \noindent where $\mathbf{A}^+$ is the Moore-Penrose pseudo-inverse
 which can be written as follows: 
 
@@ -298,11 +323,11 @@ $\blacksquare$
 
 In order to avoid the singularity of the matrix $\mathbf{A}^\top \mathbf{A}$, a regularisation term is introduced: 
 
-\begin{equation*}
-\label{eq:problem} 
+\begin{equation}
+\label{eq:RRproblem} 
 J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
  \| \mathbf{\mathbf{X}}\| ^2
-\end{equation*}
+\end{equation}
 
 \noindent which optimal solution $\mathbf{\mathbf{X}}_*$ is well known: 
 
@@ -344,6 +369,13 @@ Since $\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}=0$ we have:
 
 $\blacksquare$
 
+\subsection{Selection of Lambda}
+
+The additional term $\lambda \|\mathbf{\mathbf{X}}\|_2^2$ in the optimisation
+problem shown in equation~(\ref{eq:RRproblem}) has two effects on the solution:
+shrinks the coefficients towards zero and improves the conditioning of the
+problem.
+
 When $\mathbf{A}$ is orthonormal then $\mathbf{A}^\top \mathbf{A} =\mathbb{I}$ and there is a simple relation between the ridge estimator and the OLS estimator:
 \begin{eqnarray*}
 \mathbf{X}_* (\lambda) &=& (\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \\
@@ -352,6 +384,174 @@ When $\mathbf{A}$ is orthonormal then $\mathbf{A}^\top \mathbf{A} =\mathbb{I}$ a
  &=&(1+\lambda)^{-1} (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y} \\
  &=&(1+\lambda)^{-1} \mathbf{X}
 \end{eqnarray*}
+
+Figure~\ref{fig:shrinks} shows a visual example of the shrinking of the
+coefficients:
+
+\begin{figure}[h!]
+\includegraphics[width=0.5\linewidth]{img/shrinks}
+\caption{Shrink of regression coefficients}
+\label{fig:shrinks}
+\end{figure}
+
+
+
+On the other hand, the effect of adding the term $\lambda \mathbb{I}$
+to the matrix $\mathbf{A}^\top \mathbf{A}$
+(equation~(\ref{eq:optsolRR})) improves its condition number since it
+increases its diagonal values when $\lambda > 0 $.  The matrix
+$\mathbf{A}^\top \mathbf{A}$ is symmetrical ($(\mathbf{A}^\top
+\mathbf{A})^\top = \mathbf{A}^\top \mathbf{A}$) and therefore
+diagonalizable.  If we know the eigenvalue decomposition of $\mathbf{A}
+= \mathbf{U\Sigma V^\top}$, then:
+
+\begin{eqnarray*}
+\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I}&=&\mathbf{V\Sigma^2
+V}^\top + \lambda \mathbf{V} \mathbf{V}^\top\\ &=&\mathbf{V}
+(\mathbf{\Sigma}^2+\lambda\mathbb{I}) \mathbf{V}^\top \, ,
+\end{eqnarray*}
+
+\noindent where
+
+\begin{equation*}
+\mathbf{\Sigma}^2+\lambda\mathbb{I}=
+\begin{bmatrix}
+\sigma^2_1 + \lambda & \, & \, \\
+\, & \sigma^2_2 +\lambda & \, \\
+\, & \, & \ddots & \, \\
+\, & \, & \, & \sigma^2_n +\lambda \, .
+\end{bmatrix}
+\end{equation*}
+
+where $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_n$.
+
+Since the condition number of a matrix $\mathbf{A}$ is defined as:
+
+\begin{equation*}
+	\kappa = \|\mathbf{A}\| \|\mathbf{A}^{-1}\|
+\end{equation*}
+
+If matrix $\mathbf{A}$ is non-singular, its condition number can be
+expressed in terms of its singular values. The effect of adding the
+regularization term affects the condition number as follows:
+
+\begin{eqnarray*}
+\kappa_{ols} &=& \|\mathbf{A}\| \|\mathbf{A}^{-1}\|=\frac{\sigma_1}{\sigma_n} \\
+\kappa_{ridge} &=& \|\mathbf{A}^\intercal \mathbf{A} + \lambda \mathbb{I}\| 
+\|(\mathbf{A}^\intercal \mathbf{A} + \lambda \mathbb{I})^{-1}\|=\frac{\sigma_1+\lambda}{\sigma_n + \lambda} \,
+\end{eqnarray*}
+
+It is easy to see that the term $\lambda$ improves the condition number: 
+
+\begin{equation*}
+        \frac{\sigma_1+\lambda}{\sigma_n + \lambda} <
+        \frac{\sigma_1}{\sigma_n} \,  \qquad \forall \quad \lambda > 0
+\end{equation*}
+
+
+However, $\lambda$ cannot be too large. Tipically $\lambda$ is small and its
+magnitude depends on the matrix $\mathbf{A}$.
+
+For rank deficient matrices we know that $\text{det}(\mathbf{A A^\top})=0$, adding the
+term $\lambda \mathbb{I}$ we have that $\text{det}(\mathbf{A A^\top}+\lambda \mathbb{I}) =
+p(\lambda)$ where $p(\lambda)$ is a polynomial of degree $n$ ($\mathbf{A}$ is
+$m \times n$). The zeros of $p(\lambda)$ are discretes, so it can be represented
+as:
+
+\[
+p(\lambda) =
+\lambda(\lambda-\lambda_1)^{n_1}(\lambda-\lambda_2)^{n_2}\dots(\lambda-\lambda_s)^{n_s}
+\]
+
+\noindent where $n_1 + n_2 + \dots + n_s = n$.
+
+This means that $\lambda$ must be small in order to ensure that $p(\lambda)$
+does not vanish.
+
+
+%\subsection{The bias-variance tradeoff}
+%
+%To determine parameter $\lambda$ is crucial for ridge regression since it could
+%reduce the expected prediction error by reducing variance (bias-variance trafeoff) considering a biased
+%estimator. It is known that the prediction error is
+%obtained as:
+%
+%\begin{equation}
+% \label{eq:prederror}
+%E[(B-\hat{f}(\mathbf{X}))^2] = \sigma^2 + Bias(\hat{f}(\mathbf{X}))^2 + Var(\hat{f}(\mathbf{X}))
+%\end{equation}
+%
+%\noindent where $\hat{f}(\mathbf{X})=\mathbf{AX}(\lambda)$ and
+%$f(\mathbf{X})=\mathbf{AX}$.
+%
+%
+%
+%The bias of OLS is:
+%
+%\begin{eqnarray*}
+%Bias(\hat{\mathbf{X}}) &=& E[\hat{\mathbf{X}}] - \mathbf{X} \\
+%&=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{B}] - \mathbf{X} \\
+%&=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top (\mathbf{AX})] - \mathbf{X}  \\
+%&=& \mathbf{X}  - \mathbf{X}  \\
+%&=&  0
+%\end{eqnarray*}
+%
+%
+%The bias of ridge regression when $\mathbf{A A^\top}$ is non-singular
+%can be obtained expressing ridge regression solution
+%$\mathbf{\lambda}$ in terms of OLS solution $\hat{\mathbf{X}}$:
+%
+%\begin{eqnarray*}
+%\mathbf{X}(\lambda) &=&( \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1}\mathbf{B} \\
+%&=& (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1} (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{B} \\
+%&=&  (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1}  \hat{\mathbf{X}} \\
+%&=& \mathbf{W} \hat{\mathbf{X}} 
+%\end{eqnarray*}
+%
+%\noindent where $\mathbf{W}  = (\mathbb{I} + \lambda (\mathbf{A}^\top
+%\mathbf{A})^{-1})^{-1}  $ it is defined for simplicity. Ridge
+%regression bias is then obtained as:
+%
+%\begin{eqnarray*}
+%Bias(\mathbf{X}(\lambda)) &=& E[\mathbf{X}(\lambda)] - \mathbf{X} \\
+%&=& E[\mathbf{W}\hat{\mathbf{X}}] - \mathbf{X} \\
+%&=&  \mathbf{W} \mathbf{X} - \mathbf{X} \neq 0 
+%\end{eqnarray*}
+%
+%
+%
+%The variance of OLS is:
+%
+%\begin{equation*}
+%Var(\hat{\mathbf{X}}) = \sigma^2 (\mathbf{A}^\top \mathbf{A} )^{-1}
+%\end{equation*}
+%
+%\noindent and the variance of ridge regression is:
+%
+%\begin{eqnarray*}
+%Var(\mathbf{X}(\lambda)) &=& Var(\mathbf{W}\hat{\mathbf{X}}) \\ 
+%&=& \mathbf{W}Var(\hat{\mathbf{X}})\mathbf{W}^\top \\
+%&=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top
+%\end{eqnarray*}
+%
+%
+%\begin{figure}[h!]
+%\includegraphics[width=0.8\linewidth]{plots/biasvariance}
+%\caption{Bias-variance tradeoff}
+%\label{fig:biasvariance}
+%\end{figure}
+%
+%The figure~\ref{fig:biasvariance} shows the bias-variance tradeoff
+%given by equation~(\ref{eq:prederror}). Ridge regression shows an
+%increasing bias and a decreasing variance. Despite OLS has zero bias,
+%its variance is greater than ridge for small values of $\lambda$.
+%It can be shown that, in terms of prediction error, ridge (black line)
+%is lower than OLS (dotted line)~\cite{hoerl+kennard1970}.
+%
+%
+%
+
+
 
 \subsection{Machine learning algorithms}
 In recent years many successful machine learning applications have been developed. Artificial neural networks (ANN) and Support Vector Machines (SVM) have been some of the most popularly used machine learning algorithm \cite{haykin1998}. Historically, SVMs emerged after ANN.
