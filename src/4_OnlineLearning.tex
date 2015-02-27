@@ -147,18 +147,211 @@ R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
 
 
 
+\subsection{Ridge Regression}
 
 
 
+One example of regularisation in linear models is Ridge Regression (RR), which is a regularised least squares method.
+The least squares (LS) method is a well known way to solve a regression
+problem. 
+LS method consists of minimising the sum of squared errors:
+
+\begin{eqnarray*}
+\label{eq:lsm}
+ J(\mathbf{X}) =& \displaystyle \sum_{t=1}^N (f(\mathbf{x}_t)-y_t)^2 \\
+ =&\displaystyle \sum_{t=1}^N (\mathbf{\mathbf{X}}^\top {\mathbf{x}}_t-y_t)^2 \\
+ =& \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2 
+\end{eqnarray*}
+
+\noindent which is equivalent to find a solution to 
+\begin{equation}
+\label{eq:regproblem}
+\underset{m \times n}{\mathbf{A}} \enskip \underset{n \times
+l}{\mathbf{\mathbf{X}}} = \underset{m \times l}{\mathbf{Y}}
+\end{equation}
+
+The optimal solution for $\mathbf{\mathbf{X}}$ is:
+\begin{equation*}
+\mathbf{\mathbf{X}}= \mathbf{A}^+ \mathbf{Y}
+%(\mathbf{X}^\top\mathbf{X}
+%\mathbf{X})^{-1}\mathbf{X}^\top \mathbf{Y}
+\end{equation*}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent where $\mathbf{A}^+$ is the Moore-Penrose pseudo-inverse
+which can be written as follows: 
+
+\begin{equation}
+\label{eq:pseudoinverse}
+\mathbf{A}^+= (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \, .
+\end{equation}
+
+\textbf{Demo}\quad
+
+To solve equation~(\ref{eq:pseudoinverse}) is equivalent to solve the following
+optimisation problem:
 
 
+\begin{equation}
+\label{eq:RRproblem2}
+\underset{\mathbf{X}(\lambda)}{\text{min}} \quad \|
+\mathbf{C}\mathbf{\mathbf{X}} - \mathbf{F} \|_2^2
+\end{equation}
+
+\noindent where
+
+\begin{equation*}
+	\mathbf{C}=
+	\begin{bmatrix} \quad &\mathbf{A}& \quad \\ \hdashline \quad
+& \lambda\mathbb{I}&\quad  
+\end{bmatrix} 
+\quad \text{and} \quad
+	\mathbf{F}=\begin{bmatrix} \quad &\mathbf{Y}& \quad \\ \hdashline \quad
+& \mathbf{0}&\quad  \end{bmatrix} \, .
+\end{equation*}
+
+Applying equation~(\ref{eq:MP}) and considering that $\mathbf{C}^\top
+\mathbf{C} = \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I}$ and 
+$\mathbf{C}^\top \mathbf{F}=\mathbf{A}^\top \mathbf{Y} $ we have:
+
+\begin{eqnarray*}
+\mathbf{X}(\lambda)&=&(\mathbf{C}^\top
+\mathbf{C})^{-1}\mathbf{C}^\top \mathbf{F} \\
+&=& (\mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1} \mathbf{A}^\top \mathbf{Y}
+\end{eqnarray*}
+
+$\blacksquare$
 
 
+However, when $\mathbf{A}$ is not full rank, i.e
+$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
+always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+More generally, the pseudo-inverse is best computed using the compact
+singular value decomposition (SVD) of $\mathbf{A}$:
+
+\begin{equation}
+    \label{eq:compactsvd}
+    \underset{m \times n}{\mathbf{A}}=
+    \underset{m \times k}{\mathbf{U_1}} \enskip
+    \underset{k \times k}{\mathbf{\Sigma_1}} \enskip
+    \underset{k \times n}{\mathbf{V_1}^\top}
+\end{equation}
+
+\noindent as follows
+
+\begin{equation}
+\label{eq:pseudoinversesvd}
+\mathbf{A}^+ = \mathbf{V_1\Sigma_1^{-1}U_1^\top}
+\end{equation}
+
+\textbf{Demo}\quad
+
+In the case matrix $\mathbf{A}$ is non singular, its solution is
+straight forward:
+
+\begin{equation}
+\label{OLSsolution}
+    \mathbf{\mathbf{X}}=\mathbf{A}^{-1}\mathbf{Y}
+\end{equation}
 
 
+Since the problem shown in equation~(\ref{eq:regproblem}) has not
+solution, the minimum norm given by equation~(\ref{OLSsolution}) is
+obtained by solving the equivalent problem:
 
+\begin{equation*}
+\label{eq:proyectorsol}
+\mathbf{X \hat{\mathbf{X}} = PY} 
+\end{equation*}
+
+
+\noindent where $\mathbf{P=U_1 U_1^\top}$ is the projection onto the
+Col($\mathbf{A}$). 
+
+Since $\mathbf{V} = [\underset{(n \times k)}{\mathbf{V_1}} |
+\underset{(n \times k)}{\mathbf{V_2}}]$ and $\mathbf{V_1^\top V_2 =
+0}$ we can express $\mathbf{\hat{\mathbf{X}}} = \mathbf{V_1 \mathbf{X}_1 + V_2 \mathbf{X}_2}$
+with $\mathbf{\mathbf{X}_2=0}$ because $\mathbf{\hat{\mathbf{X}}}$ lives in the
+$\text{Row}(\mathbf{A})$ given by $\mathbf{V_1}$, so we have:
+
+\begin{eqnarray*}
+\mathbf{X \hat{\mathbf{X}}} &=& \mathbf{PB} \\
+\mathbf{U_1 \Sigma_1 V_1^\top \hat{\mathbf{X}}} &=& \mathbf{U_1 U_1^\top B} \\
+\mathbf{ V_1^\top \hat{\mathbf{X}}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top B} \\ 
+\mathbf{ V_1^\top V_1 \mathbf{X}_1} &=& \mathbf{\Sigma_1^{-1}
+U_1^\top B} \\
+\mathbf{\mathbf{X}_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top B}
+\end{eqnarray*}
+
+\noindent from this result we can obtain $\mathbf{\hat{\mathbf{X}}}$ and
+therefore the pseudo-inverse expression:
+
+\begin{eqnarray*}
+\mathbf{\hat{\mathbf{X}}} &=& \mathbf{V_1 \mathbf{X}_1} \\
+                &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top Y} \\
+\mathbf{X^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
+\end{eqnarray*}
+
+$\blacksquare$
+
+
+In order to avoid the singularity of the matrix $\mathbf{A}^\top \mathbf{A}$, a regularisation term is introduced: 
+
+\begin{equation*}
+\label{eq:problem} 
+J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
+ \| \mathbf{\mathbf{X}}\| ^2
+\end{equation*}
+
+\noindent which optimal solution $\mathbf{\mathbf{X}}_*$ is well known: 
+
+\begin{equation*}
+\label{eq:optsolRR}
+\mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
+\end{equation*}
+
+\textbf{Demo}\quad
+
+\begin{eqnarray*}
+J(\mathbf{\mathbf{X}}) &=&  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
+ \| \mathbf{\mathbf{X}}\| ^2 \\
+ &=&  \sum_{t=1}^N (\mathbf{\mathbf{X}}^\top {\bf a}_t-y_t)^2 + \lambda \sum_{i=1}^p \mathbf{X}_i^2 \\
+ &=& (\mathbf{X}^\top a_1-y_1)^2 + \dots + (\mathbf{X}^\top a_N-y_N)^2 + \lambda (\mathbf{X}_1^2+\dots+\mathbf{X}_p^2)
+\end{eqnarray*}
+\noindent taking derivatives
+ \begin{eqnarray*}
+ \frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}_1}&=& 
+ 2(\mathbf{X}^\top \mathbf{a}_1-y_1)\mathbf{a}_{11} + \dots + 2(\mathbf{X}^\top \mathbf{a}_N-y_N)\mathbf{a}_{N1} + 2\lambda \mathbf{X}_1 \\
+ &=& 2\mathbf{a}_1^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}_1\\
+& \vdots &\\
+  \frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}_p}&=& 
+ 2\mathbf{a}_p^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}_p 
+\end{eqnarray*}
+
+Then we have that:
+\begin{eqnarray*}
+\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}&=& 
+ 2\mathbf{A}^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}
+\end{eqnarray*}
+Since $\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}=0$ we have:
+\begin{eqnarray*}
+2\mathbf{A}^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}&=&0 \\
+\mathbf{A}^\top\mathbf{A}\mathbf{X} - \mathbf{A}^\top\mathbf{Y} + \lambda\mathbf{X} &=& 0\\
+(\mathbf{A}^\top\mathbf{A}+\lambda\mathbb{I})\mathbf{X} &=&  \mathbf{A}^\top\mathbf{Y} \\
+\mathbf{X} &=& (\mathbf{A}^\top\mathbf{A}+\lambda\mathbb{I})^{-1}  \mathbf{A}^\top\mathbf{Y}
+\end{eqnarray*}
+
+$\blacksquare$
+
+When $\mathbf{A}$ is orthonormal then $\mathbf{A}^\top \mathbf{A} =\mathbb{I}$ and there is a simple relation between the ridge estimator and the OLS estimator:
+\begin{eqnarray*}
+\mathbf{X}_* (\lambda) &=& (\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \\
+ &=& (\mathbb{I} + \lambda \mathbb{I})^{-1} \mathbf{A}^\top \mathbf{Y} \\
+ &=&(1+\lambda)^{-1} \mathbb{I} \mathbf{A}^\top \mathbf{Y} \\
+ &=&(1+\lambda)^{-1} (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y} \\
+ &=&(1+\lambda)^{-1} \mathbf{X}
+\end{eqnarray*}
 
 \subsection{Machine learning algorithms}
 In recent years many successful machine learning applications have been developed. Artificial neural networks (ANN) and Support Vector Machines (SVM) have been some of the most popularly used machine learning algorithm \cite{haykin1998}. Historically, SVMs emerged after ANN.
@@ -219,16 +412,16 @@ Online RR is the online formulation of the regularised Least Squares method
 and is based on the following equivalent formulation of the RR optimal solution.
 
 \begin{eqnarray*}
-\mathbf{\phi}_*&=&(\mathbf{X}^\top \mathbf{X}+\lambda
-\mathbb{I})^{-1}\mathbf{X}^\top y \\
-\mathbf{\phi}_* &=& \displaystyle \big (\sum_{t=1}^m
+\mathbf{\mathbf{X}}_*&=&(\mathbf{A}^\top \mathbf{A}+\lambda
+\mathbb{I})^{-1}\mathbf{A}^\top y \\
+\mathbf{\mathbf{X}}_* &=& \displaystyle \big (\sum_{t=1}^m
 \mathbf{x}_t \mathbf{x}_t  ^\top + \lambda
 \mathbb{I}\big)^{-1} \sum_{t=1}^m y_t
 \mathbf{x}_t \\ \\
-\mathbf{\phi}_*&=& \mathbf{A}^{-1}\mathbf{b}
+\mathbf{\mathbf{X}}_*&=& \mathbf{A}^{-1}\mathbf{b}
 \end{eqnarray*}
 
-\noindent where $\mathbf{A}=\mathbf{X}^\top \mathbf{X} +\lambda
+\noindent where $\mathbf{A}=\mathbf{A}^\top \mathbf{A} +\lambda
 \mathbb{I}$ and $\mathbf{b}=\displaystyle  \sum_{t=1}^m y_t \mathbf{x}_t$.
 
 
