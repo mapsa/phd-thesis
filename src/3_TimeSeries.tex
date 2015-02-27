@@ -93,7 +93,8 @@ $R^2$ even if the two are totally unrelated. So, if standard regression
 techniques are applied to non-stationary data, it could look good under standard
 measures but valueless \cite{brooks2002}.
 
-\texttt{Example of spurious regression} An example is shown below. Two random walks series $x_1t$ and $x_2t$ with a small drift ($\alpha=0.09$) are generated and
+\textbf{Example of spurious regression} \quad 
+An example is shown below. Two random walks series $x_1t$ and $x_2t$ with a small drift ($\alpha=0.09$) are generated and
 then regressed one on the other:
  \begin{equation}
  x_i,t = \alpha + x_{i,t-1} + \epsilon_i,t  \qquad \text{where} \qquad \mathcal{N}(0,1), \quad i=1,2
@@ -137,6 +138,7 @@ If after taking returns or first differences the regression fit is still good we
 %Skew:                          -0.469   Prob(JB):                        0.126
 %Kurtosis:                       2.662   Cond. No.                         23.3
 %==============================================================================
+$\blacksquare$
 
 \newpage
 \subsection{Integration}
@@ -228,7 +230,7 @@ Where $r$ is the number of cointegration vectors and $\hat]{\lambda}_i$ is the e
 
 
 \newpage
-\texttt{Cointegration example}
+\textbf{Cointegration example} \quad
 
 If we have two-dimensional process $\mathbf{X}_t$, $t=1,\dots,T$ by:
 
@@ -301,6 +303,7 @@ between the processes by linear relations that are more stationary than the
 original process. Cointegration vectors can be obtained using the Johansen method which gives with a certain probability the number of significant vectors. Figures    
 \ref{fig:cointvectors3}, \ref{fig:cointvectors4}  and \ref{fig:cointvectors5}  shows the linear combinations obtained using cointegration vectors given by Johansen method. The method confirm that only two vectors are found and the third one given doesn't result in a I(0) process.
 
+$\blacksquare$
 
 \section{Unit root tests}
 Many economic and financial time series exhibit trending behaviour or non-stationary behaviour in the mean or variance. An important econometric task is to determine the type of non-stationary. For trend stationary I(0) time series a time-trend regression is appropriate. For I(1) time series taking first differences transforms it into a stationary one.  For cointegration to determine if time series are I(1) is mandatory to model their long-run relationship. In order to determine if a time series is an a I(1) or I(0) process unit root tests are used. Several tests have been developed but the most widely used is an extension of the Dickey and Fuller test \cite{dickey1979} called the Augmented Dickey-Fuller (ADF) test developed in 1984 by Said and Dickey in 1984\cite{said1984}.
@@ -735,13 +738,13 @@ $\lambda=1,\dots,l$.
 Transposing each equation of the system (\ref{eq:var}) we can write
 the VAR($p$) model in block-matrix form as:
 \begin{equation}\label{eq:vareq}
-\mathbf{B} = \mathbf{A} \mathbf{X} + \mathbf{E} \, , 
+\mathbf{Y} = \mathbf{A} \mathbf{X} + \mathbf{E} \, , 
 \end{equation}
 %%
 \noindent where:
 %%
 \begin{alignat}{2}
-\mathbf{B}
+\mathbf{Y}
 &= \begin{bmatrix}
    \mathbf{y}_{p+1}^\top \\
    \mathbf{y}_{p+2}^\top \\
@@ -845,17 +848,17 @@ which is a VAR model but for time series differences.
 Transposing each equation of the system (\ref{eq:vecfull}) we can write
 the VECM($p$) model in block-matrix form as:
 \begin{equation}\label{eq:vareq}
-\mathbf{B} = 
+\mathbf{Y} = 
 \mathbf{A} \mathbf{X} + 
 \mathbf{E} \, , 
 \end{equation}
 %
-\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
+\noindent where $\mathbf{Y}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
 dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 +1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
 %
 \begin{alignat}{3}
-\mathbf{B}
+\mathbf{Y}
 &= \begin{bmatrix}
    \Delta\mathbf{y}_{p+1}^\top \\
    \Delta\mathbf{y}_{p+2}^\top \\
@@ -920,49 +923,5 @@ If the series are cointegrated, they move together in the long-run. A
 VAR in first differences will not capture those long-run tendences.
 VECM fit to the first differences of the non stationary variables, but a lagged error-correction term is added to the relationship representing the long-run relationship.
 
-\subsection{Ordinary Least Squares method} \label{sec:OLS}
-
-The solution $\widehat{\mathbf{A}}$ to
-equation~(\ref{eq:vareq}) can be obtained by the ordinary least squares (OLS)
-method. $\widehat{\mathbf{X}}$ is the solution of the quadratic optimization problem
-\begin{equation*}
-\widehat{\mathbf{X}} = \underset{\mathbf{X}}{\text{Arg\;min}}
-\|\mathbf{A}\mathbf{X}-\mathbf{B}\|_2^2
-\end{equation*}
-\noindent for which the solution $\widehat{\mathbf{X}}$ is well-known:
-\begin{equation*}
-\label{eq:MP}
-\widehat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{B}
-\end{equation*}
-\noindent where $\mathbf{A}^{\!\!+}$ is the Moore-Penrose pseudo-inverse
-which, when $\mathbf{A}$ is full rank, can be written as follows: 
-\begin{equation}
-\label{eq:pseudoinverse}
-\mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
-\end{equation}
-when $\mathbf{A}$ is not full rank, i.e
-$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
-always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
-More generally, the pseudo-inverse is best computed using the compact
-singular value decomposition (SVD) of $\mathbf{A}$ which is:
-%\begin{equation}
-%    \label{eq:compactsvd}
-%    \underset{m \times n}{\mathbf{A}}=
-%    \underset{m \times k}{\mathbf{U_1}} \enskip
-%    \underset{k \times k}{\Sigma_1} \enskip
-%    \underset{k \times n}{\mathbf{V}_1^{\top}} \, .
-%\end{equation}
-\begin{equation*}
-    \label{eq:compactsvd}
-    \mathbf{A}=
-    \mathbf{U_1}
-    \boldsymbol \Sigma_1
-    \mathbf{V}_1^{\top} \, .
-\end{equation*}
-Pseudo-inverse can then be written as follows:
-\begin{equation*}
-\label{eq:pseudoinversesvd}
-\mathbf{A}^{\!\!+} = \mathbf{V}_1 \boldsymbol \Sigma_1^{-1} \mathbf{U}_1^\top \, .
-\end{equation*}
 
 
