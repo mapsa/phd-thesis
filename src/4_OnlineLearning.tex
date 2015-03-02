@@ -610,46 +610,111 @@ Performance of an online learning algorithm is measured by the cumulative loss i
 Online RR is the online formulation of the regularised Least Squares method
 and is based on the following equivalent formulation of the RR optimal solution.
 
+Since 
+\begin{equation}
+\label{eq:notation}
+	\mathbf{A} = 
+\left[
+  \begin{tabular}{c>{$}c<{$}c}
+    --- & \mathbf{a}^{\top}_{1} & ---\\
+    --- & \mathbf{a}^{\top}_{2} & ---\\
+    & \vdots & \\
+    --- & \mathbf{a}^{\top}_{m} & ---
+  \end{tabular}
+\right]
+\quad \text{and} \quad
+\mathbf{B} =
+\left[
+  \begin{tabular}{c>{$}c<{$}c}
+    --- & \mathbf{b}_{1} & ---\\
+    --- & \mathbf{b}_{2} & ---\\
+    & \vdots & \\
+    --- & \mathbf{b}_{m} & ---
+  \end{tabular}
+\right]
+\end{equation}
+
+Equation~(\ref{eq:optsolRR}) can also be written as:
 \begin{eqnarray*}
-\mathbf{\mathbf{X}}_*&=&(\mathbf{A}^\top \mathbf{A}+\lambda
-\mathbb{I})^{-1}\mathbf{A}^\top y \\
-\mathbf{\mathbf{X}}_* &=& \displaystyle \big (\sum_{t=1}^m
-\mathbf{x}_t \mathbf{x}_t  ^\top + \lambda
-\mathbb{I}\big)^{-1} \sum_{t=1}^m y_t
-\mathbf{x}_t \\ \\
-\mathbf{\mathbf{X}}_*&=& \mathbf{A}^{-1}\mathbf{b}
+\label{eq:RReapand}
+\mathbf{\mathbf{X}}_{\text{ridge}}&=&(\mathbf{A}^\top \mathbf{A}+ \lambda
+\mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \\
+&=& \displaystyle \big (\sum_{t=1}^m
+\mathbf{a}_t \mathbf{a}_t  ^\top + \lambda \mathbb{I}\big )^{-1}
+\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t \, .
 \end{eqnarray*}
 
-\noindent where $\mathbf{A}=\mathbf{A}^\top \mathbf{A} +\lambda
-\mathbb{I}$ and $\mathbf{b}=\displaystyle  \sum_{t=1}^m y_t \mathbf{x}_t$.
-
+Lets define $\displaystyle\mathbf{S}= \sum_{t=1}^m \mathbf{a}_t
+\mathbf{a}_t  ^\top + \lambda \mathbb{I} $ and $\mathbf{W}=
+\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t$, so the
+algorithm~\ref{alg:RR} shows the iterative formulation:
 
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \REQUIRE $\,$ \\
-$\{\mathbf{x}_1,\dots,\mathbf{x}_{m} \}$: $m$ input vectors \\
-$\{y_1,\dots,y_{m} \}$: $m$ targets \\
+$\{\mathbf{a}_1,\dots,\mathbf{a}_{m} \}$: $m$ input vectors \\
+$\{\mathbf{y}_1,\dots,\mathbf{y}_{m} \}$: $m$ target vectors \\
 $\lambda$: regularization parameter \\
 \ENSURE  $\,$ \\
-$\{f(\mathbf{x}_1),\dots,f(\mathbf{x}_{m}) \}$: model predictions \\
-\STATE Initialize $\mathbf{A}=\lambda \mathbb{I}$
-and $\mathbf{b}=0$
+$\{f(\mathbf{a}_1),\dots,f(\mathbf{a}_{m}) \}$: model predictions \\
+\STATE Initialize $\mathbf{S}=\lambda \mathbb{I}$
+and $\mathbf{W}=0$
 \FOR { $t = 1$ to $m$ }
-	\STATE read new $\mathbf{x}_t$
-	\STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\top \mathbf{A}^{-1}\mathbf{x}_t$
-   	\STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_L
-        \mathbf{x}_L^\top -\mathbf{x}_1 \mathbf{x}_1^\top $
+	\STATE read new $\mathbf{a}_t$
+	\STATE $\mathbf{X}=\mathbf{S}^{-1}\mathbf{W}$
+	\STATE output prediction $f(\mathbf{a}_t) = \mathbf{X}^\top \mathbf{a}_t$
+   	\STATE $\mathbf{S} = \mathbf{S} + \mathbf{a}_t \mathbf{a}_t^\top$
    	\STATE Read new $y_t$
-    	\STATE $\mathbf{b} = \mathbf{b} + y_t \mathbf{x}_t$
+    	\STATE $\mathbf{W} = \mathbf{W} + \mathbf{a}_t \mathbf{y}_t$
 \ENDFOR
-
 \end{algorithmic}
-\caption{Ridge Regression}
+\caption{Online Ridge Regression}
 \label{alg:RR}
 \end{algorithm}
 
 
-\subsection{Aggregating algorithm regression}
+
+\section{The Aggregating Algorithm for Regression}
+
+The AAR, proposed by~\cite{vovk2001}, is an application of the aggregating
+algorithm to the problem of regression. The idea is introduce the new input
+vector $\mathbf{x}_{m+1}$ to solve the model parameters: 
+
+\begin{equation}
+\label{eq:AARexpand}
+\mathbf{X}_{aar} = \displaystyle \big (\sum_{t=1}^{m+1}
+\mathbf{a}_t \mathbf{a}_t  ^\intercal + \gamma \mathbb{I}\big )^{-1}
+\sum_{t=1}^m \mathbf{a}_t \mathbf{b}_t \, .
+\end{equation}
+
+If we define $\displaystyle\mathbf{S}= \sum_{t=1}^{m+1} \mathbf{a}_t
+\mathbf{a}_t  ^\intercal + \gamma \mathbb{I} $ and $\mathbf{W}=
+\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{b}_t$, the
+algorithm~\ref{alg:AAR} is slightly different to the algorithm~\ref{alg:RR}, 
+which updated matrix $\mathbf{S}$ before making the prediction:
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{a}_1,\dots,\mathbf{a}_{m} \}$: $m$ input vectors \\
+$\{\mathbf{b}_1,\dots,\mathbf{b}_{m} \}$: $m$ target vectors \\
+$\lambda$: regularization parameter \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{a}_1),\dots,f(\mathbf{a}_{m}) \}$: model predictions \\
+\STATE Initialize $\mathbf{S}=\lambda \mathbb{I}$
+and $\mathbf{W}=0$
+\FOR { $t = 1$ to $m$ }
+	\STATE read new $\mathbf{a}_t$
+   	\STATE $\mathbf{S} = \mathbf{S} + \mathbf{a}_t \mathbf{a}_t^\intercal$
+	\STATE $\mathbf{X}=\mathbf{S}^{-1}\mathbf{W}$
+	\STATE output prediction $f(\mathbf{a}_t) = \mathbf{X}^\intercal \mathbf{a}_t$
+   	\STATE Read new $\mathbf{y}_t$
+    	\STATE $\mathbf{W} = \mathbf{W} + \mathbf{a}_t \mathbf{b}_t$
+\ENDFOR
+\end{algorithmic}
+\caption{{\em The aggregating algorithm for regression}}
+\label{alg:AAR}
+\end{algorithm}
 
 
 %%% Measure error
