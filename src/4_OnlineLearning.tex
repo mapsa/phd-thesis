@@ -839,4 +839,63 @@ It is important to notice that the QR factorisation is computed only once and it
 is computationally less expensive than the SVD.
 
 
+Despite the bias-variance tradeoff provides a conceptual framework for
+determining a good model, is not directly useful. Some popular methods
+for determine model selection are:
+
+\begin{itemize}
+    \item Akaike information criterion (AIC) (Akaike, 1974)
+    \item Bootstrap-based selection (Efron and Tibshirani, 1997)
+    \item Cross-validation (Stone, 1974)
+\end{itemize}
+
+On the other hand, $\lambda$ can also be used to reduce computational time as it
+is shown in equation~(\ref{eq:taylor}). Golub (~\cite{golub1965}) suggested that
+$\lambda$ be chosen so that:
+
+\[
+\frac{\lambda}{\lambda + \delta^2} < 0.1
+\]
+
+\noindent where $\delta$ is a lower bound of the smallest non-zero singular
+value $\sigma_k$. One approach is to choose the greatest lower bound for
+$\delta=\sigma_k$. Hence:
+
+\[
+\frac{\lambda}{\lambda + \sigma_k^2} < 0.1
+\]
+
+\noindent if we choose $\lambda=\beta \sigma_k^2$ then we get the following
+relation:
+
+
+\[
+\frac{\beta \sigma_k^2}{\beta \sigma_k^2 + \sigma_k^2} =
+\frac{\beta}{\beta+1} < 0.1 \Rightarrow \beta < \frac{1}{9}  
+\]
+
+Experiments done by ~\cite{coleman+sun2010} have shown that $\beta = 0.01$
+produces satisfactory results. This means that $\lambda = 0.01 \sigma_k^2$.
+
+However, get $\sigma_k$ imply obtaining first the SVD, which is
+computational expensive.
+
+Since the algorithm presented by ~\cite{coleman+sun2010} already compute the QR
+factorization of the matrix $\mathbf{A}$ they show a procedure for getting
+a $\lambda$ approximation using QR.
+
+\begin{enumerate}
+\item Compute QR factorization: $\mathbf{A} = \mathbf{Q_1R_1}$
+\item Let $\mathbf{W}$ denote the set of absolute values of the nonzero diagonal
+elements of $\mathbf{R_1}$. Let $w_{\text{min}}$ and $w_{\text{max}}$ denote the
+smallest and largest elements of $\mathbf{W}$ respectively. Both 
+$\lambda_1 = \hat{\beta} w_{\text{min}}^2$
+$\lambda_2 = \hat{\beta} \frac{w_{\text{min}}^2}{w_{\text{max}}^2}$ where
+$\hat{\beta}=0.00025$ produce satisfactory results.
+\item The $\lambda_{\text{QR}}$ approximation is obtained as:
+$\lambda_{\text{QR}} = \frac{\lambda_1 + \lambda_2}{2}$  
+\end{enumerate}
+
+
+
 %%% Measure error
