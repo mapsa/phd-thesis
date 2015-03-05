@@ -674,7 +674,7 @@ and $\mathbf{W}=0$
 
 
 
-\section{The Aggregating Algorithm for Regression}
+\subsection{The Aggregating Algorithm for Regression}
 
 The AAR, proposed by~\cite{vovk2001}, is an application of the aggregating
 algorithm to the problem of regression. The idea is introduce the new input
@@ -717,7 +717,7 @@ and $\mathbf{W}=0$
 \end{algorithm}
 
 
-\section{Efficient computation}
+\subsection{Efficient computation}
 
 In order to solve OLS in a efficient way, Coleman and
 Sun~\cite{coleman+sun2010} presented an iterative algorithm which
@@ -898,4 +898,58 @@ $\lambda_{\text{QR}} = \frac{\lambda_1 + \lambda_2}{2}$
 
 
 
-%%% Measure error
+\section{Evaluation methods} \label{sec:evaluation}
+
+Forecast performance is evaluated using different methods. We have chosen three
+measures usually used:
+\begin{description}
+\item[MAPE] Mean Average Percent Error which presents forecast errors as a
+percentage.
+\begin{equation}\label{eq:MAPE}
+\text{MAPE} = \frac{1}{N} \sum_{t=1}^{N} 
+\frac{\left|\mathbf{y}_t-\hat{\mathbf{y}}_t\right|}{\left|\mathbf{y}_t\right|}
+ \times 100 
+\end{equation}
+\item[MAE] Mean Average Error which measures the distance between forecasts to the
+true value.
+\begin{equation}\label{eq:MAE}
+\text{MAE} = \frac{1}{N} \sum_{t=1}^{N} 
+\left| 
+\mathbf{y}_t-\hat{\mathbf{y}}_t
+\right| 
+\end{equation}
+\item[RMSE] Root Mean Square Error also measures the distance between forecasts
+to the true values but, unlike MAE, large deviations from the true value have a
+large impact on RMSE due to squaring forecast error.
+\begin{equation}\label{eq:RMSE}
+\text{RMSE} = \sqrt{
+\frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}}
+\end{equation}
+\end{description}
+
+
+\section{Model selection} \label{sec:pselection}
+Akaike Information Criterion (AIC) is often used in model selection where AIC
+with smaller values are preferred since they represent a trade-off between bias
+and variance.  AIC is obtained as follows:
+
+\begin{equation}
+\label{eq:aicformula}
+AIC = \underset{\text{bias}}{-\frac{2l}{N}} + 
+\underset{\text{variance}}{\frac{2k}{N}}
+\end{equation}
+
+\noindent where 
+
+\begin{description}
+\item[l] is the loglikelihood function
+\item[k] number of estimated parameters
+\item[N] number of observations
+\end{description}
+
+Loglikelihood function is obtained from the Residual Sum of Squares (RSS):
+
+\begin{equation}
+\label{eq:ll}
+l = -\frac{N}{2} \left(1 + ln(2\pi) + ln\left(\frac{RSS}{N}\right)\right) 
+\end{equation}
