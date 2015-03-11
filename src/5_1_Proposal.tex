@@ -2,11 +2,11 @@
 \chapter{Online VECM proposal}
 Financial time series are known for their non-stationary behaviour. However,
 sometimes they exhibit some stationary linear combinations. When this happens,
-it is said that those time series are cointegrated.The Vector Error Correction
-Model (VECM) is an econometric model which characterizes the joint dynamic
+it is said that those time series are cointegrated. The Vector Error Correction
+Model (VECM) is an econometric model which characterises the joint dynamic
 behaviour of a set of cointegrated variables in terms of forces pulling towards
 equilibrium. In this study, we propose an Online VEC model (OVECM) which
-optimizes how model parameters are obtained using a sliding window of the most
+optimises how model parameters are obtained using a sliding window of the most
 recent data. Our proposal also takes advantage of the long-run relationship
 between the time series in order to obtain improved execution times. Our
 proposed method is tested using four foreign exchange rates with a frequency of
@@ -27,16 +27,16 @@ each other.
 Cointegration means that one or more combinations of these variables is
 stationary even though individually they are not.
 
-Some financial models, such as  vector error correction (VEC), take advantage of
+Some financial models, such as  vector error correction model (VECM), take advantage of
 this property and describe the joint behaviour of several cointegrated
 financial instruments.
 
-VEC is a special case of the vector autorregressive model (VAR). VAR is a linear
+VECM is a special case of the vector autoregressive model (VAR). VAR is a linear
 model which express future values in terms of its own history and other
-variables past values. If cointegration exists, VEC model allows to introduce an
+variables past values. If cointegration exists, VECM allows to introduce an
 error correction term due to its cointegration estimation error. 
 
-VEC as well as VAR model parameters are obtained using ordinary least squares
+VECM as well as VAR model parameters are obtained using ordinary least squares
 method (OLS). Since OLS involves many calculations, the parameter estimation
 method is computationally expensive when the number of past values and
 observations considered increases. Moreover, OLS is an ill-posed problem which
@@ -49,15 +49,6 @@ expensive dealing with large datasets. Recently, online learning algorithms
 have been proposed to solve problems with large data sets because of their
 simplicity and their ability of updating the model when new data is available. 
 
-There are several popular online methods such as
-perceptron~\cite{rosenblatt58}, passive-aggressive~\cite{crammerETall2006},
-stochastic gradient descent~\cite{zhang2004}, aggregating
-algorithm~\cite{vovk2001} and the second order
-perceptron~\cite{cesa-bianchi2005}.  In~\cite{cesa-bianchi2006}, an in-deph
-analysis of online learning is provided.  In particular, the {\em aggregating
-algorithm for regression} (AAR) method is a recursive formulation of RR
-suitable for using in an online context.
-
 We propose an online formulation of the VEC model based on the
 AAR method considering only a sliding window of the most recent data. The
 algorithm introduces matrix optimisations in order to reduce the number of
@@ -67,14 +58,12 @@ exchange market.
 
 \section{Methodology} \label{sec:methodology}
 
-\subsection{Online VECM} \label{sec:proposal}
-
 Since VECM parameter estimation is computationally expensive, we propose an
 online version of VECM (OVECM).  OVECM considers only a sliding window of the
 most recent data. Moreover, since cointegration vectors represent long-run
 relationships which vary little in time, OVECM determines firstly if they require calculation. 
 
-OVECM also implements matrix optimizations in order to reduce execution time,
+OVECM also implements matrix optimisations in order to reduce execution time,
 such as updating matrices with new data, removing old data and introducing new
 cointegration vectors.
 
@@ -86,9 +75,9 @@ following:
 the Johansen method considering the trace statistic test at 95\%
 significance level.
 \item The function \texttt{vecMatrix} returns the matrices~(\ref{eq:vecA})
-and~(\ref{eq:vecB}) that allows VECM to be solved.
+and~(\ref{eq:vecY}) that allows VECM to be solved.
 \item The function \texttt{vecMatrixOnline} returns the
-matrices~(\ref{eq:vecA}) and~(\ref{eq:vecB}) aggregating new data and removing
+matrices~(\ref{eq:vecA}) and~(\ref{eq:vecY}) aggregating new data and removing
 the old one, avoiding calculation of the matrix $\mathbf{A}$ from scratch.
 \item Out-of-sample outputs are saved in the variables 
 $\mathbf{Y}_{\text{true}}$ and $\mathbf{Y}_{\text{pred}}$.
@@ -119,20 +108,20 @@ $\{\mathbf{y}_{\text{pred}}[L+1],\dots,\mathbf{y}_{\text{pred}}[N]\}$: model pre
     \STATE $\mathbf{y}_i \gets \mathbf{y}[i:i+L]$
 	\IF {i = 0 }
 	    \STATE{$v \gets \texttt{getJohansen}(\mathbf{y}_i,p)$}
-	    \STATE{$[\mathbf{A} \quad \mathbf{B}] \gets
+	    \STATE{$[\mathbf{A} \quad \mathbf{Y}] \gets
         \texttt{vecMatrix}(\mathbf{y}_i,p,v)$}
 	\ELSE
-	    \STATE{$[\mathbf{A} \quad \mathbf{B}] \gets
-        \texttt{vecMatrixOnline}(\mathbf{y}_i,p,v,\mathbf{A},\mathbf{B})$}
+	    \STATE{$[\mathbf{A} \quad \mathbf{Y}] \gets
+        \texttt{vecMatrixOnline}(\mathbf{y}_i,p,v,\mathbf{A},\mathbf{Y})$}
         \STATE $\Delta \mathbf{Y}_{\text{pred}}[i] \gets \mathbf{A}[-1,:] \times \mathbf{X}$
     \ENDIF
-    \STATE $\mathbf{X} \gets \texttt{OLS} (\mathbf{A},\mathbf{B})$
-    \STATE $e \gets \texttt{mape}(\mathbf{B}[-n,:],\mathbf{A}[-n,:] \times \mathbf{X})$
+    \STATE $\mathbf{X} \gets \texttt{OLS} (\mathbf{A},\mathbf{Y})$
+    \STATE $e \gets \texttt{mape}(\mathbf{Y}[-n,:],\mathbf{A}[-n,:] \times \mathbf{X})$
     \IF {$\texttt{mean}(e) > \text{mean\_error}$}
 	    \STATE{$v \gets \texttt{getJohansen}(\mathbf{y}_i,p)$}
 	    \STATE{$\mathbf{A} \gets
         \texttt{vecMatrixUpdate}(\mathbf{y}_i,p,v,\mathbf{A})$}
-        \STATE $\mathbf{X} \gets \texttt{OLS} (\mathbf{A},\mathbf{B})$
+        \STATE $\mathbf{X} \gets \texttt{OLS} (\mathbf{A},\mathbf{Y})$
     \ENDIF
 \ENDFOR
 \STATE $\mathbf{Y}_{\text{true}} \gets \mathbf{Y}[L+1:N]$
@@ -143,7 +132,7 @@ $\{\mathbf{y}_{\text{pred}}[L+1],\dots,\mathbf{y}_{\text{pred}}[N]\}$: model pre
 \label{alg:proposal}
 \end{algorithm}
 
-
+A pseudocode of the algorithm \ref{alg:proposal} is detailed in the appendix \ref{fig:pseudocodigo}.
 
 Our proposal was compared against VECM and ARIMA. Both algorithms were adapted
 to an online context in order to get a reasonable comparison with our proposal
@@ -200,58 +189,6 @@ Both OVECM and SLVECM time complexity is dominated by Johansen method which is
 $O(n^3)$. Thus, both algorithms order is $O(Cn^3)$ where $C$ is the number of
 iterations. 
 
-
-
-    \begin{tikzpicture}[node distance=2cm]
-    %\node (start) [startstop] {Start};
-    %\node (in1) [io, below of=start] {Input};
-    \node (in1) [io] {Input: y, p, L, $\epsilon$, n};
-    \node (pro1) [process, below of=in1] {$y_i = y[i:i+L]$};
-    \node (dec1) [decision, below of=pro1, yshift=-0.5cm] {i = 0};
-    \node (pro2a) [process, below of=dec1, yshift=-0.5cm] {$[\mathbf{A} \quad \mathbf{B}] =\texttt{ovecm}(\mathbf{y}_i,p,v,\mathbf{A},\mathbf{B})$
-                                                        $\Delta \mathbf{Y}_{\text{true}}[i] = \mathbf{B}[-1,:]$
-                                                        $\Delta \mathbf{Y}_{\text{pred}}[i] = \mathbf{A}[-1,:] \times \mathbf{X}$};
-
-    \node (pro2b) [process, right of=dec1, xshift=4cm] {$v = \texttt{Johansen}(\mathbf{y}_i,p)$ $[\mathbf{A} \quad 
-                                                                \mathbf{B}] = \texttt{vecm}(\mathbf{y}_i,p,v)$};
-    \node (pro3) [process, below of=pro2a, yshift=-0.5cm] {$\mathbf{X} = \text{OLS} (\mathbf{A},\mathbf{B})$ \\
-                                                        $\mathbf{y}_{\text{true}}[i] = \mathbf{y}_i[-n,:]$ \\
-                                                        $\mathbf{y}_{\text{pred}}[i] = \mathbf{A}[-n,:] \times \mathbf{X} +$ \\$ \mathbf{y}_i[-n-1,:-1]$ \\
-                                                        $e = \texttt{mape}(\mathbf{y}_{\text{true}}, \mathbf{y}_{\text{pred}})$};
-
-    \node (dec2) [decision, below of=pro3, yshift=-0.5cm] { $e > \epsilon $ };
-
-    \node (pro4a) [process, right of=dec2, xshift=4cm] {$v = \texttt{Johansen}(\mathbf{y}_i,p)$ \\
-                                                        $\mathbf{A} = \texttt{uvecm}(\mathbf{y}_i,p,v,\mathbf{A})$ \\
-                                                        $\mathbf{X} = \texttt{OLS} (\mathbf{A},\mathbf{B})$};
-
-   
-    \node (pro5) [process, left of=pro2a, xshift=-4cm] {$ i++ $}; 
-   
-    \node (dec3) [decision, below of=dec2, yshift=-0.5cm] { $i > it $ };
-    
-    \node (out1) [io, below of=dec3] {Output: $\Delta \mathbf{y}_{true}, \Delta \mathbf{y}_{pred}$};
-    
-    %\node (stop) [startstop, below of=out1] {Stop};
-    
-    %\draw [arrow] (start) -- (in1);
-    \draw [arrow] (in1) -- (pro1);
-    \draw [arrow] (pro1) -- (dec1);
-    \draw [arrow] (dec1) -- node[anchor=east] {no} (pro2a);
-    \draw [arrow] (dec1) -- node[anchor=south] {si} (pro2b);
-    \draw [arrow] (pro2a) -- (pro3);
-    \draw [arrow] (pro2b) |- (pro3);
-    \draw [arrow] (pro3) -- (dec2);
-    \draw [arrow] (dec2) --  node[anchor=south] {si} (pro4a);
-    \draw [arrow] (pro4a) |- (dec3);
-    
-    \draw [arrow] (dec2) --  node[anchor=east] {no} (dec3);
-    \draw [arrow] (dec3.west) -| node[anchor=east] {no} (pro5);
-    \draw [arrow] (pro5) |- (pro1);
-    \draw [arrow] (dec3) --  node[anchor=east] {si} (out1);
-    %\draw [arrow] (out1) -- (stop);
-    \end{tikzpicture}
-    
     
 \section{Results} \label{sec:results}
 

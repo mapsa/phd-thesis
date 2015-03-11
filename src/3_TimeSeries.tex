@@ -852,22 +852,26 @@ the VECM($p$) model in block-matrix form as:
 \mathbf{A} \mathbf{X} + 
 \mathbf{E} \, , 
 \end{equation}
-%
+
 \noindent where $\mathbf{Y}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
 dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 +1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
-%
-\begin{alignat}{3}
+
+\begin{align}
+\label{eq:vecY}
 \mathbf{Y}
-&= \begin{bmatrix}
+= \begin{bmatrix}
    \Delta\mathbf{y}_{p+1}^\top \\
    \Delta\mathbf{y}_{p+2}^\top \\
    \vdots \\
    \Delta\mathbf{y}_N^\top
    \end{bmatrix}
-&\quad
+\end{align}
+
+\begin{align}
+\label{eq:vecX}
 \mathbf{X}
-&= \begin{bmatrix}
+= \begin{bmatrix}
    \boldsymbol{\alpha}^\top \\
    \boldsymbol{\Phi}_1^{*\top} \\
    \boldsymbol{\Phi}_2^{*\top} \\
@@ -875,17 +879,23 @@ dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
    \boldsymbol{\Phi}_{p-1}^{*\top} \\
    \mathbf{c}^\top
    \end{bmatrix}
-&\quad
+\end{align}
+
+\begin{align}
+\label{eq:vecX}
 \mathbf{E}
-&= \begin{bmatrix}
+= \begin{bmatrix}
    \boldsymbol{\epsilon}_{p+1}^\top \\
    \boldsymbol{\epsilon}_{p+2}^\top \\
    \vdots \\
    \boldsymbol{\epsilon}_N^\top \\
    \end{bmatrix}
-\end{alignat}
+\end{align}
+
 \noindent and 
+
 \begin{align}
+\label{eq:vecA}
 \mathbf{A}
 &= \begin{pmat}[{....|}]
    \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
@@ -897,6 +907,9 @@ dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
                        & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
    \end{pmat}\, .
 \end{align}
+
+
+
 Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
 can be solved with respect to $\mathbf{X}$ using the ordinary least
 squares estimation (see section \ref{sec:OLS}).
