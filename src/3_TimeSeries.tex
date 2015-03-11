@@ -693,7 +693,7 @@ time to be processed with low computationally expensive calculations.
 
 \section{Vector Autoregressive Models}\label{sec:varvec}
 
-The vector autoregressive VAR($p$) model is one of the most easy to use, successful and flexible models for the analysis of multivariate time series. It is a natural extension of the univariate autoregressive (AR) model. The VAR model has proven to be useful for describing the dynamic behaviour of economic and financial time series.
+The vector autoregressive VAR($p$) model \cite{sims1980} is one of the most easy to use, successful and flexible models for the analysis of multivariate time series. It is a natural extension of the univariate autoregressive (AR) model. The VAR model has proven to be useful for describing the dynamic behaviour of economic and financial time series.
 VAR is a general framework describing the behaviour of a
 set of $l$ endogenous variables as a linear combination of their last $p$
 values, where $l,p\in\mathbb{N}$. 
@@ -784,7 +784,7 @@ can be solved with respect to $\mathbf{X}$ using the ordinary least
 squares estimation.
 
 \section{Vector error correction model}
-Vector error correction model (VECM) is a special form of a VAR model for I(1) variables that are also
+Vector error correction model (VECM)  \cite{engle87} is a special form of a VAR model for I(1) variables that are also
 cointegrated~\cite{banerjee1993}.
 
 It is obtained re-writing equation (\ref{eq:var}) in terms of the new
@@ -901,8 +901,6 @@ Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq})
 can be solved with respect to $\mathbf{X}$ using the ordinary least
 squares estimation (see section \ref{sec:OLS}).
 
-VECM models are employed because many economic time series appear to be first-difference stationary, i.e. I(1)
-
 Conventional regression estimators, including VARs, have good properties when applied to covariance-stationary time series, but encounter difficulties when applied to non stationary or integrated processes.
 
 These difficulties were illustrated by Granger and Newbold in 1974 \cite{granger1974} when they introduced the concept of spurious regressions (see section \ref{sec:spurious}). In 1982, Nelson and Plosser  \cite{nelson1982} showed that unit roots might be present in a wide variety of macroeconomic series
@@ -920,8 +918,16 @@ express the short-run responses of these series to innovations in each
 series. This implies that the simple regression in first differences is
 misspecified.
 If the series are cointegrated, they move together in the long-run. A
-VAR in first differences will not capture those long-run tendences.
+VAR in first differences will not capture those long-run tendencies.
 VECM fit to the first differences of the non stationary variables, but a lagged error-correction term is added to the relationship representing the long-run relationship.
 
+In finance, many economic time series are revealed to be stationary when they
+are differentiated and moreover cointegration restrictions often improve
+forecasting \cite{duy1998}. Therefore, VECM has been widely adopted in
+finance: \cite{mukherjee1995}, \cite{maysami2000}, \cite{arestis2001} and
+\cite{seong2013} to name a few. Pair
+trading is a very common example of a cointegration
+application \cite{herlemont2003} but also can also be extended to a larger set
+of variables \cite{mukherjee1995}, \cite{engle2004}.
 
 
