@@ -134,6 +134,59 @@ $\{\mathbf{y}_{\text{pred}}[L+1],\dots,\mathbf{y}_{\text{pred}}[N]\}$: model pre
 
 A pseudocode of the algorithm \ref{alg:proposal} is detailed in the appendix \ref{fig:pseudocodigo}.
 
+\resizebox{\textwidth}{!}{
+   \begin{tikzpicture}[node distance=2cm]
+    \label{fig:pseudocodigo}
+    %\node (start) [startstop] {Start};
+    %\node (in1) [io, below of=start] {Input};
+    \node (in1) [io] {Input: y, p, L, $\epsilon$, n};
+    \node (pro1) [process, below of=in1] {$y_i = y[i:i+L]$};
+    \node (dec1) [decision, below of=pro1, yshift=-0.5cm] {i = 0};
+    \node (pro2a) [process, below of=dec1, yshift=-0.5cm] {$[\mathbf{A} \quad \mathbf{B}] =\texttt{ovecm}(\mathbf{y}_i,p,v,\mathbf{A},\mathbf{B})$
+                                                        $\Delta \mathbf{Y}_{\text{true}}[i] = \mathbf{B}[-1,:]$
+                                                        $\Delta \mathbf{Y}_{\text{pred}}[i] = \mathbf{A}[-1,:] \times \mathbf{X}$};
+
+    \node (pro2b) [process, right of=dec1, xshift=4cm] {$v = \texttt{Johansen}(\mathbf{y}_i,p)$ $[\mathbf{A} \quad 
+                                                                \mathbf{B}] = \texttt{vecm}(\mathbf{y}_i,p,v)$};
+    \node (pro3) [process, below of=pro2a, yshift=-0.5cm] {$\mathbf{X} = \text{OLS} (\mathbf{A},\mathbf{B})$ \\
+                                                        $\mathbf{y}_{\text{true}}[i] = \mathbf{y}_i[-n,:]$ \\
+                                                        $\mathbf{y}_{\text{pred}}[i] = \mathbf{A}[-n,:] \times \mathbf{X} +$ \\$ \mathbf{y}_i[-n-1,:-1]$ \\
+                                                        $e = \texttt{mape}(\mathbf{y}_{\text{true}}, \mathbf{y}_{\text{pred}})$};
+
+    \node (dec2) [decision, below of=pro3, yshift=-0.5cm] { $e > \epsilon $ };
+
+    \node (pro4a) [process, right of=dec2, xshift=4cm] {$v = \texttt{Johansen}(\mathbf{y}_i,p)$ \\
+                                                        $\mathbf{A} = \texttt{uvecm}(\mathbf{y}_i,p,v,\mathbf{A})$ \\
+                                                        $\mathbf{X} = \texttt{OLS} (\mathbf{A},\mathbf{B})$};
+
+   
+    \node (pro5) [process, left of=pro2a, xshift=-4cm] {$ i++ $}; 
+   
+    \node (dec3) [decision, below of=dec2, yshift=-0.5cm] { $i > it $ };
+    
+    \node (out1) [io, below of=dec3] {Output: $\Delta \mathbf{y}_{true}, \Delta \mathbf{y}_{pred}$};
+    
+    %\node (stop) [startstop, below of=out1] {Stop};
+    
+    %\draw [arrow] (start) -- (in1);
+    \draw [arrow] (in1) -- (pro1);
+    \draw [arrow] (pro1) -- (dec1);
+    \draw [arrow] (dec1) -- node[anchor=east] {no} (pro2a);
+    \draw [arrow] (dec1) -- node[anchor=south] {si} (pro2b);
+    \draw [arrow] (pro2a) -- (pro3);
+    \draw [arrow] (pro2b) |- (pro3);
+    \draw [arrow] (pro3) -- (dec2);
+    \draw [arrow] (dec2) --  node[anchor=south] {si} (pro4a);
+    \draw [arrow] (pro4a) |- (dec3);
+    
+    \draw [arrow] (dec2) --  node[anchor=east] {no} (dec3);
+    \draw [arrow] (dec3.west) -| node[anchor=east] {no} (pro5);
+    \draw [arrow] (pro5) |- (pro1);
+    \draw [arrow] (dec3) --  node[anchor=east] {si} (out1);
+    %\draw [arrow] (out1) -- (stop);
+    \end{tikzpicture}
+}
+
 Our proposal was compared against VECM and ARIMA. Both algorithms were adapted
 to an online context in order to get a reasonable comparison with our proposal
 (see algorithms \ref{alg:SLVECM} and \ref{alg:SLARIMA}). VECM and ARIMA are
@@ -267,7 +320,7 @@ variable help us to decide whether new cointegration vectors are needed.
 
 \begin{figure}[!h]
   \centering
-   \includegraphics[width = 7.5cm]{img/mapes} 
+   \includegraphics[width = 10.5cm]{img/mapes} 
   \caption{In-sample MAPEs example for 50 minutes. The average of them is
   considered to obtain new cointegration vectors.}
   \label{fig:mapes}
@@ -281,6 +334,7 @@ because its is not comparable with OVECM and SLVECM. SLARIMA was created based
 on statsmodels library routine ARIMA.
 
 The execution times are shown in the table~\ref{tab:extimes}.
+
 
 \begin{table}[h!]
 \caption{Execution times}
@@ -338,6 +392,7 @@ these three performance measures.
 \caption{Model measures}
 \label{tab:stats}
 \begin{center}
+\tiny
 \begin{tabular}{|l|l|c|c|c|c|c|c|c|c|}
 \hline
 \multicolumn{4}{|c|}{Model} & \multicolumn{3}{|c|}{In-sample} &
@@ -362,10 +417,10 @@ MAPE & MAE& RMSE \\
  \textbf{0.00174}&  \textbf{0.00061}&  \textbf{0.00087}&  
  \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
 \hline
-SLARIMA & 100  &p=2, d=1, q=1 & - & 0.00285  &  0.00110  &  0.00308  &  0.00312  &0.00098  &  0.00144 \\
-SLARIMA & 400  &p=1, d=1, q=1 & - & 0.00377  &  0.00101  &  0.00128  &  0.00418 & 0.00106 & 0.00145 \\
-SLARIMA & 700  &p=2, d=1, q=1 & - & 0.00329  &  0.00102  &  0.00136  &  0.00324  & 0.00097  &  0.00133 \\
-SLARIMA & 1000 &p=2, d=1, q=1 & - & \textbf{0.00281}  & \textbf{0.00074}  &  \textbf{0.00105}  &  \textbf{0.00177} & \textbf{0.00063}  &  \textbf{0.00092} \\
+SLARIMA & 100  &p,d,q=2,1,1 & - & 0.00285  &  0.00110  &  0.00308  &  0.00312  &0.00098  &  0.00144 \\
+SLARIMA & 400  &p,d,q=1,1,1 & - & 0.00377  &  0.00101  &  0.00128  &  0.00418 & 0.00106 & 0.00145 \\
+SLARIMA & 700  &p,d,q=2,1,1 & - & 0.00329  &  0.00102  &  0.00136  &  0.00324  & 0.00097  &  0.00133 \\
+SLARIMA & 1000 &p,d,q=2,1,1 & - & \textbf{0.00281}  & \textbf{0.00074}  &  \textbf{0.00105}  &  \textbf{0.00177} & \textbf{0.00063}  &  \textbf{0.00092} \\
 \hline
 \end{tabular}
 \end{center}
@@ -383,7 +438,7 @@ which follows the time series very well.
 \begin{figure}[h]
   \vspace{-0.2cm}
   \centering
-   \includegraphics[width = 7.5cm]{img/accuracy} 
+   \includegraphics[width = 10cm]{img/accuracy} 
   \caption{OVECM forecasting accuracy example for 50 minutes using $L = 1000$ and $p =3$}
   \label{fig:accuracy}
  \end{figure}
@@ -401,7 +456,7 @@ OVECM execution time is lower.
 This reduction of execution time is mainly because OVECM avoids the cointegration vector
 calculation using the Johansen method. The condition for getting new vectors is
 given by the mean\_error variable which controls how many times the Johansen method is
-called. Additionally, OVECM introduces matrix optimization in order to get the
+called. Additionally, OVECM introduces matrix optimisation in order to get the
 new model in an iterative way.
 We could see that our algorithm took much less than a minute at every
 step. This means that it could also be used with higher frequency data and would
@@ -411,7 +466,7 @@ For future study, it would be interesting to improve the out-of-sample forecast
 by considering more explicative variables, to increase window sizes or trying new
 conditions to obtain new cointegration vectors. 
 
-Since OVECM is an online algorithm which optimizes processing time, it could be
+Since OVECM is an online algorithm which optimises processing time, it could be
 used by investors as an input for strategy robots. Moreover, some technical
 analysis methods could be based on its output. 
 
