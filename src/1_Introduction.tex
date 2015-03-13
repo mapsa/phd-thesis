@@ -15,56 +15,55 @@ The stochastic behaviour of financial time series, its incrementing
 amount of data available and the need of performing accurate forecasting in
 short periods of time has motivated researchers to create efficient and fast
 algorithms. This study involves interdisciplinary knowledge such as: finance,
-scientific computing, high performance computing, machine learning, physics
+scientific computing, high performance computing, machine learning
 among others.
 
-Forecasting financial time series have been modeled using classical statistical
-models. More recently , machine learning models have been extensively used in
-forecasting. However, getting model parameters is a computational challenge.
+Forecasting financial time series have been modelled using classical statistical
+approaches. More recently, machine learning models have been extensively used in
+forecasting. However, their main disadvantage is that getting model parameters is a computational challenge.
 The computational complexity of machine learning algorithms has become a
 limiting factor for problems that require processing large volumes of data and
-where the response time is crucial.
+where response time is crucial.
 
-Therefore, algorithms that process large amount of data in a short period of
-time are required.  Online learning algorithms have been developed to solve
+Therefore, algorithms that process large amount of data in a short periods of
+time are required. Recently, online learning algorithms have been developed to solve
 large-scale problems since they process an instance at a time, updating the
 model at each step incrementally. This is opposed to the batch algorithms where
-a phase of training that uses a large collection of historical data is first
-required and the resulting model is later used to predict.  
+the forecast model is built using a large collection of historical data in
+a training phase.
 
 The specific scope of this study is to use financial time series features in
 order to design a forecasting algorithm which ensures accuracy and low response
 times. Cointegration is the main feature studied and it refers that one or more
-linear combinations of these variables are stationary even though individually
-they are not~\cite{engle87}.  Some models, such as the Vector Error Correction
+linear combinations of these time series are stationary even though individually
+they are not~\cite{engle87}.  Some models, such as the Vector Error Correction Model
 (VECM), take advantage of this property and describe the joint behaviour of
 several cointegrated variables.
 
-In this thesis, we propose an online formulation of the VECM called Onlive VECM
-(OVECM) based on consideration of only a sliding window of the most recent data.
-The algorithm introduces matrix optimizations in order to reduce the number of
+%%
+In this thesis, an online formulation of the VECM called Online VECM
+(OVECM) is proposed. OVECM is based on the consideration of a sliding window of the most recent data.
+The algorithm introduces matrix optimisations in order to reduce the number of
 operations and also takes into account the fact that cointegration vector space
-doesn't experience large changes with small changes in the input data. Moreover,
-RR instead of OLS is used to solve VECM. Our method is later tested using four
-currency rates from the foreign exchange market with different frequencies.  Model
-efectiveness is focused on out-of-sample forecast rather than in-sample fitting.
-This criteria allows the OVECM prediction capability to be expressed rather than
-just explaining data history. Our method performance is compared with its
-optimal offline algorithm.
+doesn't experience large changes with small changes in the input data. Moreover, VECM parameters are obtained using machine learning methods. Our method is later tested using four
+currency rates from the foreign exchange market with different frequencies.  
+On the other hand, in order to improve VECM parameters, an adaptive VECM algorithm is presented called AVECM. AVECM allows VECM parameters to be found by maximising the number of cointegration relations for a given set of parameters on a grid search. This grid search is done in parallel.
+
+Models effectiveness were focused on the out-of-sample forecast rather than on the in-sample fitting. This criteria allows the OVECM and AVECM prediction capability to be expressed rather than just explaining data history. Our method performance is compared with its optimal offline algorithm.
 
 
 \section{Research Objectives}
-The main motivation for this research is the develpment of efficient methods for
+The main motivation for this research is the development of efficient methods for
 forecasting financial time series.
 
 The specific objectives of this research are,
 \begin{itemize}
 \item $\Large \mathcal{O}_1$: \emph{A review of the literature on time series
 analysis models including machine learning techniques.}
-\item $\Large \mathcal{O}_2$: \emph{Development of a set of know features of the
+\item $\Large \mathcal{O}_2$: \emph{Development of a set of known features of the
 studied time series and applied them to improve forecasting.}
 \item $\Large \mathcal{O}_3$: \emph{Development of parallel and efficient
-algorithms to ensure quick time responses.}
+algorithms to ensure quick response times .}
 \item $\Large \mathcal{O}_4$: \emph{Deep mathematical analysis of the proposal
 and financial concepts involved.}
 \item $\Large \mathcal{O}_5$: \emph{Design and implement representative set of
@@ -75,16 +74,16 @@ experiments in order to show when and why proposal performs better.}
 \section{Research Hypothesis}
 
 
-Cointegration concept was introduced by~\cite{engle1987} and implies that one or
+Cointegration concept was introduced by Engle and Granger in 1987 \cite{engle1987} and implies that one or
 more linear combinations of non-stationary variables are stationary even though
-individually they are not.  Moreover ~\cite{stock+watson1988} observed that
+individually they are not.  Moreover Stock and Watson in 1988 \cite{stock+watson1988} observed that
 cointegration reflects the common stochastic trends providing a useful way to
 understand cointegration relationships. These common stochastic trends can be
 also interpreted as a long-run equilibrium relationships.
 
 Vector error correction model (VECM) introduces this long-run relationship
 among a set of cointegrated variables as an error correction term. VECM is a
-special case of the vector autorregresive model (VAR) model. VAR model
+special case of the vector autoregresive model (VAR) model. VAR model
 expresses future values as a linear combination of variables past values.
 However, VAR model cannot be used with non-stationary variables. VECM is a
 linear model but in terms of variable differences. If cointegration exists,
@@ -98,7 +97,7 @@ Both VECM and VAR model parameters are obtained using ordinary least squares
 (OLS) method. OLS has two main problems: is sensitive to errors on input data
 and involves many calculations. The former problem is commonly solved using
 Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
-parameter that leads to an unbiased estimation with better generalization
+parameter that leads to an unbiased estimation with better generalisation
 capability. The second problem of computational complexity depends on the number
 of past values and observations considered.  Recently, online learning
 algorithms have been proposed to solve problems with large data sets because of
@@ -109,15 +108,15 @@ The main research hypothesis explored in this dissertation is the following:
 \\
 
 \textit{An online learning algorithms based on cointegration and high
-performance computing will allow to obtain better and faster forecasting
-algorithms for financial time series maintaining good accuracy levels.}
+performance computing will allow faster forecasting
+algorithms for financial time series to be obtained while maintaining good accuracy levels.}
 
 
-\section{Organization of this Thesis}
+\section{Organisation of this Thesis}
 
 Chapter 1 contains relevant finance concepts required to understand financial
 time series models such as market hypothesis, frequency, order book generation,
-market microestructure.
+market microstructure.
 Chapter 2 discuss main time series models including classic ones such as ARMA,
 GARCH and more recent ones such as VECM, VAR and volatility models. %mejorar
 Chapter 3 gives a brief introduction to machine learning and its variant online
@@ -126,8 +125,8 @@ Chapter 4 presents different algorithms propose to forecast financial time
 series using machine learning techniques.
 In Chapter 5 a deep study of foreign exchange market features is presented and
 experiments of cointegration are carried out in order to show its dynamic.
-Chapter 6 presents a discussion of found results and summarize the main
-conlusions of this thesis. It also presents some research directions for future
+Chapter 6 presents a discussion of found results and summarise the main
+conclusions of this thesis. It also presents some research directions for future
 studied.
 
 
