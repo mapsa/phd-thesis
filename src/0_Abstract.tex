@@ -4,33 +4,31 @@
 this has motivated its study using different techniques. 
 One relevant observation is that sometimes time series exhibit some stationary
 linear combinations. When this happens, it is said that those time series are
-cointegrated.  Cointegration has been then one of the main features studied.
-Vector error correction model (VECM) is an econometric model which characterizes
+cointegrated. Cointegration has been then one of the main features studied.
+Vector error correction model (VECM) is an econometric model which characterises
 the joint dynamic behaviour of a set of cointegrated variables in terms of
 forces pulling towards equilibrium.}
 
 \emph{VECM parameters are obtained using the ordinary least squares (OLS)
 method.  Even though OLS is extensively used, it has over-fitting
 issues and is computationally expensive. Ridge regression is commonly used
-instead of OLS since they include a regularization parameter which could improve
+instead of OLS since they include a regularisation parameter which could improve
 prediction error.}
 
 \emph{In this thesis, financial time series features are studied and different
-algorithms were developed in order to optimize parameters an increase performance.
-In particular, we propose an online VECM which optimizes how model parameters
-are obtained considering only past data and different ways of solving the model
-using machine learning techniques.  
-The long-run relationship between the time series is used in order to make
-optimizations and obtain improved execution times. However, due to the large
-amount of data available and the need of quick response, algorithms presented
-were optimized using high performance computing.
+algorithms were developed in order to optimise parameters and increase performance.
+In particular, I propose an online algorithm based on VECM which optimises how model parameters are obtained and reduces execution times. This is achieved considering only a sliding window of the last historical data and using machine learning techniques to solve the model. Moreover, the long-run relationship between the time series is used in order to make
+optimisations and obtain improved execution times. 
+Due to the large amount of financial data available and the need of quick response, 
+the algorithm presented
+was optimised using high performance computing.
 Our experiments were tested using synthetic data and foreign exchange rates.
 Results show that cointegration and high performance computing allow to obtain
-better models and execution times.}
+models with better performance accuracy and reduced execution times.}
 
 \vspace{0.8cm}
 
 \emph{\textbf{Keywords:} Computational finance  - Cointegration  - Time Series - 
-Online algorithms - Resampling  - Regression}
+Online algorithms  - Regression}
 
 

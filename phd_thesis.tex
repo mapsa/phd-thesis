@@ -4,11 +4,18 @@
 %\usepackage{ramo,smcapt1}
 %\usepackage[latin1]{inputenc}
 %%\usepackage[dvipdfm]{hyperref}
-%\usepackage{amsmath}
+\usepackage{array}
+\usepackage{amsmath,arydshln}
+\usepackage{MnSymbol}%
+\usepackage{wasysym}%
+\usepackage{cancel}
 %\usepackage{amsfonts}
 %\usepackage{multirow} 
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
+\usepackage{multirow}
+\usepackage{lscape}
+
 %\usepackage{pgfplots}
 %\usepackage{etex}
 %\usepackage{comment}
@@ -114,15 +121,15 @@
 \input{src/2_Finance}
 \input{src/3_TimeSeries}
 \input{src/4_OnlineLearning}
-\input{src/5_Proposal}
-%\input{6_Experimentation}
-%\input{7_Conclusion}
+\input{src/5_1_Proposal}
+\input{src/5_2_Proposal}
+\input{src/6_Conclusion}
 
 %%%%%%%%%%%%%%%%%%% APPENDIX %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\appendix
+%\appendix
 % Include appendix "chapters" here.
-
+%\input{src/appendix}
 %%%%%%%%%%%%%%%%%%% BACK MATTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \backmatter
