@@ -39,130 +39,6 @@ Franc (CHF) (USDCHF) and USD to Japanese Yen (JPY) (USDJPY) with a 10-seconds fr
 
 \section{Methodology}
 
-The relation between the number of cointegration relations and parameters $L$
-and $p$ is studied and then a relation between cointegration and performance is
-stated.
-
-Figure~\ref{fig:hists} shows the number $r$ of cointegration vectors given by
-the Johansen method for different values of the parameters $L$ and $p$, using
-four currencies data, i.e., $l=4$, and considering 1000 iterations $it$.
-We know that when there is no cointegration vectors, i.e $r=0$, 
-there is no cointegration. In the same way, when $r=l$ reveals that no process is I(1) but,
-instead, they are all stationary.
-The interesting cases of cointegration are those, where $r$ lies strictly
-between $0$ and $l$, i.e. $0<r<l$, 
-
-Experiments were run with data starting at 9:00 GMT of the 11th of August 2014,
-which corresponds to the opening of the New York financial market.
-
-\begin{figure}[!h]
-  %\vspace{-0.8cm}
-  \centering
-  \includegraphics[width=\textwidth]{img/histCointVectors}
-  \caption{Histogram of the number of cointegration vectors using $p=1$. Four
-  possible values for $L$ are shown (100, 1900, 6100 and 10700).
-  In the cases of $L=100$ and $L=6100$, most of the time there is little
-  cointegration (0 or 4 cointegration vectors). However, for $L=1900$ and
-  $L=10700$ significant cointegration is found.}
-  \label{fig:hists}
-\end{figure}
-
-\begin{figure}[!h]
-  %\vspace{-0.8cm}
-  \centering
-  \includegraphics[width=\textwidth]{img/histCointVectorsp5}
-  \caption{Histogram of the number of cointegration vectors using $p=5$. 
-   Despite the change in the distribution of cointegration vectors, 
-   the percentage of cointegration is nearly the same as in the case $p=1$. 
-   For example, for $L=10700$ the sum of 1 and 2 number of cointegration
-   vectors is very similar to 1 cointegration vector for the case $L=10700$
-   in figure \ref{fig:hists}.}
-   \label{fig:histsp5}
-\end{figure}
-
-The same experiments, using now $p=5$, were carried out in order to see the
-effect on the number of cointegration vectors found. 
-Figure~\ref{fig:histsp5} shows that, despite the change in the distribution
-of the number of cointegration vectors, the sum of their number with $0<r<4$,
-remain nearly the same. 
-Therefore we can say that the number of lags doesn't significantly affect
-the extent of cointegration found.
-
-In order to measure the extent of cointegration, we introduce a
-{\em percentage of cointegration\/} as following:
-\begin{equation} \label{eq:pcoint}
-PC = 
-\frac{\#\{ it \mid \text{$it$ has $r$ c.v. with $0<r<l$}\}}
-     {\#it}\times 100
-\end{equation}
-where c.v. stands for cointegration vectors and $it$ is the number of iterations.
-
-The goal of our next experiment was to find a relation between this ratio
-$PC$ and the performance of the accuracy measure MAPE (see equation 
-\ref{eq:MAPE}). 
-The experiments suggest that there is indeed a relation between the $PC$ ratio
-and MAPE.
-Figure~\ref{fig:cointvsmape} shows that MAPE rapidly decreases with increasing
-$PC$.
-
-\begin{figure}[!h]
-  %\vspace{-0.8cm}
-  \centering
-  \includegraphics[width=0.8\textwidth]{img/MAPEvsCoint-offset21600-p-2-freq-10s}
-  \caption{MAPE versus percentage of cointegration. MAPE was obtained from 1000
-  iterations considering several possible $L=[100,10000,400]$ and $p=[1,5]$.
-  Best $L$ found was 8900.}
-  \label{fig:cointvsmape}
-\end{figure}
-
-From these results we observe that cointegration changes with different values
-for $L$ and $p$ and also that better cointegration percentage leads to better
-accuracy performance.
-Therefore we propose to choose best $L$ and $p$ parameters determined at every
-step. 
-The criterion for choosing $L$ and $p$ is to maximise the percentage of
-cointegration $PC$ considering a number of past iterations $it$.
-
-Algorithm ~\ref{alg:AVECM} summarises our proposal. 
-The function {\bf get\_best\_params} makes a grid search on the two vector
-lists $Ls$ and $ps$ and returns the parameters $L$ and $p$ which maximise
-the percentage of cointegration $PC$ (see equation~\ref{eq:pcoint}) for a
-pre-defined number of iterations.
-Since this search is computational expensive, the number of cointegration
-vectors at each iteration is computed in parallel, thus ensuring a response
-before new data is available. 
-This parallel routine also allows to refine our grid search leading to obtain
-improved forecasting performance.
-After that optimum $L$ and $p$ parameters are found, VECM is built and used
-to forecast next data.
-
-\begin{algorithm}[ht]
-\begin{algorithmic}[1]
-\REQUIRE $\,$ \\
-$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
-$ps$: vector with the number of past values range \\
-$Ls$: vector with window sizes range ($L<N$) \\
-$outit$: Number of out-of-sample iterations($outit < N-L$)
-$it$: Number of iterations of testing (in-sample)\\
-$of$: Starting point of Testing \\
-\ENSURE  $\,$ \\
-$\{ \mathbf{y}_{\text{pred}}[1],\dots,\mathbf{y}_{\text{pred}}[N-L]\}$: model predictions 
-\FOR { $i =of$ to $of + outit$ }
-   \STATE $\mathbf{Y} \gets \mathbf{y}[i-\texttt{max}(Ls):i]$
-    \STATE $L,p \gets
-    \texttt{get\_best\_params}(Ls,ps,it,Y)$
-    \STATE $\mathbf{y}_i \gets \mathbf{y}[i-L:i]$
-        \STATE $model = VECM(\mathbf{y}_i, p)$
-        \STATE $\mathbf{y}_{\text{pred}}[i] = model.predict()$
-\ENDFOR
-\end{algorithmic}
-\caption{AVECM: Adaptive VECM.}
-\label{alg:AVECM}
-\end{algorithm}
-
-\section{Background}
-\label{sec:background}
-
 VECM is obtained re-writing equation (\ref{eq:var}) in terms of the new
 variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
 The VECM model, expressed in terms those differences, takes the form:
@@ -272,7 +148,126 @@ Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq})
 can be solved with respect to $\mathbf{X}$ using the ordinary least
 squares estimation.
 
+\subsection{Motivation}
+The relation between the number of cointegration relations
+and parameters $L$ and $p$ is studied and then a relation between cointegration
+and performance is stated.
 
+Figure~\ref{fig:hists} shows the number $r$ of cointegration vectors given by
+the Johansen method for different values of the parameters $L$ and $p$, using
+four currencies data, i.e., $l=4$, and 1000 considering iterations ($it=1000$).
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=\textwidth]{img/histCointVectors}
+  \caption{Histogram of the number of cointegration vectors using $p=1$. Four
+  possible values for $L$ are shown (100, 1900, 6100 and 10700).
+  In the cases of $L=100$ and $L=6100$, most of the time there is little
+  cointegration (0 or 4 cointegration vectors). However, for $L=1900$ and
+  $L=10700$ significant cointegration is found.}
+  \label{fig:hists}
+\end{figure}
+We know that when there is no cointegration vectors, i.e $r=0$, 
+there is no cointegration. In the same way, when $r=l$ reveals that no process is I(1) but,
+instead, they are all stationary.
+The interesting cases of cointegration are those, where $r$ lies strictly
+between $0$ and $l$, i.e. $0<r<l$, 
+
+Experiments were run with data starting at 9:00 GMT of the 11th of August 2014,
+which corresponds to the opening of the New York financial market.
+
+
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=\textwidth]{img/histCointVectorsp5}
+  \caption{Histogram of the number of cointegration vectors using $p=5$. 
+   Despite the change in the distribution of cointegration vectors, 
+   the percentage of cointegration is nearly the same as in the case $p=1$. 
+   For example, for $L=10700$ the sum of 1 and 2 number of cointegration
+   vectors is very similar to 1 cointegration vector for the case $L=10700$
+   in figure \ref{fig:hists}.}
+   \label{fig:histsp5}
+\end{figure}
+
+The same experiments, using now $p=5$, were carried out in order to see the
+effect on the number of cointegration vectors found. 
+Figure~\ref{fig:histsp5} shows that, despite the change in the distribution
+of the number of cointegration vectors, the sum of their number with $0<r<4$,
+remain nearly the same. 
+Therefore we can say that the number of lags doesn't significantly affect
+the extent of cointegration found.
+
+In order to measure the extent of cointegration, we introduce a
+{\em percentage of cointegration\/} as following:
+\begin{equation} \label{eq:pcoint}
+PC = 
+\frac{\#\{ it \mid \text{$it$ has $r$ c.v. with $0<r<l$}\}}
+     {\#it}\times 100
+\end{equation}
+where c.v. stands for cointegration vectors and $it$ is the number of iterations.
+
+The goal of our next experiment was to find a relation between this ratio
+$PC$ and the performance of the accuracy measure MAPE (see equation 
+\ref{eq:MAPE}). 
+The experiments suggest that there is indeed a relation between the $PC$ ratio
+and MAPE.
+Figure~\ref{fig:cointvsmape} shows that MAPE rapidly decreases with increasing
+$PC$.
+
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=0.7\textwidth]{img/MAPEvsCoint-offset21600-p-2-freq-10s}
+  \caption{MAPE versus percentage of cointegration. MAPE was obtained from 1000
+  iterations considering several possible $L=[100,10000,400]$ and $p=[1,5]$.
+  Best $L$ found was 8900.}
+  \label{fig:cointvsmape}
+\end{figure}
+
+From these results we observe that cointegration changes with different values
+for $L$ and $p$ and also that better cointegration percentage leads to better
+accuracy performance.  Therefore we propose to choose best $L$ and $p$
+parameters determined at every step.  The criterion for choosing $L$ and $p$ is
+to maximise the percentage of cointegration $PC$ considering a number of past
+iterations $it$.
+
+
+
+Algorithm ~\ref{alg:AVECM} solves equation \ref{eq:vareq} defining first
+parameters $L$ and $p$ using the function {\bf get\_best\_params} which makes a
+grid search on the two vector lists $Ls$ and $ps$ and returns the parameters $L$
+and $p$ which maximise the percentage of cointegration $PC$ (see
+equation~\ref{eq:pcoint}) for a pre-defined number of iterations.  Since this
+search is computational expensive, the number of cointegration vectors at each
+iteration is computed in parallel, thus ensuring a response before new data is
+available.  This parallel routine also allows to refine our grid search leading
+to obtain improved forecasting performance.  After that optimum $L$ and $p$
+parameters are found, VECM is built and used to forecast next data.
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
+$ps$: vector with the number of past values range \\
+$Ls$: vector with window sizes range ($L<N$) \\
+$outit$: Number of out-of-sample iterations($outit < N-L$)
+$it$: Number of iterations of testing (in-sample)\\
+$of$: Starting point of Testing \\
+\ENSURE  $\,$ \\
+$\{ \mathbf{y}_{\text{pred}}[1],\dots,\mathbf{y}_{\text{pred}}[N-L]\}$: model predictions 
+\FOR { $i =of$ to $of + outit$ }
+   \STATE $\mathbf{Y} \gets \mathbf{y}[i-\texttt{max}(Ls):i]$
+    \STATE $L,p \gets
+    \texttt{get\_best\_params}(Ls,ps,it,Y)$
+    \STATE $\mathbf{y}_i \gets \mathbf{y}[i-L:i]$
+        \STATE $model = VECM(\mathbf{y}_i, p)$
+        \STATE $\mathbf{y}_{\text{pred}}[i] = model.predict()$
+\ENDFOR
+\end{algorithmic}
+\caption{AVECM: Adaptive VECM.}
+\label{alg:AVECM}
+\end{algorithm}
 %
 %
 %\subsection{Evaluation methods} \label{sec:evaluation}
