@@ -1,155 +1,47 @@
 
 \chapter{Adaptive parallel algorithm for VECM}
 
-VECM parameters are those which maximise cointegration relations in the past. However, this search is computationally expensive since the Johansen
-method~\cite{johansen1995} is used, which is of order $O(n^3)$. We propose
-to parallelise this search in order to get new parameters at every iteration. 
-
 \vspace{0.5cm} 
 
-\section{Introduction}
-Both VECM and VAR model parameters are obtained using ordinary least squares
-(OLS) method \cite{golub1980}. Since OLS involves many calculations, the parameter estimation
-method is computationally expensive when the number of past values and
-observations increases. Moreover, obtaining cointegration vectors 
-is also an expensive routine because of the use of the Johansen method.
+VECM parameters are obtained using ordinary least squares (OLS) method
+\cite{golub1980}, which is computationally expensive when the number of past
+values $L$ and observations $p$ increases. Moreover, obtaining cointegration
+vectors is also an expensive routine because of the use of the Johansen method.
 
-Model effectiveness is focused on out-of-sample forecast rather than in-sample
-fitting. This criterion allows our proposal AVECM prediction capability to be
-expressed rather than just explaining data history.
+In this study we found that for some combinations of $L$ and $p$, the number of
+cointegration relations is increased and this leads to better performance. We
+propose to parallelise this search in order to achive faster execution times.
+
+
+\section{The problem} \label{sec:proposal}
+
+Cointegration vectors can be found applying the Johansen method which uses a
+sample of the most recent historical data. However, one of the main limitations of this
+methodology is that it assumes cointegration vectors do not change in time.  In
+fact, the long-run relationships between the time series might change due to
+several economic factors that can lead to structural breaks in the cointegrating
+relation \cite{gregoryETal1996}. 
+
+In this study, we show that cointegration relations depend on the amount $L$ of
+historical data considered, and how many lags $p$ were used. This search is
+computationally expensive, considering that the Johansen
+method~\cite{johansen1995} (which is of order $O(n^3)$) is used and these
+parameters change at every iteration. 
+
+Our proposal consists on to parallelise this search in order to get new
+parameters at every iteration. 
 
 The forecast capability of our method was measured using MAPE, MAE and
 RMSE \cite{armstrong1992}. Tests were run using four currency rates: Euro (EUR) to
 United States Dollar (USD) (EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss
 Franc (CHF) (USDCHF) and USD to Japanese Yen (JPY) (USDJPY) with a 10-seconds frequency.
 
-\def\rot#1{{\color{red}{#1}}}
-\def\gruen#1{{\color{green}{#1}}}
-\def\blau#1{{\color{blue}{#1}}}
 
+\section{Methodology}
 
-\section{Background}
-\label{sec:background}
-
-VECM is obtained re-writing equation (\ref{eq:var}) in terms of the new
-variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
-The VECM model, expressed in terms those differences, takes the form:
-\begin{equation}\label{eq:vec}
-\Delta \mathbf{y}_t 
-= \boldsymbol{\Omega}\,\mathbf{y}_{t-1}
-  + \sum_{i=1}^{p-1} \boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
-  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
-\end{equation}
-\noindent
-where the coefficients matrices $\boldsymbol{\Phi}_i^*$ and 
-$\boldsymbol{\Omega}$, expressed in terms of the matrices
-$\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
-\begin{align*}
-\boldsymbol{\Phi}_i^* 
-&:= -\sum_{j=i+1}^{p}\boldsymbol{\Phi}_j\,, \\
-\boldsymbol{\Omega}
-&:= -\left( \mathbb{I} - \boldsymbol{\Phi}_1 - \dots 
-    - \boldsymbol{\phi}_p \right)\,. 
-\end{align*}
-The following well known properties of the matrix $\boldsymbol{\Omega}$
-\cite{johansen1995} will be useful in the sequel:
-\begin{itemize}
-\item
-If $\boldsymbol{\Omega} = \mathbf{0}$, there is no cointegration.
-\item 
-If $rank(\boldsymbol{\Omega})=l$, i.e., if $\boldsymbol{\Omega}$ has
-full rank, then the time series are not I(1) but stationary.
-\item
-If $rank(\boldsymbol{\Omega})=r$, $0<r<l$, then there is cointegration
-and the matrix $\boldsymbol{\Omega}$ can be expressed as
-$\boldsymbol{\Omega}=\boldsymbol{\alpha\beta}^\top$, where $\boldsymbol{\alpha}$
-and $\boldsymbol{\beta}$ are
-$l\times r$ matrices and
-$\text{rank}(\boldsymbol{\alpha})=\text{rank}(\boldsymbol{\beta})=r$.
-\item
-The columns of $\boldsymbol{\beta}$ contains the cointegration vectors and the rows of
-$\boldsymbol{\alpha}$ correspond with the adjusted vectors. 
-$\boldsymbol{\beta}$ is obtained by Johansen procedure~\cite{johansen1988},
-whereas $\boldsymbol{\alpha}$ has to be determined as a variable in the VECM.
-\end{itemize}
-
-If cointegration exists, then equation (\ref{eq:vec}) can be written
-as follows:
-\begin{equation}\label{eq:vecfull}
-\Delta\mathbf{y}_t 
-= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
-  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
-  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
-\end{equation}
-\noindent
-which is a VAR model but for time series differences.
-
-Transposing each equation of the system (\ref{eq:vecfull}) we can write
-the VECM($p$) model in block-matrix form as:
-\begin{equation}\label{eq:vareq}
-\mathbf{B} = 
-\mathbf{A} \mathbf{X} + 
-\mathbf{E} \, , 
-\end{equation}
-%
-\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
-dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
-+1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
-%
-\begin{alignat}{3}
-\mathbf{B}
-&= \begin{bmatrix}
-   \Delta\mathbf{y}_{p+1}^\top \\
-   \Delta\mathbf{y}_{p+2}^\top \\
-   \vdots \\
-   \Delta\mathbf{y}_N^\top
-   \end{bmatrix}
-&\quad
-\mathbf{X}
-&= \begin{bmatrix}
-   \boldsymbol{\alpha}^\top \\
-   \boldsymbol{\Phi}_1^{*\top} \\
-   \boldsymbol{\Phi}_2^{*\top} \\
-   \vdots \\
-   \boldsymbol{\Phi}_{p-1}^{*\top} \\
-   \mathbf{c}^\top
-   \end{bmatrix}
-&\quad
-\mathbf{E}
-&= \begin{bmatrix}
-   \boldsymbol{\epsilon}_{p+1}^\top \\
-   \boldsymbol{\epsilon}_{p+2}^\top \\
-   \vdots \\
-   \boldsymbol{\epsilon}_N^\top \\
-   \end{bmatrix}
-\end{alignat}
-\noindent and 
-\begin{align}
-\mathbf{A} 
-&= \begin{pmat}[{....|}]
-   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
-                    & \Delta\mathbf{y}_2^\top & 1 \cr
-   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
-                       & \Delta\mathbf{y}_3^\top & 1 \cr
-   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
-   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
-                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
-   \end{pmat}\, .
-\end{align}
-Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
-can be solved with respect to $\mathbf{X}$ using the ordinary least
-squares estimation.
-
-\section{Motivation} \label{sec:proposal}
-
-Cointegration vectors can be found applying the Johansen method which uses a
-sample of the last historical data. However, one of the main limitations of this
-methodology is that it assumes cointegration vectors do not change in time.
-In fact, the long-run relationships between the time series might change due to
-several economic factors that can lead to structural breaks in the cointegrating
-relation \cite{gregoryETal1996}. 
-Experiments show that cointegration depends on the amount $L$ of historical data
-considered, and how many lags $p$ we use.
+The relation between the number of cointegration relations and parameters $L$
+and $p$ is studied and then a relation between cointegration and performance is
+stated.
 
 Figure~\ref{fig:hists} shows the number $r$ of cointegration vectors given by
 the Johansen method for different values of the parameters $L$ and $p$, using
@@ -267,6 +159,119 @@ $\{ \mathbf{y}_{\text{pred}}[1],\dots,\mathbf{y}_{\text{pred}}[N-L]\}$: model pr
 \caption{AVECM: Adaptive VECM.}
 \label{alg:AVECM}
 \end{algorithm}
+
+\section{Background}
+\label{sec:background}
+
+VECM is obtained re-writing equation (\ref{eq:var}) in terms of the new
+variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
+The VECM model, expressed in terms those differences, takes the form:
+\begin{equation}\label{eq:vec}
+\Delta \mathbf{y}_t 
+= \boldsymbol{\Omega}\,\mathbf{y}_{t-1}
+  + \sum_{i=1}^{p-1} \boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+where the coefficients matrices $\boldsymbol{\Phi}_i^*$ and 
+$\boldsymbol{\Omega}$, expressed in terms of the matrices
+$\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
+\begin{align*}
+\boldsymbol{\Phi}_i^* 
+&:= -\sum_{j=i+1}^{p}\boldsymbol{\Phi}_j\,, \\
+\boldsymbol{\Omega}
+&:= -\left( \mathbb{I} - \boldsymbol{\Phi}_1 - \dots 
+    - \boldsymbol{\phi}_p \right)\,. 
+\end{align*}
+The following well known properties of the matrix $\boldsymbol{\Omega}$
+\cite{johansen1995} will be useful in the sequel:
+\begin{itemize}
+\item
+If $\boldsymbol{\Omega} = \mathbf{0}$, there is no cointegration.
+\item 
+If $rank(\boldsymbol{\Omega})=l$, i.e., if $\boldsymbol{\Omega}$ has
+full rank, then the time series are not I(1) but stationary.
+\item
+If $rank(\boldsymbol{\Omega})=r$, $0<r<l$, then there is cointegration
+and the matrix $\boldsymbol{\Omega}$ can be expressed as
+$\boldsymbol{\Omega}=\boldsymbol{\alpha\beta}^\top$, where $\boldsymbol{\alpha}$
+and $\boldsymbol{\beta}$ are
+$l\times r$ matrices and
+$\text{rank}(\boldsymbol{\alpha})=\text{rank}(\boldsymbol{\beta})=r$.
+\item
+The columns of $\boldsymbol{\beta}$ contains the cointegration vectors and the rows of
+$\boldsymbol{\alpha}$ correspond with the adjusted vectors. 
+$\boldsymbol{\beta}$ is obtained by Johansen procedure~\cite{johansen1988},
+whereas $\boldsymbol{\alpha}$ has to be determined as a variable in the VECM.
+\end{itemize}
+
+If cointegration exists, then equation (\ref{eq:vec}) can be written
+as follows:
+\begin{equation}\label{eq:vecfull}
+\Delta\mathbf{y}_t 
+= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
+  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+which is a VAR model but for time series differences.
+
+Transposing each equation of the system (\ref{eq:vecfull}) we can write
+the VECM($p$) model in block-matrix form as:
+\begin{equation}\label{eq:vareq}
+\mathbf{B} = 
+\mathbf{A} \mathbf{X} + 
+\mathbf{E} \, , 
+\end{equation}
+%
+\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
+dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
++1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
+%
+\begin{alignat}{3}
+\mathbf{B}
+&= \begin{bmatrix}
+   \Delta\mathbf{y}_{p+1}^\top \\
+   \Delta\mathbf{y}_{p+2}^\top \\
+   \vdots \\
+   \Delta\mathbf{y}_N^\top
+   \end{bmatrix}
+&\quad
+\mathbf{X}
+&= \begin{bmatrix}
+   \boldsymbol{\alpha}^\top \\
+   \boldsymbol{\Phi}_1^{*\top} \\
+   \boldsymbol{\Phi}_2^{*\top} \\
+   \vdots \\
+   \boldsymbol{\Phi}_{p-1}^{*\top} \\
+   \mathbf{c}^\top
+   \end{bmatrix}
+&\quad
+\mathbf{E}
+&= \begin{bmatrix}
+   \boldsymbol{\epsilon}_{p+1}^\top \\
+   \boldsymbol{\epsilon}_{p+2}^\top \\
+   \vdots \\
+   \boldsymbol{\epsilon}_N^\top \\
+   \end{bmatrix}
+\end{alignat}
+\noindent and 
+\begin{align}
+\mathbf{A} 
+&= \begin{pmat}[{....|}]
+   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
+                    & \Delta\mathbf{y}_2^\top & 1 \cr
+   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
+                       & \Delta\mathbf{y}_3^\top & 1 \cr
+   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
+   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
+                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
+   \end{pmat}\, .
+\end{align}
+Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+can be solved with respect to $\mathbf{X}$ using the ordinary least
+squares estimation.
+
 
 %
 %
