@@ -154,8 +154,9 @@ and parameters $L$ and $p$ is studied and then a relation between cointegration
 and performance is stated.
 
 Figure~\ref{fig:hists} shows the number $r$ of cointegration vectors given by
-the Johansen method for different values of the parameters $L$ and $p$, using
-four currencies data, i.e., $l=4$, and 1000 considering iterations ($it=1000$).
+the Johansen method for different values of the parameters $L$ leaving $p$ set
+as $1$, using four currencies data, i.e., $l=4$, and 1000 considering iterations
+($it=1000$).
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
@@ -167,11 +168,11 @@ four currencies data, i.e., $l=4$, and 1000 considering iterations ($it=1000$).
   $L=10700$ significant cointegration is found.}
   \label{fig:hists}
 \end{figure}
-We know that when there is no cointegration vectors, i.e $r=0$, 
-there is no cointegration. In the same way, when $r=l$ reveals that no process is I(1) but,
-instead, they are all stationary.
-The interesting cases of cointegration are those, where $r$ lies strictly
-between $0$ and $l$, i.e. $0<r<l$, 
+We know that when no cointegration vectors can be found, i.e $r=0$, implies that
+the variables are not cointegrated. In the same way, when $r=l$ reveals that
+none of the processes is I(1) but, they are all stationary.  The interesting cases of
+cointegration are those, where $r$ lies strictly between $0$ and $l$, i.e.
+$0<r<l$, 
 
 Experiments were run with data starting at 9:00 GMT of the 11th of August 2014,
 which corresponds to the opening of the New York financial market.
@@ -190,12 +191,12 @@ which corresponds to the opening of the New York financial market.
    \label{fig:histsp5}
 \end{figure}
 
-The same experiments, using now $p=5$, were carried out in order to see the
+The same experiments, setting $p=5$, were carried out in order to see the
 effect on the number of cointegration vectors found. 
 Figure~\ref{fig:histsp5} shows that, despite the change in the distribution
-of the number of cointegration vectors, the sum of their number with $0<r<4$,
-remain nearly the same. 
-Therefore we can say that the number of lags doesn't significantly affect
+of the number of cointegration vectors, the sum of the cases where $0<r<4$,
+remains nearly the same. 
+Therefore, we can say that the number of lags doesn't significantly affect
 the extent of cointegration found.
 
 In order to measure the extent of cointegration, we introduce a
