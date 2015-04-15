@@ -587,22 +587,149 @@ For nonlinear case, SVM mapped the data sets of input space into a higher dimens
 \newpage
 \section{Online learning} \label{sec:onoffline}
 
-Online learning is a supervised machine learning framework that is useful when we have sequential access to a sample only once.  This differs from the classical batch learning, where there is an entire data set available and the learner can build the internal model without any limits in accessing the data. In batch learning, there is time enough to carefully analyse the dataset, build large predictive models and combine them in a sophisticated way. 
+Online learning is a supervised machine learning framework that is useful when
+we have sequential access to a sample only once.  This differs from the
+classical batch learning, where there is an entire data set available and the
+learner can build the internal model without any limits in accessing the data.
+In batch learning, there is time enough to carefully analyse the dataset, build
+large predictive models and combine them in a sophisticated way. However, when
+execution time is critical and new data is required to be included in the model,
+online learning algorithms are a better option.
 
-In only learning the goal is the same as batch learning, predicting targets as accurate as possible. For example, stock market prediction can be seen as online learning. The algorithm makes a prediction of the stock, little time after the real stock price is available, this information can be incorporated to the learner to further improve the prediction accuracy. In general, there is too much data available in an online learning setup, the data set grows continuously. Offline learning has equal or superior accuracy compared to online learning when the same amount of data is used.
+In batch learning, the training phase is commonly a computationally expensive
+process. Therefore, when new data arrives it can't be included easily to the
+model. Moreover, it could happen that we won't have enought time to process the
+new data before more data arrives. In online learning algorithms there is no
+training phase, but the model is updated and evaluated at every time step. This
+model updating is computationally less expensive than a training phase.
+Online algorithms allow incremental learning by processing one instance at a
+time. This is done updating the current model instead of building the model from
+scratch.
 
-Classic statistical theory of sequential prediction enforces strong assumptions on the statistical properties of the input sequence (for example, stationary stochastic process). However, these assumptions can be unknown or change over time. In online learning there is no previous assumption about the data and the sequence is allowed to be deterministic, stochastic or even adaptive.  
+Online learning is also useful when some past data may be irrelevant
+or we want to improve computational efficiency. However, the use of less
+historical data could affect accuracy.
 
-Moreover, in case we receive data streams, ANN or SVM cannot introduce new information into the model without a re-training process, so we will have to use the same non-updated model until we decide to compute another one if it is possible.  Online learning algorithms allow one example at a time to be introduced into an existing model incrementally \cite{vovk2005}. This is extremely important when the problem has large data streams and real-time forecasting must be done.  This is the most common scenario when we want to forecast a wide range of data such as stock prices and volatilities, electricity power, intrusion detection, web-mining, server load, etc.  Besides, many problems of high interest in machine learning can be treated as online ones and they can also use these types of algorithms.
+The goal of online learning is the same as batch learning, predicting targets as
+accurate as possible. For example, stock market prediction can be seen as online
+learning. The algorithm makes a prediction of the stock, little time after the
+real stock price is available, this information can be incorporated to the
+learner to further improve the prediction accuracy. In general, there is too
+much data available in an online learning setup, the data set grows
+continuously. Offline learning has equal or superior accuracy compared to online
+learning when the same amount of data is used.
 
-The online learning framework was first introduced in the perceptron algorithm \cite{rosenblatt58}. There are several other widely used online methods such as passive-aggressive \cite{crammerETall2006}, stochastic gradient descent \cite{zhang2004}, aggregating algorithm \cite{vovk2001} and the second order perceptron \cite{cesa-bianchi2005}.  In \cite{cesa-bianchi2006} an in-depth analysis of online learning is provided.
+Classic statistical theory of sequential prediction enforces strong assumptions
+on the statistical properties of the input sequence (for example, stationary
+stochastic process). However, these assumptions can be unknown or change over
+time. In online learning there is no previous assumption about the data and the
+sequence is allowed to be deterministic, stochastic or even adaptive.  
 
-The motivation for online learning is to obtain computational efficiency and tackle the shifting problem, i.e. that the distribution of the data is unknown or changes over time. Online learning algorithms can deal with this problem because they have a tracking ability which is a strategy based on retaining weak dependence on past examples by using two types of models: 
+Moreover, in case we receive data streams, ANN or SVM cannot introduce new
+information into the model without a re-training process, so we will have to use
+the same non-updated model until we decide to compute another one if it is
+possible.  Online learning algorithms allow one example at a time to be
+introduced into an existing model incrementally \cite{vovk2005}. This is
+extremely important when the problem has large data streams and real-time
+forecasting must be done.  This is the most common scenario when we want to
+forecast a wide range of data such as stock prices and volatilities, electricity
+power, intrusion detection, web-mining, server load, etc.  Besides, many
+problems of high interest in machine learning can be treated as online ones and
+they can also use these types of algorithms.
 
-\textit{a)} \textbf{memory boundedness:} consists of limiting the number of support vectors in order to improve computational efficiency. One example of this is the budget perceptron~\cite{crammeretal2004} which reduces the number of examples used for prediction. Alternatively, in the forgetron algorithm~\cite{dekeletal2008} the damage caused by removing old examples is discussed, which can be avoided by removing samples with small influences. Other examples are the sliding window kernel (RLS)~\cite{vanvaerenberghetal2006}, which only considers a sliding window of the most recent data, and in \cite{arce+salinas2012} is shown a variant of aggregating algorithm for regression~\cite{vovk2001} considering only a sliding window of the most recent data, optimising also common matrix operations.
+The online learning framework was first introduced in the perceptron algorithm
+\cite{rosenblatt58}. There are several other widely used online methods such as
+passive-aggressive \cite{crammerETall2006}, stochastic gradient descent
+\cite{zhang2004}, aggregating algorithm \cite{vovk2001} and the second order
+perceptron \cite{cesa-bianchi2005}.  In \cite{cesa-bianchi2006} an in-depth
+analysis of online learning is provided.
 
-\textit{b)} \textbf{weight decay:} one example of this is the shifting perceptron algorithm which implements an exponential decaying scheme for the examples~\cite{cavallantietal2007}.
-Performance of an online learning algorithm is measured by the cumulative loss it suffers along its run on a sequence of examples. In order to minimise this loss, the learner may update the hypothesis after each round so as to be more accurate in later rounds.
+The motivation for online learning is to obtain computational efficiency and
+tackle the shifting problem, i.e. that the distribution of the data is unknown
+or changes over time. Online learning algorithms can deal with this problem
+because they have a tracking ability which is a strategy based on retaining weak
+dependence on past examples by using two types of models: 
+
+\textit{a)} \textbf{memory boundedness:} consists of limiting the number of
+support vectors in order to improve computational efficiency. One example of
+this is the budget perceptron~\cite{crammeretal2004} which reduces the number of
+examples used for prediction. Alternatively, in the forgetron
+algorithm~\cite{dekeletal2008} the damage caused by removing old examples is
+discussed, which can be avoided by removing samples with small influences. Other
+examples are the sliding window kernel (RLS)~\cite{vanvaerenberghetal2006},
+which only considers a sliding window of the most recent data, and in
+\cite{arce+salinas2012} is shown a variant of aggregating algorithm for
+regression~\cite{vovk2001} considering only a sliding window of the most recent
+data, optimising also common matrix operations.
+
+\textit{b)} \textbf{weight decay:} one example of this is the shifting
+perceptron algorithm which implements an exponential decaying scheme for the
+examples~\cite{cavallantietal2007}.  Performance of an online learning algorithm
+is measured by the cumulative loss it suffers along its run on a sequence of
+examples. In order to minimise this loss, the learner may update the hypothesis
+after each round so as to be more accurate in later rounds.
+
+
+There is sometimes confusion about online and incremental learning concepts.
+Incremental learning refers to any online learning process that learns the same
+model as would be learnt by a batch learning algorithm. 
+
+Incremental learning is useful when the input to a learning process is stream
+data, with the need or desire to be able to use the result of learning at any
+point in time, based on the input observations received so far. 
+
+In principle, the stream of observations may be infinitely long, or the next
+observation long delayed, precluding any hope of waiting until all the
+observations have been received. One would rather not simply accumulate and
+store all the inputs and, upon receipt of each new one, apply a batch learning
+algorithm to the entire sequence of inputs received so far. It would be
+preferable compu- tationally if the existing hypothesis or other artifact of
+learning could be updated in response to each newly received input observation.
+
+Incremental learning is very useful when there is no need to record fundamental
+data and only a summary needs to be retained. Due to this, incremental
+algorithms are often characterized as memoryless, because no memory of past data
+is required.  The algorithm is online but not incremental if it doesn't produce
+the same result for all observations that the corresponding batch algorithm
+would for these same observations.
+
+Algorithm~\ref{alg:onlinealg} shows the online learning algorithm structure:
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+    \STATE Receives input $\mathbf{x}_t$
+    \STATE Makes prediction $\mathbf{\hat{y}}_t$
+    \STATE Receives response $\mathbf{y}_t$
+    \STATE Incurs loss $l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)$
+\end{algorithmic}
+\caption{Structure of a Learning System}
+\label{alg:onlinealg}
+\end{algorithm}
+
+\noindent where $l$ is some loss function. Performance is later measured after
+$T$ trials as:
+
+\begin{equation*}
+L_T = \sum_{t=1}^T l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)
+\end{equation*}
+
+The objective is minimize this loss function for all instances.
+The quality of online learning algorithms is measured by a quantity known as
+regret which is the difference between the performance of the online algorithm
+and its optimal predictor $E^* \in \Theta$ given by:
+
+\begin{equation*}
+L^*_T= \text{min}_{E \in \Theta} L_T^E \, ,
+\end{equation*}
+
+\noindent where $L_T^E = \sum_{t=1}^T
+l_t(\mathbf{y}_t,\mathbf{y}^E_t)$ and $\mathbf{y}^E_t$ is the expert estimation. 
+
+Therefore regret is defined as:
+
+\begin{equation*}
+R_T = L_T - L^*_T
+\end{equation*}
 
 
 \subsection{Online Ridge Regression}
