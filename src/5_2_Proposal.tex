@@ -1,12 +1,13 @@
 
-\chapter{Adaptive parallel algorithm for VECM}
+\chapter{Adaptive parallel algorithm for Vector error correction model}
 
 \vspace{0.5cm} 
 
-VECM parameters are obtained using ordinary least squares (OLS) method
-\cite{golub1980}, which is computationally expensive when the number of past
-values $L$ and observations $p$ increases. Moreover, obtaining cointegration
-vectors is also an expensive routine because of the use of the Johansen method.
+Vector error correction model (VECM) parameters are obtained using ordinary
+least squares (OLS) method \cite{golub1980}, which is computationally expensive
+when the number of past values $L$ and observations $p$ increases. Moreover,
+obtaining cointegration vectors is also an expensive routine because of the use
+of the Johansen method.
 
 In this study we found that for some combinations of $L$ and $p$, the number of
 cointegration relations is increased and this leads to better performance. We
@@ -31,16 +32,18 @@ parameters change at every iteration.
 Our proposal consists on to parallelise this search in order to get new
 parameters at every iteration. 
 
-The forecast capability of our method was measured using MAPE, MAE and
-RMSE \cite{armstrong1992}. Tests were run using four currency rates: Euro (EUR) to
-United States Dollar (USD) (EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss
-Franc (CHF) (USDCHF) and USD to Japanese Yen (JPY) (USDJPY) with a 10-seconds frequency.
+In finance, little academic reasearch has been done using high-frequency Forex
+rates \cite{Bekiros2015}. In our study, tests were run using four currency
+rates: Euro (EUR) to United States Dollar (USD) (EURUSD), British Pound (GBP) to
+USD (GBPUSD), USD to Swiss Franc (CHF) (USDCHF) and USD to Japanese Yen (JPY)
+(USDJPY) with a 10-seconds frequency.  The forecast capability of our method was
+later measured using MAPE, MAE and RMSE \cite{armstrong1992}. 
 
 
 \section{Methodology}
 
-VECM is obtained re-writing equation (\ref{eq:var}) in terms of the new
-variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
+VECM is obtained re-writing the VAR model, shown in equation (\ref{eq:var}), in
+terms of differences defines as: $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
 The VECM model, expressed in terms those differences, takes the form:
 \begin{equation}\label{eq:vec}
 \Delta \mathbf{y}_t 
@@ -269,42 +272,9 @@ $\{ \mathbf{y}_{\text{pred}}[1],\dots,\mathbf{y}_{\text{pred}}[N-L]\}$: model pr
 \caption{AVECM: Adaptive VECM.}
 \label{alg:AVECM}
 \end{algorithm}
-%
-%
-%\subsection{Evaluation methods} \label{sec:evaluation}
-%
-%Forecast performance was evaluated using different methods. We chose three
-%measures that are frequently used:
-%\begin{description}
-%\item
-%{\bf MAPE}, Mean Average Percent Error, which presents forecast errors as a
-%percentage:
-%\begin{equation}\label{eq:MAPE}
-%\text{MAPE} = \frac{1}{N} \sum_{t=1}^{N} 
-%\frac{\left|\mathbf{y}_t-\hat{\mathbf{y}}_t\right|}{\left|\mathbf{y}_t\right|}
-% \times 100 
-%\end{equation}
-%\item
-%{\bf MAE}, Mean Average Error, which measures the distance between forecasts and the
-%true value.
-%\begin{equation}\label{eq:MAE}
-%\text{MAE} = \frac{1}{N} \sum_{t=1}^{N} 
-%\left| 
-%\mathbf{y}_t-\hat{\mathbf{y}}_t
-%\right| 
-%\end{equation}
-%\item
-%{\bf RMSE}, Root Mean Square Error, also measures the distance between forecasts
-%and the true values but, unlike MAE, large deviations from the true value have a
-%large impact on RMSE due to squaring forecast error.
-%\begin{equation}\label{eq:RMSE}
-%\text{RMSE} = \sqrt{
-%\frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}}
-%\end{equation}
-%\end{description}
-%
-%
-%
+
+
+
 \section{Experimental results}
 \label{sec:results}
 \subsection{Data} \label{sec:unitroot}
