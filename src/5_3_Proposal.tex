@@ -96,9 +96,76 @@ the Mean Absolute Percentage Error (MAPE) of the last $n$ in-sample forecasts.
 %the last $L$ samples %and the new input $\mathbf{x}_t$, 
 %i.e. $\{\mathbf{x}_i\}_{i=t-L+1}^{t-1}$. 
 
-In order to formulate this algorithm we need to define first the
-following matrices which considers only the last $L$ instances:
- 
+VECM($p$) for $l$ cointegrated variables has the following form:
+
+\begin{equation}\label{eq:vecfull}
+\Delta\mathbf{y}_t 
+= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
+  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t \qquad \forall t = p+1,\dots,N.
+\end{equation}
+
+Transposing each equation of the system (\ref{eq:vecfull}) we can write
+the VECM($p$) model in block-matrix form as:
+\begin{equation}\label{eq:vareq}
+\mathbf{B} = 
+\mathbf{A} \mathbf{X} + 
+\mathbf{E} \, , 
+\end{equation}
+%
+\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
+dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
++1)\times l)$, $\mathbf{E}$ dimension is $((N-p)\times l)$ and $r$ is the number
+of cointegration vectors:
+%
+\begin{alignat}{3}
+\mathbf{B}
+&= \begin{bmatrix}
+   \Delta\mathbf{y}_{p+1}^\top \\
+   \Delta\mathbf{y}_{p+2}^\top \\
+   \vdots \\
+   \Delta\mathbf{y}_N^\top
+   \end{bmatrix}
+&\quad
+\mathbf{X}
+&= \begin{bmatrix}
+   \boldsymbol{\alpha}^\top \\
+   \boldsymbol{\Phi}_1^{*\top} \\
+   \boldsymbol{\Phi}_2^{*\top} \\
+   \vdots \\
+   \boldsymbol{\Phi}_{p-1}^{*\top} \\
+   \mathbf{c}^\top
+   \end{bmatrix}
+&\quad
+\mathbf{E}
+&= \begin{bmatrix}
+   \boldsymbol{\epsilon}_{p+1}^\top \\
+   \boldsymbol{\epsilon}_{p+2}^\top \\
+   \vdots \\
+   \boldsymbol{\epsilon}_N^\top \\
+   \end{bmatrix}
+\end{alignat}
+\noindent and 
+\begin{align}
+\mathbf{A} 
+&= \begin{pmat}[{....|}]
+   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
+                    & \Delta\mathbf{y}_2^\top & 1 \cr
+   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
+                       & \Delta\mathbf{y}_3^\top & 1 \cr
+   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
+   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
+                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
+   \end{pmat}\, .
+\end{align}
+%Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+%can be solved with respect to $\mathbf{X}$ using the ordinary least
+%squares estimation.
+However, the number of rows of matrix $\mathbf{A}$ increases with the number of
+observations $\mathbf{y}_t$. Our proposal considers only the most recent $L$
+rows of matrices $\mathbf{A}$ and $\mathbf{B}$ defined as  $\mathbf{A}(t)$ and
+$\mathbf{B}(t)$:
+
 \begin{equation}
 \label{eq:notation}
 	\mathbf{A}(t) = 
@@ -123,21 +190,26 @@ following matrices which considers only the last $L$ instances:
 \
 \end{equation}
 
+\noindent so that VECM parameters $\mathbf{X}(t)$ are found using the following
+equation:
 
-The RR solution $\mathbf{X}(t)$ using the sliding window matrices defined above
+\begin{equation}
+\mathbf{B}(t) = \mathbf{A}(t) \mathbf{X}(t) + \mathbf{E}(t)\\
+\end{equation}
+
+The RR solution $\mathbf{\hat{X}}(t)$ using the sliding window matrices defined above
 is:
 
 \begin{equation}
-\label{eq:optsolSLAAR}
-%\mathbf{X}(t)&=&()^{-1}{\bf A}(t)^\top{\bf B}(t) \\
-\mathbf{X}(t)=\mathbf{S}(t)^{-1} \mathbf{W}(t) \, ,
+\label{eq:oproblem}
+\mathbf{\hat{X}}(t)=\mathbf{S}(t)^{-1} \mathbf{W}(t) \, ,
 \end{equation}
 
 \noindent where $\mathbf{S}{t}$ and $\mathbf{W}{t}$ are define as:
 
 \begin{eqnarray*}
-\mathbf{S}(t) =&{\bf A}(t)^\top{\bf A}(t)+ \gamma \mathbb{I} &=
-\sum_{i=0}^L \mathbf{a}_{t-i}\mathbf{a}_{t-i}^\top + \gamma \mathbb{I}
+\mathbf{S}(t) =&{\bf A}(t)^\top{\bf A}(t)+ \lambda \mathbb{I} &=
+\sum_{i=0}^L \mathbf{a}_{t-i}\mathbf{a}_{t-i}^\top + \lambda \mathbb{I}
 \label{eq:S} \\
 \mathbf{W}(t) =& {\bf A}(t)^\top{\bf B}(t) &= 
 \sum_{i=0}^L \mathbf{a}_{t-i}\mathbf{b}_{t-i} 
@@ -161,11 +233,13 @@ $\mathbf{W}(t)$:
 \mathbf{a}_{t-L} \mathbf{b}_{t-L} \, .
 \end{eqnarray*}
 
-Therefore Sherman-Morrison-Woodbury formula can be used to reduce inverse matrix
-calculations.
+%Agregar solo si se decide agregar Sherman-Morrison
+%Therefore the Sherman-Morrison-Woodbury formula can be used to reduce inverse matrix
+%calculations.
 
-The algorithm~\ref{alg:proposal} shows our online VECM using three different
-methods for geting model parameters: OLS, RR, AAR.
+The algorithm~\ref{alg:proposal} shows OVECM using three different
+methods for geting model parameters: OLS, RR, AAR which leads to three different
+algorithms OVECM-OLS, OVECM-RR, OVECM-AAR:
 
 \begin{algorithm}[ht]
 \begin{algorithmic}[1]
@@ -222,21 +296,15 @@ Johansen method considering the trace statistic test at 95\% level of
 significance. This procedure is called at the first step of the algorithm and
 every time in-sample MAPE ($\mathbf{e}$) exceeds threshold error defined (mean\_error).
 \item The function \texttt{vecMatrix} returns VECM
-matrices $\mathbf{A},\mathbf{B}$ shown in equation~(\ref{eq:vecmatrix}). This
+matrices $\mathbf{A}(t),\mathbf{B}(t)$ shown in equation~(\ref{eq:notation}). This
 method is only required at the first step.
-\item The function \texttt{vecMatrixOnline} returns new rows of $\mathbf{A}$ and
-$\mathbf{B}$ give new input data $\mathbf{y}_t$.
-\item solver (see algorithm \ref{alg:solver}) is an object which allows online
-calculation saving matrices $\mathbf{S}$ and $\mathbf{W}$ (see
-equations~\ref{eq:S} and \ref{eq:W}) for methods RR and AAR. This method is
-initialized in the first step and only if new cointegration are required. This
-method also returns in-sample MAPE saved in $\mathbf{e}$. 
+\item The function \texttt{vecMatrixOnline} returns new rows $\mathbf{a}_t^\top$ and
+$\mathbf{b}_t^\top$ given new input data $\mathbf{y}_t$.
+\item The Solver class (see algorithm \ref{alg:solver}) obtain VECM parameters  
+using RR, AAR or OLS methods.
 \item The function \texttt{vecMatrixUpdate} updates matrix $\mathbf{A}$ when new
 cointegration vectors are required (matrix $\mathbf{B}$ is not affected). Model
 parameters $\mathbf{X}$ is also updated later.
-\item Out-of-sample outputs are saved in the variables $\Delta
-\mathbf{Y}_{\text{true}}$ and $\Delta \mathbf{Y}_{\text{pred}}$ which are used
-to obtain Out-of-sample MAPE at the end.
 %\item The number of cointegration vectors is set as a parameter (aun no lo
 %coloco en el algoritmo).
 %\item In order to set VECM parameter: $L$ and $p$, we use the Akaike Information
