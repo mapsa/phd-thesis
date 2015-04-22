@@ -263,7 +263,8 @@ $\{\mathbf{y}_{\text{pred}}[L+1],\dots, \mathbf{y}_{\text{pred}}[N]\}$: model pr
         \texttt{vecMatrix}(\mathbf{Y},p,v)$}
         \STATE \texttt{solver.init\_model($\mathbf{A},\mathbf{B}$)} 
     \ENDIF
-	\STATE{$[\mathbf{a}_t \quad \mathbf{b}_t] \gets
+	\STATE{[$\mathbf{A} \quad \mathbf{B} \quad \mathbf{a}_t \quad \mathbf{a}_L \quad \mathbf{b}_t \quad
+    \mathbf{b}_L ] \gets
     \texttt{vecMatrixOnline}(\mathbf{Y},\mathbf{y}_t,p,v)$}
     \STATE $[\mathbf{X} \quad \mathbf{y}_{\text{pred}}[t]] \gets \texttt{solver.regression}
     (\mathbf{A},\mathbf{B},\mathbf{a}_t,\mathbf{b}_t)$
