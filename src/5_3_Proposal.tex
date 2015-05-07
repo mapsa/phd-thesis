@@ -337,14 +337,12 @@ $\mathbf{e}$: in-sample MAPE \\
 %\STATE self.L = L
 %\STATE self.lambda = $\lambda$
 \quad \\
-\texttt{init\_model}($\mathbf{A},\mathbf{B}$)\\
-\IF {method == 'RR' or method == 'AAR'}
+\texttt{init\_model}($\mathbf{A},\mathbf{B}$)
 \STATE $ [m \quad n] = \text{size}(\mathbf{A}) $ 
 \STATE $\mathbf{S} = \displaystyle \sum_{i=1}^m \mathbf{a}_i \mathbf{a}_i^\top + \gamma \mathbb{I}$
 \STATE $\mathbf{W} = \displaystyle \sum_{i=1}^m \mathbf{a}_i \mathbf{b}_i$
-\ENDIF \\
 \quad \\
-\texttt{regression}($\mathbf{A},\mathbf{B},\mathbf{a_t},\mathbf{b_t},n$) \\
+\texttt{regression}($\mathbf{A},\mathbf{B},\mathbf{a_t},\mathbf{b_t}$) \\
 \IF {method == 'OLS'}
         \STATE $\mathbf{X}=(\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top
         \mathbf{B}$
