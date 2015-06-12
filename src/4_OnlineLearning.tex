@@ -503,7 +503,7 @@ can be obtained expressing ridge regression solution
 $\mathbf{\lambda}$ in terms of OLS solution $\hat{\mathbf{X}}$:
 
 \begin{eqnarray*}
-\mathbf{X}(\lambda) &=&( \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1}\mathbf{Y} \\
+\mathbf{X}(\lambda) &=&( \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \\
 &=& (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1} (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y} \\
 &=&  (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1}  \hat{\mathbf{X}} \\
 &=& \mathbf{W} \hat{\mathbf{X}} 
@@ -534,23 +534,49 @@ Var(\hat{\mathbf{X}}) = \sigma^2 (\mathbf{A}^\top \mathbf{A} )^{-1}
 \noindent and the variance of ridge regression is:
 
 \begin{eqnarray*}
-Var(\mathbf{X}(\lambda)) &=& Var(\mathbf{W}\hat{\mathbf{X}}) \\ 
+Var(\mathbf{X}(\lambda)) &=& Var(\mathbf{W}\hat{\mathbf{X}}) \\
+&=& E[(\mathbf{W}\hat{\mathbf{X}}-E[\mathbf{W}\hat{\mathbf{X}}])(\mathbf{W}\hat{\mathbf{X}}-E[\mathbf{W}\hat{\mathbf{X}}])^\top] \\
+&=& \mathbf{W}E[(\hat{\mathbf{X}}-E[\hat{\mathbf{X}}])(\hat{\mathbf{X}}-E[\hat{\mathbf{X}}])^\top] \mathbf{W}^\top \\
 &=& \mathbf{W}Var(\hat{\mathbf{X}})\mathbf{W}^\top \\
 &=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top
 \end{eqnarray*}
 
 
 The figure~\ref{fig:biasvariance} shows the bias-variance tradeoff
-given by equation~(\ref{eq:prederror}). Ridge regression shows an
-increasing bias and a decreasing variance. Despite OLS has zero bias,
+given by equation~(\ref{eq:prederror}). Despite OLS has zero bias,
 its variance is greater than ridge for small values of $\lambda$.
 It can be shown that, in terms of prediction error, ridge (black line)
-is lower than OLS (dotted line)~\cite{hoerl1970}.
+is lower than OLS (dotted line)~\cite{hoerl1970}. Ridge regression shows an
+increasing squared bias and a decreasing variance.
+
+\textbf{Demo}\quad
+
+Since $Bias(\mathbf{X}(\lambda)) \neq 0$ this imply that
+
+\begin{equation*}
+Bias(\mathbf{X}(\lambda)) ^2 > 0 
+\end{equation*}
+
+\noindent we know that $\mathbf{A}^\top
+\mathbf{A}$ has an eigenvalue decomposition $\mathbf{A}^\top
+\mathbf{A} = \mathbf{V} \Sigma \mathbf{V}^{-1}$.
 
 
+\begin{eqnarray*}
+Var(\mathbf{X}(\lambda)) &=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top\\
+Var(\mathbf{X}(\lambda)) &=& \sigma^2 (\mathbb{I} + \lambda (\mathbf{A}^\top
+\mathbf{A})^{-1})^{-1} (\mathbf{A}^\top \mathbf{A} )^{-1}((\mathbb{I} + \lambda (\mathbf{A}^\top
+\mathbf{A})^{-1})^{-1} )^\top \\
+&=& \sigma^2 (\mathbb{I} + \lambda (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1} (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1}((\mathbb{I} + \lambda (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1})^{-1} )^\top \\
+&=& \sigma^2 \mathbf{V} (\mathbb{I} + \lambda \Sigma^{-1})^{-1} \Sigma^{-1} (\mathbb{I} + \lambda \Sigma^{-1})^{-1}  \mathbf{V}^{-1}\\
+&=& \sigma^2 \mathbf{V} \mathbf{D}^{-1} \mathbf{V}^{-1}
+\end{eqnarray*}
 
+\noindent where $\mathbf{D}^{-1}  = (\mathbb{I} + \lambda \Sigma^{-1})^{-1} \Sigma^{-1} (\mathbb{I} + \lambda \Sigma^{-1})^{-1}$ is a diagonal matrix with coefficients:
 
-
+\begin{equation*}
+d_i = \frac{\sigma_i^{-1}}{(1+\lambda\sigma_i^{-1})^2}
+\end{equation*}
 
 \subsection{Machine learning algorithms}
 In recent years many successful machine learning applications have been developed. Artificial neural networks (ANN) and Support Vector Machines (SVM) have been some of the most popularly used machine learning algorithm \cite{haykin1998}. Historically, SVMs emerged after ANN.
@@ -683,12 +709,12 @@ observation long delayed, precluding any hope of waiting until all the
 observations have been received. One would rather not simply accumulate and
 store all the inputs and, upon receipt of each new one, apply a batch learning
 algorithm to the entire sequence of inputs received so far. It would be
-preferable compu- tationally if the existing hypothesis or other artifact of
+preferable computationally if the existing hypothesis or other artefact of
 learning could be updated in response to each newly received input observation.
 
 Incremental learning is very useful when there is no need to record fundamental
 data and only a summary needs to be retained. Due to this, incremental
-algorithms are often characterized as memoryless, because no memory of past data
+algorithms are often characterised as memoryless, because no memory of past data
 is required.  The algorithm is online but not incremental if it doesn't produce
 the same result for all observations that the corresponding batch algorithm
 would for these same observations.
@@ -730,6 +756,11 @@ Therefore regret is defined as:
 \begin{equation*}
 R_T = L_T - L^*_T
 \end{equation*}
+
+\subsection{Competitive analysis}
+
+Competitive analysis was designed for analysing the performance of an online algorithm compared with its optimal offline algorithm. An optimal offline algorithm can view the sequences of requests in advance. The effectiveness of an online algorithm \cite{} may be measured by its competitive ratio which is the worst-case ratio of the online algorithm and the the optimal offline algorithm.
+
 
 
 \subsection{Online Ridge Regression}
@@ -803,7 +834,7 @@ and $\mathbf{W}=0$
 
 \subsection{The Aggregating Algorithm for Regression}
 
-The AAR, proposed by~\cite{vovk2001}, is an application of the aggregating
+The AAR, proposed by~\cite{vovk2001} (also known as Vovk-Azoury-Warmuth predictor ~\cite{azoury2001}), is an application of the aggregating
 algorithm to the problem of regression. The idea is introduce the new input
 vector $\mathbf{x}_{m+1}$ to solve the model parameters: 
 
