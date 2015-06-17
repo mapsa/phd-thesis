@@ -452,29 +452,47 @@ $\{\Delta \mathbf{y}_{\text{pred}}[L+1],\dots,\Delta \mathbf{y}_{\text{pred}}[N]
 
 
 \section{Experiments}
+
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=\textwidth]{img/onlinecomparison}
+  \includegraphics[width=\textwidth]{img/forexdata}
+  \caption{10 seconds frequency forex data for EURUSD, GBPUSD and USDJPY}
+  \label{fig:forexdata}
+\end{figure}
+
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/distdata}
+  \caption{Distribution of EURUSD, GBPUSD and USDJPY data}
+  \label{fig:distdata}
+\end{figure}
+
+
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/onlinecomparison}
   \caption{Cumulative loss of AAR, RR and OLS solutions for VECM against its optimal algorithm}
-  \label{fig:hists}
+  \label{fig:onlinecomparison}
 \end{figure}
 
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=\textwidth]{img/RRcomparison}
+  \includegraphics[width=0.9\textwidth]{img/RRcomparison}
   \caption{Cumulative loss RR VECM against its optimal algorithm using different $\lambda$ values}
-  \label{fig:hists}
+  \label{fig:RRcomparison}
 \end{figure}
 
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=\textwidth]{img/AARcomparison}
+  \includegraphics[width=0.9\textwidth]{img/AARcomparison}
   \caption{Cumulative loss AAR VECM against its optimal algorithm using different $\lambda$ values}
-  \label{fig:hists}
+  \label{fig:AARcomparison}
 \end{figure}
 
