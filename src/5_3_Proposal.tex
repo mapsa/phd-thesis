@@ -57,8 +57,7 @@ with its optimal offline algorithm.
 %tudy.
 
 
-\section{\uppercase{Methodology}}
-\label{sec:methodology}
+\section{Methodology}
 
 Since financial problems are stream data problems, it is unfeasible to include
 all input data in a VECM model. Our proposal consists on an online version of
@@ -449,4 +448,33 @@ $\{\Delta \mathbf{y}_{\text{pred}}[L+1],\dots,\Delta \mathbf{y}_{\text{pred}}[N]
 %              \\ \color{red}\mathbf{\epsilon}_{T+1}
 %             \end{bmatrix}
 %\end{eqnarray}
+
+
+
+\section{Experiments}
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=\textwidth]{img/onlinecomparison}
+  \caption{Cumulative loss of AAR, RR and OLS solutions for VECM against its optimal algorithm}
+  \label{fig:hists}
+\end{figure}
+
+
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=\textwidth]{img/RRcomparison}
+  \caption{Cumulative loss RR VECM against its optimal algorithm using different $\lambda$ values}
+  \label{fig:hists}
+\end{figure}
+
+
+\begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=\textwidth]{img/AARcomparison}
+  \caption{Cumulative loss AAR VECM against its optimal algorithm using different $\lambda$ values}
+  \label{fig:hists}
+\end{figure}
 
