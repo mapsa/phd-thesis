@@ -78,7 +78,7 @@
 
 \begin{document}
 
-\title{Intraday Forex rates forecasting using an online cointegration approach}
+\title{High frequency Intraday Forex rates forecasting using an online cointegration approach}
 %\subtitle{Do you have a subtitle?\\ If so, write it here}
 
 %\titlerunning{Short form of title}        % if too long for running head
@@ -116,71 +116,60 @@
 
 \begin{abstract}
 
-%A Vector Error Correction Model (VECM) is an econometric model which
-%characterizes the joint dynamic behaviour of a set of cointegrated variables. It
-%is said that two non-stationary time series are cointegrated if a linear
-%combination of them exhibit a stationary behaviour. 
-%
-%Cointegration is commonly found in finance and it has been shown that
-%introducing cointegration restrictions often improves forecasting. However,
-%determining VECM parameters and how much of the historical data is useful for
-%making a forecast is a computational challenge.  
-%
-%In this study, we propose a new version of VECM whose parameters are obtained
-%adaptively using parallel computing taking into account the cointegrated
-%behaviour of the time series. The methodology is tested using data of the
-%Foreign Exchange (Forex) market. Numerical experiments show that our adaptive
-%and parallel approach significantly improves execution times with respect to the
-%common serial processing and forecasts are made before new data arrives.  
-Vector error correction model (VECM) parameters are commonly obtained using the
-ordinary least squares method. Since this parameters could be sensitive to the
-data, this proposal is to get these parameters using ridge regression which
-could lead to a better generalization capability. In order to give with a
-real-time response, an online version of VECM (OVECM) is proposed. OVECM solves
-VECM considering only a sliding window of historical data and therefore
-better response times could be achieved.
+This research examines the cointegration relation between three mayor currency pairs (MCP) of the foreign exchange markets:  EURUSD, GBPUSD, USDCHF. Specifically, we used a modified version of the Vector error correction model (VECM) which parameters are updated online using a limited amount of historical data.
+VECM parameters are commonly obtained using the
+ordinary least squares (OLS) method. Our proposal is to solve VECM using Ridge regression (RR) and the Aggregating algorithm for regression (AAR) which could lead to a better generalisation capability rather than OLS. Both approaches together with OLS are compared against an optimal offline algorithm which is able to see the sequences in advance.
+Our experiments were carried out using 10-seconds frequency Forex data and shows that RR and AAR approaches improve cumulative loss of OLS approach with respect to the optimal offline algorithm.
 
 
-\keywords{VECM \and Cointegration \and Forex \and MPI \and Parallel algorithm}
+\keywords{VECM \and Cointegration \and Forex \and High frequency data \and Online algorithm}
 
 \end{abstract}
 
 \section{Introduction}
 \label{sec:introduction}
-VECM introduces the long-run relationship among a set of cointegrated variables
-as an error correction term. VECM is a special case of the vector autorregresive
+
+The relationships between financial time series are commonly studied. In particular, in some of them
+it is possible to detect long-run relationships through to a cointegration analysis. Two or more non-stationary time series are said to be cointegrated if there exists a linear combination of them which is stationary.
+
+Vector error correction model (VECM) introduces the long-run relationship among a set of cointegrated variables
+as an error correction term. VECM is a special case of the vector autoregressive
 model (VAR) model. VAR model expresses future values as a linear combination of
 variables past values.  However, VAR model cannot be used with non-stationary
 variables, which is a common feature of financial assets. VECM is a linear model
 but in terms of variable differences. If cointegration exists, variable
 differences are stationary and they introduce an error correction term which
 adjusts coefficients to bring the variables back to equilibrium. In finance,
-many economic time series turn to be stationary when they are differentiated and
-cointegration restrictions often improves forecasting~\cite{duy1998}. Therefore,
+many economic time series (foreign exchange market rates for example) turns out to be stationary, when they are differentiated once ($I(1)$) and
+cointegration restrictions applied on the model often improves forecasting~\cite{duy1998}. Therefore,
 VECM has been widely adopted.
 
-Both VECM and VAR model parameters are obtained using ordinary least squares
-(OLS) method. OLS has two main problems: is sensitive to errors on input data
+VECM parameters are obtained using ordinary least squares
+(OLS) method \cite{golub1980}. OLS has two main problems: is sensitive to errors on input data
 and involves many calculations. The former problem is commonly solved using
-Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
-parameter that leads to an unbiased estimation with better generalization
+Ridge Regression (RR) \cite{hoerl1970} which introduces a regularisation
+parameter that leads to an unbiased estimation with better generalisation
 capability. The second problem of computational complexity depends on the number
 of past values and observations considered.  Recently, online learning
 algorithms have been proposed to solve problems with large data sets because of
 their simplicity and their ability to update the model when new data is
-available. 
+available. We use an online version of the linear ridge regression and also a modification introduced by 
+Vovk \cite{vovk2001} called the Aggregating algorithm regression (AAR), which is also known as Vovk-Azoury-Warmuth predictor ~\cite{azoury2001}.
 
 Our proposal is an online formulation of the VECM called Online VECM (OVECM)
-based on consideration of only a sliding window of the historical data.  OVECM
-introduces matrix optimizations in order to reduce the number of operations and
-also takes into account the fact that cointegration vector space doesn't
-experience large changes with small changes in the input data. Moreover, OVECM
-uses RR instead of OLS to obtain VECM parameters. Our method is later tested using four
-currency rates from the foreign exchange market with a frequency of 10 seconds.
-Model effectiveness is focused on out-of-sample forecast rather than in-sample
-fitting.  This criteria allows the OVECM prediction capability to be expressed
-rather than just explaining data history. Our method performance is compared
-with its optimal offline algorithm.
+based on consideration of only a sliding window of the historical data.  OVECM parameters are obtained
+via OLS, RR or AAR. A competitive analysis is done comparing its cumulative losses against the optimal offline algorithm. 
+
+In finance, little academic research has been done using high-frequency Forex
+rates \cite{Bekiros2015}. Our proposal is tested using four
+three mayor currency pairs (MCP) from the foreign exchange market:  Euro (EUR) to United States Dollar (USD) (EURUSD), British Pound (GBP) to
+USD (GBPUSD) and USD to Swiss Franc (CHF) (USDCHF). We used samples with a frequency of 10 seconds.
+
+This paper is organised as follows: section~\ref{sec:background} presents concepts of integration and cointegration, the VECM model and an online learning introduction, the OVECM algorithm is presented in section~\ref{sec:methodology}.
+In section~\ref{sec:results} we describe the experiments carried out and their results. This section also includes a
+description of the test data.  Section~\ref{sec:conclusions} contains the
+conclusions and a discussion of future research.
+
 
 \section{Background}
 \label{sec:background}
@@ -216,7 +205,7 @@ In other words, a set of $I(1)$ time series is said to be cointegrated if a
 linear combination of them exists, which is I(0).
 
 
-\subsection{Vector Autorregresive Models}\label{sec:varvec}
+\subsection{Vector Error Correction Model}\label{sec:varvec}
 
 VECM is a special case of VAR model and both describe the joint behaviour
 of a set of variables.
@@ -400,23 +389,205 @@ which, when $\mathbf{A}$ is full rank, can be written as follows:
 \label{eq:pseudoinverse}
 \mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
 \end{equation}
-when $\mathbf{A}$ is not full rank, i.e
-$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
-always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
-More generally, the pseudo-inverse is best computed using the compact
-singular value decomposition (SVD) of $\mathbf{A}$ which is:
+%when $\mathbf{A}$ is not full rank, i.e
+%$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
+%always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+%More generally, the pseudo-inverse is best computed using the compact
+%singular value decomposition (SVD) of $\mathbf{A}$ which is:
+%\begin{equation*}
+%    \label{eq:compactsvd}
+%    \mathbf{A}=
+%    \mathbf{U_1}
+%    \boldsymbol \Sigma_1
+%    \mathbf{V}_1^{\top} \, .
+%\end{equation*}
+%Pseudo-inverse can then be written as follows:
+%\begin{equation*}
+%\label{eq:pseudoinversesvd}
+%\mathbf{A}^{\!\!+} = \mathbf{V}_1 \boldsymbol \Sigma_1^{-1} \mathbf{U}_1^\top \, .
+%\end{equation*}
+
+\subsection{Ridge regression method}
+
+In order to avoid the singularity of the matrix $\mathbf{A}^\top \mathbf{A}$, a regularisation term is introduced: 
+
+\begin{equation}
+\label{eq:RRproblem} 
+J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
+ \| \mathbf{\mathbf{X}}\| ^2
+\end{equation}
+
+\noindent which optimal solution $\mathbf{\mathbf{X}}_*$ is well known: 
+
+\begin{equation}
+\label{eq:optsolRR}
+\mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
+\end{equation}
+
+
+
+\subsection{Online learning}
+Online learning is a supervised machine learning framework that is useful when
+we have sequential access to a sample only once.  This differs from the
+classical batch learning, where there is an entire data set available and the
+learner can build the internal model without any limits in accessing the data.
+In batch learning, there is time enough to carefully analyse the dataset, build
+large predictive models and combine them in a sophisticated way. However, when
+execution time is critical and new data is required to be included in the model,
+online learning algorithms are a better option.
+
+In batch learning, the training phase is commonly a computationally expensive
+process. Therefore, when new data arrives it can't be included easily to the
+model. Moreover, it could happen that we won't have enough time to process the
+new data before more data arrives. In online learning algorithms there is no
+training phase, but the model is updated and evaluated at every time step. This
+model updating is computationally less expensive than a training phase.
+Online algorithms allow incremental learning by processing one instance at a
+time. This is done updating the current model instead of building the model from
+scratch.
+
+Online learning is also useful when some past data may be irrelevant
+or we want to improve computational efficiency. However, the use of less
+historical data could affect accuracy.
+
+The online learning framework was first introduced in the perceptron algorithm
+\cite{rosenblatt58}. There are several other widely used online methods such as
+passive-aggressive \cite{crammerETall2006}, stochastic gradient descent
+\cite{zhang2004}, aggregating algorithm \cite{vovk2001} and the second order
+perceptron \cite{cesa-bianchi2005}.  In \cite{cesa-bianchi2006} an in-depth
+analysis of online learning is provided.
+
+Algorithm~\ref{alg:onlinealg} shows the online learning algorithm structure:
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+    \STATE Receives input $\mathbf{x}_t$
+    \STATE Makes prediction $\mathbf{\hat{y}}_t$
+    \STATE Receives response $\mathbf{y}_t$
+    \STATE Incurs loss $l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)$
+\end{algorithmic}
+\caption{Structure of a Learning System}
+\label{alg:onlinealg}
+\end{algorithm}
+
+\noindent where $l$ is some loss function. Performance is later measured after
+$T$ trials as:
+
 \begin{equation*}
-    \label{eq:compactsvd}
-    \mathbf{A}=
-    \mathbf{U_1}
-    \boldsymbol \Sigma_1
-    \mathbf{V}_1^{\top} \, .
+L_T = \sum_{t=1}^T l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)
 \end{equation*}
-Pseudo-inverse can then be written as follows:
-\begin{equation*}
-\label{eq:pseudoinversesvd}
-\mathbf{A}^{\!\!+} = \mathbf{V}_1 \boldsymbol \Sigma_1^{-1} \mathbf{U}_1^\top \, .
-\end{equation*}
+
+Competitive analysis was designed for analysing the performance of an online algorithm compared with its optimal offline algorithm. An optimal offline algorithm can view the sequences of requests in advance. The effectiveness of an online algorithm \cite{sleator1985} may be measured by its competitive ratio which is the worst-case ratio of the online algorithm and the the optimal offline algorithm.
+
+\subsection{Online Ridge Regression}
+
+Online RR is the online formulation of the regularised Least Squares method
+and is based on the following equivalent formulation of the RR optimal solution.
+
+%Since 
+%\begin{equation}
+%\label{eq:notation}
+%	\mathbf{A} = 
+%\left[
+%  \begin{tabular}{c>{$}c<{$}c}
+%    --- & \mathbf{a}^{\top}_{1} & ---\\
+%    --- & \mathbf{a}^{\top}_{2} & ---\\
+%    & \vdots & \\
+%    --- & \mathbf{a}^{\top}_{m} & ---
+%  \end{tabular}
+%\right]
+%\quad \text{and} \quad
+%\mathbf{B} =
+%\left[
+%  \begin{tabular}{c>{$}c<{$}c}
+%    --- & \mathbf{b}_{1} & ---\\
+%    --- & \mathbf{b}_{2} & ---\\
+%    & \vdots & \\
+%    --- & \mathbf{b}_{m} & ---
+%  \end{tabular}
+%\right]
+%\end{equation}
+
+Equation~(\ref{eq:optsolRR}) can also be written as:
+\begin{eqnarray*}
+\label{eq:RReapand}
+\mathbf{\mathbf{X}}_{\text{ridge}}&=&(\mathbf{A}^\top \mathbf{A}+ \lambda
+\mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \\
+&=& \displaystyle \big (\sum_{t=1}^m
+\mathbf{a}_t \mathbf{a}_t  ^\top + \lambda \mathbb{I}\big )^{-1}
+\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t \, .
+\end{eqnarray*}
+
+Lets define $\displaystyle\mathbf{S}= \sum_{t=1}^m \mathbf{a}_t
+\mathbf{a}_t  ^\top + \lambda \mathbb{I} $ and $\mathbf{W}=
+\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t$, so the
+algorithm~\ref{alg:RR} shows the iterative formulation:
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{a}_1,\dots,\mathbf{a}_{m} \}$: $m$ input vectors \\
+$\{\mathbf{y}_1,\dots,\mathbf{y}_{m} \}$: $m$ target vectors \\
+$\lambda$: regularization parameter \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{a}_1),\dots,f(\mathbf{a}_{m}) \}$: model predictions \\
+\STATE Initialize $\mathbf{S}=\lambda \mathbb{I}$
+and $\mathbf{W}=0$
+\FOR { $t = 1$ to $m$ }
+	\STATE read new $\mathbf{a}_t$
+	\STATE $\mathbf{X}=\mathbf{S}^{-1}\mathbf{W}$
+	\STATE output prediction $f(\mathbf{a}_t) = \mathbf{X}^\top \mathbf{a}_t$
+   	\STATE $\mathbf{S} = \mathbf{S} + \mathbf{a}_t \mathbf{a}_t^\top$
+   	\STATE Read new $y_t$
+    	\STATE $\mathbf{W} = \mathbf{W} + \mathbf{a}_t \mathbf{y}_t$
+\ENDFOR
+\end{algorithmic}
+\caption{Online Ridge Regression}
+\label{alg:RR}
+\end{algorithm}
+
+
+\subsection{The Aggregating Algorithm for Regression}
+
+The AAR, proposed by~\cite{vovk2001} (also known as Vovk-Azoury-Warmuth predictor ~\cite{azoury2001}), is an application of the aggregating
+algorithm to the problem of regression. The idea is introduce the new input
+vector $\mathbf{x}_{m+1}$ to solve the model parameters: 
+
+\begin{equation}
+\label{eq:AARexpand}
+\mathbf{X}_{aar} = \displaystyle \big (\sum_{t=1}^{m+1}
+\mathbf{a}_t \mathbf{a}_t  ^\intercal + \gamma \mathbb{I}\big )^{-1}
+\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t \, .
+\end{equation}
+
+If we define $\displaystyle\mathbf{S}= \sum_{t=1}^{m+1} \mathbf{a}_t
+\mathbf{a}_t  ^\intercal + \gamma \mathbb{I} $ and $\mathbf{W}=
+\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t$, the
+algorithm~\ref{alg:AAR} is slightly different to the algorithm~\ref{alg:RR}, 
+which updated matrix $\mathbf{S}$ before making the prediction:
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{a}_1,\dots,\mathbf{a}_{m} \}$: $m$ input vectors \\
+$\{\mathbf{y}_1,\dots,\mathbf{y}_{m} \}$: $m$ target vectors \\
+$\lambda$: regularisation parameter \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{a}_1),\dots,f(\mathbf{a}_{m}) \}$: model predictions \\
+\STATE Initialize $\mathbf{S}=\lambda \mathbb{I}$
+and $\mathbf{W}=0$
+\FOR { $t = 1$ to $m$ }
+	\STATE read new $\mathbf{a}_t$
+   	\STATE $\mathbf{S} = \mathbf{S} + \mathbf{a}_t \mathbf{a}_t^\intercal$
+	\STATE $\mathbf{X}=\mathbf{S}^{-1}\mathbf{W}$
+	\STATE output prediction $f(\mathbf{a}_t) = \mathbf{X}^\intercal \mathbf{a}_t$
+   	\STATE Read new $\mathbf{y}_t$
+    	\STATE $\mathbf{W} = \mathbf{W} + \mathbf{a}_t \mathbf{y}_t$
+\ENDFOR
+\end{algorithmic}
+\caption{{\em The aggregating algorithm for regression}}
+\label{alg:AAR}
+\end{algorithm}
 
 
 \section{Methodology} \label{sec:methodology}
@@ -434,6 +605,10 @@ vectors represent the long-run relationship between the time series, they
 vary little in time. Our proposal obtains new cointegration vectors only when
 this long-term relationship changes. This change is detected by tracking 
 the Mean Absolute Percentage Error (MAPE) of the last $n$ in-sample forecasts.
+
+
+
+
 
 %Since VECM is a model based on time series differences, the MAPE is obtained
 %from $\Delta \mathbf{y}$ as following:
@@ -811,6 +986,10 @@ $\{\Delta \mathbf{y}_{\text{pred}}[L+1],\dots,\Delta \mathbf{y}_{\text{pred}}[N]
 \section{Experimental results}
 \label{sec:results}
 \subsection{Data} \label{sec:unitroot}
+
+Experiments were run with data starting at 9:00 GMT of the 11th of August 2014,
+which corresponds to the opening of the New York financial market.
+
 %AVECM tests were carried out using four foreign exchange rates all related to
 %USD: EURUSD, GBPUSD, USDCHF and USDJPY. This data was collected from the free
 %database Dukascopy which gives access to the Swiss Foreign Exchange marketplace
@@ -862,7 +1041,7 @@ frequency.}
 \begin{figure}[!ht]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.4\textwidth]{forexdata}
+  \includegraphics[width=0.5\textwidth]{forexdata}
   \caption{10 seconds frequency forex data for EURUSD, GBPUSD and USDJPY}
   \label{fig:forexdata}
 \end{figure}
@@ -870,7 +1049,7 @@ frequency.}
 \begin{figure}[!ht]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.4\textwidth]{distdata}
+  \includegraphics[width=0.5\textwidth]{distdata}
   \caption{Distribution of EURUSD, GBPUSD and USDJPY data}
   \label{fig:distdata}
 \end{figure}
@@ -879,7 +1058,7 @@ frequency.}
 \begin{figure}[!ht]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.4\textwidth]{onlinecomparison}
+  \includegraphics[width=0.5\textwidth]{onlinecomparison}
   \caption{Cumulative loss of AAR, RR and OLS solutions for VECM against its optimal algorithm}
   \label{fig:onlinecomparison}
 \end{figure}
@@ -888,7 +1067,7 @@ frequency.}
 \begin{figure}[!ht]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.4\textwidth]{RRcomparison}
+  \includegraphics[width=0.5\textwidth]{RRcomparison}
   \caption{Cumulative loss RR VECM against its optimal algorithm using different $\lambda$ values}
   \label{fig:RRcomparison}
 \end{figure}
@@ -897,7 +1076,7 @@ frequency.}
 \begin{figure}[!ht]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.4\textwidth]{AARcomparison}
+  \includegraphics[width=0.5\textwidth]{AARcomparison}
   \caption{Cumulative loss AAR VECM against its optimal algorithm using different $\lambda$ values}
   \label{fig:AARcomparison}
 \end{figure}
