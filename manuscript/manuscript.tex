@@ -132,7 +132,7 @@ Our experiments were carried out using 10-seconds frequency Forex data and shows
 The relationships between financial time series are commonly studied. In particular, in some of them
 it is possible to detect long-run relationships through to a cointegration analysis. Two or more non-stationary time series are said to be cointegrated if there exists a linear combination of them which is stationary.
 
-Vector error correction model (VECM) introduces the long-run relationship among a set of cointegrated variables
+The vector error correction model (VECM) introduces the long-run relationship among a set of cointegrated variables
 as an error correction term. VECM is a special case of the vector autoregressive
 model (VAR) model. VAR model expresses future values as a linear combination of
 variables past values.  However, VAR model cannot be used with non-stationary
@@ -140,13 +140,11 @@ variables, which is a common feature of financial assets. VECM is a linear model
 but in terms of variable differences. If cointegration exists, variable
 differences are stationary and they introduce an error correction term which
 adjusts coefficients to bring the variables back to equilibrium. In finance,
-many economic time series (foreign exchange market rates for example) turns out to be stationary, when they are differentiated once ($I(1)$) and
-cointegration restrictions applied on the model often improves forecasting~\cite{duy1998}. Therefore,
-VECM has been widely adopted.
+many economic time series turns out to be stationary, when they are differentiated once (see section \ref{sec:coint} for more details). Additionally, cointegration restrictions applied on the model often improves forecasting~\cite{duy1998}. This is the reason why VECM has been widely adopted.
 
 VECM parameters are obtained using ordinary least squares
-(OLS) method \cite{golub1980}. OLS has two main problems: is sensitive to errors on input data
-and involves many calculations. The former problem is commonly solved using
+(OLS) method \cite{golub1980}. OLS has two main problems: it is sensitive to errors on input data
+and also involves many calculations. The former problem is commonly solved using
 Ridge Regression (RR) \cite{hoerl1970} which introduces a regularisation
 parameter that leads to an unbiased estimation with better generalisation
 capability. The second problem of computational complexity depends on the number
@@ -157,11 +155,10 @@ available. We use an online version of the linear ridge regression and also a mo
 Vovk \cite{vovk2001} called the Aggregating algorithm regression (AAR), which is also known as Vovk-Azoury-Warmuth predictor ~\cite{azoury2001}.
 
 Our proposal is an online formulation of the VECM called Online VECM (OVECM)
-based on consideration of only a sliding window of the historical data.  OVECM parameters are obtained
-via OLS, RR or AAR. A competitive analysis is done comparing its cumulative losses against the optimal offline algorithm. 
+based on the consideration of only a sliding window of the historical data at every step.  OVECM parameters are obtained via OLS, RR or AAR. In order to measure performance, a competitive analysis is done which compares the proposal cumulative loss against the optimal offline algorithm. 
 
 In finance, little academic research has been done using high-frequency Forex
-rates \cite{Bekiros2015}. Our proposal is tested using four
+rates \cite{Bekiros2015}. Our proposal is tested using
 three mayor currency pairs (MCP) from the foreign exchange market:  Euro (EUR) to United States Dollar (USD) (EURUSD), British Pound (GBP) to
 USD (GBPUSD) and USD to Swiss Franc (CHF) (USDCHF). We used samples with a frequency of 10 seconds.
 
@@ -316,17 +313,17 @@ which is a VAR model but for time series differences.
 Transposing each equation of the system (\ref{eq:vecfull}) we can write
 the VECM($p$) model in block-matrix form as:
 \begin{equation}\label{eq:vareq}
-\mathbf{B} = 
+\mathbf{Y} = 
 \mathbf{A} \mathbf{X} + 
 \mathbf{E} \, , 
 \end{equation}
 %
-\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
+\noindent where $\mathbf{Y}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
 dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 +1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
 %
 \begin{alignat}{3}
-\mathbf{B}
+\mathbf{Y}
 &= \begin{bmatrix}
    \Delta\mathbf{y}_{p+1}^\top \\
    \Delta\mathbf{y}_{p+2}^\top \\
@@ -376,12 +373,12 @@ equation~(\ref{eq:vareq}) can be obtained by the ordinary least squares (OLS)
 method. $\widehat{\mathbf{X}}$ is the solution of the quadratic optimization problem
 \begin{equation*}
 \widehat{\mathbf{X}} = \underset{\mathbf{X}}{\text{Arg\;min}}
-\|\mathbf{A}\mathbf{X}-\mathbf{B}\|_2^2
+\|\mathbf{A}\mathbf{X}-\mathbf{Y}\|_2^2
 \end{equation*}
 \noindent for which the solution $\widehat{\mathbf{X}}$ is well-known:
 \begin{equation*}
 \label{eq:MP}
-\widehat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{B}
+\widehat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{Y}
 \end{equation*}
 \noindent where $\mathbf{A}^{\!\!+}$ is the Moore-Penrose pseudo-inverse
 which, when $\mathbf{A}$ is full rank, can be written as follows: 
@@ -413,15 +410,15 @@ In order to avoid the singularity of the matrix $\mathbf{A}^\top \mathbf{A}$, a 
 
 \begin{equation}
 \label{eq:RRproblem} 
-J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
+\widehat{\mathbf{X}} (\lambda) = \underset{\mathbf{X}}{\text{Arg\;min}}  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
  \| \mathbf{\mathbf{X}}\| ^2
 \end{equation}
 
-\noindent which optimal solution $\mathbf{\mathbf{X}}_*$ is well known: 
+\noindent which optimal solution is well known: 
 
 \begin{equation}
 \label{eq:optsolRR}
-\mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
+\widehat{\mathbf{X}} (\lambda)=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \, ,
 \end{equation}
 
 
@@ -438,7 +435,7 @@ online learning algorithms are a better option.
 
 In batch learning, the training phase is commonly a computationally expensive
 process. Therefore, when new data arrives it can't be included easily to the
-model. Moreover, it could happen that we won't have enough time to process the
+model. Moreover, it could happen that there is  won't have enough time to process the
 new data before more data arrives. In online learning algorithms there is no
 training phase, but the model is updated and evaluated at every time step. This
 model updating is computationally less expensive than a training phase.
