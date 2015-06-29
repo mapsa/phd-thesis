@@ -208,7 +208,7 @@ is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
 $\lambda=1,\dots,l$.
 
 VECM is a special form of a VAR model for I(1) variables that are also
-cointegrated~\cite{banerjee1993}.
+cointegrated~\cite{johansen1991,banerjee1993}.
 
 It is obtained re-writing equation (\ref{eq:var}) in terms of the new
 variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
@@ -265,7 +265,7 @@ as follows:
   + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
 \end{equation}
 \noindent
-which is a VAR model but for time series differences.
+which is a VAR model but for time series differences ~\cite{hansen1999}.
 
 
 Transposing each equation of the system (\ref{eq:vecfull}) we can write
@@ -800,7 +800,7 @@ which corresponds to the opening of the New York financial market. Figure \ref{f
 
 \subsection{Unit root tests} \label{sec:unitroot}
 Before running the tests, we firstly checked whether the time series were
-I(1) using the Augmented Dickey Fuller (ADF) test at 95\% significance level.
+I(1) using the Augmented Dickey Fuller (ADF) \cite{dickey1979,dickey1981} test at 95\% significance level.
 Table~\ref{tab:adf} shows that all currency rates cannot reject the unit root
 test but they rejected it with their first differences. This means that all of
 them are I(1) time series and we are allowed to use VECM and therefore OVECM.
