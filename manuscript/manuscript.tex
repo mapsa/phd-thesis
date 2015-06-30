@@ -847,7 +847,7 @@ Same experiments were done using the AAR setting for different values for $\lamb
   \label{fig:AARcomparison}
 \end{figure}
 
-Finally, the three settings are compared with OOVECM. We can see that RR and AAR approaches are better than traditional OLS and also AAR seems to perform better than RR.
+The three settings are compared with OOVECM. We can see that RR and AAR approaches are better than traditional OLS and also AAR seems to perform better than RR.
 
 \begin{figure}[!ht]
   %\vspace{-0.8cm}
@@ -857,6 +857,26 @@ Finally, the three settings are compared with OOVECM. We can see that RR and AAR
   \label{fig:onlinecomparison}
 \end{figure}
 
+Additionally table \ref{tab:stats} shows the MAPE, MAE and RMSE statistics. This results also shows that AAR behaves better than RR and OLS in comparison to OOVECM.
+
+\begin{table*}[ht!]
+\caption{Model measures}
+\label{tab:stats}
+\begin{center}
+\begin{tabular}{|l|l|c|c|c|c|}
+\hline
+\hline
+Method & $Solver$  & $\lambda$ & 
+MAPE & MAE& RMSE \\
+\hline
+ OVECM  &   OLS   &  0.0&  0.00189&  1.169e-05&3.955e-05\\
+ OVECM  &   RR   & 0.00 &  0.00142& 9.167e-06 &1.713e-05\\
+ OVECM  &   AAR     &  1e-06 &  0.00115&  7.605e-06&1.197e-05\\
+ OOVECM  &   OLS    &  1e-06 &  0.00103&  6.880e-06&1.148e-05\\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
 
 \section{Conclusions}
 \label{sec:conclusions}
