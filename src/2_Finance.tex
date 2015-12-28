@@ -3,30 +3,30 @@
 \vspace{0.5cm} 
 
 High frequency trading (HFT) strategies are based on buy and sell assets in
-short periods of time gaining a small profit in every transaction, the key is
-the amount of transactions that algorithms are capable to execute obtaining profit considering transaction costs. 
-In 2012 more than 50\% of US market share of exchange trades were HFT.  HFT has
+short periods of time gaining a small profit in every transaction despite the transaction costs. The key is
+the amount of transactions that HFT algorithms are capable to execute. 
+In 2012 more than 50\% of US market trades were HFT.  HFT has
 motivated computer-driven strategies capable of processing large amount of data
 in short periods of time. 
 
 
 \section{High Frequency Trading Definition}
 
-HFT is not a strategy but a technology which allow to implement particular
+HFT is not a strategy but a technology that implements different
 trading strategies. The aim of HFT is to benefit from market short-term pricing
 inefficiencies~\cite{chlistalla2011}. HFT is characterised for the use of
 high-speed and sophisticated quantitative and algorithmic computer applications
 for modelling and executing orders efficiently. In order to make fast decisions,
-HFT firms require speed access to trading center servers and sometimes they are
-physically near minimising network latencies.
+HFT firms require speed access to trading servers and sometimes they are
+physically near so they can minimise network latencies.
 
 High frequency trades are short-term positions that commonly end the trading
 day avoiding leaving opened positions to the next business day. HFT is
-frequently associate to algorithm trading strategies, but the former is focused
+frequently associated to algorithm trading strategies, but the former is focused
 in to reduce the market impact of large institutional positions and the later refers to trade execution strategies that are typically used by fund managers to buy or sell large amounts of assets. The duration of the positions in HFT it is not well-defined. Figure~\ref{fig:HFTtimes} shows a survey done to traders about the holding time
 of a position opened. Most of them agreed that HFT refers to positions between
-1-second and 10-minutes. Overnight positions are avoided since they are more
-risky and also have more expensive fees, HFT firms end the trading day closing all
+1-second and 10-minutes. Overnight positions are avoided since they are
+riskier and also have more expensive fees, HFT firms end the trading day closing all
 opened positions.
 
 \begin{figure}[!h]
@@ -37,7 +37,7 @@ opened positions.
   \label{fig:HFTtimes}
 \end{figure}
 In 2014 HFT represented nearly 50\% of equity trades in the US and more than 20\%
-in Europe showing a consistent fall since 2009 which was its best year. US market Revenues
+in Europe showing a consistent fall since 2009 which was its best year. US market revenues
 have fallen dramatically.
 Figure~\ref{fig:HFTmarket} on the left shows HFT trades percentage of US and Europe equity shares. The right figure shows how revenues in US stocks have fallen the last years.
 
@@ -50,10 +50,10 @@ Figure~\ref{fig:HFTmarket} on the left shows HFT trades percentage of US and Eur
   \label{fig:HFTmarket}
 \end{figure}
 One of the reasons of this fall is that exchange markets have adapted, having
-now faster and more transparent and efficient market structures than before.
+now faster, more transparent and efficient market structures than before.
 This has been possible due to its investment in technology enhancing
 reliability and stability of transactions. Even though this fall, HFT is still a major component of regulated markets and
-will probably remain a topic of interest for researchers in the near future.
+will probably remain as a topic of interest for researchers in the near future.
 
 On the other hand, HFT has been criticised on qualitative issues concerning
 fairness and systemic risk. However, empirical research shows that HFT has lead to
@@ -72,7 +72,7 @@ A financial market has many components but the most commonly used are money
 markets and capital markets. Money markets are used for short-term basis,
 usually for assets up to one year, for greater periods capital markets are used.
 Capital markets include the stock or equity market and the bond or debt market
-and it their movements are the most widely followed.
+and their movements are the most widely followed.
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
@@ -112,13 +112,13 @@ institutional clients that have also become broke-dealers.
   \caption{Actual structure of capital markets.}
   \label{fig:capitalmarketnow}
 \end{figure}
-Equity market and foreign exchange market (Forex) are the most popular markets
-for high frequency trading strategies. In equity markets can be traded stocks
-such as futures and options, exchange-traded funds (ETFs) among others financial
-instruments.
 
-Forex market allows the trading of interest rates denominated pair currencies
-such as EURUSD (Euro to UD dollar) or USDJPY (US dollar to Japanese yen). Traders of this market are diverse, some of them are
+
+Equity market and foreign exchange market (Forex) are the most popular markets
+for high frequency trading strategies. In the Equity market, stocks
+such as futures and options, exchange-traded funds (ETFs) among others financial
+instruments can be traded. Additionally, in the Forex market, interest rates denominated pair currencies 
+such as EURUSD (Euro to UD dollar) or USDJPY (US dollar to Japanese yen) are traded. Traders of this market are diverse, some of them are
 high frequency traders, long-term investors and corporations. The Forex market
 used to be centralised, only commercial banks had exclusive access to
 inter-dealer networks. Today, Forex market is decentralised and has become the
@@ -130,10 +130,21 @@ hours in GMT for London, New York, Sydney and Tokyo.
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.8\textwidth]{img/forex-trading-hours}
+  \includegraphics[width=0.8\textwidth]{img/forex-trading-hours.png}
   \caption{Forex market trading hours (GMT).}
   \label{fig:Forextimes}
 \end{figure}
+
+
+There are three periods of overlaps between different trading times:
+
+\begin{itemize}
+\item New York and London from 13:00 GMT until 17:00 GMT
+\item Tokyo and London from 8:00 GMT until 9:00 GMT
+\item Sydney and Tokyo from 23:00 GMT to 7:00 GMT 
+\end{itemize}
+
+These overlap hours are very important since the highest volume of trades are expected. Therefore, most HFT strategies are executed in these hours.
 
 \section{Price formation process}
 
@@ -142,15 +153,15 @@ exit the market (sell order). Traders have different types of order they can
 execute:
 
 \begin{description}
-\item[Market order:] allows to buy or sell an asset at the current best price
+\item[Market order] allows to buy or sell an asset at the current best price
 whatever the price is. The transaction price is determined by the market
 considering previous executed orders and volume requested.
-\item[Limit order:] allow to specify the price you want to buy or sell an asset.
-Depending on the market conditions, this type of orders can never be executed.
-\item[Stop order:] are suitable for investors who are unable to monitor their
+\item[Limit order] allow to specify the price you want to buy or sell an asset.
+Depending on the market conditions, this type of orders could never been executed.
+\item[Stop order] are suitable for investors who are unable to monitor their
 investments for a period of time. Stop order allows to specify the price that a
 position should be closed called stop price. When the stop price is reached a
-market order is executed, this means that market price won't be exactly the same
+market order is executed, this means that market price could not be exactly the same
 specified in the stop order.
 \end{description}
 
@@ -160,10 +171,10 @@ there is no certainty of execution.
 Moreover, all orders can specify other parameters such as: 
 
 \begin{description}
-\item[Fill or Kill:] is an order that must be executed immediately or being
+\item[Fill or Kill] is an order that must be executed immediately or being
 cancelled, no partial fulfillments are allowed. 
-\item[Day:] the order is only valid during the day.
-\item[Good til canceled:] a order is active until the investor decides to cancel
+\item[Day] the order is only valid during the day.
+\item[Good til canceled] a order is active until the investor decides to cancel
 it or the trade is executed.
 \end{description}
 
@@ -196,18 +207,18 @@ EMH also known as the random walk theory states that current stock prices fully 
 \cite{fama1970}. EMH requires that all the participants have rational expectations, and investors reactions be random and follow a normal distribution pattern. Thus, any one can be wrong about the market, but the market is always right as a whole.
 There are three common forms of EMH: weak-form efficiency, semi-strong efficiency and strong-form efficiency.
 
-The weak form claims that prices already reflect all past publicly available information. Therefore, future prices cannot be predicted based on analysis of historical data. This implies that future prices movements are determined entirely by information not contained in the past prices and participants are unable to systematically profit from market inefficiencies. 
+The weak form claims that prices already reflect all past publicly available information. Therefore, future prices cannot be predicted based on analysis of historical data. This implies that future prices movements are determined entirely by information not contained in the past prices and participants are unable to systematically profit from market inefficiencies.
 However, many studies have shown a marked tendency for the stock markets to trend over time periods. Various explanations for such large and apparently non-random price movements have been promulgated. Even Fama has accepted price anomalies which do not follow the weak-form efficiency hypothesis \cite{fama+french2008}.
 
 The semi-strong form of the EMH claims that prices instantly change to reflect new public (not private) information such that no excess return can be obtained. 
 
-The strong form of the EMH additionally claims that prices instantly reflect even hidden, private or "insider" information. 
+The strong form of the EMH additionally claims that prices instantly reflect even hidden, private or ``insider" information. 
 
 EMH is related with two approaches to investment analysis: fundamental and technical analysis. Fundamental analysts base their predictions of stock price behaviour on fundamental factors such as internal information of a company, its industry or the economy. Technical analysts, by contrast, consider that all this financial information is already included in the prices and believe that future stock prices can be predicted studying the historical market behaviour. A market technician bases its predictions on historical patterns of prices of volume changes.
 
 Under the weak form of EMH, strategies based on technical analysis will not be able to produce excess returns. However, the weak form accepts that some forms of fundamental analysis may still provide excess return. Similarly, the semi-strong form of EMH  neither technical or fundamental analysis can produce excess return.
 
-If the stock market efficiently digests all available information, there is little justification for seeking excess returns gains from investing. However, EMH doesn't lessen the the importance of investing only change its philosophy. The only way an investor can possibly obtain higher returns is by purchasing riskier investments.
+If the stock market efficiently digests all available information, there is little justification for seeking excess returns gains from investing. However, EMH doesn't lessen the importance of investing only change its philosophy. The only way an investor can possibly obtain higher returns is by purchasing riskier investments.
 
  Researches can determine now how efficient a financial market is, i.e how efficiently information is processed.  
 
