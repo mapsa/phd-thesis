@@ -8,14 +8,107 @@ The analysis of time series main objective is to find possible internal
 structure in the data such as autocorrelation, trend or seasonal variation.
 Some of application and uses of time series analysis are data compression,
 explanatory variables (relationships with other variables, seasonal factors,
-etc.), signal processing, forecasting (predict future values).  There are two
-main approaches to study financial time series: to study directions of financial
-rates and to explain financial rate volatility.  This chapter reviews the more
+etc.), signal processing and forecasting (predict future values), which is the focus of this thesis. 
+There are two main approaches to study financial time series: to study directions of financial
+rates and to explain financial rate volatility.  This chapter reviews the most
 relevant techniques in the rich and rapidly growing field of time series
 analysis considering these two approaches.
 
 
-\section{Characteristics of Time Series}
+\section{Characteristics of Financial Time Series}
+%\section{Stylized facts of asset returns}
+\label{sec:stylizedfacts}
+
+There are several known features exhibited by financial instruments called
+stylized facts, which have been empirically studied and some of them have been
+documented only recently and accepted as truth. Stylized facts are usually
+formulated in terms of qualitative properties of asset returns and may not be
+precise enough to distinguish among different parametric models.
+\cite{cont2001}.
+
+Returns of a time series $y_t$ is defined as:
+\begin{equation}
+\label{eq:returndef}
+r_t = y_t - y_{t-1}  \, ,
+\end{equation}
+
+Some stylized facts which are common to a wide set of financial assets
+\cite{sewell2011} are:
+
+\begin{description}
+\item[Dependence] autocorrelation function (ACF) in returns is largely insignificant. The ACF measures the linear predictability of the series at time $t$ using only the value at time $s$:
+
+\begin{equation}
+\rho(s,t) = \frac{\gamma(s,t)}{\sqrt{\gamma(s,s)\gamma(t,t)}}
+\end{equation}
+\noindent where $\gamma(s,t)$ is the autocovariance function measures the linear dependence between two points on the same series observed at different times, it is defined as the second moment product:
+\begin{equation}
+\gamma_y(s,t) = E[(y_s-\mu_s)(y_t - \mu_t)]
+\end{equation}
+However, the autocorrelation in the absolute and squared returns is always positive,
+significant and decays slowly. In addition, the autocorrelation in the absolute
+returns is generally higher than the autocorrelation in the corresponding
+squared returns. The returns autocorrelation function (ACF) of SPY is shown in figure
+ \ref{fig:returnacf}. The figure shows how the correlations are significant even
+ for very long lags, this imply that a long-memory process because of its
+ long-range dependence. 
+ \begin{figure}[h]
+ \centering
+ \includegraphics[width=0.7\textwidth]{plots/spy_returns_acf.pdf}
+ \caption{SPY returns ACF}
+ \label{fig:returnacf}
+\end{figure}
+\item[Distribution] The distribution of returns is approximately symmetric and
+has high kurtosis (i.e fat tails and a peaked centre compared with the normal
+distribution). However, distribution of returns whose were obtained from higher
+frequencies looks more like a normal distribution.
+The returns distribution tails are larger than
+ what is hypothesised by common data generation process (generally normal
+ distribution assumption). In the markets, fat tails are an undesirable feature
+ because of the additional risk they imply.  In the figure \ref{fig:returndist}
+ is shown the SPY returns distribution based on daily dates from the period 1st
+ July 1998 to 4th April 2013. The distribution was compared against the normal
+ distribution which clearly doesn't fit the data.  
+ \begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.5]{plots/spy_returns_dist.pdf}
+ % spy_returns_dist.pdf: 504x504 pixel, 72dpi, 17.78x17.78 cm, bb=0 0 504 504
+ \caption{SPY returns distribution}
+ \label{fig:returndist}
+\end{figure}
+\item[Heterogeneity] despite the fact that financial returns are non-stationary,
+stationary periods can be observed. Economist speaks in terms of a structural
+break \cite{stock1994}, in machine learning this is known as drift which means
+that the statistical properties of the target variable change over time
+\cite{widmer1996}, \cite{tsymbal2004}.
+\item[Non-Linearity] financial returns may be non-linear in mean and/or
+non-linear in variance.
+\item[Calendar effects] are also called seasonal effects and they are cyclical
+anomalies in returns where the cycle is based on the calendar. Some of known
+calendar effects are: intraday effect, weekend effect, Monday effect, intramonth
+effect, the January effect and Holiday effect. The most important calendar
+anomalies are the January effect and the weekend effect. Figure
+\ref{fig:mondayeffect} shows the Monday effect from 1928 to 2007. It shows that
+in average Monday has negative returns. However, this is changing in time,
+figure \ref{fig:mondayeffect2} shows returns only for year 2007 and its last
+three months and it shows that Mondays and Wednesdays has positive returns in
+average.
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{img/average_daily_change_1928_2007}
+ \caption{Average daily return: 1928-2007}
+ \label{fig:mondayeffect}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+ \includegraphics[width=\textwidth]{img/thumb-average_daily_change_2007}
+ \caption{Average daily return: 2007}
+ \label{fig:mondayeffect2}
+\end{subfigure}
+\end{figure}
+\end{description}
+
 
 \subsection{Stationary }
 A strictly stationary times series $Y_t$ is one for which the probabilistic behaviour
@@ -329,90 +422,6 @@ The test statistic is the following:
 
 The $\text{ADF}_t$ statistic is based on the least squares estimates of equation \ref{eq:adftest}.
 
-\section{Stylized facts of asset returns}
-\label{sec:stylizedfacts}
-
-There are several known features exhibited by financial instruments called
-stylized facts, which have been empirically studied and some of them have been
-documented only recently and accepted as truth. Stylized facts are usually
-formulated in terms of qualitative properties of asset returns and may not be
-precise enough to distinguish among different parametric models.
-\cite{cont2001}.
-
-Returns of a time series $y$ is defined as:
-\begin{equation}
-\label{eq:returndef}
-r_t = y_t - y_{t-1}  \, ,
-\end{equation}
-
-Some stylized facts which are common to a wide set of financial assets
-\cite{sewell2011} are:
-
-\begin{description}
-\item[Dependence] autocorrelation in returns is largely insignificant. However,
-autocorrelation in the absolute and squared returns is always positive and
-significant and decays slowly. In addition, the autocorrelation in the absolute
-returns is generally higher than the autocorrelation in the corresponding
-squared returns. The returns autocorrelation function (ACF) of SPY is shown in figure
- \ref{fig:returnacf}. The figure shows how the correlations are significant even
- for very long lags, this imply that a long-memory process because of its
- long-range dependence. 
- \begin{figure}[h]
- \centering
- \includegraphics[width=0.7\textwidth]{plots/spy_returns_acf.pdf}
- \caption{SPY returns ACF}
- \label{fig:returnacf}
-\end{figure}
-\item[Distribution] The distribution of returns is approximately symmetric and
-has high kurtosis (i.e fat tails and a peaked centre compared with the normal
-distribution). However, distribution of returns whose were obtained from higher
-frequencies looks more like a normal distribution.
-The returns distribution tails are larger than
- what is hypothesised by common data generation process (generally normal
- distribution assumption). In the markets, fat tails are an undesirable feature
- because of the additional risk they imply.  In the figure \ref{fig:returndist}
- is shown the SPY returns distribution based on daily dates from the period 1st
- July 1998 to 4th April 2013. The distribution was compared against the normal
- distribution which clearly doesn't fit the data.  
- \begin{figure}[h]
- \centering
- \includegraphics[scale=0.5]{plots/spy_returns_dist.pdf}
- % spy_returns_dist.pdf: 504x504 pixel, 72dpi, 17.78x17.78 cm, bb=0 0 504 504
- \caption{SPY returns distribution}
- \label{fig:returndist}
-\end{figure}
-\item[Heterogeneity] despite the fact that financial returns are non-stationary,
-stationary periods can be observed. Economist speaks in terms of a structural
-break \cite{stock1994}, in machine learning this is known as drift which means
-that the statistical properties of the target variable change over time
-\cite{widmer1996}, \cite{tsymbal2004}.
-\item[Non-Linearity] financial returns may be non-linear in mean and/or
-non-linear in variance.
-\item[Calendar effects] are also called seasonal effects and they are cyclical
-anomalies in returns where the cycle is based on the calendar. Some of known
-calendar effects are: intraday effect, weekend effect, Monday effect, intramonth
-effect, the January effect and Holiday effect. The most important calendar
-anomalies are the January effect and the weekend effect. Figure
-\ref{fig:mondayeffect} shows the Monday effect from 1928 to 2007. It shows that
-in average Monday has negative returns. However, this is changing in time,
-figure \ref{fig:mondayeffect2} shows returns only for year 2007 and its last
-three months and it shows that Mondays and Wednesdays has positive returns in
-average.
-
-\begin{figure}[h!]
-\centering
-\begin{subfigure}[b]{0.45\textwidth}
- \includegraphics[width=\textwidth]{img/average_daily_change_1928_2007}
- \caption{Average daily return: 1928-2007}
- \label{fig:mondayeffect}
-\end{subfigure}
-\begin{subfigure}[b]{0.45\textwidth}
- \includegraphics[width=\textwidth]{img/thumb-average_daily_change_2007}
- \caption{Average daily return: 2007}
- \label{fig:mondayeffect2}
-\end{subfigure}
-\end{figure}
-\end{description}
 
 
 
@@ -693,7 +702,8 @@ time to be processed with low computationally expensive calculations.
 
 
 
-\section{Vector Autoregressive Models}\label{sec:varvec}
+%\section{Vector Autoregressive Models}\label{sec:varvec}
+\section{Multivariate Time Series modelling}
 
 The vector autoregressive VAR($p$) model \cite{sims1980} is one of the most easy to use, successful and flexible models for the analysis of multivariate time series. It is a natural extension of the univariate autoregressive (AR) model. The VAR model has proven to be useful for describing the dynamic behaviour of economic and financial time series.
 VAR is a general framework describing the behaviour of a
