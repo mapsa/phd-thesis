@@ -288,7 +288,7 @@ obtained by solving the equivalent problem:
 
 \begin{equation*}
 \label{eq:proyectorsol}
-\mathbf{X \hat{\mathbf{X}} = PY} 
+\mathbf{A \hat{\mathbf{X}} = PY} 
 \end{equation*}
 
 
@@ -302,12 +302,12 @@ with $\mathbf{\mathbf{X}_2=0}$ because $\mathbf{\hat{\mathbf{X}}}$ lives in the
 $\text{Row}(\mathbf{A})$ given by $\mathbf{V_1}$, so we have:
 
 \begin{eqnarray*}
-\mathbf{X \hat{\mathbf{X}}} &=& \mathbf{PB} \\
-\mathbf{U_1 \Sigma_1 V_1^\top \hat{\mathbf{X}}} &=& \mathbf{U_1 U_1^\top B} \\
-\mathbf{ V_1^\top \hat{\mathbf{X}}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top B} \\ 
+\mathbf{A \hat{\mathbf{X}}} &=& \mathbf{PY} \\
+\mathbf{U_1 \Sigma_1 V_1^\top \hat{\mathbf{X}}} &=& \mathbf{U_1 U_1^\top Y} \\
+\mathbf{ V_1^\top \hat{\mathbf{X}}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top Y} \\ 
 \mathbf{ V_1^\top V_1 \mathbf{X}_1} &=& \mathbf{\Sigma_1^{-1}
-U_1^\top B} \\
-\mathbf{\mathbf{X}_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top B}
+U_1^\top Y} \\
+\mathbf{\mathbf{X}_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top Y}
 \end{eqnarray*}
 
 \noindent from this result we can obtain $\mathbf{\hat{\mathbf{X}}}$ and
@@ -316,7 +316,7 @@ therefore the pseudo-inverse expression:
 \begin{eqnarray*}
 \mathbf{\hat{\mathbf{X}}} &=& \mathbf{V_1 \mathbf{X}_1} \\
                 &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top Y} \\
-\mathbf{X^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
+\mathbf{A^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
 \end{eqnarray*}
 
 $\blacksquare$
@@ -876,8 +876,21 @@ and $\mathbf{W}=0$
 
 
 \subsection{Efficient computation}
+In regression problems we always require getting a matrix inverse which is
+computationally expensive. However, in stream data problems the is a way to
+obtain a matrix inverse approximation using the Sherman-Morrison-Woodbury. This
+formula allows to get the inverse of a
+the matrix $\mathbf{A+uv^\top}$ if we already calculated the
+inverse of $\mathbf{A}$ as follows:
 
-In order to solve OLS in a efficient way, Coleman and
+\begin{equation}
+\label{eq:SMW}
+(\mathbf{A+uv^\top})^{-1}=\mathbf{A}^{-1}-
+\frac{\mathbf{A^{-1}uv^\top A^{-1}}}{\mathbf{1+v^\top A^{-1}u}}
+\end{equation}
+
+
+Alternatively, Coleman and
 Sun~\cite{coleman+sun2010} presented an iterative algorithm which
 uses $\mathbf{X}(\lambda)$ to approximate $\mathbf{X}(0)$.
 
