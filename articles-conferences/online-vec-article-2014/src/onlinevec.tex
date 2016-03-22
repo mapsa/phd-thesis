@@ -1,0 +1,43 @@
+\section{Online VEC model}
+
+If we want to update the VEC model with new input data
+$\mathbf{y}_{T+1}$, we have to add a new row in matrices
+$\mathbf{Y,X}$ and $\mathbf{E}$. 
+
+\begin{eqnarray}
+\mathbf{Y} &=& 
+                \left[ \begin{array}{ccc}
+               \quad & \mathbf{\Delta y}_{p+1} & \quad \\ \hline
+               \quad & \mathbf{\Delta y}_{p+2} & \quad \\ \hline
+               \quad & \vdots & \quad \\ \hline 
+               \quad & \mathbf{\Delta y}_T & \quad \\ 
+               \quad & \color{red}\mathbf{\Delta y}_{T+1} & \quad 
+               \end{array} \right]
+             \\
+\mathbf{\Phi^*} &=& 
+                \left[ \begin{array}{ccc}
+               \phi_{p-1}^* \\ 
+               \vdots \\ 
+               \phi_{1}^* \\
+               \alpha \\
+                c   
+               \end{array} \right]
+\\
+\mathbf{X} &=& \begin{bmatrix} \label{offX}
+   \mathbf{\Delta y}_2 & \dots & \mathbf{\Delta y}_{p-1} &
+   \mathbf{\Delta y}_{p} & \beta'\mathbf{y}_{p} & 1\\
+   \mathbf{\Delta y}_3 & \dots & \mathbf{\Delta y}_{p} &
+   \mathbf{\Delta y}_{p+1} & \beta'\mathbf{y}_{p+1} &1\\
+   \vdots &  \ddots & \vdots & \vdots & \vdots & \vdots\\
+   \mathbf{\Delta y}_{T-p+1} & \dots & \mathbf{\Delta y}_{T-2} &
+   \mathbf{\Delta y}_{T-1} & \beta'\mathbf{y}_{T-1} &1 \\
+   \color{red} \mathbf{\Delta y}_{T-p+2} & \dots & \color{red}\mathbf{\Delta y}_{T-1} &
+   \color{red}\mathbf{\Delta y}_{T} & \color{red}\beta'\mathbf{y}_{T}
+   & \color{red} 1
+   \end{bmatrix}
+\\
+\mathbf{E} &=& \begin{bmatrix}
+              \mathbf{\epsilon}_{p+1} \\ \vdots \\ \mathbf{\epsilon}_T
+              \\ \color{red}\mathbf{\epsilon}_{T+1}
+             \end{bmatrix}
+\end{eqnarray}

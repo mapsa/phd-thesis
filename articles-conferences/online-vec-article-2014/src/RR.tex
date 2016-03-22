@@ -1,0 +1,58 @@
+\section{Ridge Regression}\label{sec:RR}
+
+Ridge regression (RR) introduces a ridge estimation to avoid the
+singularity of the matrix $\mathbf{A}^\top \mathbf{A}$
+equation~(\ref{eq:pseudoinverse}). RR solves the following
+optimization problem:
+
+\begin{equation}
+\label{eq:RRproblem}
+\underset{\mathbf{X}}{\text{min}} \quad \|
+\mathbf{A}\mathbf{\mathbf{X}} - \mathbf{B} \|_2^2 +\lambda \|
+\mathbf{\mathbf{X}}\|_2^2 
+\end{equation}
+
+\noindent where $\lambda$ is a regularization parameter. 
+
+The RR optimal solution $\mathbf{X}(\lambda)$ is also well-known: 
+
+\begin{equation}
+\label{eq:optsolRR}
+\mathbf{X}(\lambda)=(\mathbf{A}^\top \mathbf{A}+ \lambda
+\mathbb{I})^{-1}\mathbf{A}^\top \mathbf{B} \, . 
+\end{equation}
+
+
+\textbf{Demo}\quad
+
+To solve equation~(\ref{eq:optsolRR}) is equivalent to solve the following
+optimization problem:
+
+
+\begin{equation}
+\label{eq:RRproblem2}
+\underset{\mathbf{X}(\lambda)}{\text{min}} \quad \|
+\mathbf{C}\mathbf{\mathbf{X}} - \mathbf{F} \|_2^2
+\end{equation}
+
+\noindent where
+
+\begin{equation*}
+	\mathbf{C}=\begin{bmatrix} \quad &\mathbf{A}& \quad \\ \hdashline \quad
+& \lambda\mathbb{I}&\quad  \end{bmatrix} \quad \text{and} \quad
+	\mathbf{F}=\begin{bmatrix} \quad &\mathbf{B}& \quad \\ \hdashline \quad
+& \mathbf{0}&\quad  \end{bmatrix} \, .
+\end{equation*}
+
+Applying equation~(\ref{eq:MP}) and considering that $\mathbf{C}^\top
+\mathbf{C} = \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I}$ and 
+$\mathbf{C}^\top \mathbf{F}=\mathbf{A}^\top \mathbf{B} $ we have:
+
+\begin{eqnarray*}
+\mathbf{X}(\lambda)&=&(\mathbf{C}^\top
+\mathbf{C})^{-1}\mathbf{C}^\top \mathbf{F} \\
+&=& (\mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1} \mathbf{A}^\top \mathbf{B}
+\end{eqnarray*}
+
+
+

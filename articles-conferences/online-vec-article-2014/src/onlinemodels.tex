@@ -1,0 +1,110 @@
+\section{Online Ridge regression}
+
+Since 
+\begin{equation}
+\label{eq:notation}
+	\mathbf{A} = 
+\left[
+  \begin{tabular}{c>{$}c<{$}c}
+    --- & \mathbf{a}^{\top}_{1} & ---\\
+    --- & \mathbf{a}^{\top}_{2} & ---\\
+    & \vdots & \\
+    --- & \mathbf{a}^{\top}_{m} & ---
+  \end{tabular}
+\right]
+\quad \text{and} \quad
+\mathbf{B} =
+\left[
+  \begin{tabular}{c>{$}c<{$}c}
+    --- & \mathbf{b}_{1} & ---\\
+    --- & \mathbf{b}_{2} & ---\\
+    & \vdots & \\
+    --- & \mathbf{b}_{m} & ---
+  \end{tabular}
+\right]
+\
+\end{equation}
+Equation~(\ref{eq:optsolRR}) can also be written as:
+
+\begin{eqnarray*}
+\label{eq:RReapand}
+\mathbf{\mathbf{X}}_{\text{ridge}}&=&(\mathbf{A}^\top \mathbf{A}+ \lambda
+\mathbb{I})^{-1}\mathbf{A}^\top \mathbf{B} \\
+&=& \displaystyle \big (\sum_{t=1}^m
+\mathbf{a}_t \mathbf{a}_t  ^\top + \lambda \mathbb{I}\big )^{-1}
+\sum_{t=1}^m \mathbf{a}_t \mathbf{b}_t \, .
+\end{eqnarray*}
+
+Lets define $\displaystyle\mathbf{S}= \sum_{t=1}^m \mathbf{a}_t
+\mathbf{a}_t  ^\top + \lambda \mathbb{I} $ and $\mathbf{W}=
+\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{b}_t$, so the
+algorithm~\ref{alg:RR} shows the iterative formulation:
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{a}_1,\dots,\mathbf{a}_{m} \}$: $m$ input vectors \\
+$\{\mathbf{b}_1,\dots,\mathbf{b}_{m} \}$: $m$ target vectors \\
+$\lambda$: regularization parameter \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{a}_1),\dots,f(\mathbf{a}_{m}) \}$: model predictions \\
+\STATE Initialize $\mathbf{S}=\lambda \mathbb{I}$
+and $\mathbf{W}=0$
+\FOR { $t = 1$ to $m$ }
+	\STATE read new $\mathbf{a}_t$
+	\STATE $\mathbf{X}=\mathbf{S}^{-1}\mathbf{W}$
+	\STATE output prediction $f(\mathbf{a}_t) = \mathbf{X}^\top \mathbf{a}_t$
+   	\STATE $\mathbf{S} = \mathbf{S} + \mathbf{a}_t \mathbf{a}_t^\top$
+   	\STATE Read new $y_t$
+    	\STATE $\mathbf{W} = \mathbf{W} + \mathbf{a}_t \mathbf{b}_t$
+\ENDFOR
+\end{algorithmic}
+\caption{Online Ridge Regression}
+\label{alg:RR}
+\end{algorithm}
+
+
+
+\section{The Aggregating Algorithm for Regression}
+
+The AAR, proposed by~\cite{vovk2001}, is an application of the aggregating
+algorithm to the problem of regression. The idea is introduce the new input
+vector $\mathbf{x}_{m+1}$ to solve the model parameters: 
+
+\begin{equation}
+\label{eq:AARexpand}
+\mathbf{X}_{aar} = \displaystyle \big (\sum_{t=1}^{m+1}
+\mathbf{a}_t \mathbf{a}_t  ^\intercal + \gamma \mathbb{I}\big )^{-1}
+\sum_{t=1}^m \mathbf{a}_t \mathbf{b}_t \, .
+\end{equation}
+
+If we define $\displaystyle\mathbf{S}= \sum_{t=1}^{m+1} \mathbf{a}_t
+\mathbf{a}_t  ^\intercal + \gamma \mathbb{I} $ and $\mathbf{W}=
+\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{b}_t$, the
+algorithm~\ref{alg:AAR} is slightly different to the algorithm~\ref{alg:RR}, 
+which updated matrix $\mathbf{S}$ before making the prediction:
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{a}_1,\dots,\mathbf{a}_{m} \}$: $m$ input vectors \\
+$\{\mathbf{b}_1,\dots,\mathbf{b}_{m} \}$: $m$ target vectors \\
+$\lambda$: regularization parameter \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{a}_1),\dots,f(\mathbf{a}_{m}) \}$: model predictions \\
+\STATE Initialize $\mathbf{S}=\lambda \mathbb{I}$
+and $\mathbf{W}=0$
+\FOR { $t = 1$ to $m$ }
+	\STATE read new $\mathbf{a}_t$
+   	\STATE $\mathbf{S} = \mathbf{S} + \mathbf{a}_t \mathbf{a}_t^\intercal$
+	\STATE $\mathbf{X}=\mathbf{S}^{-1}\mathbf{W}$
+	\STATE output prediction $f(\mathbf{a}_t) = \mathbf{X}^\intercal \mathbf{a}_t$
+   	\STATE Read new $\mathbf{y}_t$
+    	\STATE $\mathbf{W} = \mathbf{W} + \mathbf{a}_t \mathbf{b}_t$
+\ENDFOR
+\end{algorithmic}
+\caption{{\em The aggregating algorithm for regression}}
+\label{alg:AAR}
+\end{algorithm}
+
+

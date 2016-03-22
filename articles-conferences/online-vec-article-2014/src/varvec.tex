@@ -1,0 +1,298 @@
+
+\section{Vector autorregresive models}\label{sec:varvec}
+
+VAR as well as VEC are autorregresive models which describe the joint
+behaviour of a set variables. Since VEC is a special case of VAR
+model, we will formulate the VAR model first and then show how it is
+related to the VEC model. 
+
+
+VAR($p$) model is a general framework to describe
+the behaviour of a set of $l$ endogenous variables as a linear
+combination of their last $p$ values. These $l$ variables at time $t$
+are represented by the vector $\mathbf{y}_t$ as follows:
+
+\begin{equation}
+\label{eq:variables}
+\mathbf{y}_t = 
+\begin{bmatrix} y_{1,t} \\
+y_{2,t} \\
+\vdots \\
+y_{l,t}
+\end{bmatrix}
+\end{equation}
+\noindent where $y_{j,t}$ corresponds to the time series $j$ evaluated at
+time $t$.
+
+The VAR(p) model describes the behaviour of a dependent variable in terms
+of its own lagged values and the lags of the others variables in the
+system. The model with $p$ lags is formulated as the following:
+
+\begin{equation}
+\label{eq:var}
+ \mathbf{y}_t = \phi_1 \mathbf{y}_{t-1}  + \dots +   \phi_p\mathbf{y}_{t-p}
++ \mathbf{c} + \mathbf{\epsilon}_t, \qquad t=p+1, \dots, N
+\end{equation}
+
+\noindent where ${\phi_1,\dots,\phi_p}$ are $l \times l$ 
+matrices of real coefficients, $\mathbf{\epsilon}_{p+1},\dots,\mathbf{\epsilon}_N$ are
+error terms, $\mathbf{c}$ is a constant vector and $N$ is the total number of
+samples.
+
+The VAR matrix form is the following:
+
+\begin{equation}
+ \label{eq:varmatrix}
+               \underbrace{ \begin{bmatrix}
+               \quad \\
+               \mathbf{y}_{p+1} &
+               \mathbf{y}_{p+2} &
+               \dots & 
+               \mathbf{y}_N \\
+               \quad
+               \end{bmatrix}}_{\substack{ \mathbf{B}^\top\\l \times (N-p)}}   
+= 
+                \underbrace{\left[ 
+                \begin{array}{ccccc}
+                \quad & \quad & \quad & \quad & \quad \\
+                \phi_1  & \phi_2 & \cdots & \phi_p & \mathbf{c} \\  
+                \quad &\quad & \quad & \quad & \quad
+               \end{array} 
+               \right]}_{\substack{ \mathbf{X}^\top\\ l \times (l \times p + 1 )}}
+\underbrace{\begin{bmatrix}
+   \mathbf{y}_{p}  & \mathbf{y}_{p+1} & \dots    & \mathbf{y}_{N-1}\\
+   \mathbf{y}_{p-1}  & \mathbf{y}_{p} & \dots    & \mathbf{y}_{N-2}\\
+   \vdots        & \vdots   & \ddots   & \vdots\\
+   \mathbf{y}_{1} & \mathbf{y}_{2}   & \dots    & \mathbf{y}_{N-p}\\
+   1 & 1   & \dots    & 1 
+   \end{bmatrix}}_{\substack{ \mathbf{A}^\top\\ (l\times p +1 )\times (N-p)}}
++
+\underbrace{\begin{bmatrix}
+                \quad \\
+              \mathbf{\epsilon}_{p+1}  & 
+              \mathbf{\epsilon}_{p+2}  & 
+              \dots                & 
+              \mathbf{\epsilon}_N \\
+              \quad
+             \end{bmatrix}}_{\substack{\mathbf{E}^\top\\l \times (N-p) }} 
+\end{equation}
+
+\noindent which can be solve using ordinary least squares estimation.
+
+
+\section{Integration and Cointegration}
+
+A time series $\mathbf{y}$ is called integrated of order $d$ if after
+differencing the variable $d$ times, we get a I(0) variable (stationary
+process), i.e:
+\[
+(1-L)^d \mathbf{y} \sim \text{I(0)}
+\]
+\noindent where I(0) is a stationary time series and $L$ is the lag operator, i.e,
+\[
+(1-L)\mathbf{y} = \Delta \mathbf{y}
+\]
+\noindent where $\Delta \mathbf{y}(t) = \mathbf{y}(t)  -\mathbf{y}(t-1) \quad \forall t $.
+
+
+Let $\mathbf{y}_t = \{\mathbf{y}^1, \dots, \mathbf{y}^l\}$ be a set of $l$ stationary time
+series I(1) which are said to be cointegrated if a vector
+$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^l$  exists such that the time series,
+
+\begin{equation}
+ \mathbf{Z}_t:= \beta^\top \mathbf{y}_t = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
+ \text{I(0)}
+\end{equation}
+
+In words, a set of I(1) variables is said to be cointegrated if
+exists a linear combination of them which is I(0).
+
+\subsection{Stationary Time Series}
+
+A strictly stationary times series is one for which the probabilistic behavior
+of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
+to that of the time shifted set, more precisely: \[ P\{y_{t_1} \leq
+c_1,\dots,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,\dots,y_{t_L+h}
+\leq c_L\}
+\quad \forall L \in \mathbb{N}, \forall h \in \mathbb{Z}\] \noindent where
+$c_1,\dots,c_L$ are constants.
+
+This definition is too strong and difficult to assess it from a single data
+set. The weak version of this definition imposes conditions only on the two
+first two moments.
+
+A weakly stationary time series is a process which mean, variance and auto
+covariance do not change over time:
+
+\begin{eqnarray*}
+E(Y_t) &=& \mu  \quad \forall t \in \mathbb{N} \\ E(Y^2_t) &=&
+\sigma^2  \quad \forall t \in \mathbb{N} \\
+\lambda(s,t)&=&\lambda(s+h,t+h) \quad \forall s,t \in \mathbb{N},
+\forall h \in \mathbb{Z}
+\end{eqnarray*}
+
+\noindent with $\lambda(s,t) = E[(y_s-\mu)(y_t - \mu)]$.
+
+The following example~\cite{johansen1995} helps to illustrate the meaning
+of $\beta$:
+
+\textbf{Example:}
+
+If we have two-dimensional process $\mathbf{X}_t$, $t=1,\dots,T$ by:
+
+\begin{eqnarray*}
+\mathbf{X}_{1t} &=& \sum_{i=1}^t \epsilon_{1i} + \epsilon_{2t} \\
+\mathbf{X}_{2t} &=& a \sum_{i=1}^t \epsilon_{1i} + \epsilon_{3t} 
+\end{eqnarray*}
+
+Since $\mathbf{X}_{1t}$ and $\mathbf{X}_{2t}$ are I(1) processes and there
+exist a vector $\beta = [a -1]$ such that:
+
+\[
+\beta^\top \mathbf{X}_t = a \mathbf{X}_{1t} -\mathbf{X}_{2t} = 
+a\epsilon_{2t} - \epsilon_{3t} \sim \text{I(0)}
+\]
+
+then, both processes are said to be cointegrated. If we add a I(0) process
+$\mathbf{X}_{3t} = \epsilon_{4t}$  we find that there exists two cointegration
+vectors now: $\begin{bmatrix}a &-1& 0\end{bmatrix}$ and $\begin{bmatrix}0
+&0&1\end{bmatrix}$ since:
+
+\[
+\beta^\top \mathbf{X}_t = 
+\begin{bmatrix}
+a & -1 & 0 \\
+0 & 0 & 1
+\end{bmatrix} 
+\begin{bmatrix} 
+\mathbf{X}_{1t} \\
+\mathbf{X}_{2t} \\
+\mathbf{X}_{3t}
+\end{bmatrix} = 
+\begin{bmatrix}
+a\epsilon_{2t} - \epsilon_{3t} \\
+\epsilon_{4t}
+\end{bmatrix}
+\]
+
+This example shows how cointegration vectors describes the stable relations
+between the processes by linear relations that are more stationary than the
+original process.
+
+\section{VEC model}
+
+A VEC model is a special form of a VAR model for I(1) variables that
+are also cointegrated. The VEC model is obtained by replacing the form
+$\Delta \mathbf{y}_t = \mathbf{y}_t - \mathbf{y}_{t-1}$ in equation
+(\ref{eq:var}). The VEC model is expressed in terms of differences,
+has an error correction term and it has the following form:
+
+\begin{equation}
+ \label{eq:vec}
+ \Delta \mathbf{y}_t = 
+ \underbrace{ \Omega\mathbf{y}_{t-1}}_\text{Error correction term} + 
+ \sum_{i=1}^{p-1}
+\phi_i^* \Delta \mathbf{y}_{t-i}  + \mathbf{c} + \mathbf{\epsilon}_t \quad ,
+\end{equation}
+
+\noindent where coefficients matrices $\Omega$ and $\phi_i^*$ are
+function of matrices $\phi_i$ (shown in equation (\ref{eq:var})) as follows:
+
+\begin{eqnarray*}
+\phi_i^* &: =& -\sum_{j=i+1}^{p} \phi_j \\
+\Omega &: =& -(\mathbb{I}-\phi_1-\dots-\phi_p) 
+\end{eqnarray*}
+
+The matrix $\Omega$ has the following properties:
+\begin{itemize}
+\item If $\Omega = 0$ there is no cointegration
+\item If $rank(\Omega)=l$ i.e full rank, then the time series are not
+I(1) but stationary
+\item If $rank(\Omega)=r,\quad 0 < r < l$ then, there is cointegration
+and the matrix $\Omega$ can be expressed as $\Omega =
+\alpha \beta^\top$, where $\alpha$ and $\beta$ are $(l \times r)$
+matrices and $rank(\alpha)=rank(\beta)=r$.
+
+The columns of $\beta$ contains the cointegration vectors and the rows of
+$\alpha$ correspond with the adjusted vectors. $\beta$ is obtained by Johansen
+procedure~\cite{johansen1988} whereas $\alpha$ has to be determined as a
+variable in the VEC model.
+
+It is worth noticing that the factorization of the matrix $\Omega$ is not unique since for any
+$r \times r$ nonsingular matrix $H$ we have:
+
+\begin{eqnarray*}
+\alpha \beta^\top &=& \alpha \mathbf{HH^{-1}} \beta^\top\\
+&=&(\alpha\mathbf{H})(\beta(\mathbf{H}^{-1})^\top)^\top \\
+&=& \alpha^*(\beta^*)^\top
+\end{eqnarray*}
+
+\noindent whith $\alpha^* = \alpha\mathbf{H}$ and $\beta^* =
+\beta(\mathbf{H}^{-1})^\top$.
+
+Therefore, to obtain unique values, further restrictions on the model
+are required.
+
+\end{itemize}
+%Johansen  procedure also gives a set of
+%eigenvalues ordered in a descending way which do not correspond to
+%$\alpha$ but the number of eigenvalues larger than zero determine the rank
+%of $\beta$, i.e the number of cointegration relations. 
+
+If cointegration exists, then equation (\ref{eq:vec}) can be written as follows:
+
+
+\begin{equation}
+ \label{eq:vecfull}
+ \Delta \mathbf{y}_t = \alpha \beta^\top\mathbf{y}_{t-1} 
+ + \sum_{i=1}^{p-1} \phi_i^*\Delta
+\mathbf{y}_{t-i}  + \mathbf{c} + \mathbf{\epsilon}_t \quad ,
+\end{equation}
+
+\noindent which is a VAR model but for time series differences.
+
+The matricial form of the VEC model is the following:
+
+\begin{equation} \label{eq:vecmatrix}
+\underbrace{
+               \begin{bmatrix}
+               \quad\\
+                \mathbf{\Delta y}_{p+1} & 
+                \dots &
+                \mathbf{\Delta y}_N \\
+                \quad
+               \end{bmatrix}
+               }_{\substack{\mathbf{B}^\top\\ l \times (N-p) }} =
+   \underbrace{
+    \begin{bmatrix}
+     \quad \\
+     \alpha & \phi_1^* & \cdots & \phi_{p-1}^* & \mathbf{c} \\  
+     \quad
+     \end{bmatrix} 
+     }_{\substack{ \mathbf{X}^\top\\ l \times (l\times p +1)}}
+\underbrace{\begin{bmatrix} 
+   \beta^\top \mathbf{y}_{p} & 
+   \cdots & \beta^\top \mathbf{y}_{N-1} \\
+   \mathbf{\Delta y}_p  & \cdots 
+   & \mathbf{\Delta y}_{N-1} \\ 
+   \vdots  & \ddots & \vdots \\
+   \mathbf{\Delta y}_2  & \cdots 
+   & \mathbf{\Delta y}_{N-p+1} \\
+   1 & \cdots & 1 
+   \end{bmatrix}}_{\substack{\mathbf{A}^\top \\ (l \times p +1) \times (N-p) }}
++
+\underbrace{\begin{bmatrix}
+              \quad \\
+              \mathbf{\epsilon}_{p+1} &
+              \dots &
+              \quad &\mathbf{\epsilon}_N \\ \quad
+             \end{bmatrix}}_{\substack{\mathbf{E}^\top\\ l \times (N-p) }} 
+\end{equation}
+
+VAR and VEC model parameters shown in equations (\ref{eq:varmatrix}) and
+(\ref{eq:vecmatrix}) can be solve using standard regression techniques, such as
+ordinary least squares (OLS). However, matrix $\mathbf{A}$ is usually
+rank-deficient and OLS solution could not be found. Ridge regression method (RR)
+is commonly used instead of OLS when matrices are ill-conditioned or
+rank-deficient since it has improved generalization capabilities.
+

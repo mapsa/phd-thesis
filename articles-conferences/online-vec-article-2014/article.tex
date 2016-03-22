@@ -1,0 +1,126 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{array,arydshln}
+\usepackage{amsfonts,amssymb,amsmath,amsthm,
+            amssymb,amsopn,amsxtra,amstext,amsbsy}
+\usepackage{subfig} % To add subfigures
+\usepackage[makeroom]{cancel}
+%%\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{array}
+\usepackage{url}
+\usepackage[spanish]{babel}
+\usepackage{color}
+%\usepackage{float}
+\usepackage{savesym}
+\savesymbol{AND}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumerate}
+\newtheorem*{myteo}{Teorema}
+\newtheorem*{mydef}{Definici\'on}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\def\R{{\mathbb R }}
+\def\N{{\mathbb N }}
+\voffset=-10mm
+\oddsidemargin=0pt 
+\evensidemargin=0pt
+\topmargin=-10mm
+\headsep=10mm
+\headheight=18pt 
+\footskip=30pt
+\topskip=0mm
+\textwidth 167mm
+\textheight=230mm
+\parindent=5mm 
+\marginparsep=3mm
+\marginparwidth=19mm
+%\renewcommand{\baselinestretch}{2} %double spacing
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+\hfuzz6pt % Don't report over-full h-boxes if over-edge is small
+
+%% MYREMARK ENVIRONMENT %%%%%%%%%%%
+\newenvironment{mycolor}{\color{red}}{}
+\newcounter{myremarkcount}
+\setcounter{myremarkcount}{0}
+\newsavebox{\myremarkbox}
+\newenvironment{myremark}
+{% This is the begin code
+\medskip
+\begin{flushright}
+\begin{lrbox}{\myremarkbox}%
+\begin{minipage}[t]{0.9\linewidth}
+\stepcounter{myremarkcount}
+\footnotesize
+\begin{mycolor}
+{\bf Remark \arabic{myremarkcount}.}
+\begin{it}
+}
+{% This is the end code
+\end{it}
+\end{mycolor}
+\end{minipage}
+\end{lrbox}
+\fbox{\usebox{\myremarkbox}}
+\end{flushright}
+
+\bigskip}
+
+
+\addtolength{\itemsep}{1.5\baselineskip}
+
+\title{An Online  Vector error correction model for forecasting exchange rates}
+\author[P. Arce]{Paola Arce}
+\address[Paola Arce]{Departamento de Inform\'atica, UTFSM}
+\email{paola.arce@usm.cl}
+\author[W. Kristjanpoller]{Werner Kristjanpoller} 
+\address[Werner Kristjanpoller]{Departamento de Industrias, UTFSM}
+\email{werner.kristjanpoller@usm.cl}
+\author[L. Salinas]{Luis Salinas}
+\address[Luis Salinas]{Departamento de Inform\'atica, UTFSM \and CCTVal, UTFSM}
+\email{luis.salinas@usm.cl}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Foreign exchange rates have been studied as a set of economic
+variables whose relationship is said to be cointegrated. When
+cointegration exists there are several models which attempt to predict
+their future behaviour using historical information. In particular,
+vector error correction (VEC) model is an econometric time series
+framework widely used to characterize the joint dynamic behaviour of a
+set of cointegrated variables. VEC is a particular case of the vector
+autoregression (VAR) model that models a set of any variables
+capturing linear interdependence among them.  As well as VAR and VEC
+model parameters are obtained using the ordinary least squares (OLS)
+method.  Even though OLS is extensively used, it has over-fitting
+issues and is computationally expensive.  Due to the amount of new
+information available in foreign exchange markets, the using of VAR
+and VEC models is not suitable in online contexts.  In this article we
+present a new model able to obtain VEC parameters faster which are
+less adjusted to the data. Our model can be used in online contexts
+due to its reduced the response time and because it considers a
+portion of the historical data.
+\end{abstract} 
+
+\input{src/intro}
+\input{src/varvec}
+\input{src/OLS}
+\input{src/RR}
+\input{src/refinements}
+\input{src/lambda}
+\input{src/onlinemodels}
+\input{src/model}
+%\input{src/onlinevec}
+\input{src/data}
+%\input{src/experiments}
+%\input{src/conclusions}
+\input{src/appendix}
+
+\bibliographystyle{IEEEtran}
+\bibliography{reference}
+
+\end{document}

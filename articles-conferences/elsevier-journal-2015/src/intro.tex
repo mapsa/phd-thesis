@@ -1,0 +1,92 @@
+\section{\uppercase{Introduction}}
+\label{sec:introduction}
+\noindent 
+
+Cointegration concept was introduced by~\cite{engle1987} and implies that one or
+more linear combinations of non-stationary variables are stationary even though
+individually they are not.  Moreover ~\cite{stock+watson1988} observed that
+cointegration reflects the common stochastic trends providing a useful way to
+understand cointegration relationships. These common stochastic trends can be
+also interpreted as a long-run equilibrium relationships.
+
+This idea was inmediatly adopted in finance since it could represent their
+long-run relationship implied by economic theory~\cite{laietAl1991},
+\cite{lence+falk2005}.  Economic theory suggest that economic time series are
+mean-reverting process and therefore, it reflects the idea of that some set of
+variables cannot wander too far from each other. 
+
+On the other hand, the efficient markets hypothesis, also known as the random
+walk theory states that current stock prices fully reflect available
+information related to its value and there is no way to earn excess
+profits~\cite{fama1970}.  This means that if we have stock prices from a
+jointly efficient market, they cannot be
+cointegrated~\cite{granger1986},\cite{dwyer1992}. However, \cite{richards1995}
+claims that cointegration is directly at odds with market efficiency, even
+though, there is no evidende that cointegration among asset prices have
+implications about market efficiency~\cite{lence+falk2005}.
+
+Despite the fact that cointegration on closing daily rates of currency pairs has
+not been found \cite{coleman1990}, \cite{copeland1991}, different time series
+frequencies can have different behaviours~\cite{aldridge2009}. Pair trading is a
+very common example of cointegration application~\cite{herlemont2003} 
+but cointegration can also be extended to a larger set of
+variables~\cite{mukherjee1995},\cite{engle2004}.
+
+%So why do we care about cointegration? Someone else can probably give more
+%econometric applications, but in quantitative finance, cointegration forms the
+%basis of the pairs trading strategy: suppose we have two cointegrated stocks X
+%and Y, with the particular (for concreteness) cointegrating relationship X - 2Y
+%= Z, where Z is a stationary series of zero mean. For example, X could be
+%McDonald's, Y could be Burger King, and the cointegration relationship would
+%mean that X tends to be priced twice as high as Y, so that when X is more than
+%twice the price of Y, we expect X to move down or Y to move up in the near
+%future (and analogously, if X is less than twice the price of Y, we expect X to
+%move up or Y to move down). This suggests the following trading strategy: if X -
+%2Y > d, for some positive threshold d, then we should sell X and buy Y (since we
+%expect X to decrease in price and Y to increase), and similarly, if X - 2Y < -d,
+%then we should buy X and sell Y.
+
+
+Vector error correction model (VECM) introduces this long-run relationship
+among a set of cointegrated variables as an error correction term. VECM is a
+special case of the vector autorregresive model (VAR) model. VAR model
+expresses future values as a linear combination of variables past values.
+However, VAR model cannot be used with non-stationary variables. VECM is a
+linear model but in terms of variable differences. If cointegration exists,
+variable differences are stationary and they introduce an error correction term
+which adjusts coefficients to bring the variables back to equilibrium. In
+finance, many economic time series turn to be stationary when they are
+differentiated and cointegration restrictions often improves
+forecasting~\cite{duy1998}. Therefore, VECM has been widely adopted.
+
+Both VECM and VAR model parameters are obtained using ordinary least squares
+(OLS) method. OLS has two main problems: is sensitive to errors on input data
+and involves many calculations. The former problem is commonly solved using
+Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
+parameter that leads to an unbiased estimation with better generalization
+capability. The second problem of computational complexity depends on the number
+of past values and observations considered.  Recently, online learning
+algorithms have been proposed to solve problems with large data sets because of
+their simplicity and their ability to update the model when new data is
+available. 
+
+In this paper, we propose an online formulation of the VECM called Onlive VECM
+(OVECM) based on consideration of only a sliding window of the most recent data.
+The algorithm introduces matrix optimizations in order to reduce the number of
+operations and also takes into account the fact that cointegration vector space
+doesn't experience large changes with small changes in the input data. Moreover,
+RR instead of OLS is used to solve VECM. Our method is later tested using four
+currency rates from the foreign exchange market with different frequencies.  Model
+efectiveness is focused on out-of-sample forecast rather than in-sample fitting.
+This criteria allows the OVECM prediction capability to be expressed rather than
+just explaining data history. Our method performance is compared with its
+optimal offline algorithm.
+
+
+The next sections are organized as follows: section~\ref{sec:background}
+presents the VAR and VECM, the OVECM algorithm proposed is presented in
+section~\ref{sec:methodology}. Section~\ref{sec:results} gives a description of
+the data used and the tests carried on to show accuracy and time comparison of
+our proposal against the traditional VECM and
+section~\ref{sec:conclusions} includes conclusions and a proposal for future
+tudy.

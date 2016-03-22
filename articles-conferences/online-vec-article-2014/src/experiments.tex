@@ -1,0 +1,47 @@
+\section{Experiments} \label{sec:experiments}
+
+In order to determine the parameter for sliding window size $L$  and
+the number of lags, we define a set of base currencies:
+EURUSD,GBPUSD,USDJPY,USDCHF and add an extra currency of the rest of
+currencies available. The base currencies were chosen because they are
+the most transacted currencies.
+
+Later, we run VEC model with the 5 currencies considering a variable
+window size data (from 100 to 4000) and number of lags (from 1 to 20)
+and determine its akaike information criterion (AIC). The figure
+~\ref{fig:lagoptimization} shows the zones with AIC levels varying in
+color, were white represent the higher values and red represents the
+lower values (best models have lower AIC).  We can see that more red
+zones are related with high number of lags and windows size around
+3000 in 4 examples. The situation is similar in
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{cc}
+
+\subfloat[Base currencies + AUDSGD]{
+    \includegraphics[width=0.4\linewidth]{img/AIC_AUDSGD}
+    \label{fig:currency1}
+}
+&
+\subfloat[Base currencies + NZDJPY]{
+    \includegraphics[width=0.4\linewidth]{img/AIC_NZDJPY}
+    \label{fig:currency2}
+}
+\\
+\subfloat[Base currencies + AUDNZD]{
+    \includegraphics[width=0.4\linewidth]{img/AIC_AUDNZD}
+    \label{fig:currency3}
+}
+&
+\subfloat[Base currencies + CHFJPY]{
+    \includegraphics[width=0.4\linewidth]{img/AIC_CHFJPY}
+    \label{fig:currency4}
+}
+
+\end{tabular}
+\caption{AIC: Lags vs Sliding window size}
+\label{fig:lagoptimization}
+\end{figure}
+
+ 

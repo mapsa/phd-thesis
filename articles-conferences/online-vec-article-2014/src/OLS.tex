@@ -1,0 +1,109 @@
+\section{Regression problems} \label{sec:OLS}
+
+VAR as also VEC model parameters requires solving the following
+multiple regression problem:
+
+\begin{equation}
+\label{eq:regproblem}
+\underset{m \times n}{\mathbf{A}} \enskip \underset{n \times
+l}{\mathbf{\phi}} = \underset{m \times l}{\mathbf{B}}
+\end{equation}
+
+In the case matrix $\mathbf{X}$ is non singular, its solution is
+straight forward:
+
+\begin{equation}
+\label{OLSsolution}
+    \mathbf{X}=\mathbf{X}^{-1}\mathbf{B}
+\end{equation}
+
+\subsection{Ordinary least squares}
+When $\mathbf{X}$ is singular, solution to
+equation~(\ref{eq:regproblem}) is given by the ordinary least squares
+(OLS) method. OLS consists of minimizing the sum of squared errors or
+equivalently minimizing the following expression:
+
+\begin{equation}
+\label{eq:regressionproblem}
+\underset{\mathbf{X}}{\text{min}} \quad \| \mathbf{X}\mathbf{\mathbf{X}} - \mathbf{B} \|_2^2
+\end{equation}
+
+\noindent which solution $\hat{\mathbf{X}}$ is well-known:
+
+\begin{equation}
+\label{eq:MP}
+\hat{\mathbf{X}}=\mathbf{X}^+\mathbf{B}
+\end{equation}
+
+\noindent where $\mathbf{X}^+$ is the Moore-Penrose pseudo-inverse
+which can be written as follows: 
+
+\begin{equation}
+\label{eq:pseudoinverse}
+\mathbf{X}^+= (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \, .
+\end{equation}
+
+However, when $\mathbf{X}$ is not full rank, i.e
+$rank(\mathbf{X})=k <  n \leq m$, $\mathbf{X}^\top \mathbf{X}$ is
+always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+More generally, the pseudo-inverse is best computed using the compact
+singular value decomposition (SVD) of $\mathbf{X}$:
+
+\begin{equation}
+    \label{eq:compactsvd}
+    \underset{m \times n}{\mathbf{X}}=
+    \underset{m \times k}{\mathbf{U_1}} \enskip
+    \underset{k \times k}{\mathbf{\Sigma_1}} \enskip
+    \underset{k \times n}{\mathbf{V_1}^\top}
+\end{equation}
+
+\noindent as follows
+
+\begin{equation}
+\label{eq:pseudoinversesvd}
+\mathbf{X}^+ = \mathbf{V_1\Sigma_1^{-1}U_1^\top}
+\end{equation}
+
+
+
+
+\textbf{Demo}\quad
+
+Since the problem shown in equation~(\ref{eq:regproblem}) has not
+solution, the minimum norm given by equation~(\ref{OLSsolution}) is
+obtained by solving the equivalent problem:
+
+\begin{equation*}
+\label{eq:proyectorsol}
+\mathbf{X \hat{\phi} = PB} 
+\end{equation*}
+
+\noindent where $\mathbf{P=U_1 U_1^\top}$ is the projection onto the
+Col($\mathbf{X}$). 
+
+Since $\mathbf{V} = [\underset{(n \times k)}{\mathbf{V_1}} |
+\underset{(n \times k)}{\mathbf{V_2}}]$ and $\mathbf{V_1^\top V_2 =
+0}$ we can express $\mathbf{\hat{\phi}} = \mathbf{V_1 x_1 + V_2 x_2}$
+with $\mathbf{x_2=0}$ because $\mathbf{\hat{\phi}}$ lives in the
+$\text{Row}(\mathbf{X})$ given by $\mathbf{V_1}$, so we have:
+
+\begin{eqnarray*}
+\mathbf{X \hat{\phi}} &=& \mathbf{PB} \\
+\mathbf{U_1 \Sigma_1 V_1^\top \hat{\phi}} &=& \mathbf{U_1 U_1^\top B} \\
+\mathbf{ V_1^\top \hat{\phi}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top B} \\ 
+\mathbf{ V_1^\top V_1 x_1} &=& \mathbf{\Sigma_1^{-1}
+U_1^\top B} \\
+\mathbf{x_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top B}
+\end{eqnarray*}
+
+\noindent from this result we can obtain $\mathbf{\hat{\phi}}$ and
+therefore the pseudo-inverse expression:
+
+\begin{eqnarray*}
+\mathbf{\hat{\phi}} &=& \mathbf{V_1 x_1} \\
+                &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top B} \\
+\mathbf{X^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
+\end{eqnarray*}
+
+
+

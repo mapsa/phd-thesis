@@ -1,0 +1,132 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{amsfonts,amssymb,amsmath,amsthm,
+            amssymb,amsopn,amsxtra,amstext,amsbsy}
+\usepackage{epsfig}
+\usepackage[makeroom]{cancel}
+\usepackage{array,arydshln}
+\usepackage{array}
+\usepackage{url}
+%\usepackage{tikz}
+\usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{hyperref,wasysym}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newtheorem*{myteo}{Teorema}
+\newtheorem*{mydef}{Definici\'on}
+
+\voffset=-10mm
+\oddsidemargin=0pt
+\evensidemargin=0pt
+\topmargin=-10mm
+\headsep=10mm
+\headheight=18pt
+\footskip=30pt
+\topskip=0mm
+\textwidth 167mm
+\textheight=230mm
+\parindent=5mm
+\marginparsep=3mm
+\marginparwidth=19mm
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+\hfuzz6pt % Don't report over-full h-boxes if over-edge is small
+
+
+%% MYREMARK ENVIRONMENT %%%%%%%%%%%
+\newenvironment{mycolor}{\color{red}}{}
+\newcounter{myremarkcount}
+\setcounter{myremarkcount}{0}
+\newsavebox{\myremarkbox}
+\newenvironment{myremark}
+{% This is the begin code
+\medskip
+\begin{flushright}
+\begin{lrbox}{\myremarkbox}%
+\begin{minipage}[t]{0.9\linewidth}
+\stepcounter{myremarkcount}
+\footnotesize
+\begin{mycolor}
+{\bf Remark \arabic{myremarkcount}.}
+\begin{it}
+}
+{% This is the end code
+\end{it}
+\end{mycolor}
+\end{minipage}
+\end{lrbox}
+\fbox{\usebox{\myremarkbox}}
+\end{flushright}
+
+\bigskip}
+
+
+\title{A Time Varying Vector Error Correction Model Applied to Foreign Exchange
+Market}
+\author{Paola Arce \and Jonathan Antognini \and Luis Salinas \and Werner Kristjanpoller}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Financial time series are known for their non-stationary behaviour. However,
+sometimes they exhibit some stationary linear combinations. When this happens,
+it is said that those time series are cointegrated. Vector error correction
+model (VECM) is an econometric model which characterizes the joint dynamic
+behaviour of a set of cointegrated variables in terms of forces pulling towards
+equilibrium. 
+
+VECM parameters are obtained using the ordinary least squares (OLS)
+method.  Even though OLS is extensively used, it has over-fitting
+issues and is computationally expensive. Ridge regression is commonly used
+instead of OLS since they include a regularization parameter which could improve
+prediction error.
+
+In this study, we propose an online VECM which optimizes how model parameters
+are obtained by using only relevant past data and RR instead of OLS.  Our
+proposal also takes advantage of the long-run relationship between the time
+series in order to obtain improved execution times. Our proposed method is
+tested using synthetic data and foreign exchange rates.
+Results show that our proposal enables execution time to be reduced by at least
+50\% while maintaining good accuracy levels.
+\end{abstract}
+
+
+\input{src/intro}
+\input{src/background}
+\input{src/methodology}
+\input{src/results}
+\input{src/conclusions}
+\bibliographystyle{apalike}
+\bibliography{reference}
+%\begin{thebibliography}{9}
+%
+%\bibitem{smola}
+%Bernhard Scholkopf and Alexander J. Smola. 
+%\emph{Learning with Kernels: Support Vector Machines, 
+%Regularization, Optimization, and Beyond.}.
+%MIT Press, Cambridge, MA, USA, 2001
+%
+%\bibitem{wiki}
+%\url{http://en.wikipedia.org/wiki/Reproducing_kernel_Hilbert_space}
+%
+%\bibitem{wikibooksIsom}
+%\url{http://en.wikibooks.org/wiki/Linear_Algebra/Definition_and_Examples_of_Isomorphisms}
+%
+%\bibitem{wolframREq}
+%\url{http://mathworld.wolfram.com/EquivalenceRelation.html}
+%
+%\bibitem{wikiHomoM}
+%\url{http://en.wikipedia.org/wiki/Homomorphism}
+%
+%
+%\end{thebibliography}
+
+\end{document}

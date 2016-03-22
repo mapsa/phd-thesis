@@ -1,0 +1,318 @@
+\section{Sliding windows AAR method} \label{sec:ORR}
+
+
+Vector error correction (VEC) models allow studying the joint dynamic
+behaviour of a collection of variables which are cointegrated. 
+
+\textbf{Problems}: 
+
+\begin{itemize}
+\item VEC parameter estimation method is computationally expensive 
+%when the number of past values and observations increases. 
+\item VEC model is adjusted to the data in the least-squares sense
+\end{itemize}
+
+The objective is to build a new model which admit more error in the square norm and
+also be able to obtain VEC parameters faster.  Due to the large amount
+of information arriving in financial markets, the model must be
+suitable for using in an online fashion.
+
+
+Due to the amount of information in the Forex market and their high
+variability, sometimes old data is useless for forecasting future
+values. 
+
+Despite of RR has been a very successful method, they consider all
+the available data for making predictions. 
+However, some time series show a strong dependence on the latest
+information instead of all the data.  The method proposed consists of
+a modification of RR considering a sliding window which contains only
+the last $L$ samples %and the new input $\mathbf{x}_t$, 
+i.e. $\{\mathbf{x}_i\}_{i=t-L+1}^{t-1}$. 
+
+In order to formulate this algorithm we need to define the
+following matrices:
+ 
+\[
+\mathbf{X}(t) = 
+\begin{bmatrix} 
+\mathbf{x}_{t-L}^\intercal \\ \vdots \\ \mathbf{x}_t^\intercal
+\end{bmatrix} \; , 
+{\bf y}(t) = \begin{bmatrix} y_{t-L} \\ \vdots \\ y_t \end{bmatrix} \; .
+\]
+
+The optimal solution using a sliding windows is then:
+
+\begin{equation}
+\label{eq:optsolSLAAR}
+{\bf \phi}(t)_*=({\bf X}(t)^\intercal{\bf X}(t)+\gamma
+\mathbb{I})^{-1}{\bf X}(t)^\intercal{\bf y}(t) \, .
+\end{equation}
+
+It is worth noticing that the matrix $\mathbf{X}(t+1)$ is slightly
+different from $\mathbf{X}(t)$:
+
+\begin{equation} \label{eq:recform}
+\mathbf{X}(t+1) = 
+\begin{bmatrix} \mathbf{x}_{t-L+1}^\intercal \\ \vdots \\
+\mathbf{x}_{t+1}^\intercal
+\end{bmatrix} \, .
+\end{equation}
+
+Therefore, the matrix $\mathbf{A}=\mathbf{X}(t+1)^\intercal
+\mathbf{X}(t+1) $ can be also calculated as:
+
+\begin{eqnarray*}
+\mathbf{A}&=&\mathbf{X}(t)^\intercal \mathbf{X}(t) +  \mathbf{x}_{t+1}
+\mathbf{x}_{t+1}^\intercal -
+\mathbf{x}_{t-L} \mathbf{x}_{t-L}^\intercal \, .
+\end{eqnarray*}
+
+Algorithm \ref{alg:SLRR} shows the complete procedure:
+
+%which is very similar
+%to AAR (algorithm~\ref{alg:AAR}) except for the calculation of matrix
+%$\mathbf{A}$. 
+
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{x}_1,\dots,\mathbf{x}_m \}$: $m$ input vectors \\
+$\{y_1,\dots,y_m \}$: $m$ targets \\
+$L$: sliding window size ($L<m$) \\
+$\gamma$: regularization parameter \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_m) \}$: model predictions \\
+\STATE Initialize $\mathbf{A}=\displaystyle \sum_{t=1}^L \mathbf{x}_t
+\mathbf{x}_t^\intercal + \gamma \mathbb{I}$
+and $\mathbf{b}=\displaystyle \sum_{t=1}^Ly_t \mathbf{x}_t$
+\FOR { $t = L+1$ to $m$ }
+        \STATE read new $\mathbf{x}_t$
+        \STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
+\mathbf{A}^{-1}\mathbf{x}_t$
+        \STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal-
+\mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal  $
+        \STATE Read new $y_t$
+        \STATE $\mathbf{b} = \mathbf{b} + y_t \mathbf{x}_t - y_{t-L-1}\mathbf{x}_{t-L-1}$
+\ENDFOR
+
+\end{algorithmic}
+\caption{Recursive Ridge Regression}
+\label{alg:SLRR}
+\end{algorithm}
+
+
+\section{Model} \label{sec:proposal}
+
+The proposed model is shown in algorithm~(\ref{alg:proposal}) and
+takes account the following: 
+
+\begin{itemize}
+\item The VEC model matrices are constructed using differences time series
+and cointegration factors and vectors from prices time series.
+\item As the cointegration factors and vectors don't vary much at every step, they are recalculated every certain amount of time defined as a parameter.
+\item The number of cointegration vectors is set as a parameter.
+\item The online ridge regression with sliding window algorithm is used to get VEC parameters.
+\item In order to avoid the matrix inverse calculation, we use the Sherman
+Morrison formula (see section~\ref{sec:sherman}).
+\end{itemize}
+
+The following algorithm shows all these steps:
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{p}_1,\dots,\mathbf{p}_N \}$: $N$ price vectors \\
+%$\{y_1,\dots,y_m \}$: $m$ targets \\
+$L$: sliding window size ($L<m$) \\
+$\gamma$: regularization parameter \\
+$\mu$: cointegration vector update step \\
+$r$: number of cointegration vectors \\
+$nlag$: number of past values \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_m) \}$: model predictions \\
+%\STATE Initialize $\mathbf{A}=\gamma \mathbb{I}$
+and $\mathbf{b}=0$
+\FOR { $t =1$ to $N-L$ }
+	\IF {t == 1 \OR \NOT mod(t,$\mu$)}
+	\STATE{$jvectors = \text{getJohansen}(r, \{\mathbf{p}_t,\dots,\mathbf{p}_{t+L} \})$}
+	\STATE{$[\mathbf{X} \quad \mathbf{Y}] = \text{createMatrix}(jvectors,\{\mathbf{p}_t,\dots,\mathbf{p}_{t+L} \},nlag)$}
+	\STATE{$\mathbf{A}=\displaystyle \sum_{t=1}^L \mathbf{x}_t
+\mathbf{x}_t^\intercal + \gamma \mathbb{I}$}
+	\STATE{$\mathbf{b}=\displaystyle \sum_{t=1}^Ly_t \mathbf{x}_t$}
+	\ELSE
+        \STATE $[\mathbf{x}_{L} \quad \mathbf{x}_{1}] =
+        \text{createVectors}(\mathbf{X},\mathbf{Y},\mathbf{p}_{t+L},nlag)$
+        \STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
+\mathbf{A}^{-1}\mathbf{x}_{L}$
+        \STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_{L} \mathbf{x}_{L}^\intercal-
+\mathbf{x}_{1} \mathbf{x}_{1}^\intercal  $
+        \STATE Read new $y_t$
+        \STATE $\mathbf{b} = \mathbf{b} + y_{L} \mathbf{x}_{L} - y_{1}\mathbf{x}_{1}$
+        \ENDIF
+\ENDFOR
+
+\end{algorithmic}
+\caption{Online VEC model}
+\label{alg:proposal}
+\end{algorithm}
+
+The functions shown in algorithm~(\ref{alg:proposal}) are described
+below:
+\begin{itemize}
+\item $\text{getJohansen}(r, \{\mathbf{p}_t,\dots,\mathbf{p}_{t+L}
+\})$ returns the set of $r$ cointegration vectors get them from the las
+$L$ prices.
+\item
+$\text{createMatrix}(jvectors,\{\mathbf{p}_t,\dots,\mathbf{p}_{t+L}
+\},nlag)$ returns the matrices that allow to solve the VEC model get
+them from the cointegration vectors, the last $L$ prices and the
+number of lags. 
+\item
+$\text{createVectors}(\mathbf{X},\mathbf{Y},\mathbf{p}_{t+L},nlag)$
+returns the new input of the VEC model and the data we will remove.
+\end{itemize}
+
+The proposal was compared against a modified VEC model. The modifications are:
+
+\begin{itemize}
+\item Only a sliding windows of data is used instead of all past data,
+which would increase the size of every new input. This was done in order
+to compare execution times.
+\item Cointegration vectors and factors are calculated every time step.
+\item The number of cointegration vectors are determined by the Johansen method.
+\end{itemize}
+
+%Although the algorithm~\ref{alg:SLAAR} shows a recursive formulation, it still has
+%to compute an inverse matrix at every step. Considering the fact that
+%matrix $\mathbf{A}$ is slightly different at every iteration (see
+%equation~(\ref{eq:recform}), it is possible to take advantage of this and express
+%the inverse matrix of $\mathbf{A}$ in terms of the inverse matrix computed in
+%the previous iteration.
+%
+%At iteration $t+1$ the matrix $\mathbf{A}(t+1)$ to be inverted is: 
+%
+%\begin{equation} \label{eq:A}
+%	\mathbf{A}(t+1)= {\bf X}(t+1)^\intercal{\bf X}(t+1) + \gamma \mathbb{I}\, ,
+%\end{equation}
+%but,
+%
+%\begin{equation*}
+%{\bf X}(t+1)^\intercal{\bf X}(t+1) = {\bf X}(t)^\intercal{\bf X}(t) + {\bf
+%x}_{t+1} {\bf x}_{t+1}^\intercal - {\bf x}_{t-L} {\bf x}_{t-L} ^\intercal \, .
+%\end{equation*}
+%For convenience, let us define:
+%
+%\begin{equation*}
+%	\mathbf{C}(t) = {\bf x}_{t+1} {\bf x}_{t+1}^\intercal - {\bf x}_{t-L} {\bf
+%x}_{t-L} ^\intercal
+%\end{equation*}
+%now we can rewrite equation~(\ref{eq:A}) as:
+%
+% \begin{eqnarray*}
+% 	\mathbf{A}(t+1) =& {\bf X}(t)^\intercal{\bf X}(t) + \mathbf{C}(t) + \gamma
+%\mathbb{I} \nonumber \\
+%	\mathbf{A}(t+1) =& \mathbf{A}(t) + \mathbf{C}(t)
+% \end{eqnarray*}
+%Therefore matrix inverse $\mathbf{A}^{-1}$ can be written as: 
+%
+%\begin{eqnarray}
+%\label{eq:minverse}
+%\mathbf{A}(t+1)^{-1} =& \big(\mathbf{A}(t)+ \mathbf{C}(t) \big)^{-1} \nonumber \\
+%	=& \big( ( \mathbb{I} + \mathbf{C}(t)\mathbf{A}(t)^{-1})\mathbf{A}(t)
+%\big)^{-1} \nonumber \\
+%	=& \mathbf{A}(t)^{-1} ( \mathbb{I} +
+%\mathbf{C}(t)\mathbf{A}(t)^{-1})^{-1}
+%\end{eqnarray}
+%Equation~\ref{eq:minverse} shows that the inverse matrix at iteration $t+1$ can be expressed in
+%terms of the inverse matrix at iteration $t$, which was previously calculated. Moreover, if the term
+%$\mathbf{C}(t)\mathbf{A}(t)^{-1}$ is small, the right hand side of
+%equation~(\ref{eq:minverse}) can be approximated using the Taylor expansion for
+%matrices:
+%
+%\begin{equation} \label{eq:taylor}
+%	(\mathbb{I} + \Delta)^{-1} = \mathbb{I} - \Delta + \Delta^2 \pm \dots
+%\end{equation}
+%The inverse approximation shown in equation~(\ref{eq:taylor}) is more accurate
+%when more terms of the Taylor expansion are considered.
+%In this way, the inverse of the matrix $\mathbf{A}(t+1)$ is avoided and the
+%procedure is computationally much less expensive.
+%
+%
+%\subsection{Inverse matrix approximation} \label{sec:matrixinv}
+%
+%The inverse matrix can be improved by using the approximation used
+%in~\cite{obrien1982}. If we obtain $\mathbf{B}$ as the numerical approximation
+%of $\mathbf{A}^{-1} \in Mat(n,n)$, we will have:
+%
+%\begin{equation} \label{eq:m1}
+%\mathbf{A}^{-1} = \mathbf{B} + \epsilon \, ,
+%\end{equation}
+%where $\epsilon$ is a $n \times n$ matrix with the error approximations values.
+%This $\epsilon$ matrix can be approximated by premultiplying by $\mathbf{BA}$ in
+%equation~(\ref{eq:m1}):
+%
+%\begin{align} \label{eq:m2}
+%& \mathbf{A}^{-1} = \mathbf{B} + \epsilon  \nonumber \\
+%& \mathbf{BAA}^{-1} =  \mathbf{BAB} + \mathbf{BA}\epsilon \, ,
+%\end{align}
+%but $\mathbf{BAA}^{-1}=\mathbf{B}$ and considering that $\mathbf{BA}\epsilon \approx \epsilon$ we can
+%obtain an the following expression for $\epsilon$ using equation~(\ref{eq:m2}):
+%
+%\begin{align} \label{eq:m3}
+%\mathbf{B} =  \mathbf{BAB} + \mathbf{BA}\epsilon \nonumber \\
+%\epsilon \approx \mathbf{B}-\mathbf{BAB} \, .
+%\end{align}
+%Replacing expression~\ref{eq:m3} in equation~(\ref{eq:m1}) we have:
+%
+%\begin{align} \label{eq:m4}
+%\mathbf{A}^{-1} \approx \mathbf{B} + \mathbf{B}-\mathbf{BAB} \nonumber \\
+%\mathbf{A}^{-1} \approx 2\mathbf{B} - \mathbf{BAB}
+%\end{align}
+%The equation~(\ref{eq:m4}) allows us to improve the matrix inverse
+%approximation.
+%
+%The algorithm~\ref{alg:SLAAR} includes the recursive model formulation and the
+%matrix inverse optimization. 
+%
+%In order to initialize the algorithm we need to first get matrix $\mathbf{A}$
+%and vector $\mathbf{b}$. The exact inverse matrix for $\mathbf{A}$ is
+%calculated once using the first $L$ inputs.
+%The nexts inverse matrix calculations are done using Taylor approximation and
+%they are improved using the method shown in section~\ref{sec:matrixinv}. 
+%
+%\begin{algorithm}[ht]
+%\begin{algorithmic}[1]
+%\REQUIRE $\,$ \\
+%$\{\mathbf{x}_1,\dots,\mathbf{x}_T \}$: $T$ input vectors \\
+%$\{y_1,\dots,y_T \}$: $T$ targets \\
+%$L$: sliding window size ($L<T$) \\
+%\ENSURE  $\,$ \\
+%$\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_T) \}$: model predictions \\
+%\STATE Initialize $\mathbf{A}=\displaystyle \sum_{t=1}^L \mathbf{x}_t
+%\mathbf{x}_t^\intercal + \gamma \mathbb{I}$
+%and $\mathbf{b}=\displaystyle \sum_{t=1}^Ly_t \mathbf{x}_t$
+%\STATE Calculate $\mathbf{A}^{-1}$
+%\FOR { $t = L+1$ to $T$ }
+%        \STATE read new $\mathbf{x}_t$
+%	\STATE $C = \mathbf{x}_t \mathbf{x}_t^\intercal- \mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal$
+%	\STATE Update $\mathbf{A} = \mathbf{A} + C$
+%	\STATE $\Delta = C A^{-1}$
+%	\STATE Taylor approx. $\mathbf{A}^{-1} = \mathbf{A}^{-1} (\mathbb{I} - \Delta + \Delta^2) $
+%	\STATE Improve $\mathbf{A}^{-1} = 2\mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{A} \mathbf{A}^{-1}$
+%        \STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
+%\mathbf{A}^{-1}\mathbf{x}_t$
+%        \STATE Read new $y_t$
+%        \STATE $\mathbf{b} = \mathbf{b} + y_t \mathbf{x}_t$
+%\ENDFOR
+%
+%\end{algorithmic}
+%\caption{Recursive Ridge Regression}
+%\label{alg:proposal}
+%\end{algorithm}
+%
+
+
+
+

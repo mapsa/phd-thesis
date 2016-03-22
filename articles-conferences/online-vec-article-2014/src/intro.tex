@@ -1,0 +1,55 @@
+\section{Introduction}
+In finance, it is common to find variables with a long-run and/or a short-run
+equilibrium relationship. This relationship is called cointegration and it
+reflects the idea of that some set of variables cannot wander too far away from
+each other. 
+%and also high frequency relationship which avoid arbitrage opportunities
+%\footnote{Arbitrage is taking advantage of the price differences in different
+%markets}.  
+Cointegration means that one or more combinations of these variables is
+stationary even though individually they are not.
+
+Some financial models, such as  vector error correction (VEC), take advantage of
+this property and describe the joint behaviour of several cointegrated
+financial instruments.
+
+VEC is a special case of the vector autorregresive model (VAR). VAR is a linear
+model which express future values in terms of its own history and other
+variables past values. If cointegration exists, VEC model allows to introduce an
+error correction term due to its cointegration estimation error. 
+
+VEC as well as VAR model parameters are obtained using ordinary least squares
+method (OLS).   Since OLS involves many calculations, the parameter estimation
+method is computationally expensive when the number of past values and
+observations considered increases. Moreover, OLS is an ill-posed problem which
+admits an infinite number of solutions. 
+
+Ridge regression method (RR) tackles this ill-posed problem and is usually
+formulated instead of OLS. RR includes a regularization parameter that leads to
+better generalization capability. However, RR is still computationally
+expensive dealing with large datasets. Recently, online learning algorithms
+have been proposed to solve problems with large data sets because of their
+simplicity and their ability of updating the model when new data is available. 
+
+There are several popular online methods such as
+perceptron~\cite{rosenblatt58}, passive-aggressive~\cite{crammerETall2006},
+stochastic gradient descent~\cite{zhang2004}, aggregating
+algorithm~\cite{vovk2001} and the second order
+perceptron~\cite{cesa-bianchi2005}.  In~\cite{cesa-bianchi2006}, an in-deph
+analysis of online learning is provided.  In particular, the {\em aggregating
+algorithm for regression} (AAR) method is a recursive formulation of RR
+suitable for using in an online context.
+
+In this paper, we propose an online formulation of the VEC model based on the
+AAR method considering only a sliding window of the most recent data. The
+algorithm introduces matrix optimizations in order to reduce the number of
+operations. Our method is later tested with financial data from the foreign
+exchange market.
+
+%The next sections are organized as follows: section~\ref{sec:varvec} presents
+%the VAR and VEC model, section~\ref{sec:RR} presents the RR formulation,
+%section~\ref{sec:ORR} shows the online version of RR, the online VEC algorithm
+%proposed is presented in section~\ref{sec:proposal}, section~\ref{sec:data}
+%gives a description of the data used, section~\ref{sec:experiments} shows the
+%tests carried on to show a comparision in accuracy and time of our proposal and
+%section~\label{sec:conclusion} concludes.  
