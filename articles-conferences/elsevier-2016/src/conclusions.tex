@@ -1,0 +1,18 @@
+\section{\uppercase{Conclusions}}
+\label{sec:conclusions}
+\noindent A new online vector error correction method was presented. The traditional VECM
+was modified in order to use it in an online context. We have shown that our
+proposed OVECM considerably reduces execution times without compromising
+solution accuracy.  However the execution time of OVECM is only better than
+SLVECM if we avoid the cointegration vector calculation using the Johansen
+method, this is given by the avg\_error variable which controls how many times
+the method is called.  We could see that our algorithm took much less than a
+minute at every step. This means that it could also be used with higher
+frequency data and would still provide responses before new data arrives. 
+In all the presented scenarios, MAPE is still very high and for future
+study, it would be interesting to improve the out-of-sample forecast by
+considering more explicative variables, optimizing the windows size, the
+number of lags or trying new condition to obtain new cointegration vectors.
+Since OVECM is an online algorithm which optimizes processing time, it could be
+used by investors as an input for strategy robots. Moreover, some technical
+analysis methods could be based on its output. 
