@@ -1,0 +1,271 @@
+\section{\uppercase{Background}}
+\label{sec:background}
+\noindent
+\subsection{Integration and Cointegration}
+A time series $\mathbf{y}$ is said to be integrated of order $d$ if after
+differentiating the variable $d$ times, we get an I(0) process, more precisely:
+
+\[
+(1-L)^d \mathbf{y} \sim \text{I(0)} \, ,
+\]
+
+\noindent where I(0) is a stationary time series and $L$ is the lag operator:
+
+\[
+(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
+\]
+
+Let $\mathbf{y}_t = \{\mathbf{y}^1, \dots, \mathbf{y}^l\}$ be a set of $l$
+stationary time series I(1) which are said to be cointegrated if a vector
+$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^l$  exists such that the
+time series,
+
+\begin{equation}
+ \mathbf{Z}_t:= \beta^\top \mathbf{y}_t = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
+ \text{I(0)}\, .
+\end{equation}
+
+In other words, a set of I(1) variables is said to be cointegrated if
+a linear combination of them exists which is I(0).
+
+
+\subsection{Vector Autorregresive Models}\label{sec:varvec}
+
+VECM is a special case of VAR model and both describe the joint behaviour of a
+set of variables.
+
+VAR($p$) model is a general framework to describe the behaviour of a set of $l$
+endogenous variables as a linear combination of their last $p$ values. These
+$l$ variables at time $t$ are represented by the vector $\mathbf{y}_t$ as
+follows:
+
+\begin{equation*}
+\label{eq:variables}
+\mathbf{y}_t = 
+\begin{bmatrix} y_{1,t} &
+y_{2,t} &
+\dots &
+y_{l,t}
+\end{bmatrix}^\top \, ,
+\end{equation*}
+\noindent where $y_{j,t}$ corresponds to the time series $j$ evaluated at
+time $t$.
+
+The VAR(p) model describes the behaviour of a dependent variable in terms
+of its own lagged values and the lags of the others variables in the
+system. The model with $p$ lags is formulated as the following:
+
+\begin{equation}
+\label{eq:var}
+ \mathbf{y}_t = \phi_1 \mathbf{y}_{t-1}  + \dots +   \phi_p\mathbf{y}_{t-p}
++ \mathbf{c} + \mathbf{\epsilon}_t \, ,
+\end{equation}
+
+\noindent where $t=p+1, \dots N$,  ${\phi_1,\dots,\phi_p}$ are $l \times l$
+matrices of real coefficients,
+$\mathbf{\epsilon}_{p+1},\dots,\mathbf{\epsilon}_N$ are error terms,
+$\mathbf{c}$ is a constant vector and $N$ is the total number of samples.
+
+The VAR matrix form of equation~(\ref{eq:var}) is:
+
+\begin{equation}\label{eq:vareq}
+\mathbf{B} = \mathbf{A} \mathbf{X} + 
+\mathbf{E} \, , 
+\end{equation}
+
+\noindent where:
+\begin{eqnarray*}
+\mathbf{A} &=&
+\begin{bmatrix}
+   \mathbf{y}_{p}     & \dots    & \mathbf{y}_{N-1}\\
+   \mathbf{y}_{p-1}   & \dots    & \mathbf{y}_{N-2}\\
+   \vdots             & \ddots   & \vdots\\
+   \mathbf{y}_{1}     & \dots    & \mathbf{y}_{N-p}\\
+   1                  & \dots    & 1 
+   \end{bmatrix}^\top \, ,\\
+\mathbf{B} &=&
+\begin{bmatrix}
+\quad \\
+\mathbf{y}_{p+1} &
+\dots & 
+\mathbf{y}_N \\
+\quad
+\end{bmatrix}^\top  \, ,\\
+\mathbf{X}&=&
+\left[
+\begin{array}{ccccc}
+    \quad  & \quad & \quad & \quad \\
+    \phi_1   & \cdots & \phi_p & \mathbf{c} \\  
+    \quad & \quad & \quad & \quad
+    \end{array}
+\right]^\top \, ,\\
+\mathbf{E} &=& 
+\begin{bmatrix}
+    \quad \\
+    \mathbf{\epsilon}_{p+1}  & 
+    \dots                & 
+    \mathbf{\epsilon}_N \\
+    \quad
+\end{bmatrix}^\top \, . 
+\end{eqnarray*}
+
+Equation~(\ref{eq:vareq})  can be solved using ordinary least squares estimation.
+
+\subsection{VECM}
+
+VECM is a special form of a VAR model for I(1) variables that are also
+cointegrated~\cite{banerjee1993}. It is obtained by replacing the form $\Delta
+\mathbf{y}_t = \mathbf{y}_t - \mathbf{y}_{t-1}$ in equation (\ref{eq:var}).
+VECM is expressed in terms of differences, has an error correction term and 
+the following form:
+
+\begin{equation}
+ \label{eq:vec}
+ \Delta \mathbf{y}_t = 
+ \underbrace{ \Omega\mathbf{y}_{t-1}}_\text{Error correction term} + 
+ \sum_{i=1}^{p-1}
+\phi_i^* \Delta \mathbf{y}_{t-i}  + \mathbf{c} + \mathbf{\epsilon}_t \quad ,
+\end{equation}
+
+\noindent where coefficients matrices $\Omega$ and $\phi_i^*$ are
+function of matrices $\phi_i$ (shown in equation (\ref{eq:var})) as follows:
+
+\begin{eqnarray*}
+\phi_i^* &: =& -\sum_{j=i+1}^{p} \phi_j \\
+\Omega &: =& -(\mathbb{I}-\phi_1-\dots-\phi_p) 
+\end{eqnarray*}
+
+The matrix $\Omega$ has the following properties~\cite{johansen1995}:
+\begin{itemize}
+\item If $\Omega = 0$ there is no cointegration
+\item If $rank(\Omega)=l$ i.e full rank, then the time series are not
+I(1) but stationary
+\item If $rank(\Omega)=r,\quad 0 < r < l$ then, there is cointegration
+and the matrix $\Omega$ can be expressed as $\Omega =
+\alpha \beta^\top$, where $\alpha$ and $\beta$ are $(l \times r)$
+matrices and $rank(\alpha)=rank(\beta)=r$.
+
+The columns of $\beta$ contains the cointegration vectors and the rows of
+$\alpha$ correspond with the adjusted vectors. $\beta$ is obtained by Johansen
+procedure~\cite{johansen1988} whereas $\alpha$ has to be determined as a
+variable in the VECM.
+
+It is worth noticing that the factorization of the matrix $\Omega$ is not
+unique since for any $r \times r$ nonsingular matrix $H$ we have:
+
+\begin{eqnarray*}
+\alpha \beta^\top &=& \alpha \mathbf{HH^{-1}} \beta^\top\\
+&=&(\alpha\mathbf{H})(\beta(\mathbf{H}^{-1})^\top)^\top \\
+&=& \alpha^*(\beta^*)^\top
+\end{eqnarray*}
+
+\noindent with $\alpha^* = \alpha\mathbf{H}$ and $\beta^* =
+\beta(\mathbf{H}^{-1})^\top$.
+
+
+\end{itemize}
+
+If cointegration exists, then equation (\ref{eq:vec}) can be written as follows:
+
+
+\begin{equation*}
+ \label{eq:vecfull}
+ \Delta \mathbf{y}_t = \alpha \beta^\top\mathbf{y}_{t-1} 
+ + \sum_{i=1}^{p-1} \phi_i^*\Delta
+\mathbf{y}_{t-i}  + \mathbf{c} + \mathbf{\epsilon}_t \quad ,
+\end{equation*}
+
+\noindent which is a VAR model but for time series differences.
+
+VECM has the same form shown in equation~(\ref{eq:vareq}) but with
+different matrices:
+
+\begin{eqnarray}\label{eq:vecmatrix}
+ \mathbf{A}&=&
+   \begin{bmatrix} 
+   \beta^\top \mathbf{y}_{p} & 
+   \cdots & \beta^\top \mathbf{y}_{N-1} \\
+   \Delta \mathbf{y}_p  & \cdots 
+   &\Delta\mathbf{y}_{N-1} \\ 
+   \vdots  & \ddots & \vdots \\
+   \Delta\mathbf{y}_2  & \cdots 
+   & \Delta \mathbf{y}_{N-p+1} \\
+   1 & \cdots & 1 
+   \end{bmatrix}^\top \label{eq:vecA} \, ,\\
+\mathbf{B} & = &
+ \begin{bmatrix}
+ \quad\\
+  \Delta \mathbf{y}_{p+1} & 
+  \dots &
+  \Delta \mathbf{y}_N \label{eq:vecB}\\
+  \quad
+ \end{bmatrix}^\top \, ,\\
+\mathbf{X}&=&
+  \begin{bmatrix}
+   \quad \\
+   \alpha & \phi_1^* & \cdots & \phi_{p-1}^* & \mathbf{c} \\  
+   \quad
+   \end{bmatrix}^\top \, ,\\
+\mathbf{E} &=&
+\begin{bmatrix}
+   \quad \\
+   \mathbf{\epsilon}_{p+1} &
+   \dots &
+   \quad &\mathbf{\epsilon}_N \, \\ \quad
+\end{bmatrix}^\top 
+\end{eqnarray}
+
+
+
+VAR and VECM parameters shown in equation (\ref{eq:vareq}) can be solved
+using standard regression techniques, such as ordinary least squares (OLS).
+
+
+\subsection{Ordinary Least Squares method}
+
+When $\mathbf{A}$ is singular, solution to equation~(\ref{eq:vareq}) is given
+by the ordinary least squares (OLS) method. OLS consists of minimizing the sum
+of squared errors or equivalently minimizing the following expression:
+
+\begin{equation*}
+\label{eq:regressionproblem}
+\underset{\mathbf{X}}{\text{min}} \quad \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{B} \|_2^2
+\end{equation*}
+
+\noindent for which the solution $\hat{\mathbf{X}}$ is well-known:
+
+\begin{equation*}
+\label{eq:MP}
+\hat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{B}
+\end{equation*}
+
+\noindent where $\mathbf{A}^{\!\!+}$ is the Moore-Penrose pseudo-inverse
+which can be written as follows: 
+
+\begin{equation}
+\label{eq:pseudoinverse}
+\mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
+\end{equation}
+
+However, when $\mathbf{A}$ is not full rank, i.e
+$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
+always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+More generally, the pseudo-inverse is best computed using the compact
+singular value decomposition (SVD) of $\mathbf{A}$:
+
+\begin{equation*}
+    \label{eq:compactsvd}
+    \underset{m \times n}{\mathbf{A}}=
+    \underset{m \times k}{\mathbf{U_1}} \enskip
+    \underset{k \times k}{\Sigma_1} \enskip
+    \underset{k \times n}{\mathbf{V}_1^{\top}} \, ,
+\end{equation*}
+
+\noindent as follows
+
+\begin{equation*}
+\label{eq:pseudoinversesvd}
+\mathbf{A}^{\!\!+} = \mathbf{V}_1 \Sigma_1^{-1} \mathbf{U}_1^\top \, .
+\end{equation*}
+
+

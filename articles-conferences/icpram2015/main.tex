@@ -1,0 +1,80 @@
+\documentclass[a4paper,twoside]{article}
+\usepackage{graphicx} 
+\usepackage{epstopdf}
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{calc}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{lscape}
+\usepackage{multicol}
+\usepackage{pslatex}
+\usepackage{apalike}
+\usepackage{SCITEPRESS}
+\usepackage[small]{caption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumerate}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\def\R{{\mathbb R }}
+\def\N{{\mathbb N }}
+\subfigtopskip=0pt
+\subfigcapskip=0pt
+\subfigbottomskip=0pt
+\begin{document}
+
+\title{An Online Vector Error Correction Model for Exchange Rates Forecasting}
+
+
+\author{\authorname{Paola Arce\sup{1}, Jonathan Antognini\sup{1}, Werner
+Kristjanpoller\sup{2} and Luis Salinas\sup{1,3}}
+\affiliation{\sup{1}Departamento de Inform\'atica, Universidad T\'ecnica Federico
+Santa Mar\'ia, Valpara\'iso, Chile}
+\affiliation{\sup{2}Departamento de Industrias, Universidad T\'ecnica Federico
+Santa Mar\'ia, Valpara\'iso, Chile}
+\affiliation{\sup{3}CCTVal, Universidad T\'ecnica Federico
+Santa Mar\'ia, Valpara\'iso, Chile}
+\email{\{paola.arce,luis.salinas,werner.kristjanpoller\}@usm.cl, jantogni@csrg.inf.utfsm.cl}
+}
+
+\keywords{Vector Error Correction Model, Online Learning, Financial
+Forecasting, Foreign Exchange Market}
+
+\abstract{
+Financial time series are known for their non-stationary behaviour. However,
+sometimes they exhibit some stationary linear combinations. When this happens,
+it is said that those time series are cointegrated.The Vector Error Correction
+Model (VECM) is an econometric model which characterizes the joint dynamic
+behaviour of a set of cointegrated variables in terms of forces pulling towards
+equilibrium. In this study, we propose an Online VEC model (OVECM) which
+optimizes how model parameters are obtained using a sliding window of the most
+recent data. Our proposal also takes advantage of the long-run relationship
+between the time series in order to obtain improved execution times. Our
+proposed method is tested using four foreign exchange rates with a frequency of
+1-minute, all related to the USD currency base. OVECM is compared with VECM and
+ARIMA models in terms of forecasting accuracy and execution times. We show that
+OVECM outperforms ARIMA forecasting and enables execution time to
+be reduced considerably while maintaining good accuracy levels compared with
+VECM.
+}
+
+\onecolumn \maketitle \normalsize \vfill
+
+\input{src/intro}
+\input{src/background}
+\input{src/methodology}
+\input{src/results}
+\input{src/conclusions}
+
+
+\vfill
+\bibliographystyle{apalike}
+{\small
+\bibliography{reference}}
+
+\vfill
+\end{document}
+

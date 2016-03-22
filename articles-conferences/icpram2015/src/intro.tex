@@ -1,0 +1,67 @@
+\section{\uppercase{Introduction}}
+\label{sec:introduction}
+\noindent In finance, it is common to find variables with long-run equilibrium
+relationships. This is called cointegration and it reflects the idea of that
+some set of variables cannot wander too far from each other. Cointegration means
+that one or more linear combinations of these variables are stationary even
+though individually they are not~\cite{engle87}. Furthermore, the number of
+cointegration vectors reflects how many of these linear combinations exist. Some
+models, such as the Vector Error Correction (VECM), take advantage of this property
+and describe the joint behaviour of several cointegrated variables.
+
+VECM introduces this long-run relationship
+among a set of cointegrated variables as an error correction term. VECM is a
+special case of the vector autorregresive model (VAR) model. VAR model
+expresses future values as a linear combination of variables past values.
+However, VAR model cannot be used with non-stationary variables. VECM is a
+linear model but in terms of variable differences. If cointegration exists,
+variable differences are stationary and they introduce an error correction term
+which adjusts coefficients to bring the variables back to equilibrium. In
+finance, many economic time series are revealed to be stationary when they are
+differentiated and cointegration restrictions often improves
+forecasting~\cite{duy1998}. Therefore, VECM has been widely adopted.
+
+In finance, pair trading is a very common example of cointegration
+application~\cite{herlemont2003} but cointegration can also be extended to a
+larger set of variables~\cite{mukherjee1995},\cite{engle2004}.
+
+Both VECM and VAR model parameters are obtained using ordinary least squares
+(OLS) method. Since OLS involves many calculations, the parameter estimation
+method is computationally expensive when the number of past values and
+observations increases. Moreover, obtaining cointegration vectors is also an
+expensive routine.
+
+Recently, online learning algorithms have been proposed to solve problems with
+large data sets because of their simplicity and their ability to update the
+model when new data is available. The study presented by ~\cite{arce+salinas2012}
+applied this idea using ridge regression.
+
+There are several popular online methods such as perceptron~\cite{rosenblatt58},
+passive-aggressive~\cite{crammerETall2006}, stochastic gradient
+descent~\cite{zhang2004}, aggregating algorithm~\cite{vovk2001} and the second
+order perceptron~\cite{cesa-bianchi2005}.  In~\cite{cesa-bianchi2006}, an
+in-deph analysis of online learning is provided. 
+
+In this paper, we propose an online formulation of the VECM called Online VECM
+(OVECM). OVECM is a lighter version of VECM which considers only a sliding window
+of the most recent data and introduces matrix optimizations in order to reduce
+the number of operations and therefore execution times. OVECM also takes into
+account the fact that cointegration vector space doesn't experience large
+changes with small changes in the input data. 
+
+OVECM is later compared against VECM and ARIMA models using four currency rates
+from the foreign exchange market with 1-minute frequency. VECM and ARIMA models
+were used in an iterative way in order to allow fair comparison. Execution times
+and forecast performance measures MAPE, MAE and RMSE were used to compare all
+methods. 
+
+Model effectiveness is focused on out-of-sample forecast rather than in-sample
+fitting. This criteria allows the OVECM prediction capability to be expressed
+rather than just explaining data history.
+
+The next sections are organized as follows: section~\ref{sec:background}
+presents the VAR and VECM, the OVECM algorithm proposed is presented in
+section~\ref{sec:methodology}. Section~\ref{sec:results} gives a description of
+the data used and the tests carried on to show accuracy and time comparison of
+our proposal against the traditional VECM and
+section~\ref{sec:conclusions} includes conclusions and a proposal for future study.

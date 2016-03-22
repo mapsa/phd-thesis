@@ -1,0 +1,322 @@
+\section{HFT time series}
+\subsection{Intro}
+
+\begin{frame}
+\frametitle{Motivation: Financial Time Series Forecasting}
+\begin{columns}
+\begin{column}{.48\textwidth}
+\color{purple}\rule{\linewidth}{4pt}
+Characteristics
+  \begin{itemize}
+  \item High Frequency data
+  \item Large number of factors affecting the market
+  \end{itemize}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{img/financial_ts}
+    \end{center}
+\end{column}%
+\begin{column}{.48\textwidth}
+\color{blue}\rule{\linewidth}{4pt}
+Requires
+  \begin{itemize}
+  \item Fast implementations
+  \item High Frequency Trading Algorithms 
+  \end{itemize}
+    \begin{center}
+    \includegraphics[width=0.9\textwidth]{img/hft}
+    \end{center}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{FFN: Feed Forward Neural Network}
+ 
+FFNs are widely-used to model problems for learning tasks and especially
+used to forecast financial time series.
+
+\begin{itemize}
+\item FFNs have three layers: 
+\begin{enumerate}[a)]
+\item Input layer
+\item Hidden layer
+\item Output layer
+\end{enumerate}
+\item Each layer consists of a fixed set of neurons
+\item All neurons in a layer are fully connected with the other neurons
+of the following layer
+\item Each connection has an associated weight related to its
+dependence
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Feed Forward Neural Network}
+%\begin{center}
+%\includegraphics[width=0.8\textwidth]{img/simple_feedforward_network}
+%\end{center}
+
+  %\input{src/ffn1}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Feed Forward Neural Network}
+%\begin{center}
+%\includegraphics[width=0.8\textwidth]{img/simple_feedforward_network}
+%\end{center}
+
+  %\input{src/ffn}
+\end{frame}
+\begin{frame}
+    \frametitle{FFN: Training and Testing phases}
+
+The learning process to set the weights and biases is done in a
+{\color{red}training phase}, which is computationally expensive and
+can be computed offline.
+
+However, the output calculation or {\color{red}testing phase} can not
+be done offline and needs to be as fast as possible.  
+
+\end{frame}
+
+\section{Model}
+\subsection{math}
+
+\begin{frame}
+\frametitle{Matrix representation}
+\framesubtitle{Input Layer}
+
+\begin{columns}
+\begin{column}{.48\textwidth}
+The input data can be represented as a pair $(\mathbf{x},y)$, where $\mathbf{x}$ is a vector:
+\[
+        \mathbf{x}=\begin{bmatrix}
+        x_1 \\ x_2 \\ \vdots \\ x_n
+        \end{bmatrix}
+\]
+
+
+and $y$ is the target.
+
+\end{column}
+
+\begin{column}{.48\textwidth}
+In order to simplify the calculations, an extra row set to 1 is added:
+\[
+        x=\begin{bmatrix}
+        x_1  \\ \vdots \\ x_n \\ 1
+        \end{bmatrix}
+\]
+
+which is done to include the bias.
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Input-Hidden weights}
+
+The connection between the Input and the Hidden layer can be expressed
+in a matricial form:
+\[
+    {\color{blue}
+    \mathbf{W}_{h \times {n+1}}} =
+    \left[
+      \begin{array}{ccc|c}
+        w_{1, 1} & \cdots & w_{1, n} & w_{1, n+1} \\
+        \vdots   & \ddots & \vdots   & \vdots     \\
+        w_{h, 1} & \cdots & w_{h, n} & w_{h, n+1}
+      \end{array}
+    \right],
+  \]
+where $w_{i,j}$ is the connection between the hidden neuron $i$ and
+the input neuron $j$, $n$ is the length of the input vector and $h$ is
+the number of neurons in the hidden layer.
+The last column represents the bias for each hidden neuron. 
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hidden-Output weights}
+
+The weight matrix for the Hidden-Output weights is:
+
+  \[
+    {\color{blue}
+    \mathbf{\Delta}_{m \times h+1}} =
+    \left[
+      \begin{array}{ccc|c}
+        \delta_{1,1} & \cdots & \delta_{1,h} & \delta_{1,h+1}\\
+        \vdots & \ddots &  \vdots & \vdots\\
+        \delta_{m,1} & \cdots & \delta_{m,h} &\delta_{m,h+1}
+      \end{array}
+    \right],
+  \]
+
+where $\delta_{i,j}$ is the weight between the output neuron $i$ and
+the hidden neuron $j$ and $m$ is the number of output neurons. The
+bias is represented in the last column.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{State of hidden neurons}
+
+The input of a hidden neuron $i$ is
+
+\[   
+     {\color{blue}[\mathbf{Wx}]_{i}}=
+     \sum_{j=1}^{n+1}
+      w_{i,j}\,x_j 
+  \]
+
+and the output 
+
+\[
+\eta_{i} = \phi \left(
+{\color{blue}[\mathbf{Wx}]_{i}}
+    \right)
+\]
+
+where $\phi$ is the logistic sigmoid function:
+\[
+\phi(x) = \frac{1}{1+e^{-x}}
+\]
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{State of output neurons}
+
+The input of an output neuron $i$ is
+\[
+    {\color{blue}[\mathbf{\Delta \eta}]_{i}} =
+      \sum_{j=1}^{h+1}
+      \delta_{i,j}\,\eta_i
+  \]
+
+
+and the output 
+
+\[
+\gamma_{i} = \phi \left(
+    {\color{blue}[\mathbf{\Delta \eta}]_{i}} 
+    \right)
+\]
+
+which is the FFN output.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorithm}
+
+The algorithm in matricial form for an input vector $\mathbf{x}$ is:
+
+  \begin{align*}
+    \mathbf{\eta} &= \mathbf{Wx} & \qquad \text{//Input for the
+    Hidden layer }\\
+    \mathbf{\eta} &= \mathbf{\phi}(\eta) & \qquad \text{//Applying activation
+    function}\\
+    \mathbf{\gamma} &= \mathbf{\Delta\eta} & \qquad \text{// Input for the
+    Output layer}\\
+    \mathbf{\gamma} &= \mathbf{\phi(\gamma)} & \qquad \text{//Applying
+    activation function}
+  \end{align*}
+
+\end{frame}
+
+
+
+
+
+
+%\begin{frame}
+%  \frametitle{Interaction diagram}
+%%  \includegraphics[width=0.7\textwidth]{img/interaction-diagram.eps}
+%\begin{center}
+%\includegraphics[width=0.9\textwidth]{img/interaction_diagram}
+%\end{center}
+%\end{frame}
+
+
+
+%\begin{frame}
+%  \frametitle{CUBLAS}
+  %\lstinputlisting{src/cublas.cu}
+%\end{frame}
+
+%\begin{frame}
+%  \frametitle{CUDA kernels}
+  %\lstinputlisting[basicstyle=\small]{src/kernels.cu}
+%\end{frame}
+
+\section{Experiments}
+\subsection{sol}
+\begin{frame}
+  \frametitle{Experiments}
+  \begin{itemize}
+    \item Problem: $n=h=m=1000,\dots,6000$
+    \item Two implementations:
+    \begin{itemize}
+    \item GPU using CUBLAS (CUDA library for Basic Linear Algebra
+    Subprograms)
+    \item CPU using MKL (Math kernel library)    
+    \end{itemize}
+    \item Hardware
+    \begin{itemize}
+    \item Two 6-core Intel Xeon X5650 2.67GHz
+    \item NVIDIA M2050 GPU,448 cores, 1.15Ghz    
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Arquitecture of the solution}
+  \begin{center}
+  \includegraphics[width=0.7\textwidth]{img/arq1}    
+  \end{center}
+\end{frame}
+\begin{frame}
+\frametitle{Results}
+    \begin{center}
+     \includegraphics[width=0.9\textwidth]{img/data}    
+    \end{center}
+\end{frame}
+
+\section{Conclusions}
+\subsection{conclusion}
+
+\begin{frame}
+  \frametitle{Conclusions}
+  \begin{itemize}
+    \item Activation function time is negligible ($\sim$2\%).
+    \item The GPU and CPU computation times are comparable when the
+    FFN size is small.
+    \item The GPU implementation is recommended for a large number of
+    neurons (financial models).
+    \item ZeroMQ library allows an efficient communication library for
+    high frequency data.
+  \end{itemize}
+\end{frame}
+
+
+
+%\section{Future work}
+%\subsection{future}
+%
+\begin{frame}
+    
+    \begin{center}
+        
+    {\color{red}\Huge Questions?}
+    \end{center}
+
+\end{frame}
+

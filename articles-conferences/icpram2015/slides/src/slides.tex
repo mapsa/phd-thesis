@@ -1,0 +1,379 @@
+
+\section{HFT time series}
+\subsection{Intro}
+
+\begin{frame}
+    \frametitle{Motivation: Financial Time Series Forecasting}
+    \begin{itemize}
+        \item High Frequency data
+        \item Large number of factors affecting the market
+    \end{itemize}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{img/financial_ts}
+    \end{center}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Learning Problems}
+    \begin{itemize}
+        \item Batch Learning
+        \begin{itemize}
+            \item Training phase then testing
+            \item The model doesn't change in testing phase
+        \end{itemize}
+        \item Online Learning
+        \begin{itemize}
+            \item No separate phase
+            \item "Learning while doing"
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Batch methods}
+    \framesubtitle{Ridge Regression}
+
+    \begin{Definition}
+    {\em Ridge regression} (RR) is a batch method which is a
+        generalization of the least squares method (LS). 
+    \end{Definition}
+
+    \begin{equation*} \min_{\mathbf{w}} J(\mathbf{w}), \quad
+    \text{where} \quad J(\mathbf{w}) = \sum_{t=1}^m
+    (f(\mathbf{x}_t)-y_t)^2  + \gamma R(\mathbf{w}) \, ,
+    \end{equation*} 
+    
+    where $\gamma$ is a regularization parameter and
+    $R(\mathbf{w}) = \| \mathbf{w}\| ^2$.
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{Batch methods}
+    \framesubtitle{Ridge Regression}
+
+    The RR solution $\mathbf{w}_*$ is well-known:
+
+   \begin{equation*}
+   {\color{red}\mathbf{w}_*}= (X^\intercal
+   X+\gamma \mathbb{I})^{-1}X^\intercal y  
+   \end{equation*}
+
+   which is equivalent to:
+   \begin{equation*}
+   {\color{red}\mathbf{w}_*}= \Big (\sum_{t=1}^m \mathbf{x}_t \mathbf{x}_t
+   ^\intercal + \gamma \mathbb{I})\Big )^{-1}
+   \sum_{t=1}^m y_t \mathbf{x}_t
+   \end{equation*}
+   
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Batch methods}
+    \framesubtitle{Ridge Regression}
+    The prediction for a new input $\color{blue}\mathbf{x}_{m+1}$ is given by:    
+    \begin{equation*}
+        f({\color{blue}\mathbf{x}_{m+1}})={\color{red}\mathbf{w}_*^\intercal}
+        \color{blue}\mathbf{x}_{m+1}
+    \end{equation*}
+
+    \begin{equation*}
+        f({\color{blue}\mathbf{x}_{m+1}}) = \displaystyle
+        \overbrace{\underbrace{\Big( \sum_{t=1}^m y_t \mathbf{x}_t \Big
+        )^\intercal}_{\color{ForestGreen}b} \underbrace{\Big (
+        \sum_{t=1}^m \mathbf{x}_t \mathbf{x}_t  ^\intercal + \gamma
+        \mathbb{I}}_{\color{ForestGreen}A}\Big)^{-1}}^{{\color{red}\mathbf{w}_*^\intercal}}  \color{blue}\mathbf{x}_{m+1} 
+    \end{equation*}
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{RR Algorithm}
+
+    \begin{columns}[T]
+    \begin{column}{.6\textwidth}
+    {\color{purple}\rule{\linewidth}{4pt}}
+    \begin{algorithm}[H] \begin{algorithmic}[1] \REQUIRE $\,$ \\
+    $\{\mathbf{x}_1,\dots,\mathbf{x}_m \}$: $m$ input vectors \\
+    $\{y_1,\dots,y_m \}$: $m$ targets \\ \ENSURE  $\,$ \\
+    $\{f(\mathbf{x}_1),\dots,f(\mathbf{x}_m) \}$: model predictions \\
+    \STATE Initialize $\mathbf{A}=\gamma \mathbb{I}$ and $\mathbf{b}=0$
+    \FOR { $t = 1$ to $m$ } \STATE read new $\mathbf{x}_t$ \STATE output
+    prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
+    \mathbf{A}^{-1}\mathbf{x}_t$ \STATE $\mathbf{A} = \mathbf{A} +
+    \mathbf{x}_t \mathbf{x}_t^\intercal$ \STATE Read new $y_t$ \STATE
+    $\mathbf{b} = \mathbf{b} + y_t \mathbf{x}_t$ \ENDFOR
+    \end{algorithmic} \caption{Ridge Regression} \label{alg:RR}
+    \end{algorithm}
+    \end{column}
+    \begin{column}{.3\textwidth}
+    {\color{blue}\rule{\linewidth}{4pt}}
+        \[ {\color{ForestGreen}\mathbf{b}}=  \sum_{t=1}^\intercal y_t \mathbf{x}_t  \]
+    \[{\color{ForestGreen}\mathbf{A}}= \sum_{t=1}^\intercal \mathbf{x}_t \mathbf{x}_t
+    ^\intercal + \gamma \mathbb{I} \]
+    
+    \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Online methods}
+    \framesubtitle{Examples}
+    There are several popular online methods such as:
+    \begin{itemize}
+    \item Perceptron
+    \item Passive-aggressive
+    \item Stochastic gradient descent
+    \item {\color{red} Aggregating algorithm}
+    \item The second order perceptron.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{AAR: The Aggregating Algorithm for Regression}
+
+    The {\color{red}AAR} (proposed by Vovk in 2001) is an application of
+    the AA to the problem of regression.
+
+    The prediction formula is given by:
+
+    \begin{equation}
+    f({\color{blue}\mathbf{x}_{m+1}}) =
+    \displaystyle {\Big( \underbrace{\sum_{t=1}^m y_t \mathbf{x}_t \Big
+    )}_{\color{ForestGreen}b}}^\intercal \Big ( \underbrace{\sum_{t=1}^{{\color{red}m+1}} \mathbf{x}_t \mathbf{x}_t
+    ^\intercal + \gamma \mathbb{I} \Big
+    )}_{\color{ForestGreen}\mathbf{A}}^{-1}
+    {\color{blue}\mathbf{x}_{m+1}} \, ,
+    \end{equation} 
+   
+    The only difference is the matriz $\color{ForestGreen}\mathbf{A}$ is updated before
+    the prediction is made.
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{AAR: The Aggregating Algorithm for Regression}
+
+%    Algorithm~\ref{alg:AAR} shows this procedure based on
+%    equation~(\ref{eq:predAAR}). This algorithm can be obtained by
+%    swapping lines 4 and 5 from algorithm~\ref{alg:RR}. 
+    \begin{algorithm}[H] \begin{algorithmic}[1] \REQUIRE $\,$ \\
+    $\{\mathbf{x}_1,\dots,\mathbf{x}_m \}$: $m$ input vectors \\
+    $\{y_1,\dots,y_m \}$: $m$ targets \\ \ENSURE  $\,$ \\
+    $\{f(\mathbf{x}_1),\dots,f(\mathbf{x}_m) \}$: model predictions \\
+    \STATE Initialize $\mathbf{A}=\gamma \mathbb{I}$ and $\mathbf{b}=0$
+    \FOR { $t = 1$ to $m$ } \STATE read new $\mathbf{x}_t$ \STATE
+    $\color{red}\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal$ \STATE
+    {\color{blue}output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
+    \mathbf{A}^{-1}\mathbf{x}_t$} 
+    \STATE Read new $y_t$ \STATE $\mathbf{b}
+    = \mathbf{b} + y_t \mathbf{x}_t$ \ENDFOR
+    \end{algorithmic} \caption{{\em The aggregating algorithm for
+    regression}} \label{alg:AAR} \end{algorithm}
+
+\end{frame}
+
+
+\section{Model} % (fold)
+\label{sec:Method}
+
+\begin{frame}
+     \frametitle{Motivation}
+    Despite of RR and AAR being very successful methods, they have
+    some problems:
+    \begin{itemize}
+        \item They consider all the data for making predictions, but some time series show a strong
+    dependence on the latest information instead of all the data.
+        \item A matrix inverse is computed at every step of the
+        algorithm without considering the matrices are slightly different.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{Proposal}
+    
+    The method proposed consists of a modification of AAR considering a
+    {\color{red}sliding window} which contains only the last $L+1$ samples 
+    $\{\mathbf{x}_m, \mathbf{x}_{m-1}, \dots, \mathbf{x}_{m-L} \}$. 
+    If we define an input matrix with the sliding window data:
+
+    \begin{equation*}
+    \mathbf{X}(t) = 
+    \begin{bmatrix}
+    \mathbf{x}_{t-L}^{\intercal}\\
+    \vdots \\ 
+    \mathbf{x}_t^{\intercal} 
+    \end{bmatrix} 
+    , \qquad \text{and a target vector} \qquad 
+    {\bf y}(t) =
+    \begin{bmatrix}
+    y_{t-L} \\
+    \vdots \\ 
+    y_t 
+    \end{bmatrix} 
+    \end{equation*}
+    The optimal solution at each time $t$ is:
+
+    \begin{equation*}
+    {\bf w}(t)_*=({\bf
+    X}(t)^\intercal{\bf X}(t)+\gamma \mathbb{I})^{-1}{\bf
+    X}(t)^\intercal{\bf y}(t) \, .  
+    \end{equation*} 
+    
+\end{frame}
+
+\begin{frame}
+     \frametitle{Algorithm} 
+
+    \begin{algorithm}[H] \begin{algorithmic}[1] \REQUIRE $\,$ \\
+    $\{\mathbf{x}_1,\dots,\mathbf{x}_m \}$: $m$ input vectors \\
+    $\{y_1,\dots,y_m \}$: $m$ targets \\ $L$: sliding window size ($L<m$)
+    \\ \ENSURE  $\,$ \\ $\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_m) \}$:
+    model predictions \\ \STATE {\color{blue}Initialize $\mathbf{A}=\displaystyle
+    \sum_{t=1}^L \mathbf{x}_t \mathbf{x}_t^\intercal + \gamma \mathbb{I}$
+    and $\mathbf{b}=\displaystyle \sum_{t=1}^Ly_t \mathbf{x}_t$} \FOR { $t
+    = L+1$ to $m$ } \STATE read new $\mathbf{x}_t$ 
+    
+    \STATE $\color{red}\mathbf{A} =
+    \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal- \mathbf{x}_{t-L-1}
+    \mathbf{x}_{t-L-1}^\intercal  $ \STATE output prediction
+    $f(\mathbf{x}_t) =  \mathbf{b}^\intercal \mathbf{A}^{-1}\mathbf{x}_t$
+    \STATE Read new $y_t$ \STATE $\mathbf{b} = \mathbf{b} + y_t
+    \mathbf{x}_t$ \ENDFOR
+
+    \end{algorithmic} \caption{Recursive Ridge Regression}
+    \label{alg:SLAAR} \end{algorithm}
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{Matrix Inverse} 
+   Additionally, it is worth noticing that the matrix $\mathbf{A}$ is
+   only slightly different:
+
+   \begin{equation*}
+        \mathbf{A} = \mathbf{A} + {\color{red}\mathbf{x}_t \mathbf{x}_t^\intercal -\mathbf{x}_{t-L-1}
+       \mathbf{x}_{t-L-1}^\intercal}
+   \end{equation*}
+
+   However the inverse matrix $\mathbf{A}^{-1}$ can be computed using
+   the inverse matrix previously calculated.
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{Sherman Morrison formula}
+     \begin{theorem}[Sherman Morrison]
+     If $\mathbf{A}$ is a positive definite matrix and its inverse
+     matrix is known, then the inverse of the matrix
+     $\mathbf{B}=\mathbf{A} + \mathbf{x}\mathbf{x}^\intercal$ can be
+     obtained as:
+     \begin{equation*}
+         \mathbf{B}^{-1} = \mathbf{A}^{-1} - 
+         \frac{(\mathbf{A}^{-1}\mathbf{x})(\mathbf{A}^{-1}\mathbf{x})^{\intercal}}
+         {1 + \mathbf{x}^{\intercal} \mathbf{A}^{-1} \mathbf{x}}
+     \end{equation*}
+     \end{theorem}   
+     This reduces the inverse matrix computation order from $O(n^3)$ to $O(n^2)$.
+\end{frame}
+
+
+\section{Experiments} % (fold)
+\label{sec:Experiments}
+
+\begin{frame}
+     \frametitle{Experiments}
+     \framesubtitle{Data}
+
+    We used daily stock returns of {\color{blue} 45 stocks} from the
+    technology sector dated from the {\color{blue}1st of January 2000
+    to the 1st of July 2012}.  
+    
+    Returns $\{x_t\}_{t=1}^{m-1}$ were
+    defined based on stock prices $\{{p_t}\}_{t=1}^{m}$ and they are
+    related as:
+
+    \begin{equation*} x_t = \frac{p_{t+1}-p_t}{p_t} \, .
+    \end{equation*} 
+    \begin{block}{Objective}
+    The objective is to build a model of the returns of
+    stock $k$ based on returns of other stocks of the same financial
+    sector.
+    \end{block}
+
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{Data}
+    
+    Therefore, every input vector $\mathbf{x}_t$ will have 44 stock
+    returns at time $t$ without considering information of stock $k$. The
+    target vector $\mathbf{y}$ will be the stocks returns of stock $k$.
+
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{Experiments}
+     \begin{itemize}
+         \item We compared RR, AAR and our proposal.
+         \item Experiments were done using 45 stocks.
+         \item The error was calculated considering the {\em mean
+         squared error} (MSE) using the last 100 predictions made.
+     \end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}
+     \frametitle{Results} 
+    \begin{figure}[H]
+      \centering
+        \includegraphics[width=0.78\textwidth]{img/data}
+      \caption{SPY returns}
+      \label{fig:data}
+    \end{figure}
+\end{frame}
+
+
+
+\section{Conclusions} % (fold)
+\label{sec:Conclusions}
+
+\begin{frame}
+     \frametitle{Conclusions}
+    \begin{itemize}
+        \item The experiments show that our method was better in 28 of
+45 stocks.
+        \item The smaller error in our method was for the SPY stock,
+        which is an expected result considering that the SPY value is
+        constructed based on the main stocks of the markets.
+        \item For SPY, it is shown how AAR and
+        our method fit better than RR to the target and also that our
+        method is slightly better compared with AAR.
+        \item It's also possible to notice that when returns change
+        drastically none of the methods fit satisfactorily.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+     \frametitle{Conclusions}
+    \begin{itemize}
+    \item The proposal shows an online version of RR which allows the
+    number of calculations required to be reduced and it is therefore a better
+    option for financial algorithms.
+    \item The tests show that in some cases, a portion of data will
+    provide a better model instead of using all data.
+    \item The historical dependence should be studied in order to
+    obtain more accurate algorithms.
+    \end{itemize}
+\end{frame}
+
