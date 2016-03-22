@@ -1,0 +1,245 @@
+\def\rot#1{{\color{red}{#1}}}
+\def\gruen#1{{\color{green}{#1}}}
+\def\blau#1{{\color{blue}{#1}}}
+
+
+\section{\uppercase{Background}}
+\label{sec:background}
+
+\subsection{Integration and Cointegration}\label{sec:coint}\  
+Following Johansen \cite{johansen1995} we shall say that a stochastic process
+$Y_t$ which satisfies $Y_t-E(Y_t) = \sum_{i=0}^\infty C_i\,\varepsilon_{t-i}$ is
+called $I(0)$, and then we shall write $Y_t\sim I(0)$, whenever
+$\sum_{i=0}^\infty C_i \neq 0$ and $\sum_{i=0}^\infty C_i\,z^i$ converges for
+$z\in\mathbb{C}$ with $|z|<1$.  It is understood that the condition
+$\varepsilon_t\sim iid(0,\sigma^2)$ holds.
+
+A (vector) time series $\mathbf{y}_t$ is said to be {\em integrated of order\/}
+$d$, and then we shall write $\mathbf{y}_t\sim I(d)$, whenever after $d$ times
+(discrete) differentiation an stationary process is obtained~\cite{banerjee1993};
+more precisely, whenever
+$(1-L)^d\,\mathbf{y}_t\sim\text{I(0)}$, where $L$ is the usual lag operator:
+$(1-L)\,\mathbf{y}_t = \Delta\mathbf{y}_t = \mathbf{y}_t-\mathbf{y}_{t-1}$ for
+all $t$.  
+
+Note that this definition includes the scalar case as time series of
+vectors of dimension 1; in this scalar case we will write the time series in
+nonbold format.
+
+Let $\mathbf{y}_t^\nu$, $\nu=1,\dots,l$, be a set of $l$ vector time series of
+order $I(1)$.  They are said to be {\em cointegrated\/} if a vector
+$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^p$ exists, such that the
+time series,
+\begin{equation}
+\mathbf{Z}_t:= 
+\sum_{\nu=1}^l \beta(\nu)\,\mathbf{y}_t^\nu\,\sim\,\text{I(0)}\,.
+\end{equation}
+In other words, a set of $I(1)$ time series is said to be cointegrated if a
+linear combination of them exists, which is I(0).
+
+
+\subsection{Vector Autorregresive Models}\label{sec:varvec}
+
+VECM is a special case of the VAR \cite{sims1980} model and both describe the joint behaviour
+of a set of variables.
+
+The VAR($p$) model is a general framework describing the behaviour of a
+set of $l$ endogenous variables as a linear combination of their last $p$
+values, where $l,p\in\mathbb{N}$. 
+In our case, each one of these $l$ variables is a scalar time series
+$y_{\lambda,t}$, $\lambda=1,\dots,l$, and we represent them all together
+at time $t$ by the the vector time series:
+\begin{equation}
+\label{eq:variables}
+\mathbf{y}_t = 
+\begin{bmatrix} y_{1,t} & y_{2,t} & \dots & y_{l,t} \end{bmatrix}^\top.
+\end{equation}
+\noindent
+Notice that the vectors $\mathbf{y}_t$ are assumed to be $l$-dimensional.
+
+The VAR($p$) model describes the behaviour of a dependent variable in terms of
+its own lagged values and the lags of the others variables in the system. The
+model with $p$ lags is formulated as the system of $N$:
+\begin{align}
+\label{eq:var}
+\mathbf{y}_t 
+= \boldsymbol{\Phi}_1 \mathbf{y}_{t-1} +
+  \boldsymbol{\Phi}_2 \mathbf{y}_{t-2} + \dots +
+  \boldsymbol{\Phi}_p\mathbf{y}_{t-p} +
+  \mathbf{c} + \boldsymbol{\epsilon}_t \nonumber \\
+t=p+1,\dots,N,
+\end{align}
+\noindent where 
+$\boldsymbol{\Phi}_1, \boldsymbol{\Phi}_2,\dots,\boldsymbol{\Phi}_p$
+are $l\times l$-matrices of real coefficients,
+$\boldsymbol{\epsilon}_{p+1},
+ \boldsymbol{\epsilon}_{p+2}, \dots, \boldsymbol{\epsilon}_N$ 
+are error terms, $\mathbf{c}$ is a constant vector and $N$ is the total
+number of samples.
+
+Notice that, regarding our notation of section (\ref{sec:coint}),
+we have here 
+$\mathbf{y}_t^0 = \mathbf{y}_t$,
+$\mathbf{y}_t^\nu = \mathbf{y}_{t-\nu}$ and
+the $\lambda$-th component of the vector time series $\mathbf{y}_t^\nu$
+is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
+$\lambda=1,\dots,l$.
+
+However, the VAR model cannot be used with non-stationary variables. VECM \cite{engle87} is also a linear model and a special form of a VAR model for I(1) variables that are also
+cointegrated~\cite{banerjee1993}. If cointegration exists, variable differences
+are stationary and they introduce an error correction term which adjusts
+coefficients to bring the variables back to equilibrium. 
+
+
+It is obtained re-writing equation (\ref{eq:var}) in terms of the new
+variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
+The VECM model, expressed in terms those differences, takes the form:
+\begin{equation}\label{eq:vec}
+\Delta \mathbf{y}_t 
+= \boldsymbol{\Omega}\,\mathbf{y}_{t-1}
+  + \sum_{i=1}^{p-1} \boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+where the coefficients matrices $\boldsymbol{\Phi}_i^*$ and 
+$\boldsymbol{\Omega}$, expressed in terms of the matrices
+$\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
+\begin{align*}
+\boldsymbol{\Phi}_i^* 
+&:= -\sum_{j=i+1}^{p}\boldsymbol{\Phi}_j\,, \\
+\boldsymbol{\Omega}
+&:= -\left( \mathbb{I} - \boldsymbol{\Phi}_1 - \dots 
+    - \boldsymbol{\phi}_p \right)\,. 
+\end{align*}
+The following well known properties of the matrix $\boldsymbol{\Omega}$
+\cite{johansen1995} will be useful in the sequel:
+\begin{itemize}
+\item
+If $\boldsymbol{\Omega} = \mathbf{0}$, there is no cointegration.
+\item 
+If $rank(\boldsymbol{\Omega})=l$, i.e., if $\boldsymbol{\Omega}$ has
+full rank, then the time series are not I(1) but stationary.
+\item
+If $rank(\boldsymbol{\Omega})=r$, $0<r<l$, then there is cointegration
+and the matrix $\boldsymbol{\Omega}$ can be expressed as
+$\boldsymbol{\Omega}=\boldsymbol{\alpha\beta}^\top$, where $\boldsymbol{\alpha}$
+and $\boldsymbol{\beta}$ are
+$l\times r$ matrices and
+$\text{rank}(\boldsymbol{\alpha})=\text{rank}(\boldsymbol{\beta})=r$.
+\item
+The columns of $\boldsymbol{\beta}$ contains the cointegration vectors and the rows of
+$\boldsymbol{\alpha}$ correspond with the adjusted vectors. 
+$\boldsymbol{\beta}$ is obtained by Johansen procedure~\cite{johansen1988},
+whereas $\boldsymbol{\alpha}$ has to be determined as a variable in the VECM.
+\end{itemize}
+It is worth noticing that the factorization of the matrix
+$\boldsymbol\Omega$ is not unique, since for any $r \times r$
+non-singular matrix $\mathbf{H}$, $\boldsymbol{\alpha}^*:=\boldsymbol{\alpha}\mathbf{H}$,
+and $\boldsymbol{\beta}^*=\boldsymbol{\beta}(\mathbf{H}^{-1})^\top$ we have
+$\boldsymbol{\alpha\beta}^\top=\boldsymbol{\alpha}^*(\boldsymbol{\beta}^*)^\top$.
+If cointegration exists, then equation (\ref{eq:vec}) can be written
+as follows:
+\begin{equation}\label{eq:vecfull}
+\Delta\mathbf{y}_t 
+= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
+  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+which is a VAR model but for time series differences.
+
+
+Transposing each equation of the system (\ref{eq:vecfull}) we can write
+the VECM($p$) model in block-matrix form as:
+\begin{equation}\label{eq:vareq}
+\mathbf{B} = 
+\mathbf{A} \mathbf{X} + 
+\mathbf{E} \, , 
+\end{equation}
+%
+\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
+dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
++1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
+%
+\begin{alignat}{3}
+\mathbf{B}
+&= \begin{bmatrix}
+   \Delta\mathbf{y}_{p+1}^\top \\
+   \Delta\mathbf{y}_{p+2}^\top \\
+   \vdots \\
+   \Delta\mathbf{y}_N^\top
+   \end{bmatrix}
+&\quad
+\mathbf{X}
+&= \begin{bmatrix}
+   \boldsymbol{\alpha}^\top \\
+   \boldsymbol{\Phi}_1^{*\top} \\
+   \boldsymbol{\Phi}_2^{*\top} \\
+   \vdots \\
+   \boldsymbol{\Phi}_{p-1}^{*\top} \\
+   \mathbf{c}^\top
+   \end{bmatrix}
+&\quad
+\mathbf{E}
+&= \begin{bmatrix}
+   \boldsymbol{\epsilon}_{p+1}^\top \\
+   \boldsymbol{\epsilon}_{p+2}^\top \\
+   \vdots \\
+   \boldsymbol{\epsilon}_N^\top \\
+   \end{bmatrix}
+\end{alignat}
+\noindent and 
+\begin{align}
+\mathbf{A} 
+&= \begin{pmat}[{....|}]
+   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
+                    & \Delta\mathbf{y}_2^\top & 1 \cr
+   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
+                       & \Delta\mathbf{y}_3^\top & 1 \cr
+   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
+   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
+                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
+   \end{pmat}\, .
+\label{eq:Amatrix}
+\end{align}
+Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+can be solved with respect to $\mathbf{X}$ using the ordinary least
+squares (OLS) estimation.
+
+%\subsection{Ordinary Least Squares method}
+%
+%The solution $\widehat{\mathbf{A}}$ to
+%equation~(\ref{eq:vareq}) can be obtained by the ordinary least squares (OLS)
+%method. $\widehat{\mathbf{X}}$ is the solution of the quadratic optimization problem
+%\begin{equation*}
+%\widehat{\mathbf{X}} = \underset{\mathbf{X}}{\text{Arg\;min}}
+%\|\mathbf{A}\mathbf{X}-\mathbf{B}\|_2^2
+%\end{equation*}
+%\noindent for which the solution $\widehat{\mathbf{X}}$ is well-known:
+%\begin{equation*}
+%\label{eq:MP}
+%\widehat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{B}
+%\end{equation*}
+%\noindent where $\mathbf{A}^{\!\!+}$ is the Moore-Penrose pseudo-inverse
+%which, when $\mathbf{A}$ is full rank, can be written as follows: 
+%\begin{equation}
+%\label{eq:pseudoinverse}
+%\mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
+%\end{equation}
+%when $\mathbf{A}$ is not full rank, i.e
+%$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
+%always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+%More generally, the pseudo-inverse is best computed using the compact
+%singular value decomposition (SVD) of $\mathbf{A}$ which is:
+%\begin{equation*}
+%    \label{eq:compactsvd}
+%    \mathbf{A}=
+%    \mathbf{U_1}
+%    \boldsymbol \Sigma_1
+%    \mathbf{V}_1^{\top} \, .
+%\end{equation*}
+%Pseudo-inverse can then be written as follows:
+%\begin{equation*}
+%\label{eq:pseudoinversesvd}
+%\mathbf{A}^{\!\!+} = \mathbf{V}_1 \boldsymbol \Sigma_1^{-1} \mathbf{U}_1^\top \, .
+%\end{equation*}

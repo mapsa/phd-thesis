@@ -1,0 +1,44 @@
+\section{\uppercase{Conclusions}}
+\label{sec:conclusions}
+Cointegration in financial time series has been largely studied and the 
+Johansen method is commonly used to obtain cointegration relationships. 
+In practice, it has been found that cointegration relations change with time. 
+However, model-based cointegration such as VECM assumes that cointegration
+remains unchanged in time. 
+We empirically showed that the Johansen method is sensitive to the number
+of lags but also to the amount of data considered.
+
+Moreover, we introduced the notion of {\em percentage of cointegration\/} and
+found that out-of-sample forecast performance MSE is related to the value of
+this figure in the last samples.  We used this information to set the model
+parameters.  Our proposal AVECM consists of an adaptive algorithm to update VECM
+parameters every time that new data is available. These parameters are found by
+maximising the percentage of cointegration of the last samples or iterations.
+
+Despite the fact that high frequency Forex data can be spurious, the model performance can be less reliable (and more spurious) relative to the lower frequencies (such as 1 minute or 5 minute intervals) adopted by some other studies. However, the deficiency is offset by gain in accuracy from parallel processing which is capable of searching or examining a much larger state space given the same computational time.
+
+Determining VECM parameters was the most expensive routine and it was run
+using parallel processes using MPI which allowed a grid search within a range of
+values for $L$ and $p$ to be made.
+Tests were done using real currency rates data. 
+Our proposal was tested in several scenarios using different times of
+the day to show its behaviour related to the opening times of
+financial markets.
+
+Results showed that our proposed AVECM improves performance measures by finding
+parameters of $L$ and $p$ maximising the percentage of cointegration.
+These facts were consistent for different times of the day. 
+We found that increasing the number of parameters will always lead to
+better performance measures.
+
+The parallel implementation allowed the execution times to be reduced
+more than 9 times and therefore a response time was obtain before 10
+seconds. Since we used 10-second frequencies we can say that our proposal is suitable
+for use in an online context for real applications because response times
+were less than this frequency.
+
+For future study, it would be interesting to explore the relationship between
+cointegration and performance in order to propose new criteria for
+improving VECM parameters. It would also be interesting to include more 
+explaining variables such as bid-ask spread and change in volume.
+

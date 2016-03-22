@@ -1,0 +1,140 @@
+
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+
+
+\usepackage{graphicx}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+\usepackage{amsfonts,amssymb,amsmath,
+            amssymb,amsopn,amsxtra,amstext,amsbsy}
+\usepackage{epsfig}
+\usepackage[makeroom]{cancel}
+\usepackage{array,arydshln}
+\usepackage{multirow,varwidth}
+\usepackage{hhline}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{hyperref,wasysym}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{setspace}
+\usepackage{booktabs}
+\let\Algorithm\algorithm
+\renewcommand\algorithm[1][]{\Algorithm[#1]\setstretch{1.1}}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{pmat}
+
+
+
+\journalname{Computational Economics}
+
+
+\begin{document}
+
+\title{Fast and adaptive cointegration based model
+for forecasting high frequency financial time series}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+\titlerunning{Cointegration based model
+for forecasting high frequency financial time series}        % if too long for running head
+
+%\author{Paola Arce  \and Jonathan Antognini \and Werner Kristjanpoller \and Luis Salinas }
+\author{}
+%\authorrunning{Short form of author list} % if too long for running head
+
+%\institute{P. Arce  \at
+%              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
+%              Mar\'ia\\
+%              Tel.: +56-32-2654000\\
+%              \email{paola.arce@usm.cl}           %  \\
+%%             \emph{Present address:} of F. Author  %  if needed
+%           \and
+%           J. Antognini \at
+%              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
+%              Mar\'ia\\
+%              \email{jantognini@csrg.cl}             \\
+%           \and
+%           W. Kristjanpoller \at
+%              Departamento de Industrias, Universidad T\'ecnica Federico Santa
+%              Mar\'ia\\
+%              %Fax: +123-45-678910\\
+%              \email{werner.kristjanpoller@usm.cl}             \\
+%           \and
+%           L. Salinas \at
+%              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
+%              Mar\'ia\\
+%              Centro Cient\'ifico Tecnol\'ogico de Valpara\'iso (CCTVal) \\
+%              \email{luis.salinas@usm.cl}           %  \\
+%}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+
+\maketitle
+
+\begin{abstract}
+
+Cointegration is a long-run property of some non-stationary time series where a 
+linear combination of those time series is stationary.
+This behaviour has been studied in finance because cointegration restrictions often improve forecasting.
+The Vector Error Correction Model (VECM) is a well-known econometric technique that
+characterises short-run variations of a set of cointegrated time series incorporating long-run relationships as an error correction term. VECM has been broadly used with low frequency time series. We aimed to adapt VECM to be used in finance with high frequency stream data.
+%
+
+Cointegration relations change in time and therefore VECM parameters must be updated when new data is available. We studied how forecasting performance is affected when VECM parameters and the length of historical data used change in time. We observed that the number of cointegration relationships varies with the length of historical data used. Moreover, parameters that increased these relationships in time led to better forecasting performance. Our proposal, called an Adaptive VECM (AVECM) is 
+to make a parameters grid search that maximises the number of cointegration relationships in the near past. To ensure the search can be executed fast enough, we used a distributed environment.
+
+%
+The methodology was tested using four 10-seconds frequency time series of the Foreign Exchange market. We compared our proposal with ARIMA and the naive forecast of the random walk model. Numerical experiments showed that on average AVECM performed better than ARIMA and random walk. Additionally, our parallel approach AVECM significantly improved execution times with respect to its serial version.
+
+\keywords{VECM \and Cointegration \and Forex \and MPI \and Parallel algorithm}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+
+\input{src/intro}
+\input{src/background}
+\input{src/methodology}
+\input{src/results}
+\input{src/conclusions}
+
+\begin{acknowledgements}
+L. Salinas acknowledges support from Basal Project
+FB0821 CCTVal-Centro Científico Tecnológico de Valparaíso. P. Arce and W.
+Kristjanpoller thank PIIC 2014 DGIP-UTFSM grant for supporting this research.
+\end{acknowledgements}
+
+% BibTeX users please use one of
+%\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+
+\bibliographystyle{plain}       % APS-like style for physics
+
+\bibliography{reference}   % name your BibTeX data base
+
+\end{document}
+% end of file template.tex
+
