@@ -253,16 +253,11 @@ singular value decomposition (SVD) of $\mathbf{A}$:
 
 \subsection{Regularization}\label{sec:RR}
 
-Regularization can be understood using two contexts: learning and inverse problems. In the context of learning, regularization refers to techniques allowing to avoid over-fitting, e.g. ridge regression (RR) or Tikhonov regularization \cite{ tikhonov1977} 
+Regularization can be understood using two contexts: learning theory (probabilistic) and inverse problems (deterministic). In the context of learning, regularization refers to techniques allowing to avoid over-fitting and the desire property of the selected estimator is to perform well on new data (to generalize), e.g. regularized least squares. In the context of inverse problems, regularization objective is to obtain stable solutions with respect to noise e.g Tikhonov regularization or ridge regression (RR)\cite{ tikhonov1977}.
 
-introduces a ridge estimation to avoid the
-singularity of the matrix $\mathbf{A}^\top \mathbf{A}$
-equation~(\ref{eq:pseudoinverse}). RR solves the following
-optimization problem:
+In particular, it is well known that regularization schemes such as RR or Tikhonov regularization can be effectively used in the context of learning \cite{vito2005}.
 
-
-which was independently by Tikhonov \cite{tikhonov1963} and Phillips \cite{phillips1962}.
-
+Ridge regression was independently proposed by Tikhonov \cite{tikhonov1963} and Phillips \cite{phillips1962}. RR penalise the complexity of the  solution by adding a constraint with respect to OLS (see equation \ref{eq:regressionproblem}) in the optimisation problem:
 
 \begin{equation}
 \label{eq:RRproblem}
@@ -271,9 +266,7 @@ which was independently by Tikhonov \cite{tikhonov1963} and Phillips \cite{phill
 \mathbf{\mathbf{X}}\|_2^2 
 \end{equation}
 
-\noindent where $\lambda$ is a regularization parameter. 
-
-The RR optimal solution $\mathbf{X}(\lambda)$ is also well-known: 
+\noindent where $\lambda>0$ is a regularization parameter. The RR optimal solution $\mathbf{X}(\lambda)$ is also well-known: 
 
 \begin{equation}
 \label{eq:optsolRR}
@@ -281,41 +274,21 @@ The RR optimal solution $\mathbf{X}(\lambda)$ is also well-known:
 \mathbb{I})^{-1}\mathbf{A}^\top \mathbf{B} \, . 
 \end{equation}
 
+The method is called ridge regression because the term $\lambda \mathbb{I}$ adds positive entries along the diagonal (ridge) to avoid the
+singularity of the covariance matrix $\mathbf{A}^\top \mathbf{A}$. This addition ensures that all of the covariance matrix eigenvalues will be strictly greater than 0, i.e the solution becomes unique.
 
+Despite the fact that RR is a biased estimator (OLS is unbiased) it could
+reduce the expected prediction error by reducing variance, this is called the bias-variance tradeoff \cite{hoerl1970}. 
 
+To determine parameter $\lambda$ is crucial for ridge regression, but the bias-variance tradeoff is not directly useful to determine it, since que don't know the data we want to predict. 
 
-\subsection{Regularization parameter chose}
-
-The additional term $\lambda \|\mathbf{\mathbf{X}}\|_2^2$ in the optimization
-problem shown in equation~(\ref{eq:RRproblem})
-improves the conditioning of the problem because is equivalent to add the term $\lambda \mathbb{I}$ to the matrix $\mathbf{A}^\top \mathbf{A}$
-(equation~(\ref{eq:optsolRR})) which effect is to improve its condition number.
-
-To determine parameter $\lambda$ is crucial for ridge regression since it could
-reduce the expected prediction error by reducing variance considering a biased
-estimator, this is called the bias-variance tradeoff. 
-For example, OLS has zero bias but its variance is greater than ridge regression for small values of $\lambda$. Additionally, in terms of prediction error, ridge regression is lower than OLS \cite{hoerl1970}.
-
-
-
-\subsubsection{Methods for lambda selection}
-
-Despite the bias-variance tradeoff provides a conceptual framework for
-determining lambda is not directly useful. 
-
-
-Some popular methods
-for determine model selection are:
-
+The two most  popular regularization methods are :
+%%%% Agregar metodos del paper spectral cut-off y cross valid
 \begin{itemize}
     \item Akaike information criterion (AIC) (Akaike, 1974)
     \item Bootstrap-based selection (Efron and Tibshirani, 1997)
     \item Cross-validation (Stone, 1974)
 \end{itemize}
-
-On the other hand, $\lambda$ can also be used to reduce computational time as it
-is shown in equation~(\ref{eq:taylor}). Golub (~\cite{golub1965}) 
-
 
 
 \subsection{Online machine learning algorithms}
