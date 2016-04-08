@@ -253,7 +253,7 @@ singular value decomposition (SVD) of $\mathbf{A}$:
 
 \subsection{Regularization}\label{sec:RR}
 
-Regularization can be understood using two contexts: learning theory (probabilistic) and inverse problems (deterministic). In the context of learning, regularization refers to techniques allowing to avoid over-fitting and the desire property of the selected estimator is to perform well on new data (to generalize), e.g. regularized least squares. In the context of inverse problems, regularization objective is to obtain stable solutions with respect to noise e.g Tikhonov regularization or ridge regression (RR)\cite{ tikhonov1977}.
+Regularization can be understood using two contexts: learning theory (probabilistic) and inverse problems (deterministic). In the context of learning, regularization refers to techniques allowing to avoid over-fitting and the desire property of the selected estimator is to perform well on new data (to generalize), e.g. regularized least squares. In the context of inverse problems, regularization objective is to stabilise, with respect to noise, a possibly ill-conditioned matrix inversion problem e.g spectral cut-off and Tikhonov regularization or ridge regression (RR)\cite{ tikhonov1977}.
 
 In particular, it is well known that regularization schemes such as RR or Tikhonov regularization can be effectively used in the context of learning \cite{vito2005}.
 
@@ -278,19 +278,24 @@ The method is called ridge regression because the term $\lambda \mathbb{I}$ adds
 singularity of the covariance matrix $\mathbf{A}^\top \mathbf{A}$. This addition ensures that all of the covariance matrix eigenvalues will be strictly greater than 0, i.e the solution becomes unique.
 
 Despite the fact that RR is a biased estimator (OLS is unbiased) it could
-reduce the expected prediction error by reducing variance, this is called the bias-variance tradeoff \cite{hoerl1970}. 
+reduce the expected prediction error by reducing variance, this is called the bias-variance tradeoff  \cite{hoerl1970}. 
 
-To determine parameter $\lambda$ is crucial for ridge regression, but the bias-variance tradeoff is not directly useful to determine it, since que don't know the data we want to predict. 
+To determine parameter $\lambda$ is crucial for ridge regression, but the bias-variance tradeoff is not directly useful to determine it, since que don't know the data we want to predict. Many techniques have been developed to determine suitable value for the regularization parameter. However, when no information is available on the error, one of the most popular techniques is the Generalized Cross Validation (GCV) \cite{bauer2011}. 
+GCV originates from the older method leave-one-out Cross Validation \cite{stone1974}.
 
-The two most  popular regularization methods are :
-%%%% Agregar metodos del paper spectral cut-off y cross valid
-\begin{itemize}
-    \item Akaike information criterion (AIC) (Akaike, 1974)
-    \item Bootstrap-based selection (Efron and Tibshirani, 1997)
-    \item Cross-validation (Stone, 1974)
-\end{itemize}
+The leave-one-out cross validation method determine a regularization parameter that minimises the average of the squared predictions errors using each solution to predict the missing data value.
 
+%'---------------------------http://robjhyndman.com/hyndsight/crossvalidation/
+When the data are not independent cross-validation becomes more difficult as leaving out an observation does not remove all the associated information due to the correlations with other observations. For time series forecasting, a cross-validation statistic is obtained as follows
 
+Fit the model to the data y1,…,yt and let y^t+1 denote the forecast of the next observation. Then compute the error (et+1∗=yt+1−y^t+1) for the forecast observation.
+Repeat step 1 for t=m,…,n−1 where m is the minimum number of observations needed for fitting the model.
+Compute the MSE from em+1∗,…,en∗.
+References
+
+An excellent and comprehensive recent survey of cross-validation results is Arlot and Celisse (2010)
+
+%---------------------------------------------------
 \subsection{Online machine learning algorithms}
 
 An online algorithm allows incremental learning by processing one instance at a
