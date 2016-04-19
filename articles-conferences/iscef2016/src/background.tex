@@ -40,11 +40,10 @@ linear combination of them exists, which is I(0).
 
 \subsection{Vector Autorregresive Models}\label{sec:varvec}
 
-VECM is a special case of the VAR \cite{sims1980} model and both describe the joint behaviour
-of a set of variables.
-
-The VAR($p$) model is a general framework describing the behaviour of a
-set of $l$ endogenous variables as a linear combination of their last $p$
+Vector error correction model (VECM) describe the joint behaviour
+of a set of variables and can be derived from the simple Vector Autoregressive model (VAR) \cite{sims1980} model.
+The VAR($p$) model is a framework describing the behaviour of a
+set of $l$ endogenous and stationary variables as a linear combination of their last $p$
 values, where $l,p\in\mathbb{N}$. 
 In our case, each one of these $l$ variables is a scalar time series
 $y_{\lambda,t}$, $\lambda=1,\dots,l$, and we represent them all together
