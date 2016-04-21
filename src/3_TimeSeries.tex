@@ -114,35 +114,31 @@ non-stationary data, the persistence of shocks will always be infinite.
 
 There are different types of non-stationary time series models often found in economics:
 
-
-\subsubsection{Deterministic trend}
-
-Deterministic trend or trend stationary processes have the following form:
+\begin{enumerate}[(a)]
+\item \textbf{Deterministic trend:} Deterministic trend or trend stationary processes have the following form:
 
 \[
-X_t = f(t) + \epsilon{t} \quad ,
+y_t = f(t) + \epsilon_{t} \quad ,
 \]
 
-\noindent where $t$ is the time trend and $\epsilon{t}$ represents a stationary error term (with mean 0 and variance $\sigma^2$) and $f(t)$ is a deterministic function of time:
+\noindent where $t$ is the time trend and $\epsilon_{t}$ represents a stationary error term (with mean 0 and variance $\sigma^2$) and $f(t)$ is a deterministic function of time:
 \begin{itemize}
 \item If $f(t) = \alpha + \beta t$ we have a linear trend model which is widely used. 
 \item If $f(t)= \alpha \exp^rt$ we have an exponential growth curve.
 \item If $f(t) = c_1 + c_2t + c_3 t^2$ we have a quadratic trend model
 \item If $f(t) = \frac{1}{k+\alpha \beta ^t }$ we have a logistic curve
 \end{itemize}
-
-\subsubsection{Stochastic trend}
-Stochastic trend processes are also called unit root or difference stationarity processes and have the following form:
+\item \textbf{Stochastic trend:} Stochastic trend processes are also called unit root or difference stationarity processes and have the following form:
 
 \[
-X_t = \mu + X_{t-1} + \epsilon_t
+y_t = \mu + y_{t-1} + \epsilon_t
 \]
 \noindent where $\epsilon_t$ is a stationary process. When $\mu = 0 $ the process is called pure random walk and when $\mu \neq 0$  the process is called random walk with drift.
 
 Alternatively this process can be expressed using the lag operator $L$ such as:
 
 \[
-(1-L) X_t = \mu  + \epsilon_t
+(1-L) y_t = \mu  + \epsilon_t
 \]
 
 This process is also called unit root because the root of the characteristic equation ($1-z = 0$) is the unity.  
@@ -152,12 +148,11 @@ A random walk with or without drift can be transformed to a stationary process b
 Apart from a stochastic trend, many economic financial time series seem to involve an exponential trend, this is the reason why researchers often take the logarithmic transformation before doing analysis.
 
 Other less common forms of non-stationarity are structural break in mean and structural break in variance. 
+\end{enumerate}
 
-\newpage
 \subsection{Spurious regression} \label{sec:spurious}
-The use
-of non-stationary data can lead to spurious regressions. Spurious regression
-dates back to Yule in 1926 \cite{yule1926} If two stationary
+The use of non-stationary data can lead to spurious regressions. Spurious regression
+dates back to Yule in 1926 \cite{yule1926}. If two stationary
 variables are generated as independent random series and are trending over time,
 when one of those variables is regressed on the other, they could have a high
 $R^2$ even if the two are totally unrelated. So, if standard regression
@@ -165,16 +160,16 @@ techniques are applied to non-stationary data, it could look good under standard
 measures but valueless \cite{brooks2002}.
 
 \textbf{Example of spurious regression} \quad 
-An example is shown below. Two random walks series $x_1t$ and $x_2t$ with a small drift ($\alpha=0.09$) are generated and
+An example is shown below. Two random walks series $x_{1,t}$ and $x_{2,t}$ with a small drift ($\alpha=0.09$) are generated and
 then regressed one on the other:
  \begin{equation}
- x_i,t = \alpha + x_{i,t-1} + \epsilon_i,t  \qquad \text{where} \qquad \mathcal{N}(0,1), \quad i=1,2
+ x_{i,t} = \alpha + x_{i,t-1} + \epsilon_i,t  \qquad \text{where} \qquad \mathcal{N}(0,1), \quad i=1,2
  \end{equation}
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/spurious1}
-  \caption{Two random walks time series $x_1,t$ and $x_2,t$}
+  \caption{Two random walks time series $x_{1,t}$ and $x_{2,t}$}
   \label{fig:spurious1}
 \end{figure}
 
@@ -188,30 +183,6 @@ then regressed one on the other:
 These two random walks, which are independent by construction, appear to be related with a $R^2=0.883$. However, what it is happening is that they are drifting in the same direction. Drift can be removed using returns or first differences.
 If after taking returns or first differences the regression fit is still good we will say that the variables are cointegrated, this means that both series may drift but their residuals will not. A more formal definition of cointegration is given in the section \ref{sec:cointegration}.
 
-%                            OLS Regression Results                            
-%==============================================================================
-%Dep. Variable:                      y   R-squared:                       0.883
-%Model:                            OLS   Adj. R-squared:                  0.882
-%Method:                 Least Squares   F-statistic:                     742.2
-%Date:                Fri, 06 Feb 2015   Prob (F-statistic):           1.61e-47
-%Time:                        06:07:47   Log-Likelihood:                -218.03
-%No. Observations:                 100   AIC:                             440.1
-%Df Residuals:                      98   BIC:                             445.3
-%Df Model:                           1                                         
-%==============================================================================
-%                 coef    std err          t      P>|t|      [95.0% Conf. Int.]
-%------------------------------------------------------------------------------
-%x1             0.8883      0.033     27.243      0.000         0.824     0.953
-%const          2.6726      0.405      6.606      0.000         1.870     3.475
-%==============================================================================
-%Omnibus:                        4.133   Durbin-Watson:                   0.363
-%Prob(Omnibus):                  0.127   Jarque-Bera (JB):                4.145
-%Skew:                          -0.469   Prob(JB):                        0.126
-%Kurtosis:                       2.662   Cond. No.                         23.3
-%==============================================================================
-$\blacksquare$
-
-\newpage
 \subsection{Integration}
 
 Following Johansen \cite{johansen1995} we shall say that a stochastic process
@@ -223,7 +194,7 @@ $\varepsilon_t\sim iid(0,\sigma^2)$ holds.
 
 A (vector) time series $\mathbf{y}_t$ is said to be {\em integrated of order\/}
 $d$, and then we shall write $\mathbf{y}_t\sim I(d)$, whenever after $d$ times
-(discrete) differentiation an stationary process is
+(discrete) differentiation a stationary process is
 obtained~\cite{banerjee1993};
 more precisely, whenever
 $(1-L)^d\,\mathbf{y}_t\sim\text{I(0)}$, where $L$ is the usual lag operator:
@@ -235,7 +206,7 @@ vectors of dimension 1; in this scalar case we will write the time series in
 non-bold format.
 
 
-\subsection{Cointegration} \label{sec:coint}
+\subsection{Cointegration} \label{sec:cointegration}
 Cointegration concept was introduced by Engle in 1987 \cite{engle1987} and implies that one or
 more linear combinations of non-stationary variables are stationary even though
 individually they are not.  
@@ -255,7 +226,7 @@ linear combination of them exists, which is I(0).
 Stock and Watson in 1988 \cite{stock+watson1988} observed that
 cointegration reflects the common stochastic trends providing a useful way to
 understand cointegration relationships. These common stochastic trends can be
-also interpreted as a long-run equilibrium relationships.
+also interpreted as a long-run equilibrium relationship.
 
 The idea of cointegration was immediately adopted in finance since it could
 represent their long-run relationship implied by economic
@@ -282,7 +253,7 @@ variables~\cite{mukherjee1995},\cite{engle2004}.
 \subsection{Johansen method}
 Johansen in 1988 \cite{johansen1988} suggests a method for determining cointegration vectors. 
 
-There are two statistics for cointegration under Johansen approach: the trace (shown in equation \ref{eq:johansentrace}) and the maximum-eigenvalue statistic (shown in equation \ref{eq:johansenmax}).
+There are two statistics for cointegration under Johansen approach: the trace (shown in equation \ref{eq:johansentrace}) and the maximum-eigenvalue statistic (shown in equation \ref{eq:johansenmax}):
 
 \begin{equation}
 \label{eq:johansentrace}
@@ -296,25 +267,25 @@ There are two statistics for cointegration under Johansen approach: the trace (s
 \end{equation}
 
 
-Where $r$ is the number of cointegration vectors and $\hat]{\lambda}_i$ is the estimated value for the ith ordered eigenvalue.  $\lambda_{\text{trace}}$ null hypothesis is that the number of cointegration vectors is less than or equal to $r$ against that there are more than $r$. $\lambda_{\text{max}}$ has the null hypothesis that the number of cointegration vectors is $r$ against an alternative of $r
+\noindent where $r$ is the number of cointegration vectors and $\hat]{\lambda}_i$ is the estimated value for the ith ordered eigenvalue.  $\lambda_{\text{trace}}$ null hypothesis is that the number of cointegration vectors is less than or equal to $r$ against that there are more than $r$. $\lambda_{\text{max}}$ has the null hypothesis that the number of cointegration vectors is $r$ against an alternative of $r
 +1$.
 
 
 \newpage
 \textbf{Cointegration example} \quad
 
-If we have two-dimensional process $\mathbf{X}_t$, $t=1,\dots,T$ by:
+If we have two-dimensional process $\mathbf{y}_t$, $t=1,\dots,T$ by:
 
 \begin{eqnarray*}
-\mathbf{X}_{1t} &=& \sum_{i=1}^t \epsilon_{1i} + \epsilon_{2t} \\
-\mathbf{X}_{2t} &=& a \sum_{i=1}^t \epsilon_{1i} + \epsilon_{3t} 
+\mathbf{y}_{1t} &=& \sum_{i=1}^t \epsilon_{1i} + \epsilon_{2t} \\
+\mathbf{y}_{2t} &=& a \sum_{i=1}^t \epsilon_{1i} + \epsilon_{3t} 
 \end{eqnarray*}
 
-Since $\mathbf{X}_{1t}$ and $\mathbf{X}_{2t}$ are I(1) processes and there
+Since $\mathbf{y}_{1t}$ and $\mathbf{y}_{2t}$ are I(1) processes and there
 exist a vector $\beta = [a -1]$ such that:
 
 \[
-\beta^\top \mathbf{X}_t = a \mathbf{X}_{1t} -\mathbf{X}_{2t} = 
+\beta^\top \mathbf{y}_t = a \mathbf{y}_{1t} -\mathbf{y}_{2t} = 
 a\epsilon_{2t} - \epsilon_{3t} \sim \text{I(0)}
 \]
 
@@ -322,20 +293,20 @@ then, both processes are said to be cointegrated.
 
 
 If we add a I(0) process
-$\mathbf{X}_{3t} = \epsilon_{4t}$  we find that there exists two cointegration
+$\mathbf{y}_{3t} = \epsilon_{4t}$  we find that there exists two cointegration
 vectors now: $\begin{bmatrix}a &-1& 0\end{bmatrix}$ and $\begin{bmatrix}0
 &0&1\end{bmatrix}$ since:
 
 \[
-\beta^\top \mathbf{X}_t = 
+\beta^\top \mathbf{y}_t = 
 \begin{bmatrix}
 a & -1 & 0 \\
 0 & 0 & 1
 \end{bmatrix} 
 \begin{bmatrix} 
-\mathbf{X}_{1t} \\
-\mathbf{X}_{2t} \\
-\mathbf{X}_{3t}
+\mathbf{y}_{1t} \\
+\mathbf{y}_{2t} \\
+\mathbf{y}_{3t}
 \end{bmatrix} = 
 \begin{bmatrix}
 a\epsilon_{2t} - \epsilon_{3t} \\
@@ -348,7 +319,7 @@ a\epsilon_{2t} - \epsilon_{3t} \\
 \begin{figure}[!h]
   \centering
   \includegraphics[width=\textwidth]{img/coint-example}
-  \caption{Cointegration example: two processes I(1)(blue and green) and one process I(0) (red)}
+  \caption{Cointegration example: two I(1) processes (blue and green) and one I(0) process (red).}
   \label{fig:cointex}
 \end{figure}
 
@@ -374,10 +345,9 @@ between the processes by linear relations that are more stationary than the
 original process. Cointegration vectors can be obtained using the Johansen method which gives with a certain probability the number of significant vectors. Figures    
 \ref{fig:cointvectors3}, \ref{fig:cointvectors4}  and \ref{fig:cointvectors5}  shows the linear combinations obtained using cointegration vectors given by Johansen method. The method confirm that only two vectors are found and the third one given doesn't result in a I(0) process.
 
-$\blacksquare$
 
 \section{Unit root tests}
-Many economic and financial time series exhibit trending behaviour or non-stationary behaviour in the mean or variance. An important econometric task is to determine the type of non-stationary. For trend stationary I(0) time series a time-trend regression is appropriate. For I(1) time series taking first differences transforms it into a stationary one.  For cointegration to determine if time series are I(1) is mandatory to model their long-run relationship. In order to determine if a time series is an a I(1) or I(0) process unit root tests are used. Several tests have been developed but the most widely used is an extension of the Dickey and Fuller test \cite{dickey1979} called the Augmented Dickey-Fuller (ADF) test developed in 1984 by Said and Dickey in 1984\cite{said1984}.
+Many economic and financial time series exhibit trending behaviour or non-stationary behaviour in the mean or variance. An important econometric task is to determine the type of non-stationary. For trend stationary I(0) time series a time-trend regression is appropriate. For I(1) time series taking first differences transforms it into a stationary one.  For cointegration to determine if time series are I(1) is mandatory to model their long-run relationship. In order to determine if a time series is an a I(1) or I(0) process unit root tests are used. Several tests have been developed but the most widely used is an extension of the Dickey and Fuller test \cite{dickey1979} called the Augmented Dickey-Fuller (ADF) test developed by Said and Dickey in 1984\cite{said1984}.
 
 The ADF test tests the null hypothesis that a time series $y_t$ is I(1) against the alternative that it is I(0), assuming that the dynamics in the data have an ARMA structure. The ADF test is based on estimating the test regression:
 
@@ -419,9 +389,7 @@ proposed to forecast its behaviour.
 The volatility of the data is due to a large number of factors affecting the
 market, with some of them directly measurable such as historical prices,
 trends, supply and demand. However, others such as monetary policies and news
-are not directly measurable and are included in other models out of the scope
-of this thesis. 
-
+are not directly measurable.
 
 Despite the fact variance and volatility are related, they are not the same concept. Variance is a measure of distribution of returns and is not necessarily
 bound by any time period.  Volatility is a measure of the standard deviation
@@ -443,11 +411,11 @@ underlying assumptions of the process.
 
 \subsection{Types of volatility}
 
-The volatility of a stock is not directly observable~\cite{tsay2005,engle1993}. For example, daily volatility is not directly observable from only daily returns because there is only one observation in a trading day.  If intraday data is available, then volatility could be estimated. However, intraday returns are not the only explanatory variables for volatility and several estimators have been proposed. These estimators are observable variables that are related to the latent variable of interest called volatility proxies~\cite{devilderetal2007}. Examples of volatility proxies are the following: 
+The volatility of a stock is not directly observable \cite{tsay2005,engle1993}. For example, daily volatility is not directly observable from only daily returns because there is only one observation in a trading day.  If intraday data is available, then volatility could be estimated. However, intraday returns are not the only explanatory variables for volatility and several estimators have been proposed. These estimators are observable variables that are related to the latent variable of interest called volatility proxies~\cite{devilderetal2007}. Examples of volatility proxies are the following: 
 
 
 
-\subsubsection{realized volatility} is also known as historic volatility and
+\subsubsection{Realized volatility} is also known as historic volatility and
 it is the actual variance in the price of a stock over time.
 Realized volatility is measured in terms of the standard deviation
 using the historical stock prices. It is commonly calculated based on
@@ -491,7 +459,7 @@ result in an inferior model being chosen as the best one. The realized
 volatility, as calculated by the cumulative sum of squared intraday returns and
 shown in equation (\ref{eq:rv}), is less noisy and doesn't lead to choosing an
 inferior model.   
-\subsubsection{implied volatility volatility} not only can be extracted from returns
+\subsubsection{Implied volatility} not only can be extracted from returns
 but it can also be derived from option or future pricing models.  The
 volatility obtained corresponds to the market's prediction of future
 volatility. In finance, an option is a derivative, that is, a contract which
@@ -686,15 +654,15 @@ VAR is a general framework describing the behaviour of a
 set of $l$ endogenous variables as a linear combination of their last $p$
 values, where $l,p\in\mathbb{N}$. 
 In our case, each one of these $l$ variables is a scalar time series
-$y_{\lambda,t}$, $\lambda=1,\dots,l$, and we represent them all together
+$y_{i,t}$, $i=1,\dots,l$, and we represent them all together
 at time $t$ by the the vector time series:
-\begin{equation}
+\begin{equation*}
 \label{eq:variables}
 \mathbf{y}_t = 
 \begin{bmatrix} y_{1,t} & y_{2,t} & \dots & y_{l,t} \end{bmatrix}^\top.
-\end{equation}
+\end{equation*}
 \noindent
-Notice that the vectors $\mathbf{y}_t$ are assumed to be $l$-dimensional.
+Notice that the vector $\mathbf{y}_t$ is assumed to be $l$-dimensional.
 
 The VAR($p$) model describes the behaviour of a dependent variable in terms of
 its own lagged values and the lags of the others variables in the system. The
@@ -716,22 +684,22 @@ $\boldsymbol{\epsilon}_{p+1},
 are error terms, $\mathbf{c}$ is a constant vector and $N$ is the total
 number of samples.
 
-Notice that, regarding our notation of section (\ref{sec:coint}),
+Notice that, regarding our notation of section (\ref{sec:cointegration}),
 we have here 
 $\mathbf{y}_t^0 = \mathbf{y}_t$,
 $\mathbf{y}_t^\nu = \mathbf{y}_{t-\nu}$ and
-the $\lambda$-th component of the vector time series $\mathbf{y}_t^\nu$
-is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
-$\lambda=1,\dots,l$.
+the $i$-th component of the vector time series $\mathbf{y}_t^\nu$
+is the scalar time series $y_{i,t}^\nu$, where $\nu=1,\dots,p$ and
+$i=1,\dots,l$.
 Transposing each equation of the system (\ref{eq:var}) we can write
 the VAR($p$) model in block-matrix form as:
-\begin{equation}\label{eq:vareq}
+\begin{equation}\label{eq:simplevareq}
 \mathbf{Y} = \mathbf{A} \mathbf{X} + \mathbf{E} \, , 
 \end{equation}
 %%
 \noindent where:
 %%
-\begin{alignat}{2}
+\begin{alignat*}{2}
 \mathbf{Y}
 &= \begin{bmatrix}
    \mathbf{y}_{p+1}^\top \\
@@ -766,16 +734,15 @@ the VAR($p$) model in block-matrix form as:
    \vdots \\
    \boldsymbol{\epsilon}_N^\top \\
    \end{bmatrix}_{(N-p)\times l}
-\end{alignat}
-Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+\end{alignat*}
+Taking into account the error term $\mathbf{E}$, equation \ref{eq:simplevareq}
 can be solved with respect to $\mathbf{X}$ using the ordinary least
-squares estimation.
+squares estimation (see section \ref{sec:OLS}).
 
 \section{Vector error correction model}
-Vector error correction model (VECM)  \cite{engle87} is a special form of a VAR model for I(1) variables that are also
-cointegrated~\cite{banerjee1993}.
+Vector error correction model (VECM)  \cite{engle87} describe the joint behaviour of a set of cointegrated I(1) time series \cite{banerjee1993} and can be derived from the simple VAR model.
 
-It is obtained re-writing equation (\ref{eq:var}) in terms of the new
+It is obtained re-writing equation \ref{eq:var} in terms of the new
 variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
 The VECM model, expressed in terms those differences, takes the form:
 \begin{equation}\label{eq:vec}
@@ -787,7 +754,7 @@ The VECM model, expressed in terms those differences, takes the form:
 \noindent
 where the coefficients matrices $\boldsymbol{\Phi}_i^*$ and 
 $\boldsymbol{\Omega}$, expressed in terms of the matrices
-$\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
+$\boldsymbol{\Phi}_i$ of the model VAR shown in equation \ref{eq:var}, are:
 \begin{align*}
 \boldsymbol{\Phi}_i^* 
 &:= -\sum_{j=i+1}^{p}\boldsymbol{\Phi}_j\,, \\
@@ -835,7 +802,7 @@ which is a VAR model but for time series differences.
 
 Transposing each equation of the system (\ref{eq:vecfull}) we can write
 the VECM($p$) model in block-matrix form as:
-\begin{equation}\label{eq:vareq}
+\begin{equation}\label{eq:simpleveceq}
 \mathbf{Y} = 
 \mathbf{A} \mathbf{X} + 
 \mathbf{E} \, , 
@@ -870,7 +837,7 @@ dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 \end{align}
 
 \begin{align}
-\label{eq:vecX}
+\label{eq:vecE}
 \mathbf{E}
 = \begin{bmatrix}
    \boldsymbol{\epsilon}_{p+1}^\top \\
@@ -898,10 +865,58 @@ dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 
 
 
-Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+Taking into account the error term $\mathbf{E}$, equation~\ref{eq:simpleveceq}
 can be solved with respect to $\mathbf{X}$ using the ordinary least
 squares estimation (see section \ref{sec:OLS}).
 
+\subsection{Ordinary Least Squares method} \label{sec:OLS}
+
+When $\mathbf{A}$ is singular, solution to equation~(\ref{eq:vareq}) is given
+by the ordinary least squares (OLS) method. OLS consists of minimizing the sum
+of squared errors or equivalently minimizing the following expression:
+
+\begin{equation}
+\label{eq:regressionproblem}
+\underset{\mathbf{X}}{\text{min}} \quad \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{B} \|_2^2
+\end{equation}
+
+\noindent for which the solution $\hat{\mathbf{X}}$ is well-known:
+
+\begin{equation}
+\label{eq:MP}
+\hat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{B}
+\end{equation}
+
+\noindent where $\mathbf{A}^{\!\!+}$ is the Moore-Penrose pseudo-inverse
+which can be written as follows: 
+
+\begin{equation}
+\label{eq:pseudoinverse}
+\mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
+\end{equation}
+
+However, when $\mathbf{A}$ is not full rank, i.e
+$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
+always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+More generally, the pseudo-inverse is best computed using the compact
+singular value decomposition (SVD) of $\mathbf{A}$:
+
+\begin{equation}
+    \label{eq:compactsvd}
+    \underset{m \times n}{\mathbf{A}}=
+    \underset{m \times k}{\mathbf{U_1}} \enskip
+    \underset{k \times k}{\Sigma_1} \enskip
+    \underset{k \times n}{\mathbf{V}_1^{\top}} \, ,
+\end{equation}
+
+\noindent as follows
+
+\begin{equation}
+\label{eq:pseudoinversesvd}
+\mathbf{A}^{\!\!+} = \mathbf{V}_1 \Sigma_1^{-1} \mathbf{U}_1^\top \, .
+\end{equation}
+
+\newpage
 Conventional regression estimators, including VARs, have good properties when applied to covariance-stationary time series, but encounter difficulties when applied to non stationary or integrated processes.
 
 These difficulties were illustrated by Granger and Newbold in 1974 \cite{granger1974} when they introduced the concept of spurious regressions (see section \ref{sec:spurious}). In 1982, Nelson and Plosser  \cite{nelson1982} showed that unit roots might be present in a wide variety of macroeconomic series
@@ -930,5 +945,4 @@ finance: \cite{mukherjee1995}, \cite{maysami2000}, \cite{arestis2001} and
 trading is a very common example of a cointegration
 application \cite{herlemont2003} but also can also be extended to a larger set
 of variables \cite{mukherjee1995}, \cite{engle2004}.
-
 
