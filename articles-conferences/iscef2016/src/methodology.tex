@@ -6,7 +6,7 @@ sample of the last historical data. However, VECM assumes cointegration vectors 
 In fact, the long-run relationships between the time series might change due to
 several economic factors that can lead to structural breaks in the cointegration
 relationship \cite{gregoryETal1996}. 
-In order to show the the number of cointegration vectors which depends on 
+In order to show the number of cointegration vectors which depends on 
 the amount $L$ of historical data and the number of lags $p$ in the VECM, we used a grid search. We defined a grid of possible values for $L$ and $p$. $L$ goes throughout $[100,5000]$ with a step size of 300 and $p$  throughout $[1,5]$ with step size of 1. The first experiment consisted in determining the number of cointegration vectors for all combinations of $L$ and $p$.
 We used four forex rates: EURUSD, GBPUSD, USDCHF and USDJPY with 10-second frequency. Data started at 13:00 GMT of the 13th of August 2014,
 when the New York and London financial markets opened.
@@ -124,13 +124,7 @@ The naive forecast of the time series difference $\hat{\mathbf{y}}_{t+1}$ for th
 \end{equation}
 \noindent where  $\hat{\epsilon}_{t+1} = \epsilon_{t}$.
 
-On the other hand, ARIMA is widely used to forecast returns in finance \cite{tsay2005}. A process can be modelled as an ARIMA$(p,d,q)$ model if $\mathbf{x}_t=\Delta^d \mathbf{y}_t $, i.e after differencing $d$ times the time series $\mathbf{y}_t$,  we get an ARMA$(p,q)$. Since we are modelling returns, we used $d=1$. An ARMA$(p,q)$ model is the following:
-
-\begin{equation}
-\mathbf{x}_t = \sum_{i=1}^p \phi_i \mathbf{x}_{t-i}  +  \sum_{j=1}^q \theta_j \epsilon_{t-j}  
-\end{equation}
-\noindent with coefficients $\phi_p \neq 0$, $\theta_q \neq 0$ and $\sigma_{\epsilon}^2 > 0$.
-
+On the other hand, ARIMA is widely used to forecast returns in finance \cite{tsay2005}. A process can be modelled as an ARIMA$(p,d,q)$ model if $\mathbf{x}_t=\Delta^d \mathbf{y}_t $, i.e after differencing $d$ times the time series $\mathbf{y}_t$,  we get an ARMA$(p,q)$. Since we are modelling returns, we used $d=1$.
 
 
 \subsection{Evaluation methods} \label{sec:evaluation}
