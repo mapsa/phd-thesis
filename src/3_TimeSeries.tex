@@ -644,9 +644,28 @@ a re-training process from scratch needs to be done. This problem can be
 avoided using online machine learning algorithms that allow one instance at a
 time to be processed with low computationally expensive calculations.
 
+\section{Univariate Time Series modeling}
 
+The random walk model, despite its simplicity is still difficult to outperform for standard econometric forecasting models \cite{lo2011} despite its simplicity. The random walk model is defined as:
 
-%\section{Vector Autoregressive Models}\label{sec:varvec}
+\begin{equation}
+\mathbf{y}_t = \mathbf{y}_{t-1} + \epsilon_{t}
+\label{rwmodel}
+\end{equation}
+
+The naive forecast of the time series difference $\hat{\mathbf{y}}_{t+1}$ for the random walk model is defined as:
+\begin{equation}
+\hat{\mathbf{y}}_{t+1} = \mathbf{y}_t + \hat{\epsilon}_{t+1} 
+\end{equation}
+\noindent where  $\hat{\epsilon}_{t+1} = \epsilon_{t}$.
+
+On the other hand, ARIMA is widely used to forecast returns in finance \cite{tsay2005}. A process can be modelled as an ARIMA$(p,d,q)$ model if $\mathbf{x}_t=\Delta^d \mathbf{y}_t $, i.e after differencing $d$ times the time series $\mathbf{y}_t$,  we get an ARMA$(p,q)$. An ARMA$(p,q)$ model is the following:
+
+\begin{equation}
+\mathbf{x}_t = \sum_{i=1}^p \phi_i \mathbf{x}_{t-i}  +  \sum_{j=1}^q \theta_j \epsilon_{t-j}  
+\end{equation}
+\noindent with coefficients $\phi_p \neq 0$, $\theta_q \neq 0$ and $\sigma_{\epsilon}^2 > 0$.
+
 \section{Multivariate Time Series modelling}
 
 The vector autoregressive VAR($p$) model \cite{sims1980} is one of the most easy to use, successful and flexible models for the analysis of multivariate time series. It is a natural extension of the univariate autoregressive (AR) model. The VAR model has proven to be useful for describing the dynamic behaviour of economic and financial time series.
