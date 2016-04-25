@@ -13,7 +13,7 @@ to introduce cointegration restrictions in models often improves forecasting \ci
 financial applications \cite{mukherjee1995,seong2013,maysami2000,arestis2001} such as pair trading \cite{herlemont2003} or models with more than two variables \cite{mukherjee1995,engle2004}.
 
 VECM parameters are obtained using the ordinary least squares
-(OLS) method~\cite{golub1980}. Since OLS involves many calculations, the parameter estimation is computationally expensive when the number of lagged values and
+(OLS) method \cite{golub1980}. Since OLS involves many calculations, the parameter estimation is computationally expensive when the number of lagged values and
 data increases. Moreover, obtaining cointegration vectors 
 is also an expensive routine. This is a main limitation to use VECM with stream data with high frequency.
 Chen and Lung's BVECM \cite{chen2003} addresses the advantage of distributed processing over conventional rolling window processing. 
@@ -23,7 +23,7 @@ Our approach was to determine adaptively the number of observations and lags of 
 maximise cointegration relations in the past. 
  This search is computationally
 expensive because the Johansen
-method~\cite{johansen1995} is required to find cointegration vectors, which is of order $O(n^3)$. Therefore, our proposal, called Adaptively Vector Error Correction (AVECM), 
+method \cite{johansen1995} is required to find cointegration vectors, which is of order $O(n^3)$. Therefore, our proposal, called Adaptively Vector Error Correction (AVECM), 
 is to parallelise this search in order to get new parameters before new data arrives.
 Model effectiveness is focused on out-of-sample forecast rather than in-sample
 fitting. This criterion allows AVECM prediction capability to be
@@ -32,9 +32,9 @@ The forecast capability of our method was measured using MSE and the Theil's $U$
 United States Dollar (USD) (EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss
 Franc (CHF) (USDCHF) and USD to Japanese Yen (JPY) (USDJPY) with a 10-seconds frequency.
 
-This paper is organised as follows: section~\ref{sec:background} presents the
-VAR and VECM, the AVECM algorithm is presented in section~\ref{sec:methodology}.
-In section~\ref{sec:results} we describe the tests carried on to assess the
+This paper is organised as follows: section \ref{sec:background} presents the
+VAR and VECM, the AVECM algorithm is presented in section \ref{sec:methodology}.
+In section \ref{sec:results} we describe the tests carried on to assess the
 accuracy and the execution time of AVECM.  This section also includes a
-description of the test data.  Section~\ref{sec:conclusions} contains the
+description of the test data.  Section \ref{sec:conclusions} contains the
 conclusions and a discussion of future research.

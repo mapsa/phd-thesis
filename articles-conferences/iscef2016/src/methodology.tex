@@ -25,17 +25,6 @@ given by the Johansen method for different values of $L$ and $p=1$ . This proced
   \label{fig:hists}
 \end{figure}
 
-The same experiments, this time using $p=3$, were carried out in order to see the
-effect on the number of cointegration vectors found. 
-Figure~\ref{fig:histsp3} shows that $p$ affects the distribution of the number of cointegration vectors by small amounts.
-
-\begin{figure}[!h]
-  %\vspace{-0.8cm}
-  \centering
-  \includegraphics[width=0.9\textwidth]{img/histCointVectors-offset20520-p-3-freq-10s}
-  \caption{Histogram of the number of cointegration vectors using $p=3$. The distribution is very similar to the one with $p=1$}
-   \label{fig:histsp3}
-\end{figure}
 
 From section \ref{sec:background} we know that $r=0$ means no cointegration and $r=l$ (we are using four rates, so $l=4$) reveals that no process is I(1) but stationary.
 The interesting cases of cointegration are those where $r$ lies strictly
@@ -60,7 +49,7 @@ $PC$ and the performance measure MSE (see equation
 \begin{figure}[ht!]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.8\textwidth]{img/MSE-offset20520-p-2-freq-10s}
+  \includegraphics[width=0.8\textwidth]{img/MSE-offset20520-p-1-freq-10s}
   \caption{MSE versus the percentage of cointegration considering 1000
   iterations. Best $L$ found was 1600. Below MSE versus $L$ shows a rapidly decreasing behaviour, founding minimum at PC = 84.3\% }
   \label{fig:cointvsmse}
