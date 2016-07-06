@@ -1,36 +1,44 @@
 \section{Introduction}
 \label{sec:introduction}
 In finance, it is common to find variables with long-run equilibrium
-relationships. This is termed cointegration and reflects the idea that
-some sets of variables cannot wander too far from each other. Cointegration
-means that one or more linear combinations of these variables are stationary
-even though individually they are not. Some models,
-such as the Vector Error Correction (VECM) \cite{engle87}, take advantage of
-this property and describe the joint behaviour of several cointegrated
-variables. VECM introduces this long-run relationship among a set of cointegrated
-time series as an error correction term. These time series must be integrated of order 1, denoted I(1), i.e. they become stationary at their first differences. In finance, I(1) time series are very common and 
-to introduce cointegration restrictions in models often improves forecasting \cite{duy1998}. Therefore, VECM has been widely adopted in
-financial applications \cite{mukherjee1995,seong2013,maysami2000,arestis2001} such as pair trading \cite{herlemont2003} or models with more than two variables \cite{mukherjee1995,engle2004}.
+relationships. This is termed cointegration and reflects the idea that some sets
+of variables cannot wander too far from each other. Cointegration means that one
+or more linear combinations of these variables are stationary even though
+individually they are not. Some models, such as the Vector Error Correction
+(VECM) \citep{engle87}, take advantage of this property and describe the joint
+behaviour of several cointegrated variables. VECM introduces this long-run
+relationship among a set of cointegrated time series as an error correction
+term. These time series must be integrated of order 1, denoted I(1), i.e. they
+become stationary at their first differences. In finance, I(1) time series are
+very common and to introduce cointegration restrictions in models often improves
+forecasting \citep{duy1998}. Therefore, VECM has been widely adopted in financial
+applications (\cite{mukherjee1995}, \cite{seong2013}, \cite{maysami2000} and
+\cite{arestis2001}). VECM has also been used in pair trading \citep{herlemont2003} or
+models with more than two variables (\cite{mukherjee1995} and \cite{engle2004}).
 
-VECM parameters are obtained using the ordinary least squares
-(OLS) method \cite{golub1980}. Since OLS involves many calculations, the parameter estimation is computationally expensive when the number of lagged values and
-data increases. Moreover, obtaining cointegration vectors 
-is also an expensive routine. This is a main limitation to use VECM with stream data with high frequency.
-Chen and Lung's BVECM \cite{chen2003} addresses the advantage of distributed processing over conventional rolling window processing. 
+VECM parameters are obtained using the ordinary least squares (OLS) method
+\citep{golub1980}. Since OLS involves many calculations, the parameter estimation
+is computationally expensive when the number of lagged values and data
+increases. Moreover, obtaining cointegration vectors is also an expensive
+routine. This is a main limitation to use VECM with stream data with high
+frequency.  Chen and Lung's BVECM \citep{chen2003} addresses the advantage of
+distributed processing over conventional rolling window processing. 
 
-Our aims were to study if a parallel version of VECM can be used with high frequency stream data.
-Our approach was to determine adaptively the number of observations and lags of VECM which
-maximise cointegration relations in the past. 
- This search is computationally
-expensive because the Johansen
-method \cite{johansen1995} is required to find cointegration vectors, which is of order $O(n^3)$. Therefore, our proposal, called Adaptively Vector Error Correction (AVECM), 
-is to parallelise this search in order to get new parameters before new data arrives.
-Model effectiveness is focused on out-of-sample forecast rather than in-sample
-fitting. This criterion allows AVECM prediction capability to be
-expressed rather than just explaining data history.
-The forecast capability of our method was measured using MSE and the Theil's $U$-statistic \cite{theil1966} widely used in economic forecast. Tests were run using four currency rates: Euro (EUR) to
-United States Dollar (USD) (EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss
-Franc (CHF) (USDCHF) and USD to Japanese Yen (JPY) (USDJPY) with a 10-seconds frequency.
+Our aims were to study if a parallel version of VECM can be used with high
+frequency stream data.  Our approach was to determine adaptively the number of
+observations and lags of VECM which maximise cointegration relations in the
+past.  This search is computationally expensive because the Johansen method
+\citep{johansen1995} is required to find cointegration vectors, which is of order
+$O(n^3)$. Therefore, our proposal, called Adaptively Vector Error Correction
+(AVECM), is to parallelise this search in order to get new parameters before new
+data arrives.  Model effectiveness is focused on out-of-sample forecast rather
+than in-sample fitting. This criterion allows AVECM prediction capability to be
+expressed rather than just explaining data history.  The forecast capability of
+our method was measured using MSE and the Theil's $U$-statistic \citep{theil1966}
+widely used in economic forecast. Tests were run using four currency rates: Euro
+(EUR) to United States Dollar (USD) (EURUSD), British Pound (GBP) to USD
+(GBPUSD), USD to Swiss Franc (CHF) (USDCHF) and USD to Japanese Yen (JPY)
+(USDJPY) with a 10-seconds frequency.
 
 This paper is organised as follows: section \ref{sec:background} presents the
 VAR and VECM, the AVECM algorithm is presented in section \ref{sec:methodology}.
