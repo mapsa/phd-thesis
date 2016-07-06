@@ -1,4 +1,4 @@
-\section{\uppercase{Conclusions}}
+\section{Conclusions}
 \label{sec:conclusions}
 Cointegration in financial time series has been largely studied and the Johansen
 method is commonly used to obtain cointegration relationships.  In practice, it
@@ -24,17 +24,14 @@ given the same computational time.
 Determining VECM parameters was the most expensive routine and it was run using
 parallel processes using MPI which allowed a grid search within a range of
 values for $L$ and $p$ to be made.  Tests were done using real currency rates
-data.  Our proposal was tested in several scenarios using different times of the
-day to show its behaviour related to the opening times of financial markets.
+data.  
 
 Results showed that our proposed AVECM improves performance measures by finding
-parameters of $L$ and $p$ maximising the percentage of cointegration.  These
-facts were consistent for different times of the day.  We found that increasing
-the number of parameters will always lead to better performance measures.
+parameters of $L$ and $p$ maximising the percentage of cointegration. 
 
 The parallel implementation allowed the execution times to be reduced more than
 9 times and therefore a response time was obtain before 10 seconds. Since we
-used 10-second frequencies we can say that our proposal is suitable for use in
+used 10-second frequencys we can say that our proposal is suitable for use in
 an online context for real applications because response times were less than
 this frequency.
 
@@ -42,4 +39,3 @@ For future study, it would be interesting to explore the relationship between
 cointegration and performance in order to propose new criteria for improving
 VECM parameters. It would also be interesting to include more explaining
 variables such as bid-ask spread and change in volume.
-

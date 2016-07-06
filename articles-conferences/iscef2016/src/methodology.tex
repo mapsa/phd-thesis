@@ -1,35 +1,35 @@
-\section{\uppercase{Methodology}} \label{sec:methodology}
+\section{Methodology} \label{sec:methodology}
 \subsection{Motivation} \label{sec:proposal}
 
 Cointegration vectors can be found applying the Johansen method which uses a
 sample of the last historical data. However, VECM assumes cointegration vectors
-do not change in time.  In fact, the long-run relationships between the time
-series might change due to several economic factors that can lead to structural
-breaks in the cointegration relationship \citep{gregoryETal1996}.  In order to
-show the number of cointegration vectors which depends on the amount $L$ of
-historical data and the number of lags $p$ in the VECM, we used a grid search.
-We defined a grid of possible values for $L$ and $p$. $L$ goes throughout
-$[2,14]$ hours with a step size of 4 hours and $p$  throughout $[1,5]$ with step
-size of 1. The first experiment consisted in determining the number of
-cointegration vectors for all combinations of $L$ and $p$.  We used four forex
-rates: EURUSD, GBPUSD, USDCHF and USDJPY with 10-second frequency. Data started
-at 13:00 GMT of the 13th of August 2014, when the New York and London financial
-markets opened.
+do not change in time.  In fact, \cite{gregoryETal1996} addresses that the
+long-run relationships between the time series  might change due to several
+economic factors that can lead to structural breaks in the cointegration
+relationship.  In order to show that the number of cointegration vectors depends
+on the amount $L$ of historical data and the number of lags $p$ in the VECM, we
+used a grid search.  We defined a grid of possible values for $L$ and $p$. $L$
+goes throughout $[2,14]$ hours (1 $hour = 360$ data points) with a step size of
+4 hours and $p$ throughout $[1,5]$ with step size of 1. The first experiment
+consisted in determining the number of cointegration vectors for all
+combinations of $L$ and $p$.  We used four forex rates: EURUSD, GBPUSD, USDCHF
+and USDJPY with 10-second frequency. Data started at 13:00 GMT of the 13th of
+August 2014, when the New York and London financial markets opened.
 
-Figure~\ref{fig:hists} shows the distribution of the number of cointegration
-vectors given by the Johansen method for different values of $L=[2,6,10,14]$ and
-$p=1$ . This procedure was carried out by a sliding window of historical data
-moving 1000 times.
+Figure \ref{fig:hists} shows the distribution of the number of cointegration
+vectors given by the Johansen method for different values of $L=[2,6,10,14]$
+hours  and $p=1$ . This procedure was carried out by a sliding window of
+historical data moving 1000 times.
 
 
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.9\textwidth]{img/Fig1}
-  \caption{Histogram of the number of cointegration vectors using $p=1$. Four
-  possible values for $L$ are shown (2, 6, 10 and 14) hours (1 hour = 360 data
-  points).}
+  \includegraphics[width=0.9\textwidth]{Fig1}
+  \caption{Distribution of the number of cointegration vectors using $p=1$ lags.
+  Four possible values for windows size $L$ are shown (2, 6, 10 and 14) hours (1
+  hour = 360 data points).}
   \label{fig:hists}
 \end{figure}
 
@@ -50,15 +50,15 @@ where c.v. stands for cointegration vectors and $it$ is the number of iterations
 
 The goal of our next experiment was to find a relation between this ratio $PC$
 and the performance measure MSE (see equation \ref{eq:MSE}). $L$ was defined
-between $[700,1500]$ data points with step size 100 and $p$ takes values between
+between $[700,1500]$ data points with step size 100 and $p$ took values between
 $[1,5]$ with step size 1.  
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=0.8\textwidth]{img/Fig2}
+  \includegraphics[width=0.9\textwidth]{Fig2}
   \caption{MSE versus the percentage of cointegration considering 1000
-  iterations. Best $L$ found was 1060. Below MSE versus $L$ shows a rapidly
-  decreasing behaviour, founding minimum at PC = 80\% }
+  iterations. Best windows size $L$ found was 1060. Below MSE versus $L$ shows a
+  rapidly decreasing behaviour, founding minimum at PC = 80\% }
   \label{fig:cointvsmse}
 \end{figure}
 
@@ -72,7 +72,7 @@ new data was processed. However, this search can be slow if we try different
 values for $L$ and $p$ and therefore we distributed this calculation in order to
 reduce searching time.
 
-Our proposal was then a modified version of VECM, with parameter $p$ and the
+Our proposal is then a modified version of VECM, with parameter $p$ and the
 amount of historical data used $L$ obtained at every step. Only the search of
 $L$ and $p$ was done in a distributed environment, since this is the most
 expensive routine. Our proposal is called Adaptive Vector Error Correction model
@@ -117,8 +117,8 @@ built and used to forecast the next data point.
 \subsection{Model comparison} \label{sec:random}
 We compared our proposal, in terms of performance, with the naive forecast of
 the random walk model and ARIMA. It is still difficult to outperform the random
-walk model for standard econometric forecasting models \citep{lo2011} despite its
-simplicity. The random walk model is defined as:
+walk model for standard econometric forecasting models  despite its
+simplicity, see \cite{lo2011}. The random walk model is defined as:
 
 \begin{equation}
 \mathbf{y}_t = \mathbf{y}_{t-1} + \epsilon_{t}
@@ -132,8 +132,8 @@ the random walk model is defined as:
 \end{equation}
 \noindent where  $\hat{\epsilon}_{t+1} = \epsilon_{t}$.
 
-On the other hand, ARIMA is widely used to forecast returns in finance
-\citep{tsay2005}. A process can be modelled as an ARIMA$(p,d,q)$ model if
+On the other hand, ARIMA is widely used to forecast returns in finance, see
+\cite{tsay2005}. A process can be modelled as an ARIMA$(p,d,q)$ model if
 $\mathbf{x}_t=\Delta^d \mathbf{y}_t $, i.e after differencing $d$ times the time
 series $\mathbf{y}_t$,  we get an ARMA$(p,q)$. Since we are modelling returns,
 we used $d=1$.
@@ -152,10 +152,9 @@ large impact due to squaring forecast error.
 \text{MSE} = 
 \frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}
 \end{equation}
-\item {\bf $U$-statistic}, the Theil's $U$-statistic \citep{theil1966} is a unit
-free measure obtained as the ratio between the root MSE (RMSE) of a model and
-the RMSE of the naive random walk model. A $U$-statistic less than 1 implies the
-performance is better than the naive model.
+\item {\bf $U$-statistic}, the Theil's $U$-statistic, presented by
+\cite{theil1966}, is a unit free measure obtained as the ratio between the root
+MSE (RMSE) of a model and the RMSE of the naive random walk model. A
+$U$-statistic less than 1 implies the performance is better than the naive
+model.
 \end{description}
-
-

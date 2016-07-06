@@ -3,19 +3,19 @@
 \subsection{Data} \label{sec:unitroot}
 AVECM tests were carried out using four foreign exchange rates all related to
 USD: EURUSD, GBPUSD, USDCHF and USDJPY. This data was collected from
-Dukascopy \citep{Dukascopy2014}, a free database which gives access to the Swiss
-Foreign Exchange marketplace.
+\cite{Dukascopy2014}, a free database which gives access to the Swiss Foreign
+Exchange marketplace.
 
-The tests were done using 10-seconds frequency from ask prices from the 11th to
+The tests were done using 10-second frequency from ask prices from the 11th to
 the 15th of August 2014. Since one day corresponds to 8640 data points and we
 used 5 days of data, we have 43,200 data points in total.
 
-\subsection{Unit root tests} \label{sec:unitroot}
+\subsection{Unit root tests} \label{sec:unitroottests}
 
 Before running the tests, we firstly checked whether the time series were I(1)
-using the Augmented Dickey Fuller (ADF) test with lags $p=1,2,3,4,5$.  MacKinnon
-\citep{mackinnon2010} critical values for rejection of hypothesis of a unit root
-are: -2.62 (1\%), 1.94 (5\%) and 1.62 (10\%).
+using the Augmented Dickey Fuller (ADF) test with lags $p=1,2,3,4,5$.
+\cite{mackinnon2010} presented critical values for rejection of hypothesis of a
+unit root: -2.62 (1\%), 1.94 (5\%) and 1.62 (10\%).
 \begin{table*}[ht]
 \label{tab:adf}
 \centering
@@ -40,7 +40,7 @@ $\Delta$ USDJPY & -135.1*  & -135.1*  & -101.2* & -101.2*   & -101.2*\\
 \multicolumn{6}{l}{ -2.62 (1\%), -1.94 (5\%) and -1.62 (10\%)}\\
 \multicolumn{6}{l}{ADF($d$) Augmented Dickey-Fuller test with lag $d$} 
 \end{tabular}
-\caption{Unit roots tests for EURUSD, GBPUSD, USDCHF and USDJPY at 10-seconds
+\caption{Unit roots tests for EURUSD, GBPUSD, USDCHF and USDJPY at 10-second
 frequency.}
 \end{table*}
 Table~\ref{tab:adf} shows that all currency rates cannot reject the unit root
@@ -95,17 +95,17 @@ routine. This procedure is done by the function
 get\_best\_params($Ls,ps,m,\mathbf{Y}$) shown in algorithm \ref{alg:AVECM}.  In
 order to improve the execution time of this search, our proposal included a
 parallel search of VECM parameters using high performance computing.  The main
-objective was to obtain a response before a new data arrived in the following10
+objective was to obtain a response before a new data arrived in the following 10
 seconds.
 
 The Johansen method is already programmed in the Python Statsmodels
-library \citep{seabold2010} and the parallel implementation was developed using
+library, see \cite{seabold2010}, and the parallel implementation was developed using
 MPI in Python.  We chose MPI because it allows large-scale parallel applications
 with wide portability to be built, being able to run in large clusters or on
 local computers.  We tested our proposal in a cluster with 2 servers Xeon
 E5-2667 (2.90GHz) of 24 cores each (48 cores in total) and 24GB RAM.  In order
 to compare serial and parallel execution times in AVECM, we set parameter
-$it=100$ in algorithm\ref{alg:AVECM}.
+$it=100$ in algorithm \ref{alg:AVECM}.
 
 The $L$ parameter was always chosen between 2 and 14 hours and $p$ always took
 values between 1 and 5. Parameter $nparams$ represents the number of pairs
@@ -120,15 +120,15 @@ below 10 seconds  (the time series frequency).
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.75\textwidth]{img/Fig3}
+  \includegraphics[width=0.9\textwidth]{Fig3}
   \caption{Computing time of sequential and parallel algorithm is shown in the
   upper figure. Speed-up is shown below.}
   \label{fig:extimes}
 \end{figure}
 
-The superior figure \ref{fig:extimes} shows that best performance accuracy
+The superior figure in \ref{fig:extimes} shows that best performance accuracy
 measurements are achieved in times near or below 10 seconds in the parallel
-version. Contrarily, serial times are high, above 10 seconds in most cases.
+version. Contrarily, serial times are higher, above 10 seconds in most cases.
 Figure~\ref{fig:extimes} also shows the speed-up in computing time for AVECM
 which is near 9X if we use more than 25 parameters ($nparams$).
 
@@ -137,4 +137,3 @@ parameters and matrix operations. The time MPI spends transferring data and
 synchronising processes is about two seconds independently of the number of
 processes considered. Execution times were measured using the Time python
 library.
-

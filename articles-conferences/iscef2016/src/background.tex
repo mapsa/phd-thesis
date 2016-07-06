@@ -1,13 +1,8 @@
-\def\rot#1{{\color{red}{#1}}}
-\def\gruen#1{{\color{green}{#1}}}
-\def\blau#1{{\color{blue}{#1}}}
-
-
 \section{Background}
 \label{sec:background}
 
 \subsection{Integration and Cointegration}\label{sec:coint}\  
-Following Johansen \citep{johansen1995} we shall say that a stochastic process
+Following \cite{johansen1995} we shall say that a stochastic process
 $Y_t$ which satisfies $Y_t-E(Y_t) = \sum_{i=0}^\infty C_i\,\varepsilon_{t-i}$ is
 called $I(0)$, and then we shall write $Y_t\sim I(0)$, whenever
 $\sum_{i=0}^\infty C_i \neq 0$ and $\sum_{i=0}^\infty C_i\,z^i$ converges for
@@ -17,7 +12,7 @@ $\varepsilon_t\sim iid(0,\sigma^2)$ holds.
 A (vector) time series $\mathbf{y}_t$ is said to be {\em integrated of order\/}
 $d$, and then we shall write $\mathbf{y}_t\sim I(d)$, whenever after $d$ times
 (discrete) differentiation an stationary process is
-obtained \citep{banerjee1993}; more precisely, whenever
+obtained, see \cite{banerjee1993}; more precisely, whenever
 $(1-L)^d\,\mathbf{y}_t\sim\text{I(0)}$, where $L$ is the usual lag operator:
 $(1-L)\,\mathbf{y}_t = \Delta\mathbf{y}_t = \mathbf{y}_t-\mathbf{y}_{t-1}$ for
 all $t$.  
@@ -42,7 +37,7 @@ linear combination of them exists, which is I(0).
 
 Vector error correction model (VECM) describe the joint behaviour of a set of
 variables and can be derived from the simple Vector Autoregressive model (VAR)
-\citep{sims1980} model.  The VAR($p$) model is a framework describing the
+presented by \cite{sims1980}.  The VAR($p$) model is a framework describing the
 behaviour of a set of $l$ endogenous and stationary variables as a linear
 combination of their last $p$ values, where $l,p\in\mathbb{N}$.  In our case,
 each one of these $l$ variables is a scalar time series $y_{\lambda,t}$,
@@ -84,12 +79,11 @@ the $\lambda$-th component of the vector time series $\mathbf{y}_t^\nu$
 is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
 $\lambda=1,\dots,l$.
 
-However, the VAR model cannot be used with non-stationary variables. VECM
-\citep{engle87} is also a linear model and a special form of a VAR model for I(1)
-variables that are also cointegrated \citep{banerjee1993}. If cointegration
-exists, variable differences are stationary and they introduce an error
-correction term which adjusts coefficients to bring the variables back to
-equilibrium. 
+However, the VAR model cannot be used with non-stationary variables. VECM ,
+developed by \cite{engle87}, is also a linear model for I(1) variables that are
+also cointegrated, see \cite{banerjee1993}. If cointegration exists, variable
+differences are stationary and they introduce an error correction term which
+adjusts coefficients to bring the variables back to equilibrium. 
 
 
 It is obtained re-writing equation (\ref{eq:var}) in terms of the new
@@ -112,8 +106,8 @@ $\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
 &:= -\left( \mathbb{I} - \boldsymbol{\Phi}_1 - \dots 
     - \boldsymbol{\phi}_p \right)\,. 
 \end{align*}
-The following well known properties of the matrix $\boldsymbol{\Omega}$
-\citep{johansen1995} will be useful in the sequel:
+The following well known properties of the matrix $\boldsymbol{\Omega}$, see
+\cite{johansen1995}, will be useful in the sequel:
 \begin{itemize}
 \item
 If $\boldsymbol{\Omega} = \mathbf{0}$, there is no cointegration.
@@ -130,7 +124,7 @@ $\text{rank}(\boldsymbol{\alpha})=\text{rank}(\boldsymbol{\beta})=r$.
 \item
 The columns of $\boldsymbol{\beta}$ contains the cointegration vectors and the rows of
 $\boldsymbol{\alpha}$ correspond with the adjusted vectors. 
-$\boldsymbol{\beta}$ is obtained by Johansen procedure~\citep{johansen1988},
+$\boldsymbol{\beta}$ is obtained by Johansen procedure,see \cite{johansen1988},
 whereas $\boldsymbol{\alpha}$ has to be determined as a variable in the VECM.
 \end{itemize}
 It is worth noticing that the factorization of the matrix
@@ -204,5 +198,4 @@ dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 \label{eq:Amatrix}
 \end{align}
 Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
-can be solved with respect to $\mathbf{X}$ using the ordinary least
-squares (OLS) estimation.
+can be solved with respect to $\mathbf{X}$ using the OLS estimation.
