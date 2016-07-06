@@ -106,7 +106,7 @@ that characterises short-run variations of a set of cointegrated time series
 incorporating long-run relationships as an error correction term. VECM has been
 broadly used with low frequency time series. We aimed to adapt VECM to be used
 in finance with high frequency stream data.
-%
+
 Cointegration relations change in time and therefore VECM parameters must be
 updated when new data is available. We studied how forecasting performance is
 affected when VECM parameters and the length of historical data used change in
@@ -116,8 +116,8 @@ relationships in time led to better forecasting performance. Our proposal,
 called an Adaptive VECM (AVECM) is to make a parameters grid search that
 maximises the number of cointegration relationships in the near past. To ensure
 the search can be executed fast enough, we used a distributed environment.
-%
-The methodology was tested using four 10-seconds frequency time series of the
+
+The methodology was tested using four 10-second frequency time series of the
 Foreign Exchange market. We compared our proposal with ARIMA and the naive
 forecast of the random walk model. Numerical experiments showed that on average
 AVECM performed better than ARIMA and random walk. Additionally, AVECM
