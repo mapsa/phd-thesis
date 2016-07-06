@@ -1,26 +1,23 @@
 \chapter{Machine Learning Models}
-Machine learning is a scientific discipline focused on the development of algorithms focused on learning from examples. This idea has become central to the design of search engines, robots systems and forecasts applications which process large data sets. However, machines require an extended training period when developing algorithms to predict future behaviour such as financial time series forecasting where new data is available in a short period of time.  Online machine learning techniques tackle this problem and allow to update the model with new data or to compute a new model using less data allowing to give a response in a short period of time.
+Machine learning is a scientific discipline focused on the development of algorithms based on learning from examples. This idea has become central to the design of search engines, robots systems and forecasts applications that process large data sets. Usually machines require long training period when developing algorithms to predict future behaviour such as financial time series forecasting where new data is available in a short period of time. Online machine learning techniques tackle this problem by updating the model with new data or computing a new model using less data so they  can give a response in a short period of time.
 
 \vspace{0.5cm} 
 
 \section{Introduction}
 Machine Learning (ML) studies computer algorithms for learning
-something such as to complete a task, to make accurate predictions or to behave intelligently. The learning is always based on samples and the objective is about to do better in the future based on the past experiences in an automatic way. ML is a subarea of artificial intelligence and broadly intersects with other fields such as statistics, mathematics, physics and computer science. 
+something such as to complete a task, to make accurate predictions or to behave intelligently. The learning is always based on samples and the objective is about to do better in the future based on the past experiences in an automatic way. ML is a sub-area of artificial intelligence and broadly intersects with other fields such as statistics, mathematics, physics and computer science. 
 There are many examples of machine learning problems: time series forecasting, image processing, face detection, spam filtering, weather prediction, search engines, among many others.
 
 ML models are often more accurate than what can be created through direct programming. The reason is that ML models are data driven and are able to examine large amounts of data.
 
-There are three types of ML classified depending on the nature of the learning input or output available to a learning system.
+There are three types of ML classified depending on the nature of the learning input or output available to a learning system:
+
 \begin{description}
-\item[supervised learning]  the input data is a tuple which contains the example input and its desired outputs (also called labels). The list of tuples is called the training set. The concept of supervised learning comes from the supervisor, acting as a teacher in the learning process. The goal is to learn a general rule that maps inputs to outputs optimising a target function. There are two related problem types in supervised learning: classification and regression problems \cite{bishop2006}. Its two mainstream approaches are: support vector machines (SVMs) \cite{vapnik1998} and ensemble learning \cite{breiman1998}. Furthermore supervised learning can be categorised into offline or batch learning and online learning (see section \ref{sec:onoffline}). 
-\item[unsupervised learning] also known as clustering \cite{ben2005}. In this type of learning no labels are given and the system has to find a structure on its own, discovering hidden patterns in data.
-\item[reinforcement learning] is the problem faced by an agent that must learn 
-through trial-and-error interactions with a dynamic environment. It is based on programming agents by reward and punishment without needing to specify how the task is to be achieved \cite{sutton1998}.
+\item[Supervised learning]  the input data is a tuple which contains the example input and its desired outputs (also called labels). The list of tuples is called the training set. The concept of supervised learning comes from the supervisor, acting as a teacher in the learning process. The goal is to learn a general rule that maps inputs to outputs optimising a target function. There are two related problem types in supervised learning: classification and regression problems \cite{bishop2006}. Its two mainstream approaches are: support vector machines (SVMs) \cite{vapnik1998} and ensemble learning \cite{breiman1998}. Furthermore, supervised learning can be categorised into offline or batch learning and online learning (see section \ref{sec:onoffline}). 
+\item[Unsupervised learning] also known as clustering \cite{ben2005}. In this type of learning no labels are given and the system has to find a structure on its own, discovering hidden patterns in data.
+\item[Reinforcement learning] is the problem faced by an agent that must learn 
+through trial-and-error interactions with a dynamic environment. It is based on programming agents by reward and punishment without the need to specify how the task is to be achieved \cite{sutton1998}.
 \end{description}
-
-
-
-%%% Learning problem. Ac;a ma;ana, formulas y descripcion de tallada del problema de aprendizaje
 
 
 \section{Statistical learning theory} \label{sec:mltheory}
@@ -85,7 +82,7 @@ Very complex models will fit the training data better (low bias) but it could ov
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/3tradeoff}
-  \caption{Triple tradeoff in empirical learning}
+  \caption{Tradeoff in empirical learning. The generalization accuracy is not affected by the amount of examples for low complex classifiers. However, for some more complex classifiers, the number of examples improves the generalization accuracy. The key is to find the best generalization accuracy and the lowest complex classifier as possible. }
   \label{fig:tradeoff}
 \end{figure}
 
@@ -475,22 +472,12 @@ does not vanish.
 One of the ways to determine parameter $\lambda$ is using the bias-variance tradeoff (see section \ref{sec:biasvar}). This parameter is crucial for ridge regression since it could
 reduce the expected prediction error by reducing variance, considering a biased
 estimator. 
-It is known that the prediction error can be express as a decomposition between bias and variance. The prediction error is
-obtained as:
+It is known that the prediction error can be express as a decomposition between bias and variance.
 
-\begin{equation}
- \label{eq:prederror}
-E[(Y-\hat{f}(\mathbf{X}))^2] = \sigma^2 + Bias(\hat{f}(\mathbf{X}))^2 + Var(\hat{f}(\mathbf{X}))
-\end{equation}
-
-\noindent where $\hat{f}(\mathbf{X})=\mathbf{AX}(\lambda)$ for RR and
-$\hat{f}(\mathbf{X})=\mathbf{AX}$ in the case of OLS.
-
-For ridge regression we will use the following notation: $\hat{f}(\mathbf{X})=\mathbf{AX}(\lambda)$ and
-for OLS $f(\mathbf{X})=\mathbf{AX}$. The solution of OLS is well known $\hat{\mathbf{X}}=(\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}$, and its bias is:
+The solution of OLS is well known $\hat{\mathbf{X}}=(\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}$, and its bias is:
 
 \begin{eqnarray*}
-Bias(\hat{\mathbf{X}}) &=& E[\hat{\mathbf{X}}] - \mathbf{X} \\
+Bias(\hat{f}(\hat{\mathbf{X}}) &=& E[\hat{\mathbf{X}}] - \mathbf{X} \\
 &=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}] - \mathbf{X} \\
 &=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top (\mathbf{AX})] - \mathbf{X}  \\
 &=& \mathbf{X}  - \mathbf{X}  \\
@@ -519,11 +506,6 @@ Bias(\mathbf{X}(\lambda)) &=& E[\mathbf{X}(\lambda)] - \mathbf{X} \\
 &=&  \mathbf{W} \mathbf{X} - \mathbf{X} \neq 0 
 \end{eqnarray*}
 
-\begin{figure}[h!]
-\includegraphics[width=\linewidth]{img/biasvariance}
-\caption{Bias-variance tradeoff depending on lambda}
-\label{fig:biasvariance}
-\end{figure}	
 
 The variance of OLS is:
 
@@ -541,9 +523,17 @@ Var(\mathbf{X}(\lambda)) &=& Var(\mathbf{W}\hat{\mathbf{X}}) \\
 &=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top
 \end{eqnarray*}
 
+\begin{figure}[h!]
+\includegraphics[width=\linewidth]{img/biasvariance}
+\caption{Bias-variance tradeoff depending on lambda. Dotted line corresponds to OLS prediction error (invariant with lambda). Black line corresponds to RR prediction error which can be decomposed in $Bias^2$ (in red) + Variance (in blue).}
+\label{fig:biasvariance}
+\end{figure}	
+
 
 The figure~\ref{fig:biasvariance} shows the bias-variance tradeoff
-given by equation~(\ref{eq:prederror}). Despite OLS has zero bias,
+given by equation~(\ref{eq:bvtrade}). 
+
+Despite OLS has zero bias,
 its variance is greater than ridge for small values of $\lambda$.
 It can be shown that, in terms of prediction error, ridge (black line)
 is lower than OLS (dotted line)~\cite{hoerl1970}. Ridge regression shows an
@@ -585,12 +575,12 @@ The main characteristics of neural networks are that they have the ability to le
 complex nonlinear input-output relationships, they use sequential training procedures 
 they adapt themselves to the data.
 
-ANN is inspired by biological learning systems. ANN are organised into layers and have unidirectional connections between the layers, feed-forward networks  (FFN) are the most used.  FFN consist of a series of layers. The first layer has a connection from the network input. Each subsequent layer has a connection from the previous layer. The final layer produces the network's output. Figure \ref{fig:ffn} shows a FFN with its different layers.
+ANN is inspired by biological learning systems organised into layers and have unidirectional connections between the layers, feed-forward networks  (FFN) are the most used.  FFN consist of a series of layers. The first layer has a connection from the network input. Each subsequent layer has a connection from the previous layer. The final layer produces the network's output. Figure \ref{fig:ffn} shows a FFN with its different layers.
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/ffn}
-  \caption{Feed-forward neural network}
+  \caption{Feed-forward neural network (FFN). FNN consists of an input layer, an output layer and at least one hidden layer between the input and output layer. }
   \label{fig:ffn}
 \end{figure}
 
@@ -599,8 +589,7 @@ Support Vector Machine (SVM) was introduced in 1992 by Vapnik and his coworkers
 \cite{boser1992}. In its original form, SVM is a training algorithm for linear classification. Only later it was used for regression, principal component analysis, novelty detection and also for non-linear case.  However, unlike ANN, it is very well 
 based on theory in statistical learning \cite{cortes1995}.  SVM tunes the capacity of 
 maximising the margin between the training patterns and the decision boundary. The
-solution is expressed as a linear combination of supporting patterns, which are the 
-of training patterns close to the decision boundary, called the support vectors.
+solution is expressed as a linear combination of supporting patterns, which are the training patterns close to the decision boundary, called the support vectors.
 
 The major difference between SVM and ANN is in the error optimisation. In ANN, the aim of learning is to obtain a set of weight values which minimise the training error 
 minimum while training adjust the capacity of the machine. 
@@ -704,14 +693,6 @@ Incremental learning is useful when the input to a learning process is stream
 data, with the need or desire to be able to use the result of learning at any
 point in time, based on the input observations received so far. 
 
-In principle, the stream of observations may be infinitely long, or the next
-observation long delayed, precluding any hope of waiting until all the
-observations have been received. One would rather not simply accumulate and
-store all the inputs and, upon receipt of each new one, apply a batch learning
-algorithm to the entire sequence of inputs received so far. It would be
-preferable computationally if the existing hypothesis or other artefact of
-learning could be updated in response to each newly received input observation.
-
 Incremental learning is very useful when there is no need to record fundamental
 data and only a summary needs to be retained. Due to this, incremental
 algorithms are often characterised as memoryless, because no memory of past data
@@ -759,7 +740,7 @@ R_T = L_T - L^*_T
 
 \subsection{Competitive analysis}
 
-Competitive analysis was designed for analysing the performance of an online algorithm compared with its optimal offline algorithm. An optimal offline algorithm can view the sequences of requests in advance. The effectiveness of an online algorithm \cite{sleator1985} may be measured by its competitive ratio which is the worst-case ratio of the online algorithm and the the optimal offline algorithm.
+Competitive analysis was designed for analysing the performance of an online algorithm compared with its optimal offline algorithm. An optimal offline algorithm can view the sequences of requests in advance. The effectiveness of an online algorithm \cite{sleator1985} may be measured by its competitive ratio which is the worst-case ratio of the online algorithm and the optimal offline algorithm.
 
 
 
@@ -877,10 +858,9 @@ and $\mathbf{W}=0$
 
 \subsection{Efficient computation}
 In regression problems we always require getting a matrix inverse which is
-computationally expensive. However, in stream data problems the is a way to
+computationally expensive. However, in stream data problems there is a way to
 obtain a matrix inverse approximation using the Sherman-Morrison-Woodbury. This
-formula allows to get the inverse of a
-the matrix $\mathbf{A+uv^\top}$ if we already calculated the
+formula allows to get the inverse of a matrix $\mathbf{A+uv^\top}$ if we previously calculated the
 inverse of $\mathbf{A}$ as follows:
 
 \begin{equation}
@@ -1067,7 +1047,7 @@ $\hat{\beta}=0.00025$ produce satisfactory results.
 $\lambda_{\text{QR}} = \frac{\lambda_1 + \lambda_2}{2}$  
 \end{enumerate}
 
-
+\newpage
 
 \section{Evaluation methods} \label{sec:evaluation}
 
