@@ -1,5 +1,12 @@
 \chapter{Machine Learning Models}
-Machine learning is a scientific discipline focused on the development of algorithms based on learning from examples. This idea has become central to the design of search engines, robots systems and forecasts applications that process large data sets. Usually machines require long training period when developing algorithms to predict future behaviour such as financial time series forecasting where new data is available in a short period of time. Online machine learning techniques tackle this problem by updating the model with new data or computing a new model using less data so they  can give a response in a short period of time.
+Machine learning is a scientific discipline focused on the development of
+algorithms based on learning from examples. This idea has become central to the
+design of search engines, robots systems and forecasts applications that
+process large data sets. Usually machines designed to forecast financial time
+series requires long training period and therefore they are not suitable to be updated
+with stream data. Online machine learning techniques tackle this problem by updating the model with new
+data or by computing a new model using less data so they can give a response in a
+short period of time.
 
 \vspace{0.5cm} 
 
@@ -24,16 +31,16 @@ through trial-and-error interactions with a dynamic environment. It is based on 
 
 All ML problems can be viewed as optimisation problems. The ML core task is to define a learning criterion, i.e the function to be optimised. 
 
-In this thesis we will emphasised the supervised learning problem since it is the most common way of modelling financial problems.
+In this thesis we will emphasise the supervised learning problem since it is the most common way of modelling financial problems.
 
-Supervised learning consists in to find a learning function $f: X \rightarrow Y$ which models a set of examples called training set $S$ which have been drawn randomly and independently according to a unknown joint distribution function $p(x,y)$ on $X \times Y$:
+Supervised learning consists in finding a learning function $f: X \rightarrow Y$ which models a set of examples, called training set $S$, which have been drawn randomly and independently according to a unknown joint distribution function $p(x,y)$ on $X \times Y$:
 
 
 $$
-S= \{(x_1,y_1),\,(x_2,y_2),\dots\,,\,(x_n,y_n)\} \in \mathcal{S}, (x_i,y_i) \in X\times Y \quad \forall i = 1\dots n
+S= \{(x_1,y_1),\,(x_2,y_2),\dots\,,\,(x_n,y_n)\} \in \mathcal{S}, (x_i,y_i) \in X\times Y \quad \forall i = 1..n
 $$
 
-\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
+\noindent where $\mathcal{S}$ is the space of instances, $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
 
 A learning algorithm $\mathcal{A}$ takes as input a data set $S \in \mathcal{S}$ and output a function $f_S$:
 
@@ -42,13 +49,14 @@ A learning algorithm $\mathcal{A}$ takes as input a data set $S \in \mathcal{S}$
 S &\rightarrow &\mathcal{A}(S) = f_S
 \end{eqnarray*}
 
-\noindent where $\mathcal{H}$ is called the hypothesis space, is the space of functions that the algorithm is allowed to search. The selection of $f_S$ is based on a loss function $V(f(x),y)$ which expected risk has to be minimised.
+\noindent where $\mathcal{H}$ is called the {\em hypothesis space}, is the space of functions that the algorithm is allowed to search. The selection of $f_S$ is based on a loss function $V(f(x),y)$ the expected risk, which has to be minimised.
 
-\[
-E[V(f(x),y)] = \int V(f(x),y) dp(x,y)
-\]
+\begin{equation}
+\label{eq:expetedrisk}
+E[V(f(x),y)] = \int_{X \times Y} V(f(x),y) \, \, dp(x,y)
+\end{equation}
 
-\noindent $V(f(x),y)$ denote the price paid for mistakes. Therefore, $V(f(x),y)=0$ if$f(x)=y$.
+\noindent $V(f(x),y)$ denote the price paid for mistakes. Therefore, $V(f(x),y)=0$ if $f(x)=y$.
 
 For regression, the most common loss function is square loss or L2 loss function:
 \begin{equation}
@@ -72,9 +80,9 @@ R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y)
 \subsection{Learning algorithms}
 In all learning algorithms that are trained from example data, there is a tradeoff \cite{dietterich2003} between three factors:
 \begin{description}
-\item[Complexity of the hypothesis class] for best generalisation, we should adjust the complexity of the learner model $\hat{f}$ to the complexity of the data $f$. In polynomial regression, the complexity parameter is the order of the fitted polynomial, and therefore we need to find a way to choose the best order that minimises the generalisation error, that is, tune the complexity of the model to best fit the complexity of the function inherent in the data.
-\item[Generalisation accuracy on new examples] is the capability of the algorithm to generate the right output for an input instance outside the training set.
-\item[The amount of training data]  generally generalisation accuracy increases as the amount of training data increases.
+\item[Complexity of the hypothesis class] for best generalisation, we should adjust the complexity of the learner model $\hat{f}$ to the complexity of the data $f$. The complexity of a learning problem mostly depends on the number of training examples and the size of the searched hypothesis space. In polynomial regression, the complexity parameter is the order of the fitted polynomial, and therefore we need to find a way to choose the best order that minimises the generalisation error, that is, tune the complexity of the model to best fit the complexity of the function inherent in the data.
+\item[Generalisation accuracy on new examples] is the capability of the algorithm to generate the right output for an input instance outside the training set. It is measured by the expected risk (equation \ref{eq:expetedrisk}).
+\item[The amount of training data]  in most cases, generalisation accuracy increases as the amount of training data increases.
 \end{description}
 
 Very complex models will fit the training data better (low bias) but it could overfit it and generalise poorly (high variance), this is also called the bias-variance tradeoff.  Generalisation accuracy can sometimes be improved with more training data. The figure \ref{fig:tradeoff} illustrates how generalisation accuracy depends on the complexity of the model and the amount of training data.
@@ -82,7 +90,7 @@ Very complex models will fit the training data better (low bias) but it could ov
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/3tradeoff}
-  \caption{Tradeoff in empirical learning. The generalization accuracy is not affected by the amount of examples for low complex classifiers. However, for some more complex classifiers, the number of examples improves the generalization accuracy. The key is to find the best generalization accuracy and the lowest complex classifier as possible. }
+  \caption{Tradeoff in empirical learning from \cite{dietterich2003}. The generalization accuracy is not affected by the amount of examples for low complex classifiers. However, for some more complex classifiers, the number of examples improves the generalization accuracy. The key is to find the best generalization accuracy and the lowest complex classifier as possible. }
   \label{fig:tradeoff}
 \end{figure}
 
