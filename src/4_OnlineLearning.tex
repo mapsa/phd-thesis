@@ -31,25 +31,25 @@ through trial-and-error interactions with a dynamic environment. It is based on 
 
 All ML problems can be viewed as optimisation problems. The ML core task is to define a learning criterion, i.e the function to be optimised. 
 
-In this thesis we will emphasise the supervised learning problem since it is the most common way of modelling financial problems.
+Supervised learning is most popular and most commonly used in modelling financial problems and the assessments of this method and their results in practice are fairly good. Therefore, in this thesis we will adhere to this trend and we will use supervised learning.
 
 Supervised learning consists in finding a learning function $f: X \rightarrow Y$ which models a set of examples, called training set $S$, which have been drawn randomly and independently according to a unknown joint distribution function $p(x,y)$ on $X \times Y$:
 
 
 $$
-S= \{(x_1,y_1),\,(x_2,y_2),\dots\,,\,(x_n,y_n)\} \in \mathcal{S}, (x_i,y_i) \in X\times Y \quad \forall i = 1..n
+S = \{ (x_k,y_k)\in X\times Y : k=1,...,n \}
 $$
 
-\noindent where $\mathcal{S}$ is the space of instances, $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
+\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
 
-A learning algorithm $\mathcal{A}$ takes as input a data set $S \in \mathcal{S}$ and output a function $f_S$:
+A learning algorithm $\mathcal{A}$ takes as input a data set $S \in \mathcal{S}$ and outputs a function $f$:
 
 \begin{eqnarray*}
 \mathcal{A}: \mathcal{S} &\rightarrow & \mathcal{H} \\
-S &\rightarrow &\mathcal{A}(S) = f_S
+S &\rightarrow &\mathcal{A}(S) = f
 \end{eqnarray*}
 
-\noindent where $\mathcal{H}$ is called the {\em hypothesis space}, is the space of functions that the algorithm is allowed to search. The selection of $f_S$ is based on a loss function $V(f(x),y)$ the expected risk, which has to be minimised.
+\noindent where $\mathcal{H}$ is called the {\em hypothesis space}, is the space of functions that the algorithm is allowed to search. The selection of $f_S$ is based on the minimization if the expected risk of the loss function $V(f(x),y): \R\times\R\to\R$.
 
 \begin{equation}
 \label{eq:expetedrisk}
