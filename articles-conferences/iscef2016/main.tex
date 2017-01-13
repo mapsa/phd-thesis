@@ -4,21 +4,13 @@
 %\documentclass{svjour3}                     
 %\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
 \documentclass[smallextended]{svjour3}       % onecolumn (second format) ******
-%\usepackage[doublespacing]{setspace}   
 %\documentclass[twocolumn]{svjour3}          % twocolumn
-%
-\smartqed  % flush right qed marks, e.g. at end of proof
 
-%\usepackage{natbib}
+\smartqed  % flush right qed marks, e.g. at end of proof
+\usepackage{natbib}
+
 \usepackage{graphicx}
 
-%
-% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
-%
-% insert here the call for the packages your document requires
-%\usepackage{latexsym}
-% etc.
-%
 \usepackage{amsfonts,amssymb,amsmath,
             amssymb,amsopn,amsxtra,amstext,amsbsy}
 \usepackage{epsfig}
@@ -55,42 +47,40 @@
 
 \title{Fast and adaptive cointegration based model
 for forecasting high frequency financial time series}
-%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
 
 \titlerunning{Cointegration based model
 for forecasting high frequency financial time series}        % if too long for running head
 
-%\author{Paola Arce  \and Jonathan Antognini \and Werner Kristjanpoller \and Luis Salinas }
-\author{}
+
+\author{Paola Arce  \and Jonathan Antognini \and Werner Kristjanpoller \and Luis Salinas }
 %\authorrunning{Short form of author list} % if too long for running head
 
-%\institute{P. Arce  \at
-%              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
-%              Mar\'ia\\
-%              Tel.: +56-32-2654000\\
-%              \email{paola.arce@usm.cl}           %  \\
-%%             \emph{Present address:} of F. Author  %  if needed
-%           \and
-%           J. Antognini \at
-%              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
-%              Mar\'ia\\
-%              \email{jantognini@csrg.cl}             \\
-%           \and
-%           W. Kristjanpoller \at
-%              Departamento de Industrias, Universidad T\'ecnica Federico Santa
-%              Mar\'ia\\
-%              %Fax: +123-45-678910\\
-%              \email{werner.kristjanpoller@usm.cl}             \\
-%           \and
-%           L. Salinas \at
-%              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
-%              Mar\'ia\\
-%              Centro Cient\'ifico Tecnol\'ogico de Valpara\'iso (CCTVal) \\
-%              \email{luis.salinas@usm.cl}           %  \\
-%}
-
+\institute{P. Arce  \at
+              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
+              Mar\'ia\\
+              Tel.: +56-32-2654000\\
+              \email{paola.arce@usm.cl}           %  \\
+%             \emph{Present address:} of F. Author  %  if needed
+           \and
+           J. Antognini \at
+              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
+              Mar\'ia\\
+              \email{jantognini@csrg.cl}             \\
+           \and
+           W. Kristjanpoller \at
+              Departamento de Industrias, Universidad T\'ecnica Federico Santa
+              Mar\'ia\\
+              %Fax: +123-45-678910\\
+              \email{werner.kristjanpoller@usm.cl}             \\
+           \and
+           L. Salinas \at
+              Departamento de Inform\'atica, Universidad T\'ecnica Federico Santa
+              Mar\'ia\\
+              Centro Cient\'ifico Tecnol\'ogico de Valpara\'iso (CCTVal) \\
+              \email{luis.salinas@usm.cl}           %  \\
+}
 \date{Received: date / Accepted: date}
-% The correct dates will be entered by the editor
 
 
 \maketitle
@@ -124,23 +114,11 @@ AVECM performed better than ARIMA and random walk. Additionally, AVECM
 significantly improved execution times with respect to its serial version.
 
 \keywords{VECM \and Cointegration \and Forex \and MPI \and Parallel algorithm}
-% \PACS{PACS code1 \and PACS code2 \and more}
-% \subclass{MSC code1 \and MSC code2 \and more}
+
 \end{abstract}
 
-\begin{acknowledgements}
-L. Salinas acknowledges support from Basal Project
-FB0821 CCTVal-Centro Científico Tecnológico de Valparaíso. P. Arce and W.
-Kristjanpoller thank PIIC 2014 DGIP-UTFSM grant for supporting this research. We also acknowledge to the Fourth International Symposium in Computational Economics and Finance (ISCEF) 2016 for valuable comments and suggestions.
-\end{acknowledgements}
 
-
-\input{src/intro}
-\input{src/background}
-\input{src/methodology}
-\input{src/results}
-\input{src/conclusions}
-
+\input{body}
 
 % BibTeX users please use one of
 \bibliographystyle{spbasic}      % basic style, author-year citations
@@ -152,4 +130,5 @@ Kristjanpoller thank PIIC 2014 DGIP-UTFSM grant for supporting this research. We
 \bibliography{reference}   % name your BibTeX data base
 
 \end{document}
+
 
