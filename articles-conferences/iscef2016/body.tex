@@ -25,21 +25,29 @@ expensive routine. This is a main limitation to use VECM with stream data with
 high frequency. \cite{chen2003} addresses the advantage of distributed
 processing over conventional rolling window processing. 
 
-Our aims were to study if a parallel version of VECM can be used with high
-frequency stream data.  Our approach was to determine adaptively the number of
-observations and lags of VECM which maximise cointegration relations in the
-past.  This search is computationally expensive because the Johansen method, see
-\cite{johansen1995}, is required to find cointegration vectors, which is of
-order $O(n^3)$. Therefore, our proposal, called Adaptively Vector Error
-Correction (AVECM), is to parallelise this search in order to get new parameters
-before new data arrives.  Model effectiveness is focused on out-of-sample
-forecast rather than in-sample fitting. This criterion allows AVECM prediction
-capability to be expressed rather than just explaining data history.  The
-forecast capability of our method was measured using MSE and the Theil's
-$U$-statistic, see \cite{theil1966}, widely used in economic forecast. Tests
-were run using four currency rates: Euro (EUR) to United States Dollar (USD)
-(EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss Franc (CHF) (USDCHF)
-and USD to Japanese Yen (JPY) (USDJPY) with a 10-second frequency.
+Cointegration relationship can be found in low and high frequency data of two
+or more assets. While cointegration in low frequency data is motivated by a
+long-run equilibrium relationship between economic forces, cointegration in
+high frequency data has its foundation in statistical arbitrage which is very
+helpful to detect mean-reverting trades. Cointegration at different data
+frequencies may differ. \cite{rittler2012} shows how cointegration appears when
+the data frequency is increased. Our aims were to study if a parallel
+version of VECM can be used with high frequency stream data. 
+
+Our approach was to determine adaptively the number of observations and lags of
+VECM which maximise cointegration relations in the past.  This search is
+computationally expensive because the Johansen method, see \cite{johansen1995},
+is required to find cointegration vectors, which is of order $O(n^3)$.
+Therefore, our proposal, called Adaptively Vector Error Correction (AVECM), is
+to parallelise this search in order to get new parameters before new data
+arrives.  Model effectiveness is focused on out-of-sample forecast rather than
+in-sample fitting. This criterion allows AVECM prediction capability to be
+expressed rather than just explaining data history.  The forecast capability of
+our method was measured using MSE and the Theil's $U$-statistic, see
+\cite{theil1966}, widely used in economic forecast. Tests were run using four
+currency rates: Euro (EUR) to United States Dollar (USD) (EURUSD), British
+Pound (GBP) to USD (GBPUSD), USD to Swiss Franc (CHF) (USDCHF) and USD to
+Japanese Yen (JPY) (USDJPY) with a 10-second frequency.
 
 This paper is organised as follows: section \ref{sec:background} presents the
 VAR and VECM, the AVECM algorithm is presented in section \ref{sec:methodology}.
