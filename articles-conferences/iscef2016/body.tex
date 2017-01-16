@@ -17,33 +17,37 @@ financial applications, among others: \cite{mukherjee1995}, \cite{seong2013},
 trading, see \cite{herlemont2003}, or models with more than two variables, see
 for example \cite{mukherjee1995} and \cite{engle2004}).
 
-Cointegration relationship can be found in low and high frequency data of two
-or more assets. While cointegration in low frequency data is motivated by a
-long-run equilibrium relationship between economic forces, cointegration in
-high frequency data has its foundation in statistical arbitrage which is very
-helpful to detect mean-reverting trades. Cointegration at different data
-frequencies may differ. \cite{rittler2012} shows how cointegration appears when
-the data frequency is increased. 
+Cointegration relationship can be found in low and high frequency data of two or
+more assets. While cointegration in low frequency data is motivated by a
+long-run equilibrium relationship between economic forces, cointegration in high
+frequency data has its foundation in statistical arbitrage which is very helpful
+to detect mean-reverting trades. Cointegration at different data frequencies may
+differ. \cite{rittler2012} shows how cointegration appears when the data
+frequency is increased. 
 
-The use of VECM with high frequency data is mainly limited by computational 
-expensive routines. Firstly, VECM parameters are obtained using the ordinary least squares (OLS) method, developed by \cite{golub1980}. Since OLS involves many calculations, the
-parameter estimation is computationally expensive when the number of lagged
-values and data increases. Secondly, obtaining cointegration vectors is also an
-expensive routine because the Johansen method, see \cite{johansen1995}, is required, which is of order $O(n^3)$. \cite{chen2003} addresses the advantage of distributed
-processing over conventional rolling window processing. Therefore, our aims were to study if a parallel version of VECM can be used with high frequency stream data. 
+The use of VECM with high frequency data is mainly limited by computational
+expensive routines. Firstly, VECM parameters are obtained using the ordinary
+least squares (OLS) method, developed by \cite{golub1980}. Since OLS involves
+many calculations, the parameter estimation is computationally expensive when
+the number of lagged values and data increases. Secondly, obtaining
+cointegration vectors is also an expensive routine because the Johansen method,
+see \cite{johansen1995}, is required, which is of order $O(n^3)$.
+\cite{chen2003} addresses the advantage of distributed processing over
+conventional rolling window processing. Therefore, our aims were to study if a
+parallel version of VECM can be used with high frequency stream data. 
 
 Our approach was to determine adaptively the number of observations and lags of
-VECM which maximise cointegration relations in the past in a distributed environment. 
-We called Adaptively Vector Error Correction (AVECM) to our proposal. AVECM
-parallelise this search of parameters in order to update them before new data
-arrives. Model effectiveness is focused on out-of-sample forecast rather than
-in-sample fitting. This criterion allows AVECM prediction capability to be
-expressed rather than just explaining data history.  The forecast capability of
-our method was measured using MSE and the Theil's $U$-statistic, see
-\cite{theil1966}, widely used in economic forecast. Tests were run using four
-currency rates: Euro (EUR) to United States Dollar (USD) (EURUSD), British
-Pound (GBP) to USD (GBPUSD), USD to Swiss Franc (CHF) (USDCHF) and USD to
-Japanese Yen (JPY) (USDJPY) with a 10-second frequency.
+VECM which maximise cointegration relations in the past in a distributed
+environment.  We called Adaptively Vector Error Correction (AVECM) to our
+proposal. AVECM parallelise this search of parameters in order to update them
+before new data arrives. Model effectiveness is focused on out-of-sample
+forecast rather than in-sample fitting. This criterion allows AVECM prediction
+capability to be expressed rather than just explaining data history.  The
+forecast capability of our method was measured using MSE and the Theil's
+$U$-statistic, see \cite{theil1966}, widely used in economic forecast. Tests
+were run using four currency rates: Euro (EUR) to United States Dollar (USD)
+(EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss Franc (CHF) (USDCHF)
+and USD to Japanese Yen (JPY) (USDJPY) with a 10-second frequency.
 
 This paper is organised as follows: section \ref{sec:background} presents the
 VAR and VECM, the AVECM algorithm is presented in section \ref{sec:methodology}.
@@ -264,20 +268,13 @@ long-run relationships between the time series  might change due to several
 economic factors that can lead to structural breaks in the cointegration
 relationship.  In order to show that the number of cointegration vectors depends
 on the amount $L$ of historical data and the number of lags $p$ in the VECM, we
-used a grid search.  We defined a grid of possible values for $L$ and $p$. $L$
-goes throughout $[2,14]$ hours (1 $hour = 360$ data points) with a step size of
-4 hours and $p$ throughout $[1,5]$ with step size of 1. The first experiment
-consisted in determining the number of cointegration vectors for all
-combinations of $L$ and $p$.  We used four forex rates: EURUSD, GBPUSD, USDCHF
-and USDJPY with 10-second frequency. Data started at 13:00 GMT of the 13th of
-August 2014, when the New York and London financial markets opened.
-
-Figure \ref{fig:hists} shows the distribution of the number of cointegration
-vectors given by the Johansen method for different values of $L=[2,6,10,14]$
-hours  and $p=1$ . This procedure was carried out by a sliding window of
-historical data moving 1000 times.
-
-
+used a grid search.  We defined arbitrarily a grid of possible values for $L$
+and $p$. $L$ goes throughout $[2,14]$ hours (1 $hour = 360$ data points) with a
+step size of 4 hours and $p$ throughout $[1,5]$ with step size of 1. The idea is
+to show the variability of the number of cointegration vectors when we changed
+these two parameters. We used four forex rates: EURUSD, GBPUSD, USDCHF and
+USDJPY with 10-second frequency. Data started at 13:00 GMT of the 13th of August
+2014, when the New York and London financial markets opened.
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
@@ -290,6 +287,15 @@ historical data moving 1000 times.
   \label{fig:hists}
 \end{figure}
 
+Figure \ref{fig:hists} shows the distribution of the number of cointegration
+vectors given by the Johansen method for different values of $L=[2,6,10,14]$
+hours and $p=1$ . This procedure was carried out by a sliding window of
+historical data moving 1000 times. We can observe that the distribution of
+cointegration vectors is always changing with different values of $L$. When
+$L=2$ hours, there were no cointegration in more than 60\% of the iterations.
+Cointegration increases when $L=6$ hours and is maximum when $L=10$ hours where
+one cointegration vectors was found for all 1000 iterations. The ocurrence of
+cointegration starts to decrease with $L=14$ hours.
 
 From section \ref{sec:background} we know that $r=0$ means no cointegration and
 $r=l$ (we are using four rates, so $l=4$) reveals that no process is I(1) but
