@@ -21,9 +21,13 @@ Cointegration relationship can be found in low and high frequency data of two or
 more assets. While cointegration in low frequency data is motivated by a
 long-run equilibrium relationship between economic forces, cointegration in high
 frequency data has its foundation in statistical arbitrage which is very helpful
-to detect mean-reverting trades. Cointegration at different data frequencies may
-differ. \cite{rittler2012} shows how cointegration appears when the data
-frequency is increased. 
+to detect mean-reverting trades. Information, about cointegrated assets in high
+frequency data could be used as an input for high frequency trading strategies,
+using it as signal to capture small profits in short term trades, see
+\cite{miao2014}. \cite{zhou2001} addresses the benefits of using higher
+frequency data to analize cointegration. \cite{rittler2012} also found that
+cointegration may differ with different data frequencies and it could appear
+when the data frequency is increased.
 
 The use of VECM with high frequency data is mainly limited by computational
 expensive routines. Firstly, VECM parameters are obtained using the ordinary
@@ -313,8 +317,8 @@ where c.v. stands for cointegration vectors and $it$ is the number of iterations
 
 The goal of our next experiment was to find a relation between this ratio $PC$
 and the performance measure MSE (see equation \ref{eq:MSE}). $L$ was defined
-between $[700,1500]$ data points with step size 100 and $p$ took values between
-$[1,5]$ with step size 1.  
+between $[2,14]$ hours, that corresponds to $[720, 5040]$ data points, and $p$
+took values between $[1,5]$.  
 
 \begin{figure}[ht!]
   \centering
@@ -328,7 +332,8 @@ $[1,5]$ with step size 1.
 
 Figure~\ref{fig:cointvsmse} shows the relation between MSE and $PC$ and $L$.  We
 found that better cointegration percentage leads to better performance accuracy
-in terms of reducing MSE.
+in terms of reducing MSE. Also, increasing the size of the sliding window $L$
+doesn't necessarily help to reduce MSE.
 
 Therefore we proposed to choose $L$ and $p$ in order to maximise the percentage
 of cointegration $PC$ in the near past. This process was done every time that
@@ -427,8 +432,10 @@ model.
 \section{Experimental results}
 \label{sec:results}
 \subsection{Data} \label{sec:unitroot}
-AVECM tests were carried out using four foreign exchange rates all related to
-USD: EURUSD, GBPUSD, USDCHF and USDJPY. This data was collected from
+All the experiments and AVECM tests were carried out using four foreign exchange rates all related to
+USD: EURUSD, GBPUSD, USDCHF and USDJPY. We chose the most traded rates related
+to USD so they are likely to be cointegrated. 
+This data was collected from
 \cite{Dukascopy2014}, a free database which gives access to the Swiss Foreign
 Exchange marketplace.
 
