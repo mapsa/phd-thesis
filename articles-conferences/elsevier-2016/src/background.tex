@@ -286,14 +286,14 @@ GCV originates from the older method leave-one-out Cross Validation \cite{stone1
 The leave-one-out cross validation method determine a regularization parameter that minimises the average of the squared predictions errors using each solution to predict the missing data value.
 
 %'---------------------------http://robjhyndman.com/hyndsight/crossvalidation/
-When the data are not independent cross-validation becomes more difficult as leaving out an observation does not remove all the associated information due to the correlations with other observations. For time series forecasting, a cross-validation statistic is obtained as follows
+%When the data are not independent cross-validation becomes more difficult as leaving out an observation does not remove all the associated information due to the correlations with other observations. For time series forecasting, a cross-validation statistic is obtained as follows
 
-Fit the model to the data y1,…,yt and let y^t+1 denote the forecast of the next observation. Then compute the error (et+1∗=yt+1−y^t+1) for the forecast observation.
-Repeat step 1 for t=m,…,n−1 where m is the minimum number of observations needed for fitting the model.
-Compute the MSE from em+1∗,…,en∗.
-References
+%Fit the model to the data y1,…,yt and let y^t+1 denote the forecast of the next observation. Then compute the error (et+1∗=yt+1−y^t+1) for the forecast observation.
+%Repeat step 1 for t=m,…,n−1 where m is the minimum number of observations needed for fitting the model.
+%Compute the MSE from em+1∗,…,en∗.
+%References
 
-An excellent and comprehensive recent survey of cross-validation results is Arlot and Celisse (2010)
+%An excellent and comprehensive recent survey of cross-validation results is Arlot and Celisse (2010)
 
 %---------------------------------------------------
 \subsection{Online machine learning algorithms}
