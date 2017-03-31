@@ -4,54 +4,46 @@
 
 \subsection{Integration and Cointegration}\label{sec:coint}\  
 Following Johansen \cite{johansen1995} we shall say that a stochastic process
-$Y_t$ which satisfies $Y_t-E(Y_t) = \sum_{i=0}^\infty C_i\,\varepsilon_{t-i}$ is
-called $I(0)$, and then we shall write $Y_t\sim I(0)$, whenever
+$Y_t$ which satisfies $Y_t-E(Y_t) = \sum_{i=0}^\infty C_i\,\varepsilon_{t-i}$
+is called $I(0)$, and then we shall write $Y_t\sim I(0)$, whenever
 $\sum_{i=0}^\infty C_i \neq 0$ and $\sum_{i=0}^\infty C_i\,z^i$ converges for
 $z\in\mathbb{C}$ with $|z|<1$.  It is understood that the condition
 $\varepsilon_t\sim iid(0,\sigma^2)$ holds.
 
 A (vector) time series $\mathbf{y}_t$ is said to be {\em integrated of order\/}
 $d$, and then we shall write $\mathbf{y}_t\sim I(d)$, whenever after $d$ times
-(discrete) differentiation an stationary process is obtained~\cite{banerjee1993};
-more precisely, whenever
+(discrete) differentiation an stationary process is
+obtained~\cite{banerjee1993}; more precisely, whenever
 $(1-L)^d\,\mathbf{y}_t\sim\text{I(0)}$, where $L$ is the usual lag operator:
 $(1-L)\,\mathbf{y}_t = \Delta\mathbf{y}_t = \mathbf{y}_t-\mathbf{y}_{t-1}$ for
 all $t$.  
 
-Note that this definition includes the scalar case as time series of
-vectors of dimension 1; in this scalar case we will write the time series in
-nonbold format.
+Note that this definition includes the scalar case as time series of vectors of
+dimension 1; in this scalar case we will write the time series in nonbold
+format.
 
 Let $\mathbf{y}_t^\nu$, $\nu=1,\dots,l$, be a set of $l$ vector time series of
 order $I(1)$.  They are said to be {\em cointegrated\/} if a vector
 $\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^p$ exists, such that the
-time series,
-\begin{equation}
-\mathbf{Z}_t:= 
-\sum_{\nu=1}^l \beta(\nu)\,\mathbf{y}_t^\nu\,\sim\,\text{I(0)}\,.
-\end{equation}
-In other words, a set of $I(1)$ time series is said to be cointegrated if a
-linear combination of them exists, which is I(0).
+time series, \begin{equation} \mathbf{Z}_t:= \sum_{\nu=1}^l
+\beta(\nu)\,\mathbf{y}_t^\nu\,\sim\,\text{I(0)}\,.  \end{equation} In other
+words, a set of $I(1)$ time series is said to be cointegrated if a linear
+combination of them exists, which is I(0).
 
 
 \subsection{Vector Autorregresive Models}\label{sec:varvec}
 
-VECM is a special case of the VAR \cite{sims1980} model and both describe the joint behaviour
-of a set of variables.
+VECM is a special case of the VAR \cite{sims1980} model and both describe the
+joint behaviour of a set of variables.
 
-The VAR($p$) model is a general framework describing the behaviour of a
-set of $l$ endogenous variables as a linear combination of their last $p$
-values, where $l,p\in\mathbb{N}$. 
-In our case, each one of these $l$ variables is a scalar time series
-$y_{\lambda,t}$, $\lambda=1,\dots,l$, and we represent them all together
-at time $t$ by the the vector time series:
-\begin{equation}
-\label{eq:variables}
-\mathbf{y}_t = 
-\begin{bmatrix} y_{1,t} & y_{2,t} & \dots & y_{l,t} \end{bmatrix}^\top.
-\end{equation}
-\noindent
-Notice that the vectors $\mathbf{y}_t$ are assumed to be $l$-dimensional.
+The VAR($p$) model is a general framework describing the behaviour of a set of
+$l$ endogenous variables as a linear combination of their last $p$ values,
+where $l,p\in\mathbb{N}$.  In our case, each one of these $l$ variables is a
+scalar time series $y_{\lambda,t}$, $\lambda=1,\dots,l$, and we represent them
+all together at time $t$ by the the vector time series: \begin{equation}
+\label{eq:variables} \mathbf{y}_t = \begin{bmatrix} y_{1,t} & y_{2,t} & \dots &
+y_{l,t} \end{bmatrix}^\top.  \end{equation} \noindent Notice that the vectors
+$\mathbf{y}_t$ are assumed to be $l$-dimensional.
 
 The VAR($p$) model describes the behaviour of a dependent variable in terms of
 its own lagged values and the lags of the others variables in the system. The
@@ -81,10 +73,12 @@ the $\lambda$-th component of the vector time series $\mathbf{y}_t^\nu$
 is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
 $\lambda=1,\dots,l$.
 
-However, the VAR model cannot be used with non-stationary variables. VECM \cite{engle87} is also a linear model and a special form of a VAR model for I(1) variables that are also
-cointegrated~\cite{banerjee1993}. If cointegration exists, variable differences
-are stationary and they introduce an error correction term which adjusts
-coefficients to bring the variables back to equilibrium. 
+However, the VAR model cannot be used with non-stationary variables. VECM
+\cite{engle87} is also a linear model and a special form of a VAR model for
+I(1) variables that are also cointegrated~\cite{banerjee1993}. If cointegration
+exists, variable differences are stationary and they introduce an error
+correction term which adjusts coefficients to bring the variables back to
+equilibrium. 
 
 
 It is obtained re-writing equation (\ref{eq:var}) in terms of the new
@@ -153,102 +147,9 @@ the VECM($p$) model in block-matrix form as:
 \mathbf{E} \, , 
 \end{equation}
 %
-\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
-dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
-+1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
-%
-\begin{alignat}{3}
-\mathbf{B}
-&= \begin{bmatrix}
-   \Delta\mathbf{y}_{p+1}^\top \\
-   \Delta\mathbf{y}_{p+2}^\top \\
-   \vdots \\
-   \Delta\mathbf{y}_N^\top
-   \end{bmatrix}
-&\quad
-\mathbf{X}
-&= \begin{bmatrix}
-   \boldsymbol{\alpha}^\top \\
-   \boldsymbol{\Phi}_1^{*\top} \\
-   \boldsymbol{\Phi}_2^{*\top} \\
-   \vdots \\
-   \boldsymbol{\Phi}_{p-1}^{*\top} \\
-   \mathbf{c}^\top
-   \end{bmatrix}
-&\quad
-\mathbf{E}
-&= \begin{bmatrix}
-   \boldsymbol{\epsilon}_{p+1}^\top \\
-   \boldsymbol{\epsilon}_{p+2}^\top \\
-   \vdots \\
-   \boldsymbol{\epsilon}_N^\top \\
-   \end{bmatrix}
-\end{alignat}
-\noindent and 
-\begin{align}
-\mathbf{A} 
-&= \begin{pmat}[{....|}]
-   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
-                    & \Delta\mathbf{y}_2^\top & 1 \cr
-   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
-                       & \Delta\mathbf{y}_3^\top & 1 \cr
-   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
-   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
-                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
-   \end{pmat}\, .
-\label{eq:Amatrix}
-\end{align}
 Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
 can be solved with respect to $\mathbf{X}$ using the ordinary least
 squares (OLS) estimation.
-
-\subsection{Ordinary Least Squares method}
-
-When $\mathbf{A}$ is singular, solution to equation~(\ref{eq:vareq}) is given
-by the ordinary least squares (OLS) method. OLS consists of minimizing the sum
-of squared errors or equivalently minimizing the following expression:
-
-\begin{equation}
-\label{eq:regressionproblem}
-\underset{\mathbf{X}}{\text{min}} \quad \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{B} \|_2^2
-\end{equation}
-
-\noindent for which the solution $\hat{\mathbf{X}}$ is well-known:
-
-\begin{equation}
-\label{eq:MP}
-\hat{\mathbf{X}}=\mathbf{A}^{\!\!+}\,\mathbf{B}
-\end{equation}
-
-\noindent where $\mathbf{A}^{\!\!+}$ is the Moore-Penrose pseudo-inverse
-which can be written as follows: 
-
-\begin{equation}
-\label{eq:pseudoinverse}
-\mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
-\end{equation}
-
-However, when $\mathbf{A}$ is not full rank, i.e
-$rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
-always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
-More generally, the pseudo-inverse is best computed using the compact
-singular value decomposition (SVD) of $\mathbf{A}$:
-
-\begin{equation}
-    \label{eq:compactsvd}
-    \underset{m \times n}{\mathbf{A}}=
-    \underset{m \times k}{\mathbf{U_1}} \enskip
-    \underset{k \times k}{\Sigma_1} \enskip
-    \underset{k \times n}{\mathbf{V}_1^{\top}} \, ,
-\end{equation}
-
-\noindent as follows
-
-\begin{equation}
-\label{eq:pseudoinversesvd}
-\mathbf{A}^{\!\!+} = \mathbf{V}_1 \Sigma_1^{-1} \mathbf{U}_1^\top \, .
-\end{equation}
-
 
 
 \subsection{Regularization}\label{sec:RR}
