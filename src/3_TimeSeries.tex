@@ -151,19 +151,36 @@ Other less common forms of non-stationarity are structural break in mean and str
 \end{enumerate}
 
 \subsection{Spurious regression} \label{sec:spurious}
-The use of non-stationary data can lead to spurious regressions. Spurious regression
-dates back to Yule in 1926 \cite{yule1926}. If two stationary
-variables are generated as independent random series and are trending over time,
-when one of those variables is regressed on the other, they could have a high
-$R^2$ even if the two are totally unrelated. So, if standard regression
-techniques are applied to non-stationary data, it could look good under standard
-measures but valueless \cite{brooks2002}.
+The use of non-stationary data can lead to spurious regressions. Spurious
+regression dates back to Yule in 1926 \cite{yule1926}. If two stationary
+variables are generated as independent random series and are trending over
+time, when one of those variables is regressed on the other, they could have a
+high $R^2$ even if the two are totally unrelated. So, if standard regression
+techniques are applied to non-stationary data, it could look good under
+standard measures but valueless \cite{brooks2002}.
+The
+regression measure $R^2$ gives high values in presence of spurious
+relationships. This measure would means that the model explains all the
+variability of the response data around its mean which is not true. 
+
+The $R^2$ measure is calculated as follows:
+
+\begin{equation}
+\label{eq:rsquared}
+R^2 = 1 - \frac{\sum_{t=1}^T \epsilon_t^2}{\sum_{t=1}^T(y_t - \bar{y})^2}
+\end{equation}
+
+In presence of spurious relationships the denominator of equation
+\ref{eq:rsquared} becomes very large because a large weight is placed on
+extreme observations on either side of the mean $\bar{y}$.
 
 \textbf{Example of spurious regression} \quad 
-An example is shown below. Two random walks series $x_{1,t}$ and $x_{2,t}$ with a small drift ($\alpha=0.09$) are generated and
-then regressed one on the other:
+An example is shown below. Two random walks series $x_{1,t}$ and $x_{2,t}$ with
+a small drift ($\alpha=0.09$) are generated and then regressed one on the
+other:
  \begin{equation}
- x_{i,t} = \alpha + x_{i,t-1} + \epsilon_i,t  \qquad \text{where} \qquad \mathcal{N}(0,1), \quad i=1,2
+ x_{i,t} = \alpha + x_{i,t-1} + \epsilon_i,t  \qquad \text{where} \qquad
+\mathcal{N}(0,1), \quad i=1,2
  \end{equation}
 
 \begin{figure}[!h]
@@ -180,8 +197,13 @@ then regressed one on the other:
   \label{fig:spurious2}
 \end{figure}
 
-These two random walks, which are independent by construction, appear to be related with a $R^2=0.883$. However, what it is happening is that they are drifting in the same direction. Drift can be removed using returns or first differences.
-If after taking returns or first differences the regression fit is still good we will say that the variables are cointegrated, this means that both series may drift but their residuals will not. A more formal definition of cointegration is given in the section \ref{sec:cointegration}.
+These two random walks, which are independent by construction, appear to be
+related with a $R^2=0.883$. However, what it is happening is that they are
+drifting in the same direction. Drift can be removed using returns or first
+differences.  If after taking returns or first differences the regression fit
+is still good we will say that the variables are cointegrated, this means that
+both series may drift but their residuals will not. A more formal definition of
+cointegration is given in the section \ref{sec:cointegration}.
 
 \subsection{Integration}
 
@@ -936,32 +958,39 @@ singular value decomposition (SVD) of $\mathbf{A}$:
 \end{equation}
 
 \newpage
-Conventional regression estimators, including VARs, have good properties when applied to covariance-stationary time series, but encounter difficulties when applied to non stationary or integrated processes.
+Conventional regression estimators, including VARs, have good properties when
+applied to covariance-stationary time series, but encounter difficulties when
+applied to non stationary or integrated processes.
 
-These difficulties were illustrated by Granger and Newbold in 1974 \cite{granger1974} when they introduced the concept of spurious regressions (see section \ref{sec:spurious}). In 1982, Nelson and Plosser  \cite{nelson1982} showed that unit roots might be present in a wide variety of macroeconomic series
-in levels or logarithms. This finding gave rise to the industry of unit root testing, and
-the implication that variables should be rendered stationary by
-differencing before they are included in an econometric model.
-Further theoretical developments by Granger and Engle in 1987 \cite{engle87} raised the possibility that two or more integrated, non stationary time series might be cointegrated, so that some linear combination of these series could be stationary even though each series were not. 
+These difficulties were illustrated by Granger and Newbold in 1974
+\cite{granger1974} when they introduced the concept of spurious regressions
+(see section \ref{sec:spurious}). In 1982, Nelson and Plosser \cite{nelson1982}
+showed that unit roots might be present in a wide variety of macroeconomic
+series in levels or logarithms. This finding gave rise to the industry of unit
+root testing, and the implication that variables should be rendered stationary
+by differencing before they are included in an econometric model.  Further
+theoretical developments by Granger and Engle in 1987 \cite{engle87} raised the
+possibility that two or more integrated, non stationary time series might be
+cointegrated, so that some linear combination of these series could be
+stationary even though each series were not. 
 
-If two series are both integrated (of order one, or I(1)) we could model
-their interrelationship by taking first differences of each series and
-including the differences in a VAR or a structural model.
-However, this approach would be suboptimal if it was determined that
-these series are indeed cointegrated. In that case, the VAR only
-express the short-run responses of these series to innovations in each
-series. This implies that the simple regression in first differences is
-misspecified.
-If the series are cointegrated, they move together in the long-run. A
-VAR in first differences will not capture those long-run tendencies.
-VECM fit to the first differences of the non stationary variables, but a lagged error-correction term is added to the relationship representing the long-run relationship.
+If two series are both integrated (of order one, or I(1)) we could model their
+interrelationship by taking first differences of each series and including the
+differences in a VAR or a structural model.  However, this approach would be
+suboptimal if it was determined that these series are indeed cointegrated. In
+that case, the VAR only express the short-run responses of these series to
+innovations in each series. This implies that the simple regression in first
+differences is misspecified.  If the series are cointegrated, they move
+together in the long-run. A VAR in first differences will not capture those
+long-run tendencies.  VECM fit to the first differences of the non stationary
+variables, but a lagged error-correction term is added to the relationship
+representing the long-run relationship.
 
 In finance, many economic time series are revealed to be stationary when they
 are differentiated and moreover cointegration restrictions often improve
-forecasting \cite{duy1998}. Therefore, VECM has been widely adopted in
-finance: \cite{mukherjee1995}, \cite{maysami2000}, \cite{arestis2001} and
-\cite{seong2013} to name a few. Pair
-trading is a very common example of a cointegration
-application \cite{herlemont2003} but also can also be extended to a larger set
-of variables \cite{mukherjee1995}, \cite{engle2004}.
+forecasting \cite{duy1998}. Therefore, VECM has been widely adopted in finance:
+\cite{mukherjee1995}, \cite{maysami2000}, \cite{arestis2001} and
+\cite{seong2013} to name a few. Pair trading is a very common example of a
+cointegration application \cite{herlemont2003} but also can also be extended to
+a larger set of variables \cite{mukherjee1995}, \cite{engle2004}.
 
