@@ -1,9 +1,19 @@
-\chapter{Adaptive parallel algorithm for Vector error correction model}
-VECM (presented in section \ref{sec:vecm}) has been
+\chapter{Fast and adaptive cointegration based model
+for forecasting high frequency financial time series}
+
+Cointegration is a long-run property of some non-stationary time series where a
+linear combination of those time series is stationary.  This behaviour has been
+studied in finance because cointegration restrictions often improve forecasting.
+The Vector Error Correction Model (VECM) is a well-known econometric technique
+that characterises short-run variations of a set of cointegrated time series
+incorporating long-run relationships as an error correction term. VECM has been
 broadly used with low frequency time series. We aimed to adapt VECM to be used
 in finance with high frequency stream data.
 
-We observed that the number of cointegration relationships varies with the
+Cointegration relations change in time and therefore VECM parameters must be
+updated when new data is available. We studied how forecasting performance is
+affected when VECM parameters and the length of historical data used change in
+time. We observed that the number of cointegration relationships varies with the
 length of historical data used. Moreover, parameters that increased these
 relationships in time led to better forecasting performance. Our proposal,
 called an Adaptive VECM (AVECM) is to make a parameters grid search that
@@ -15,6 +25,7 @@ Foreign Exchange market. We compared our proposal with ARIMA and the naive
 forecast of the random walk model. Numerical experiments showed that on average
 AVECM performed better than ARIMA and random walk. Additionally, AVECM
 significantly improved execution times with respect to its serial version.
+
 
 \section{Introduction}
 \label{sec:introduction}
@@ -33,24 +44,36 @@ forecasting, see \cite{duy1998}. Therefore, VECM has been widely adopted in
 financial applications, among others: \cite{mukherjee1995}, \cite{seong2013},
 \cite{maysami2000} and \cite{arestis2001}. VECM has also been used in pair
 trading, see \cite{herlemont2003}, or models with more than two variables, see
-for example \cite{mukherjee1995} and \cite{engle2004}).
+for example \cite{mukherjee1995} and \cite{engle2004}.
 
-VECM parameters are obtained using the ordinary least squares (OLS) method,
-developed by \cite{golub1980}. Since OLS involves many calculations, the
-parameter estimation is computationally expensive when the number of lagged
-values and data increases. Moreover, obtaining cointegration vectors is also an
-expensive routine. This is a main limitation to use VECM with stream data with
-high frequency. \cite{chen2003} addresses the advantage of distributed
-processing over conventional rolling window processing. 
+Cointegration relationships can be found in low and high frequency data of two or
+more assets. While cointegration in low frequency data is motivated by a
+long-run equilibrium relationship between economic forces, cointegration in high
+frequency data has its foundation in statistical arbitrage theory which is very helpful
+to detect mean-reverting trades. Information about cointegrated assets in high
+frequency data could be used as an input for high frequency trading strategies,
+using it as a signal to capture small profits in short term trades, see
+\cite{miao2014}. \cite{zhou2001} addressed the benefits of using higher
+frequency data to analize cointegration. \cite{rittler2012} also found that
+cointegration may differ with different data frequencies and could appear
+whith increased data frequency.
 
-Our aims were to study if a parallel version of VECM can be used with high
-frequency stream data.  Our approach was to determine adaptively the number of
-observations and lags of VECM which maximise cointegration relations in the
-past.  This search is computationally expensive because the Johansen method, see
-\cite{johansen1995}, is required to find cointegration vectors, which is of
-order $O(n^3)$. Therefore, our proposal, called Adaptively Vector Error
-Correction (AVECM), is to parallelise this search in order to get new parameters
-before new data arrives.  Model effectiveness is focused on out-of-sample
+The use of VECM with high frequency data is mainly limited by computationally
+expensive routines. Firstly, VECM parameters are obtained using the ordinary
+least squares (OLS) method, developed by \cite{golub1980}. Since OLS involves
+many calculations, the parameter estimation is computationally expensive when
+the number of lagged values and data increases. Secondly, obtaining
+cointegration vectors is also an expensive routine because the Johansen method 
+is required, which is of order $O(n^3)$ (\cite{johansen1995}).
+\cite{chen2003} addressed the advantage of distributed processing over
+conventional rolling window processing. Therefore, our aim was to study if a
+parallel version of VECM can be used with high frequency stream data. 
+
+Our approach was to determine, adaptively, the number of observations and lags of
+VECM which maximise cointegration relations in the past in a distributed
+environment. We called our proposal Adaptive Vector Error Correction (AVECM). 
+AVECM parallelises this search of parameters in order to update them
+before new data arrives. Model effectiveness is focused on out-of-sample
 forecast rather than in-sample fitting. This criterion allows AVECM prediction
 capability to be expressed rather than just explaining data history.  The
 forecast capability of our method was measured using MSE and the Theil's
@@ -58,6 +81,215 @@ $U$-statistic, see \cite{theil1966}, widely used in economic forecast. Tests
 were run using four currency rates: Euro (EUR) to United States Dollar (USD)
 (EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss Franc (CHF) (USDCHF)
 and USD to Japanese Yen (JPY) (USDJPY) with a 10-second frequency.
+
+This paper is organised as follows: section \ref{sec:background} presents the
+VAR and VECM, the AVECM algorithm is presented in section \ref{sec:methodology}.
+In section \ref{sec:results} we describe the tests carried on to assess the
+accuracy and the execution time of AVECM.  This section also includes a
+description of the test data.  Section \ref{sec:conclusions} contains the
+conclusions and a discussion of future research.
+
+\section{Background}
+\label{sec:background}
+
+\subsection{Integration and Cointegration}\label{sec:coint}\  
+Following \cite{johansen1995} we shall say that a stochastic process
+$Y_t$ which satisfies $Y_t-E(Y_t) = \sum_{i=0}^\infty C_i\,\varepsilon_{t-i}$ is
+called $I(0)$, and then we shall write $Y_t\sim I(0)$, whenever
+$\sum_{i=0}^\infty C_i \neq 0$ and $\sum_{i=0}^\infty C_i\,z^i$ converges for
+$z\in\mathbb{C}$ with $|z|<1$.  It is understood that the condition
+$\varepsilon_t\sim iid(0,\sigma^2)$ holds.
+
+A (vector) time series $\mathbf{y}_t$ is said to be {\em integrated of order\/}
+$d$, and then we shall write $\mathbf{y}_t\sim I(d)$, whenever after $d$ times
+(discrete) differentiation an stationary process is
+obtained, see \cite{banerjee1993}; more precisely, whenever
+$(1-L)^d\,\mathbf{y}_t\sim\text{I(0)}$, where $L$ is the usual lag operator:
+$(1-L)\,\mathbf{y}_t = \Delta\mathbf{y}_t = \mathbf{y}_t-\mathbf{y}_{t-1}$ for
+all $t$.  
+
+Note that this definition includes the scalar case as time series of vectors of
+dimension 1; in this scalar case we will write the time series in nonbold
+format.
+
+Let $\mathbf{y}_t^\nu$, $\nu=1,\dots,l$, be a set of $l$ vector time series of
+order $I(1)$.  They are said to be {\em cointegrated\/} if a vector
+$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^p$ exists, such that the
+time series,
+\begin{equation}
+\mathbf{Z}_t:= 
+\sum_{\nu=1}^l \beta(\nu)\,\mathbf{y}_t^\nu\,\sim\,\text{I(0)}\,.
+\end{equation}
+In other words, a set of $I(1)$ time series is said to be cointegrated if a
+linear combination of them exists, which is I(0).
+
+
+\subsection{Vector Autorregresive Models}\label{sec:varvec}
+
+Vector error correction model (VECM) describe the joint behaviour of a set of
+variables and can be derived from the simple Vector Autoregressive model (VAR)
+presented by \cite{sims1980}.  The VAR($p$) model is a framework describing the
+behaviour of a set of $l$ endogenous and stationary variables as a linear
+combination of their last $p$ values, where $l,p\in\mathbb{N}$.  In our case,
+each one of these $l$ variables is a scalar time series $y_{\lambda,t}$,
+$\lambda=1,\dots,l$, and we represent them all together at time $t$ by the
+vector time series:
+\begin{equation}
+\label{eq:variables}
+\mathbf{y}_t = 
+\begin{bmatrix} y_{1,t} & y_{2,t} & \dots & y_{l,t} \end{bmatrix}^\top.
+\end{equation}
+\noindent
+Notice that the vectors $\mathbf{y}_t$ are assumed to be $l$-dimensional.
+
+The VAR($p$) model describes the behaviour of a dependent variable in terms of
+its own lagged values and the lags of the others variables in the system. The
+model with $p$ lags is formulated as the system:
+\begin{align}
+\label{eq:var}
+\mathbf{y}_t 
+= \boldsymbol{\Phi}_1 \mathbf{y}_{t-1} +
+  \boldsymbol{\Phi}_2 \mathbf{y}_{t-2} + \dots +
+  \boldsymbol{\Phi}_p\mathbf{y}_{t-p} +
+  \mathbf{c} + \boldsymbol{\epsilon}_t \nonumber \\
+t=p+1,\dots,N,
+\end{align}
+\noindent where 
+$\boldsymbol{\Phi}_1, \boldsymbol{\Phi}_2,\dots,\boldsymbol{\Phi}_p$
+are $l\times l$-matrices of real coefficients,
+$\boldsymbol{\epsilon}_{p+1},
+ \boldsymbol{\epsilon}_{p+2}, \dots, \boldsymbol{\epsilon}_N$ 
+are error terms, $\mathbf{c}$ is a constant vector and $N$ is the total
+number of samples.
+
+Notice that, regarding our notation of section (\ref{sec:coint}),
+we have here 
+$\mathbf{y}_t^0 = \mathbf{y}_t$,
+$\mathbf{y}_t^\nu = \mathbf{y}_{t-\nu}$ and
+the $\lambda$-th component of the vector time series $\mathbf{y}_t^\nu$
+is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
+$\lambda=1,\dots,l$.
+
+However, the VAR model cannot be used with non-stationary variables. VECM ,
+developed by \cite{engle87}, is also a linear model for I(1) variables that are
+also cointegrated, see \cite{banerjee1993}. If cointegration exists, variable
+differences are stationary and they introduce an error correction term which
+adjusts coefficients to bring the variables back to equilibrium. 
+
+
+It is obtained re-writing equation (\ref{eq:var}) in terms of the new
+variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
+The VECM model, expressed in terms those differences, takes the form:
+\begin{equation}\label{eq:vec}
+\Delta \mathbf{y}_t 
+= \boldsymbol{\Omega}\,\mathbf{y}_{t-1}
+  + \sum_{i=1}^{p-1} \boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+where the coefficients matrices $\boldsymbol{\Phi}_i^*$ and 
+$\boldsymbol{\Omega}$, expressed in terms of the matrices
+$\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
+\begin{align*}
+\boldsymbol{\Phi}_i^* 
+&:= -\sum_{j=i+1}^{p}\boldsymbol{\Phi}_j\,, \\
+\boldsymbol{\Omega}
+&:= -\left( \mathbb{I} - \boldsymbol{\Phi}_1 - \dots 
+    - \boldsymbol{\phi}_p \right)\,. 
+\end{align*}
+The following well known properties of the matrix $\boldsymbol{\Omega}$, see
+\cite{johansen1995}, will be useful in the sequel:
+\begin{itemize}
+\item
+If $\boldsymbol{\Omega} = \mathbf{0}$, there is no cointegration.
+\item 
+If $rank(\boldsymbol{\Omega})=l$, i.e., if $\boldsymbol{\Omega}$ has
+full rank, then the time series are not I(1) but stationary.
+\item
+If $rank(\boldsymbol{\Omega})=r$, $0<r<l$, then there is cointegration
+and the matrix $\boldsymbol{\Omega}$ can be expressed as
+$\boldsymbol{\Omega}=\boldsymbol{\alpha\beta}^\top$, where $\boldsymbol{\alpha}$
+and $\boldsymbol{\beta}$ are
+$l\times r$ matrices and
+$\text{rank}(\boldsymbol{\alpha})=\text{rank}(\boldsymbol{\beta})=r$.
+\item
+The columns of $\boldsymbol{\beta}$ contains the cointegration vectors and the rows of
+$\boldsymbol{\alpha}$ correspond with the adjusted vectors. 
+$\boldsymbol{\beta}$ is obtained by Johansen procedure,see \cite{johansen1988},
+whereas $\boldsymbol{\alpha}$ has to be determined as a variable in the VECM.
+\end{itemize}
+It is worth noticing that the factorization of the matrix
+$\boldsymbol\Omega$ is not unique, since for any $r \times r$
+non-singular matrix $\mathbf{H}$, $\boldsymbol{\alpha}^*:=\boldsymbol{\alpha}\mathbf{H}$,
+and $\boldsymbol{\beta}^*=\boldsymbol{\beta}(\mathbf{H}^{-1})^\top$ we have
+$\boldsymbol{\alpha\beta}^\top=\boldsymbol{\alpha}^*(\boldsymbol{\beta}^*)^\top$.
+If cointegration exists, then equation (\ref{eq:vec}) can be written
+as follows:
+\begin{equation}\label{eq:vecfull}
+\Delta\mathbf{y}_t 
+= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
+  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
+  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
+\end{equation}
+\noindent
+which is a VAR model but for time series differences.
+
+
+Transposing each equation of the system (\ref{eq:vecfull}) we can write
+the VECM($p$) model in block-matrix form as:
+\begin{equation}\label{eq:vareq}
+\mathbf{B} = 
+\mathbf{A} \mathbf{X} + 
+\mathbf{E} \, , 
+\end{equation}
+%
+\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
+dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
++1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
+%
+\begin{alignat}{3}
+\mathbf{B}
+&= \begin{bmatrix}
+   \Delta\mathbf{y}_{p+1}^\top \\
+   \Delta\mathbf{y}_{p+2}^\top \\
+   \vdots \\
+   \Delta\mathbf{y}_N^\top
+   \end{bmatrix}
+&\quad
+\mathbf{X}
+&= \begin{bmatrix}
+   \boldsymbol{\alpha}^\top \\
+   \boldsymbol{\Phi}_1^{*\top} \\
+   \boldsymbol{\Phi}_2^{*\top} \\
+   \vdots \\
+   \boldsymbol{\Phi}_{p-1}^{*\top} \\
+   \mathbf{c}^\top
+   \end{bmatrix}
+&\quad
+\mathbf{E}
+&= \begin{bmatrix}
+   \boldsymbol{\epsilon}_{p+1}^\top \\
+   \boldsymbol{\epsilon}_{p+2}^\top \\
+   \vdots \\
+   \boldsymbol{\epsilon}_N^\top \\
+   \end{bmatrix}
+\end{alignat}
+\noindent and 
+\begin{align}
+\mathbf{A} 
+&= \begin{pmat}[{....|}]
+   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
+                    & \Delta\mathbf{y}_2^\top & 1 \cr
+   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
+                       & \Delta\mathbf{y}_3^\top & 1 \cr
+   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
+   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
+                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
+   \end{pmat}\, .
+\label{eq:Amatrix}
+\end{align}
+Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
+can be solved with respect to $\mathbf{X}$ using the OLS estimation.
 
 \section{Methodology} \label{sec:methodology}
 \subsection{Motivation} \label{sec:proposal}
@@ -69,31 +301,33 @@ long-run relationships between the time series  might change due to several
 economic factors that can lead to structural breaks in the cointegration
 relationship.  In order to show that the number of cointegration vectors depends
 on the amount $L$ of historical data and the number of lags $p$ in the VECM, we
-used a grid search.  We defined a grid of possible values for $L$ and $p$. $L$
-goes throughout $[2,14]$ hours (1 $hour = 360$ data points) with a step size of
-4 hours and $p$ throughout $[1,5]$ with step size of 1. The first experiment
-consisted in determining the number of cointegration vectors for all
-combinations of $L$ and $p$.  We used four forex rates: EURUSD, GBPUSD, USDCHF
-and USDJPY with 10-second frequency. Data started at 13:00 GMT of the 13th of
-August 2014, when the New York and London financial markets opened.
-
-Figure \ref{fig:hists} shows the distribution of the number of cointegration
-vectors given by the Johansen method for different values of $L=[2,6,10,14]$
-hours  and $p=1$ . This procedure was carried out by a sliding window of
-historical data moving 1000 times.
-
-
+used a grid search.  We arbitrarily defined a grid of possible values for $L$
+and $p$. $L$ goes throughout $[2,14]$ hours (1 $hour = 360$ data points) with a
+step size of 4 hours and $p$ throughout $[1,5]$ with a step size of 1. The idea
+was to show the variability of the number of cointegration vectors when we changed
+these two parameters. We used four forex rates: EURUSD, GBPUSD, USDCHF and
+USDJPY with 10-second frequency. Data started at 13:00 GMT of the 13th of August
+2014, when the New York and London financial markets opened.
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.9\textwidth]{img/Fig1}
+   \includegraphics[width=0.9\textwidth]{img/51_Fig1}
   \caption{Distribution of the number of cointegration vectors using $p=1$ lags.
   Four possible values for windows size $L$ are shown (2, 6, 10 and 14) hours (1
   hour = 360 data points).}
   \label{fig:hists}
 \end{figure}
 
+Figure \ref{fig:hists} shows the distribution of the number of cointegration
+vectors given by the Johansen method for different values of $L=[2,6,10,14]$
+hours and $p=1$ . This procedure was carried out by a sliding window of
+historical data moving 1000 times. We observed that the distribution of
+cointegration vectors changed with different values of $L$. When
+$L=2$ hours, there was no cointegration in more than 60\% of the iterations.
+Cointegration increased when $L=6$ hours and was maximum when $L=10$ hours where
+one cointegration vectors was found for all 1000 iterations. The ocurrence of
+cointegration started to decrease at $L=14$ hours.
 
 From section \ref{sec:background} we know that $r=0$ means no cointegration and
 $r=l$ (we are using four rates, so $l=4$) reveals that no process is I(1) but
@@ -109,23 +343,24 @@ PC =
 \end{equation}
 where c.v. stands for cointegration vectors and $it$ is the number of iterations.
 
-The goal of our next experiment was to find a relation between this ratio $PC$
+The goal of our next experiment was to find a relationship between the ratio $PC$
 and the performance measure MSE (see equation \ref{eq:MSE}). $L$ was defined
-between $[700,1500]$ data points with step size 100 and $p$ took values between
-$[1,5]$ with step size 1.  
+between $[2,14]$ hours, that corresponded to $[720, 5040]$ data points, and $p$
+took values between $[1,5]$.  
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=0.9\textwidth]{img/Fig2}
+   \includegraphics[width=0.9\textwidth]{img/51_Fig2}
   \caption{MSE versus the percentage of cointegration considering 1000
-  iterations. Best windows size $L$ found was 1060. Below MSE versus $L$ shows a
-  rapidly decreasing behaviour, founding minimum at PC = 80\% }
+  iterations. Optimum windows size $L$ found was 1060. Below MSE versus $L$ shows a
+  rapidly decreasing behaviour, founding minimum at PC = 73\% }
   \label{fig:cointvsmse}
 \end{figure}
 
-Figure~\ref{fig:cointvsmse} shows the relation between MSE and $PC$ and $L$.  We
-found that better cointegration percentage leads to better performance accuracy
-in terms of reducing MSE.
+Figure~\ref{fig:cointvsmse} shows the relationship between MSE and $PC$ and $L$. We
+found that higher cointegration percentage leads to improved performance accuracy
+in terms of lower MSE. Also, increasing the size of the sliding window $L$
+doesn't necessarily help to reduce MSE.
 
 Therefore we proposed to choose $L$ and $p$ in order to maximise the percentage
 of cointegration $PC$ in the near past. This process was done every time that
@@ -220,11 +455,14 @@ $U$-statistic less than 1 implies the performance is better than the naive
 model.
 \end{description}
 
+
 \section{Experimental results}
 \label{sec:results}
 \subsection{Data} \label{sec:unitroot}
-AVECM tests were carried out using four foreign exchange rates all related to
-USD: EURUSD, GBPUSD, USDCHF and USDJPY. This data was collected from
+All the experiments and AVECM tests were carried out using four foreign exchange rates all related to
+USD: EURUSD, GBPUSD, USDCHF and USDJPY. We chose the most traded rates related
+to USD so they were likely to be cointegrated. 
+This data was collected from
 \cite{Dukascopy2014}, a free database which gives access to the Swiss Foreign
 Exchange marketplace.
 
@@ -342,7 +580,7 @@ below 10 seconds  (the time series frequency).
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.9\textwidth]{img/Fig3}
+  \includegraphics[width=0.9\textwidth]{img/51_Fig3}
   \caption{Computing time of sequential and parallel algorithm is shown in the
   upper figure. Speed-up is shown below.}
   \label{fig:extimes}
@@ -360,14 +598,13 @@ synchronising processes is about two seconds independently of the number of
 processes considered. Execution times were measured using the Time python
 library.
 
-
 \section{Conclusions}
 \label{sec:conclusions}
 Cointegration in financial time series has been largely studied and the Johansen
-method is commonly used to obtain cointegration relationships.  In practice, it
-has been found that cointegration relations change with time.  However,
+method is commonly used to obtain cointegration relationships. In practice, it
+has been found that cointegration relations change with time. However,
 model-based cointegration such as VECM assumes that cointegration remains
-unchanged in time.  We empirically showed that the Johansen method is sensitive
+unchanged in time. We empirically showed that the Johansen method is sensitive
 to the number of lags but also to the amount of data considered.
 
 Moreover, we introduced the notion of {\em percentage of cointegration\/} and
@@ -394,13 +631,13 @@ parameters of $L$ and $p$ maximising the percentage of cointegration.
 
 The parallel implementation allowed the execution times to be reduced more than
 9 times and therefore a response time was obtain before 10 seconds. Since we
-used 10-second frequencys we can say that our proposal is suitable for use in
-an online context for real applications because response times were less than
-this frequency.
+used 10-second frequencys we can say that our proposal is suitable for use in an
+online context for real applications because response times were less than this
+frequency. Cointegration information can now easily be used as an integration tool
+to detect arbitrage opportunities or risk control.
 
 For future study, it would be interesting to explore the relationship between
 cointegration and performance in order to propose new criteria for improving
 VECM parameters. It would also be interesting to include more explaining
 variables such as bid-ask spread and change in volume.
-
 
