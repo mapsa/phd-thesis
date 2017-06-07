@@ -18,14 +18,16 @@ length of historical data used. Moreover, parameters that increased these
 relationships in time led to better forecasting performance. Our proposal,
 called an Adaptive VECM (AVECM) is to make a parameters grid search that
 maximises the number of cointegration relationships in the near past. To ensure
-the search can be executed fast enough, we used a distributed environment 
-\cite{Arce2017}.
+the search can be executed fast enough, we used a distributed environment .
+
 
 The methodology was tested using four 10-second frequency time series of the
 Foreign Exchange market. We compared our proposal with ARIMA and the naive
 forecast of the random walk model. Numerical experiments showed that on average
 AVECM performed better than ARIMA and random walk. Additionally, AVECM
 significantly improved execution times with respect to its serial version.
+
+This work is published in \cite{Arce2017}.
 
 
 \section{Introduction}
