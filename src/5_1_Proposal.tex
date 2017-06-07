@@ -1,4 +1,4 @@
-\chapter{Fast and adaptive cointegration based model
+\chapter[Adaptive cointegration model for time series forecasting]{Fast and adaptive cointegration based model
 for forecasting high frequency financial time series}
 
 Cointegration is a long-run property of some non-stationary time series where a
@@ -90,210 +90,7 @@ accuracy and the execution time of AVECM.  This section also includes a
 description of the test data.  Section \ref{sec:51conclusions} contains the
 conclusions and a discussion of future research.
 
-%\section{Background}
-%\label{sec:background}
-%
-%\subsection{Integration and Cointegration}\label{sec:coint}\  
-%Following \cite{johansen1995} we shall say that a stochastic process
-%$Y_t$ which satisfies $Y_t-E(Y_t) = \sum_{i=0}^\infty C_i\,\varepsilon_{t-i}$ is
-%called $I(0)$, and then we shall write $Y_t\sim I(0)$, whenever
-%$\sum_{i=0}^\infty C_i \neq 0$ and $\sum_{i=0}^\infty C_i\,z^i$ converges for
-%$z\in\mathbb{C}$ with $|z|<1$.  It is understood that the condition
-%$\varepsilon_t\sim iid(0,\sigma^2)$ holds.
-%
-%A (vector) time series $\mathbf{y}_t$ is said to be {\em integrated of order\/}
-%$d$, and then we shall write $\mathbf{y}_t\sim I(d)$, whenever after $d$ times
-%(discrete) differentiation an stationary process is
-%obtained, see \cite{banerjee1993}; more precisely, whenever
-%$(1-L)^d\,\mathbf{y}_t\sim\text{I(0)}$, where $L$ is the usual lag operator:
-%$(1-L)\,\mathbf{y}_t = \Delta\mathbf{y}_t = \mathbf{y}_t-\mathbf{y}_{t-1}$ for
-%all $t$.  
-%
-%Note that this definition includes the scalar case as time series of vectors of
-%dimension 1; in this scalar case we will write the time series in nonbold
-%format.
-%
-%Let $\mathbf{y}_t^\nu$, $\nu=1,\dots,l$, be a set of $l$ vector time series of
-%order $I(1)$.  They are said to be {\em cointegrated\/} if a vector
-%$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^p$ exists, such that the
-%time series,
-%\begin{equation}
-%\mathbf{Z}_t:= 
-%\sum_{\nu=1}^l \beta(\nu)\,\mathbf{y}_t^\nu\,\sim\,\text{I(0)}\,.
-%\end{equation}
-%In other words, a set of $I(1)$ time series is said to be cointegrated if a
-%linear combination of them exists, which is I(0).
-%
-%
-%\subsection{Vector Autorregresive Models}\label{sec:varvec}
-%
-%Vector error correction model (VECM) describe the joint behaviour of a set of
-%variables and can be derived from the simple Vector Autoregressive model (VAR)
-%presented by \cite{sims1980}.  The VAR($p$) model is a framework describing the
-%behaviour of a set of $l$ endogenous and stationary variables as a linear
-%combination of their last $p$ values, where $l,p\in\mathbb{N}$.  In our case,
-%each one of these $l$ variables is a scalar time series $y_{\lambda,t}$,
-%$\lambda=1,\dots,l$, and we represent them all together at time $t$ by the
-%vector time series:
-%\begin{equation}
-%\label{eq:variables}
-%\mathbf{y}_t = 
-%\begin{bmatrix} y_{1,t} & y_{2,t} & \dots & y_{l,t} \end{bmatrix}^\top.
-%\end{equation}
-%\noindent
-%Notice that the vectors $\mathbf{y}_t$ are assumed to be $l$-dimensional.
-%
-%The VAR($p$) model describes the behaviour of a dependent variable in terms of
-%its own lagged values and the lags of the others variables in the system. The
-%model with $p$ lags is formulated as the system:
-%\begin{align}
-%\label{eq:var}
-%\mathbf{y}_t 
-%= \boldsymbol{\Phi}_1 \mathbf{y}_{t-1} +
-%  \boldsymbol{\Phi}_2 \mathbf{y}_{t-2} + \dots +
-%  \boldsymbol{\Phi}_p\mathbf{y}_{t-p} +
-%  \mathbf{c} + \boldsymbol{\epsilon}_t \nonumber \\
-%t=p+1,\dots,N,
-%\end{align}
-%\noindent where 
-%$\boldsymbol{\Phi}_1, \boldsymbol{\Phi}_2,\dots,\boldsymbol{\Phi}_p$
-%are $l\times l$-matrices of real coefficients,
-%$\boldsymbol{\epsilon}_{p+1},
-% \boldsymbol{\epsilon}_{p+2}, \dots, \boldsymbol{\epsilon}_N$ 
-%are error terms, $\mathbf{c}$ is a constant vector and $N$ is the total
-%number of samples.
-%
-%Notice that, regarding our notation of section (\ref{sec:coint}),
-%we have here 
-%$\mathbf{y}_t^0 = \mathbf{y}_t$,
-%$\mathbf{y}_t^\nu = \mathbf{y}_{t-\nu}$ and
-%the $\lambda$-th component of the vector time series $\mathbf{y}_t^\nu$
-%is the scalar time series $y_{\lambda,t}^\nu$, where $\nu=1,\dots,p$ and
-%$\lambda=1,\dots,l$.
-%
-%However, the VAR model cannot be used with non-stationary variables. VECM ,
-%developed by \cite{engle87}, is also a linear model for I(1) variables that are
-%also cointegrated, see \cite{banerjee1993}. If cointegration exists, variable
-%differences are stationary and they introduce an error correction term which
-%adjusts coefficients to bring the variables back to equilibrium. 
-%
-%
-%It is obtained re-writing equation (\ref{eq:var}) in terms of the new
-%variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
-%The VECM model, expressed in terms those differences, takes the form:
-%\begin{equation}\label{eq:vec}
-%\Delta \mathbf{y}_t 
-%= \boldsymbol{\Omega}\,\mathbf{y}_{t-1}
-%  + \sum_{i=1}^{p-1} \boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
-%  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
-%\end{equation}
-%\noindent
-%where the coefficients matrices $\boldsymbol{\Phi}_i^*$ and 
-%$\boldsymbol{\Omega}$, expressed in terms of the matrices
-%$\boldsymbol{\Phi}_i$ of (\ref{eq:var}), are:
-%\begin{align*}
-%\boldsymbol{\Phi}_i^* 
-%&:= -\sum_{j=i+1}^{p}\boldsymbol{\Phi}_j\,, \\
-%\boldsymbol{\Omega}
-%&:= -\left( \mathbb{I} - \boldsymbol{\Phi}_1 - \dots 
-%    - \boldsymbol{\phi}_p \right)\,. 
-%\end{align*}
-%The following well known properties of the matrix $\boldsymbol{\Omega}$, see
-%\cite{johansen1995}, will be useful in the sequel:
-%\begin{itemize}
-%\item
-%If $\boldsymbol{\Omega} = \mathbf{0}$, there is no cointegration.
-%\item 
-%If $rank(\boldsymbol{\Omega})=l$, i.e., if $\boldsymbol{\Omega}$ has
-%full rank, then the time series are not I(1) but stationary.
-%\item
-%If $rank(\boldsymbol{\Omega})=r$, $0<r<l$, then there is cointegration
-%and the matrix $\boldsymbol{\Omega}$ can be expressed as
-%$\boldsymbol{\Omega}=\boldsymbol{\alpha\beta}^\top$, where $\boldsymbol{\alpha}$
-%and $\boldsymbol{\beta}$ are
-%$l\times r$ matrices and
-%$\text{rank}(\boldsymbol{\alpha})=\text{rank}(\boldsymbol{\beta})=r$.
-%\item
-%The columns of $\boldsymbol{\beta}$ contains the cointegration vectors and the rows of
-%$\boldsymbol{\alpha}$ correspond with the adjusted vectors. 
-%$\boldsymbol{\beta}$ is obtained by Johansen procedure,see \cite{johansen1988},
-%whereas $\boldsymbol{\alpha}$ has to be determined as a variable in the VECM.
-%\end{itemize}
-%It is worth noticing that the factorization of the matrix
-%$\boldsymbol\Omega$ is not unique, since for any $r \times r$
-%non-singular matrix $\mathbf{H}$, $\boldsymbol{\alpha}^*:=\boldsymbol{\alpha}\mathbf{H}$,
-%and $\boldsymbol{\beta}^*=\boldsymbol{\beta}(\mathbf{H}^{-1})^\top$ we have
-%$\boldsymbol{\alpha\beta}^\top=\boldsymbol{\alpha}^*(\boldsymbol{\beta}^*)^\top$.
-%If cointegration exists, then equation (\ref{eq:vec}) can be written
-%as follows:
-%\begin{equation}\label{eq:vecfull}
-%\Delta\mathbf{y}_t 
-%= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
-%  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
-%  + \mathbf{c} + \boldsymbol{\epsilon}_t\,,
-%\end{equation}
-%\noindent
-%which is a VAR model but for time series differences.
-%
-%
-%Transposing each equation of the system (\ref{eq:vecfull}) we can write
-%the VECM($p$) model in block-matrix form as:
-%\begin{equation}\label{eq:vareq}
-%\mathbf{B} = 
-%\mathbf{A} \mathbf{X} + 
-%\mathbf{E} \, , 
-%\end{equation}
-%%
-%\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
-%dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
-%+1)\times l)$ and $\mathbf{E}$ dimension is $((N-p)\times l)$:
-%%
-%\begin{alignat}{3}
-%\mathbf{B}
-%&= \begin{bmatrix}
-%   \Delta\mathbf{y}_{p+1}^\top \\
-%   \Delta\mathbf{y}_{p+2}^\top \\
-%   \vdots \\
-%   \Delta\mathbf{y}_N^\top
-%   \end{bmatrix}
-%&\quad
-%\mathbf{X}
-%&= \begin{bmatrix}
-%   \boldsymbol{\alpha}^\top \\
-%   \boldsymbol{\Phi}_1^{*\top} \\
-%   \boldsymbol{\Phi}_2^{*\top} \\
-%   \vdots \\
-%   \boldsymbol{\Phi}_{p-1}^{*\top} \\
-%   \mathbf{c}^\top
-%   \end{bmatrix}
-%&\quad
-%\mathbf{E}
-%&= \begin{bmatrix}
-%   \boldsymbol{\epsilon}_{p+1}^\top \\
-%   \boldsymbol{\epsilon}_{p+2}^\top \\
-%   \vdots \\
-%   \boldsymbol{\epsilon}_N^\top \\
-%   \end{bmatrix}
-%\end{alignat}
-%\noindent and 
-%\begin{align}
-%\mathbf{A} 
-%&= \begin{pmat}[{....|}]
-%   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
-%                    & \Delta\mathbf{y}_2^\top & 1 \cr
-%   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
-%                       & \Delta\mathbf{y}_3^\top & 1 \cr
-%   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
-%   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
-%                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
-%   \end{pmat}\, .
-%\label{eq:Amatrix}
-%\end{align}
-%Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
-%can be solved with respect to $\mathbf{X}$ using the OLS estimation.
-
 \section{Methodology} \label{sec:51methodology}
-\subsection{Motivation}
 
 Cointegration vectors can be found applying the Johansen method which uses a
 sample of the last historical data. However, VECM assumes cointegration vectors
@@ -436,26 +233,6 @@ series $\mathbf{y}_t$,  we get an ARMA$(p,q)$. Since we are modelling returns,
 we used $d=1$.
 
 
-\subsection{Evaluation methods}
-
-Forecast performance was evaluated using two different methods which are
-frequently used in finance:
-\begin{description}
-\item[MSE]  Mean Square Error measures the distance between forecasts
-and the true values and large deviations from the true value have a
-large impact due to squaring forecast error.
-\begin{equation}\label{eq:MSE}
-\text{MSE} = 
-\frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}
-\end{equation}
-\item[$U$-statistic] the Theil's $U$-statistic, presented by
-\cite{theil1966}, is a unit free measure obtained as the ratio between the root
-MSE (RMSE) of a model and the RMSE of the naive random walk model. A
-$U$-statistic less than 1 implies the performance is better than the naive
-model.
-\end{description}
-
-
 \section{Experimental results}
 \label{sec:51results}
 \subsection{Data}
@@ -516,7 +293,7 @@ different number of iterations (parameter $m$ in algorithm \ref{alg:AVECM}): 10,
 50 and 100. We tried 12, 24 and 47 different pair of combinations for $L$ and
 $p$. Possible values for $L$ were in the interval $[2,14]$ hours and $p$ can
 have values in between $[1,5]$. Best AVECM performance was compared against
-ARIMA and the random walk model.  Table~\ref{tab:stats} shows the out-of-sample
+ARIMA and the random walk model.  Table~\ref{tab:51stats} shows the out-of-sample
 performance measures: MSE and $U$-statistic for AVECM and ARIMA. In terms of
 both measures we found that AVECM is superior to ARIMA and the naive random walk
 model. We also included the p-value that proves that the difference in the MSE
@@ -527,7 +304,7 @@ superior to ARIMA.
 
 \begin{table}[!htbp]
 \caption{AVECM performance}
-\label{tab:stats}
+\label{tab:51stats}
 \begin{center}
 \begin{tabular}{ccccccc}
 
@@ -552,7 +329,7 @@ AVECM & ARIMA \\
 To determine $L$ and $p$ based on maximising the percentage of cointegration
 requires use of the Johansen method which is a computationally expensive
 routine. This procedure is done by the function
-get\_best\_params($Ls,ps,m,\mathbf{Y}$) shown in algorithm \ref{alg:AVECM}.  In
+get\_best\_params shown in algorithm \ref{alg:AVECM}.  In
 order to improve the execution time of this search, our proposal included a
 parallel search of VECM parameters using high performance computing.  The main
 objective was to obtain a response before a new data arrived in the following 10
@@ -572,7 +349,7 @@ values between 1 and 5. Parameter $nparams$ represents the number of pairs
 ($L$,$p$) used to maximise the percentage of cointegration. 
 
 Execution time depends directly on $L$, $p$ and $nparams$ used, since they
-determine the size of matrix $\mathbf{A}$ (see equation \ref{eq:Amatrix}) and
+determine the size of matrix $\mathbf{A}$ (see equation \ref{eq:vecA}) and
 therefore affect the OLS function execution time.  Therefore, if we try more
 combinations of $L$ and $p$ (increasing $nparams$) the serial algorithm will
 take longer. For this financial time series we are interested in execution times

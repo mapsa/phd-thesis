@@ -781,7 +781,11 @@ can be solved with respect to $\mathbf{X}$ using the ordinary least
 squares estimation (see section \ref{sec:OLS}).
 
 \section{Vector error correction model}\label{sec:vecm}
-Vector error correction model (VECM)  \cite{engle87} describe the joint behaviour of a set of cointegrated I(1) time series \cite{banerjee1993} and can be derived from the simple VAR model.
+The VAR model cannot be used with non-stationary variables. VECM ,
+developed by \cite{engle87}, is also a linear model for I(1) variables that are
+also cointegrated, see \cite{banerjee1993}. If cointegration exists, variable
+differences are stationary and they introduce an error correction term which
+adjusts coefficients to bring the variables back to equilibrium. 
 
 It is obtained re-writing equation \ref{eq:var} in terms of the new
 variable $\Delta\mathbf{y}_t=\mathbf{y}_t-\mathbf{y}_{t-1}$.
@@ -843,8 +847,8 @@ which is a VAR model but for time series differences.
 
 Transposing each equation of the system (\ref{eq:vecfull}) we can write
 the VECM($p$) model in block-matrix form as:
-\begin{equation}\label{eq:simpleveceq}
-\mathbf{Y} = 
+\begin{equation}\label{eq:simpleveceq} %vareq}
+\mathbf{B} = 
 \mathbf{A} \mathbf{X} + 
 \mathbf{E} \, , 
 \end{equation}
@@ -855,7 +859,7 @@ dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
 
 \begin{align}
 \label{eq:vecY}
-\mathbf{Y}
+\mathbf{B}
 = \begin{bmatrix}
    \Delta\mathbf{y}_{p+1}^\top \\
    \Delta\mathbf{y}_{p+2}^\top \\

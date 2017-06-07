@@ -1087,6 +1087,13 @@ true value.
 \mathbf{y}_t-\hat{\mathbf{y}}_t
 \right| 
 \end{equation}
+\item[MSE]  Mean Square Error measures the distance between forecasts
+and the true values and large deviations from the true value have a
+large impact due to squaring forecast error.
+\begin{equation}\label{eq:MSE}
+\text{MSE} = 
+\frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}
+\end{equation}
 \item[RMSE] Root Mean Square Error also measures the distance between forecasts
 to the true values but, unlike MAE, large deviations from the true value have a
 large impact on RMSE due to squaring forecast error.
@@ -1094,6 +1101,11 @@ large impact on RMSE due to squaring forecast error.
 \text{RMSE} = \sqrt{
 \frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}}
 \end{equation}
+\item[$U$-statistic] the Theil's $U$-statistic, presented by
+\cite{theil1966}, is a unit free measure obtained as the ratio between the root
+MSE (RMSE) of a model and the RMSE of the naive random walk model. A
+$U$-statistic less than 1 implies the performance is better than the naive
+model.
 \end{description}
 
 
