@@ -1,13 +1,9 @@
 \chapter{A Regularized Time Varying Vector Error Correction Model}
 
-Vector error correction model (VECM) parameters are commonly obtained using the
-ordinary least squares method. Since this parameters could be sensitive to the
-data, this proposal is to get these parameters using ridge regression which
-could lead to a better generalization capability. In order to give with a
-real-time response, an online version of VECM (OVECM) is proposed. OVECM solves
-VECM considering only a sliding window of historical data and therefore
-better response times could be achieved.
-
+In the last chapter, the Online Vector Error Correction Model (OVECM) was proposed. OVECM parameters are obtained using the Ordinary Least Squares (OLS) method. Even though OLS is extensively used, it has over-fitting issues and is computationally expensive. Therefore, OVECM parameters could be very sensitive to the data. Ridge Regression (RR)  is commonly used
+instead of OLS to tackle this problem, introducing a regularization parameter which could improve
+prediction error.
+In this chapter, the use of Ridge Regression (RR) and its variant called Aggregating Algorithm for Regression (AAR) is explored in order to get better generalisation capability. 
 
 \section{The problem}
 
