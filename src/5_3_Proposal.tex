@@ -7,17 +7,19 @@ In this chapter, the use of Ridge Regression (RR) and its variant called Aggrega
 
 \section{The problem}
 
-VECM introduces the long-run relationship among a set of cointegrated variables
-as an error correction term. VECM is a special case of the vector autorregresive
-model (VAR) model. VAR model expresses future values as a linear combination of
-variables past values.  However, VAR model cannot be used with non-stationary
-variables, which is a common feature of financial assets. VECM is a linear model
-but in terms of variable differences. If cointegration exists, variable
-differences are stationary and they introduce an error correction term which
-adjusts coefficients to bring the variables back to equilibrium. In finance,
-many economic time series turn to be stationary when they are differentiated and
-cointegration restrictions often improves forecasting~\cite{duy1998}. Therefore,
-VECM has been widely adopted.
+%So why do we care about cointegration? Someone else can probably give more
+%econometric applications, but in quantitative finance, cointegration forms the
+%basis of the pairs trading strategy: suppose we have two cointegrated stocks X
+%and Y, with the particular (for concreteness) cointegrating relationship X - 2Y
+%= Z, where Z is a stationary series of zero mean. For example, X could be
+%McDonald's, Y could be Burger King, and the cointegration relationship would
+%mean that X tends to be priced twice as high as Y, so that when X is more than
+%twice the price of Y, we expect X to move down or Y to move up in the near
+%future (and analogously, if X is less than twice the price of Y, we expect X to
+%move up or Y to move down). This suggests the following trading strategy: if X -
+%2Y > d, for some positive threshold d, then we should sell X and buy Y (since we
+%expect X to decrease in price and Y to increase), and similarly, if X - 2Y < -d,
+%then we should buy X and sell Y.
 
 Both VECM and VAR model parameters are obtained using ordinary least squares
 (OLS) method. OLS has two main problems: is sensitive to errors on input data
@@ -30,26 +32,26 @@ algorithms have been proposed to solve problems with large data sets because of
 their simplicity and their ability to update the model when new data is
 available. 
 
-Our proposal is an online formulation of the VECM called Online VECM (OVECM)
-based on consideration of only a sliding window of the historical data.  OVECM
-introduces matrix optimizations in order to reduce the number of operations and
-also takes into account the fact that cointegration vector space doesn't
-experience large changes with small changes in the input data. Moreover, OVECM
-uses RR instead of OLS to obtain VECM parameters. Our method is later tested using four
-currency rates from the foreign exchange market with a frequency of 10 seconds.
-Model efectiveness is focused on out-of-sample forecast rather than in-sample
-fitting.  This criteria allows the OVECM prediction capability to be expressed
-rather than just explaining data history. Our method performance is compared
-with its optimal offline algorithm.
+In this paper, we propose an online formulation of the VECM called Onlive VECM
+(OVECM) based on consideration of only a sliding window of the most recent data.
+The algorithm introduces matrix optimizations in order to reduce the number of
+operations and also takes into account the fact that cointegration vector space
+doesn't experience large changes with small changes in the input data. Moreover,
+RR instead of OLS is used to solve VECM. Our method is later tested using four
+currency rates from the foreign exchange market with different frequencies.  Model
+efectiveness is focused on out-of-sample forecast rather than in-sample fitting.
+This criteria allows the OVECM prediction capability to be expressed rather than
+just explaining data history. Our method performance is compared with its
+optimal offline algorithm.
 
 
-%The next sections are organized as follows: section~\ref{sec:background}
-%presents the VAR and VECM, the OVECM algorithm proposed is presented in
-%section~\ref{sec:methodology}. Section~\ref{sec:results} gives a description of
-%the data used and the tests carried on to show accuracy and time comparison of
-%our proposal against the traditional VECM and
-%section~\ref{sec:conclusions} includes conclusions and a proposal for future
-%tudy.
+The next sections are organized as follows: section~\ref{sec:background}
+presents the VAR and VECM, the OVECM algorithm proposed is presented in
+section~\ref{sec:methodology}. Section~\ref{sec:results} gives a description of
+the data used and the tests carried on to show accuracy and time comparison of
+our proposal against the traditional VECM and
+section~\ref{sec:conclusions} includes conclusions and a proposal for future
+tudy.
 
 
 \section{Methodology}
