@@ -195,8 +195,7 @@ R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
 
 \subsection{Ridge Regression}
 
-
-
+Ridge regression was independently proposed by Tikhonov \cite{tikhonov1963} and Phillips \cite{phillips1962}. 
 One example of regularisation in linear models is Ridge Regression (RR), which is a regularised least squares method.
 The least squares (LS) method is a well known way to solve a regression
 problem. 
@@ -386,6 +385,11 @@ Since $\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}=0$ we have:
 \end{eqnarray*}
 
 $\blacksquare$
+
+
+The method is called ridge regression because the term $\lambda \mathbb{I}$ adds positive entries along the diagonal (ridge) to avoid the
+singularity of the covariance matrix $\mathbf{A}^\top \mathbf{A}$. This addition ensures that all of the covariance matrix eigenvalues will be strictly greater than 0, i.e the solution becomes unique.
+
 
 \subsection{The Lambda parameter}
 
@@ -588,6 +592,26 @@ Var(\mathbf{X}(\lambda)) &=& \sigma^2 (\mathbb{I} + \lambda (\mathbf{A}^\top
 d_i = \frac{\sigma_i^{-1}}{(1+\lambda\sigma_i^{-1})^2}
 \end{equation*}
 
+$\blacksquare$
+
+\subsection{Generalized Cross Validation}
+Since we don't know the data we want to predict, the bias-variance tradeoff is not directly useful to determine $\lambda$. Many techniques have been developed to determine a suitable value for the regularization parameter. However, when no information is available on the error, one of the most popular techniques is the Generalized Cross Validation (GCV) \cite{bauer2011}. 
+GCV originates from the older method leave-one-out Cross Validation \cite{stone1974}.
+
+The leave-one-out cross validation method determine a regularization parameter that minimises the average of the squared predictions errors using each solution to predict the missing data value.
+
+%'---------------------------http://robjhyndman.com/hyndsight/crossvalidation/
+%When the data are not independent cross-validation becomes more difficult as leaving out an observation does not remove all the associated information due to the correlations with other observations. 
+
+For time series forecasting, a cross-validation statistic is obtained as follows: fit the model to the data $y1,…,yt$ and let $y^t+1$ denote the forecast of the next observation. Then compute the error ($et+1∗=yt+1−y^t+1$) for the forecast observation.
+Repeat step 1 for t=m,…,n−1 where m is the minimum number of observations needed for fitting the model.
+Compute the MSE from $em+1∗,…,en∗$.
+
+%An excellent and comprehensive recent survey of cross-validation results is Arlot and Celisse (2010)
+
+%---------------------------------------------------
+
+
 \subsection{Machine learning algorithms}
 In recent years many successful machine learning applications have been developed. Artificial neural networks (ANN) and Support Vector Machines (SVM) have been some of the most popularly used machine learning algorithm \cite{haykin1998}. Historically, SVMs emerged after ANN.
 
@@ -637,6 +661,9 @@ model. Moreover, it could happen that we won't have enough time to process the
 new data before more data arrives. In online learning algorithms there is no
 training phase, but the model is updated and evaluated at every time step. This
 model updating is computationally less expensive than a training phase.
+
+
+
 Online algorithms allow incremental learning by processing one instance at a
 time. This is done updating the current model instead of building the model from
 scratch.
@@ -677,7 +704,7 @@ The online learning framework was first introduced in the perceptron algorithm
 passive-aggressive \cite{crammerETall2006}, stochastic gradient descent
 \cite{zhang2004}, aggregating algorithm \cite{vovk2001} and the second order
 perceptron \cite{cesa-bianchi2005}.  In \cite{cesa-bianchi2006} an in-depth
-analysis of online learning is provided.
+analysis of online learning is provided. Applications in finance has been widely used: study presented by~\cite{arce+salinas2012} applied ridge regression in an online context and more recently, time series forecasting using online learning has been presented~\cite{anavaetAl2013}.
 
 The motivation for online learning is to obtain computational efficiency and
 tackle the shifting problem, i.e. that the distribution of the data is unknown
@@ -720,6 +747,8 @@ is required.  The algorithm is online but not incremental if it doesn't produce
 the same result for all observations that the corresponding batch algorithm
 would for these same observations.
 
+
+
 Algorithm~\ref{alg:onlinealg} shows the online learning algorithm structure:
 
 \begin{algorithm}[ht]
@@ -749,6 +778,7 @@ and its optimal predictor $E^* \in \Theta$ given by:
 L^*_T= \text{min}_{E \in \Theta} L_T^E \, ,
 \end{equation*}
 
+
 \noindent where $L_T^E = \sum_{t=1}^T
 l_t(\mathbf{y}_t,\mathbf{y}^E_t)$ and $\mathbf{y}^E_t$ is the expert estimation. 
 
@@ -757,6 +787,8 @@ Therefore regret is defined as:
 \begin{equation*}
 R_T = L_T - L^*_T
 \end{equation*}
+
+%REVISADO HASTA ACA
 
 \subsection{Competitive analysis}
 
@@ -1010,62 +1042,62 @@ It is important to notice that the QR factorisation is computed only once and it
 is computationally less expensive than the SVD.
 
 
-Despite the bias-variance tradeoff provides a conceptual framework for
-determining a good model, is not directly useful. Some popular methods
-for determine model selection are:
-
-\begin{itemize}
-    \item Akaike information criterion (AIC) (Akaike, 1974)
-    \item Bootstrap-based selection (Efron and Tibshirani, 1997)
-    \item Cross-validation (Stone, 1974)
-\end{itemize}
-
-On the other hand, $\lambda$ can also be used to reduce computational time as it
-is shown in equation~(\ref{eq:taylor}). Golub (~\cite{golub1965}) suggested that
-$\lambda$ be chosen so that:
-
-\[
-\frac{\lambda}{\lambda + \delta^2} < 0.1
-\]
-
-\noindent where $\delta$ is a lower bound of the smallest non-zero singular
-value $\sigma_k$. One approach is to choose the greatest lower bound for
-$\delta=\sigma_k$. Hence:
-
-\[
-\frac{\lambda}{\lambda + \sigma_k^2} < 0.1
-\]
-
-\noindent if we choose $\lambda=\beta \sigma_k^2$ then we get the following
-relation:
-
-
-\[
-\frac{\beta \sigma_k^2}{\beta \sigma_k^2 + \sigma_k^2} =
-\frac{\beta}{\beta+1} < 0.1 \Rightarrow \beta < \frac{1}{9}  
-\]
-
-Experiments done by ~\cite{coleman+sun2010} have shown that $\beta = 0.01$
-produces satisfactory results. This means that $\lambda = 0.01 \sigma_k^2$.
-
-However, get $\sigma_k$ imply obtaining first the SVD, which is
-computational expensive.
-
-Since the algorithm presented by ~\cite{coleman+sun2010} already compute the QR
-factorization of the matrix $\mathbf{A}$ they show a procedure for getting
-a $\lambda$ approximation using QR.
-
-\begin{enumerate}
-\item Compute QR factorization: $\mathbf{A} = \mathbf{Q_1R_1}$
-\item Let $\mathbf{W}$ denote the set of absolute values of the nonzero diagonal
-elements of $\mathbf{R_1}$. Let $w_{\text{min}}$ and $w_{\text{max}}$ denote the
-smallest and largest elements of $\mathbf{W}$ respectively. Both 
-$\lambda_1 = \hat{\beta} w_{\text{min}}^2$
-$\lambda_2 = \hat{\beta} \frac{w_{\text{min}}^2}{w_{\text{max}}^2}$ where
-$\hat{\beta}=0.00025$ produce satisfactory results.
-\item The $\lambda_{\text{QR}}$ approximation is obtained as:
-$\lambda_{\text{QR}} = \frac{\lambda_1 + \lambda_2}{2}$  
-\end{enumerate}
+%Despite the bias-variance tradeoff provides a conceptual framework for
+%determining a good model, is not directly useful. Some popular methods
+%for determine model selection are:
+%
+%\begin{itemize}
+%    \item Akaike information criterion (AIC) (Akaike, 1974)
+%    \item Bootstrap-based selection (Efron and Tibshirani, 1997)
+%    \item Cross-validation (Stone, 1974)
+%\end{itemize}
+%
+%On the other hand, $\lambda$ can also be used to reduce computational time as it
+%is shown in equation~(\ref{eq:taylor}). Golub (~\cite{golub1965}) suggested that
+%$\lambda$ be chosen so that:
+%
+%\[
+%\frac{\lambda}{\lambda + \delta^2} < 0.1
+%\]
+%
+%\noindent where $\delta$ is a lower bound of the smallest non-zero singular
+%value $\sigma_k$. One approach is to choose the greatest lower bound for
+%$\delta=\sigma_k$. Hence:
+%
+%\[
+%\frac{\lambda}{\lambda + \sigma_k^2} < 0.1
+%\]
+%
+%\noindent if we choose $\lambda=\beta \sigma_k^2$ then we get the following
+%relation:
+%
+%
+%\[
+%\frac{\beta \sigma_k^2}{\beta \sigma_k^2 + \sigma_k^2} =
+%\frac{\beta}{\beta+1} < 0.1 \Rightarrow \beta < \frac{1}{9}  
+%\]
+%
+%Experiments done by ~\cite{coleman+sun2010} have shown that $\beta = 0.01$
+%produces satisfactory results. This means that $\lambda = 0.01 \sigma_k^2$.
+%
+%However, get $\sigma_k$ imply obtaining first the SVD, which is
+%computational expensive.
+%
+%Since the algorithm presented by ~\cite{coleman+sun2010} already compute the QR
+%factorization of the matrix $\mathbf{A}$ they show a procedure for getting
+%a $\lambda$ approximation using QR.
+%
+%\begin{enumerate}
+%\item Compute QR factorization: $\mathbf{A} = \mathbf{Q_1R_1}$
+%\item Let $\mathbf{W}$ denote the set of absolute values of the nonzero diagonal
+%elements of $\mathbf{R_1}$. Let $w_{\text{min}}$ and $w_{\text{max}}$ denote the
+%smallest and largest elements of $\mathbf{W}$ respectively. Both 
+%$\lambda_1 = \hat{\beta} w_{\text{min}}^2$
+%$\lambda_2 = \hat{\beta} \frac{w_{\text{min}}^2}{w_{\text{max}}^2}$ where
+%$\hat{\beta}=0.00025$ produce satisfactory results.
+%\item The $\lambda_{\text{QR}}$ approximation is obtained as:
+%$\lambda_{\text{QR}} = \frac{\lambda_1 + \lambda_2}{2}$  
+%\end{enumerate}
 
 \newpage
 
