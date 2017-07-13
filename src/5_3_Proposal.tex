@@ -1,30 +1,17 @@
-\chapter{Intraday Forex rates forecasting using an online cointegration approach}
-
-High frequency forex rates 
+\chapter{A Regularized Time Varying Vector Error Correction Model}
 Vector error correction model (VECM) parameters are commonly obtained using the
-ordinary least squares method. Since this parameters could be sensitive to the
-data, this proposal is to get these parameters using ridge regression which
-could lead to a better generalization capability. In order to give with a
-real-time response, an online version of VECM (OVECM) is proposed. OVECM solves
-VECM considering only a sliding window of historical data and therefore
-better response times could be achieved.
-
+ordinary least squares method (OLS). Since these parameters could be very
+sensitive to the data, this proposal explores the use of ridge regression (RR)
+and the agregating algorithm for regression (AAR) which could lead to a better
+generalization capability. In the previous chapter OVECM was presented, which is
+an online version of the traditional VECM (Vector Error Correction) that uses
+OLS to get the model parameters. In this chapter a variation of OVECM is
+presented. RR and AAR will be used instead of OLS to get the model parameters in
+an online way.
 
 \section{The problem}
 
-VECM introduces the long-run relationship among a set of cointegrated variables
-as an error correction term. VECM is a special case of the vector autorregresive
-model (VAR) model. VAR model expresses future values as a linear combination of
-variables past values.  However, VAR model cannot be used with non-stationary
-variables, which is a common feature of financial assets. VECM is a linear model
-but in terms of variable differences. If cointegration exists, variable
-differences are stationary and they introduce an error correction term which
-adjusts coefficients to bring the variables back to equilibrium. In finance,
-many economic time series turn to be stationary when they are differentiated and
-cointegration restrictions often improves forecasting~\cite{duy1998}. Therefore,
-VECM has been widely adopted.
-
-Both VECM and VAR model parameters are obtained using ordinary least squares
+Traditionally VECM parameters are obtained using ordinary least squares
 (OLS) method. OLS has two main problems: is sensitive to errors on input data
 and involves many calculations. The former problem is commonly solved using
 Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
@@ -47,14 +34,6 @@ fitting.  This criteria allows the OVECM prediction capability to be expressed
 rather than just explaining data history. Our method performance is compared
 with its optimal offline algorithm.
 
-
-%The next sections are organized as follows: section~\ref{sec:background}
-%presents the VAR and VECM, the OVECM algorithm proposed is presented in
-%section~\ref{sec:methodology}. Section~\ref{sec:results} gives a description of
-%the data used and the tests carried on to show accuracy and time comparison of
-%our proposal against the traditional VECM and
-%section~\ref{sec:conclusions} includes conclusions and a proposal for future
-%tudy.
 
 
 \section{Methodology}
