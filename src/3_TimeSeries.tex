@@ -369,7 +369,7 @@ original process. Cointegration vectors can be obtained using the Johansen metho
 
 
 \section{Unit root tests}
-Many economic and financial time series exhibit trending behaviour or non-stationary behaviour in the mean or variance. An important econometric task is to determine the type of non-stationary. For trend stationary I(0) time series a time-trend regression is appropriate. For I(1) time series taking first differences transforms it into a stationary one.  For cointegration to determine if time series are I(1) is mandatory to model their long-run relationship. In order to determine if a time series is an a I(1) or I(0) process unit root tests are used. Several tests have been developed but the most widely used is an extension of the Dickey and Fuller test \cite{dickey1979} called the Augmented Dickey-Fuller (ADF) test developed by Said and Dickey in 1984\cite{said1984}.
+Many economic and financial time series exhibit trending behaviour or non-stationary behaviour in the mean or variance. An important econometric task is to determine the type of non-stationary. For trend stationary I(0) time series a time-trend regression is appropriate. For I(1) time series taking first differences transforms it into a stationary one.  For cointegration to determine if time series are I(1) is mandatory to model their long-run relationship. In order to determine if a time series is an a I(1) or I(0) process unit root tests are used. Several tests have been developed but the most widely used is an extension of the Dickey and Fuller test \cite{dickey1979} called the Augmented Dickey-Fuller (ADF) test developed by Said and Dickey in 1984\cite{said1984} which tabulated critical values were obtained by~\cite{mackinnon2010}. 
 
 The ADF test tests the null hypothesis that a time series $y_t$ is I(1) against the alternative that it is I(0), assuming that the dynamics in the data have an ARMA structure. The ADF test is based on estimating the test regression:
 
@@ -390,6 +390,27 @@ The test statistic is the following:
 
 The $\text{ADF}_t$ statistic is based on the least squares estimates of equation \ref{eq:adftest}.
 
+\section {Cointegration Tests}
+
+Johansen method~\cite{johansen1988} allows to find cointegration among several
+I(1) time series. This test is more general than the
+Engle-Granger~\cite{engle1987} test which only allow to find cointegration
+between two time series.  Johansen procedure takes the form of a
+likelihood-ratio test which determines $r$ cointegration relationships. The
+method provides two tests based on an eigenvector decomposition of the matrix
+$\Omega = \alpha \beta^\top$ on equation~\ref{eq:vec} called trace and maximal
+eigenvalue statistic.  Once the number of cointegration number is determined,
+$r$ more significative eigenvectors provided by Johansen procedure are used to
+get the cointegration vector matrix $\beta^\top$.  Critical values for both
+tests are limited to 12 and 5 variables in the trace and maximal eigenvalue
+statistic respectively.
+
+The trace test null hypothesis is $H_0: r = r_0$ against $H_1: r > r_0$ and the
+maximum eigenvalue test null hypothesis is $H_0: r = r_0$ against $H_1: r =
+r_0+1$ starting with $r_0 = 0$.  In the latest test, if we start with $r_0=0$
+and $H_0$ is rejected $H_1: r = 1$ will be accepted which is not true if there
+are more than one cointegration relationship, this is why this test is less
+powerful and the trace test is commonly used.
 
 
 
@@ -936,13 +957,13 @@ of squared errors or equivalently minimizing the following expression:
 which can be written as follows: 
 
 \begin{equation}
-\label{eq:pseudoinverse}
+\label{eq:pseudoinv}
 \mathbf{A}^{\!\!+}= (\mathbf{A}^{\!\!\top} \mathbf{A})^{-1}\mathbf{A}^{\!\!\top} \, .
 \end{equation}
 
 However, when $\mathbf{A}$ is not full rank, i.e
 $rank(\mathbf{A})=k <  n \leq m$, $\mathbf{A}^\top \mathbf{A}$ is
-always singular and equation~(\ref{eq:pseudoinverse}) cannot be used.
+always singular and equation~(\ref{eq:pseudoinv}) cannot be used.
 More generally, the pseudo-inverse is best computed using the compact
 singular value decomposition (SVD) of $\mathbf{A}$:
 
@@ -960,6 +981,49 @@ singular value decomposition (SVD) of $\mathbf{A}$:
 \label{eq:pseudoinversesvd}
 \mathbf{A}^{\!\!+} = \mathbf{V}_1 \Sigma_1^{-1} \mathbf{U}_1^\top \, .
 \end{equation}
+
+
+\textbf{Demo}\quad
+
+Since $\mathbf{A}$ is singular the problem shown in
+equation~(\ref{eq:regressionproblem}) has not solution, the minimum norm given
+by equation~(\ref{eq:MP}) is obtained by solving the equivalent problem:
+
+\begin{equation*}
+\label{eq:proyectorsol}
+\mathbf{A \hat{X} = PB} 
+\end{equation*}
+
+\noindent where $\mathbf{P=U_1 U_1^\top}$ is the projection onto the
+Col($\mathbf{A}$). 
+
+Since $\mathbf{V} = [\underset{(n \times k)}{\mathbf{V_1}} |
+\underset{(n \times k)}{\mathbf{V_2}}]$ and $\mathbf{V_1^\top V_2 =
+0}$ we can express $\mathbf{\hat{X}} = \mathbf{V_1 x_1 + V_2 x_2}$
+with $\mathbf{x_2=0}$ because $\mathbf{\hat{X}}$ lives in the
+$\text{Row}(\mathbf{A})$ given by $\mathbf{V_1}$, so we have:
+
+\begin{eqnarray*}
+\mathbf{A \hat{X}} &=& \mathbf{PB} \\
+\mathbf{U_1 \Sigma_1 V_1^\top \hat{X}} &=& \mathbf{U_1 U_1^\top B} \\
+\mathbf{ V_1^\top \hat{X}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top B} \\ 
+\mathbf{ V_1^\top V_1 x_1} &=& \mathbf{\Sigma_1^{-1}
+U_1^\top B} \\
+\mathbf{x_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top B}
+\end{eqnarray*}
+
+\noindent from this result we can obtain $\mathbf{\hat{X}}$ and
+therefore the pseudo-inverse expression:
+
+\begin{eqnarray*}
+\mathbf{\hat{X}} &=& \mathbf{V_1 x_1} \\
+                &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top B} \\
+\mathbf{A^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
+\end{eqnarray*}
+
+$\blacksquare$
+
+
 
 \newpage
 Conventional regression estimators, including VARs, have good properties when

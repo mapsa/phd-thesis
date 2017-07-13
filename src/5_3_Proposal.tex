@@ -1,17 +1,18 @@
 \chapter{A Regularized Time Varying Vector Error Correction Model}
-Vector error correction model (VECM) parameters are commonly obtained using the
-ordinary least squares method (OLS). Since these parameters could be very
-sensitive to the data, this proposal explores the use of ridge regression (RR)
-and the agregating algorithm for regression (AAR) which could lead to a better
-generalization capability. In the previous chapter OVECM was presented, which is
-an online version of the traditional VECM (Vector Error Correction) that uses
-OLS to get the model parameters. In this chapter a variation of OVECM is
-presented. RR and AAR will be used instead of OLS to get the model parameters in
-an online way.
+
+In the last chapter, the Online Vector Error Correction Model (OVECM) was
+proposed. OVECM parameters are obtained using the Ordinary Least Squares (OLS)
+method. Even though OLS is extensively used, it has over-fitting issues and is
+computationally expensive. Therefore, OVECM parameters could be very sensitive
+to the data. Ridge Regression (RR) is commonly used instead of OLS to tackle
+this problem, introducing a regularization parameter which could improve
+prediction error.  In this chapter, the use of Ridge Regression (RR) and its
+variant called Aggregating Algorithm for Regression (AAR) is explored in order
+to get better generalisation capability. 
 
 \section{The problem}
 
-Traditionally VECM parameters are obtained using ordinary least squares
+Both VECM and VAR model parameters are obtained using ordinary least squares
 (OLS) method. OLS has two main problems: is sensitive to errors on input data
 and involves many calculations. The former problem is commonly solved using
 Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
@@ -21,6 +22,7 @@ of past values and observations considered.  Recently, online learning
 algorithms have been proposed to solve problems with large data sets because of
 their simplicity and their ability to update the model when new data is
 available. 
+
 
 Our proposal is an online formulation of the VECM called Online VECM (OVECM)
 based on consideration of only a sliding window of the historical data.  OVECM
@@ -33,7 +35,6 @@ Model efectiveness is focused on out-of-sample forecast rather than in-sample
 fitting.  This criteria allows the OVECM prediction capability to be expressed
 rather than just explaining data history. Our method performance is compared
 with its optimal offline algorithm.
-
 
 
 \section{Methodology}
