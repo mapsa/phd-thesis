@@ -12,7 +12,7 @@ to get better generalisation capability.
 
 \section{The problem}
 
-Both VECM and VAR model parameters are obtained using ordinary least squares
+VECM model parameters are traditionally obtained using ordinary least squares
 (OLS) method. OLS has two main problems: is sensitive to errors on input data
 and involves many calculations. The former problem is commonly solved using
 Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
@@ -23,18 +23,9 @@ algorithms have been proposed to solve problems with large data sets because of
 their simplicity and their ability to update the model when new data is
 available. 
 
-
-Our proposal is an online formulation of the VECM called Online VECM (OVECM)
-based on consideration of only a sliding window of the historical data.  OVECM
-introduces matrix optimizations in order to reduce the number of operations and
-also takes into account the fact that cointegration vector space doesn't
-experience large changes with small changes in the input data. Moreover, OVECM
-uses RR instead of OLS to obtain VECM parameters. Our method is later tested using four
-currency rates from the foreign exchange market with a frequency of 10 seconds.
-Model efectiveness is focused on out-of-sample forecast rather than in-sample
-fitting.  This criteria allows the OVECM prediction capability to be expressed
-rather than just explaining data history. Our method performance is compared
-with its optimal offline algorithm.
+The proposal is to modify OVECM so it wan be an incremental algorithm and also
+to use RR and its variant AAR instead of OLS. Therefore, three different
+variations of OVECM using as a solver: OLS, RR and AAR will be compared. 
 
 
 \section{Methodology}
@@ -46,12 +37,12 @@ responses in a short period of time. OVECM only considers a time varying window
 of historical data and the using of RR or its variant AAR (Aggregating Algorithm
 for Regression) as an alternative of OLS to get model parameters.
 
-On the other hand, getting cointegration vectors using Johansen method is also
-an expensive procedure. However, since cointegration
-vectors represent the long-run relationship between the time series, they
-vary little in time. Our proposal obtains new cointegration vectors only when
-this long-term relationship changes. This change is detected by tracking 
-the Mean Absolute Percentage Error (MAPE) of the last $n$ in-sample forecasts.
+On the other hand, getting cointegration vectors using Johansen method is also a
+computationally expensive procedure. However, since cointegration vectors
+represent the long-run relationship between the time series, they vary little in
+time. This proposal also include to obtain new cointegration vectors only when
+this long-term relationship changes. This change is detected by tracking the
+Mean Absolute Percentage Error (MAPE) of the last $n$ in-sample forecasts.
 
 %Since VECM is a model based on time series differences, the MAPE is obtained
 %from $\Delta \mathbf{y}$ as following:
@@ -75,73 +66,21 @@ the Mean Absolute Percentage Error (MAPE) of the last $n$ in-sample forecasts.
 %the last $L$ samples %and the new input $\mathbf{x}_t$, 
 %i.e. $\{\mathbf{x}_i\}_{i=t-L+1}^{t-1}$. 
 
-VECM($p$) for $l$ cointegrated variables has the following form:
 
-\begin{equation}\label{eq:vecfull}
-\Delta\mathbf{y}_t 
-= \boldsymbol{\alpha\beta}^\top\mathbf{y}_{t-1} 
-  + \sum_{i=1}^{p-1}\boldsymbol{\Phi}_i^*\,\Delta\mathbf{y}_{t-i}
-  + \mathbf{c} + \boldsymbol{\epsilon}_t \qquad \forall t = p+1,\dots,N.
-\end{equation}
+VECM($p$) was defined in equation \ref{eq:vecfull} and its matrix form is:
 
-Transposing each equation of the system (\ref{eq:vecfull}) we can write
-the VECM($p$) model in block-matrix form as:
 \begin{equation}\label{eq:vareq}
 \mathbf{B} = 
 \mathbf{A} \mathbf{X} + 
 \mathbf{E} \, , 
 \end{equation}
-%
-\noindent where $\mathbf{B}$ dimension is $((N-p)\times l)$, $\mathbf{A}$
-dimension is $((N-p)\times(r+(p-1)l +1))$, $\mathbf{X}$ dimension is $((r+(p-1)l
-+1)\times l)$, $\mathbf{E}$ dimension is $((N-p)\times l)$ and $r$ is the number
-of cointegration vectors:
-%
-\begin{alignat}{3}
-\mathbf{B}
-&= \begin{bmatrix}
-   \Delta\mathbf{y}_{p+1}^\top \\
-   \Delta\mathbf{y}_{p+2}^\top \\
-   \vdots \\
-   \Delta\mathbf{y}_N^\top
-   \end{bmatrix}
-&\quad
-\mathbf{X}
-&= \begin{bmatrix}
-   \boldsymbol{\alpha}^\top \\
-   \boldsymbol{\Phi}_1^{*\top} \\
-   \boldsymbol{\Phi}_2^{*\top} \\
-   \vdots \\
-   \boldsymbol{\Phi}_{p-1}^{*\top} \\
-   \mathbf{c}^\top
-   \end{bmatrix}
-&\quad
-\mathbf{E}
-&= \begin{bmatrix}
-   \boldsymbol{\epsilon}_{p+1}^\top \\
-   \boldsymbol{\epsilon}_{p+2}^\top \\
-   \vdots \\
-   \boldsymbol{\epsilon}_N^\top \\
-   \end{bmatrix}
-\end{alignat}
-\noindent and 
-\begin{align}
-\mathbf{A} 
-&= \begin{pmat}[{....|}]
-   \mathbf{y}_p^\top \boldsymbol{\beta} & \Delta \mathbf{y}_p^\top & \Delta\mathbf{y}_{p-1}^\top & \dots 
-                    & \Delta\mathbf{y}_2^\top & 1 \cr
-   \mathbf{y}_{p+1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\top & \Delta\mathbf{y}_p^\top & \dots
-                       & \Delta\mathbf{y}_3^\top & 1 \cr
-   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
-   \mathbf{y}_{N-1}^\top  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\top & \Delta\mathbf{y}_{N-2}^\top & \dots 
-                       & \Delta\mathbf{y}_{N-p-1}^\top & 1 \cr
-   \end{pmat}\, .
-\end{align}
-%Taking into account the error term $\mathbf{E}$, equation~(\ref{eq:vareq}) 
-%can be solved with respect to $\mathbf{X}$ using the ordinary least
-%squares estimation.
-However, the number of rows of matrix $\mathbf{A}$ increases with the number of
-observations $\mathbf{y}_t$. Our proposal considers only the most recent $L$
+
+\noindent where matrix $\mathbf{B}$ is defined in equation
+\ref{eq:vecY}, matrix $\mathbf{X}$ is detailed in equation \ref{eq:vecX}, matrix
+$\mathbf{E}$ in equation \ref{eq:vecE} and matrix $\mathbf{A}$ in equation \ref{eq:vecA}.
+
+In the traditional VECM the number of rows of matrix $\mathbf{A}$ increases with the number of
+observations $\mathbf{y}_t$. This proposal considers only the most recent $L$
 rows of matrices $\mathbf{A}$ and $\mathbf{B}$ defined as  $\mathbf{A}(t)$ and
 $\mathbf{B}(t)$:
 
@@ -267,8 +206,7 @@ $\{\mathbf{y}_{\text{pred}}[L+1],\dots, \mathbf{y}_{\text{pred}}[N]\}$: model pr
 \label{alg:proposal}
 \end{algorithm}
 
-
-Our proposal considers the following:
+The proposal considers the following:
 
 \begin{itemize}
 \item The function \texttt{getJohansen} returns cointegration vectors given by the
