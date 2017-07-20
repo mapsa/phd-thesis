@@ -173,7 +173,7 @@ A pseudocode of the algorithm \ref{alg:52proposal} is detailed in the figure\ref
     \node (dec2) [decision, below of=pro3, yshift=-0.5cm] { $e > \epsilon $ };
 
     \node (pro4a) [process, right of=dec2, xshift=4cm] {$v = \texttt{Johansen}(\mathbf{y}_i,p)$ \\
-                                                        $\mathbf{A} = \texttt{uvecm}(\mathbf{y}_i,p,v,\mathbf{A})$ \\
+                                                        $\mathbf{A} = \texttt{ovecm}(\mathbf{y}_i,p,v,\mathbf{A})$ \\
                                                         $\mathbf{X} = \texttt{OLS} (\mathbf{A},\mathbf{B})$};
 
    

@@ -6,14 +6,14 @@ method. Even though OLS is extensively used, it has over-fitting issues and is
 computationally expensive. Therefore, OVECM parameters could be very sensitive
 to the data. Ridge Regression (RR) is commonly used instead of OLS to tackle
 this problem, introducing a regularization parameter which could improve
-prediction error.  In this chapter, the use of Ridge Regression (RR) and its
+prediction error. In this chapter, the use of Ridge Regression (RR) and its
 variant called Aggregating Algorithm for Regression (AAR) is explored in order
 to get better generalisation capability. 
 
 \section{The problem}
 
 VECM model parameters are traditionally obtained using ordinary least squares
-(OLS) method. OLS has two main problems: is sensitive to errors on input data
+(OLS) method. OLS has two main problems: is sensitive to input data errors
 and involves many calculations. The former problem is commonly solved using
 Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
 parameter that leads to an unbiased estimation with better generalization
@@ -23,51 +23,25 @@ algorithms have been proposed to solve problems with large data sets because of
 their simplicity and their ability to update the model when new data is
 available. 
 
-The proposal is to modify OVECM so it wan be an incremental algorithm and also
-to use RR and its variant AAR instead of OLS. Therefore, three different
-variations of OVECM using as a solver: OLS, RR and AAR will be compared. 
+The proposal is to create an online algorithm based on the idea of OVECM
+using either RR or its variant AAR instead of OLS 
+. 
 
 
 \section{Methodology}
 
-Since financial problems are stream data problems, it is unfeasible to include
-all input data in a VECM model. Our proposal consists on an online version of
-VECM (OVECM) capable of updating the model with new arrival data and give
-responses in a short period of time. OVECM only considers a time varying window
-of historical data and the using of RR or its variant AAR (Aggregating Algorithm
-for Regression) as an alternative of OLS to get model parameters.
+OVECM only considers a time varying window of historical data and uses OLS to
+get solve model parameters. This proposal is about using RR or its variant AAR
+as an alternative of OLS to get model parameters.
 
-On the other hand, getting cointegration vectors using Johansen method is also a
-computationally expensive procedure. However, since cointegration vectors
-represent the long-run relationship between the time series, they vary little in
-time. This proposal also include to obtain new cointegration vectors only when
-this long-term relationship changes. This change is detected by tracking the
-Mean Absolute Percentage Error (MAPE) of the last $n$ in-sample forecasts.
-
-%Since VECM is a model based on time series differences, the MAPE is obtained
-%from $\Delta \mathbf{y}$ as following:
-% 
-%\begin{equation}\label{eq:MAPE}
-%\text{MAPE}[t] = \frac{1}{n} \sum_{i=1}^{n} \left| 
-%\frac{\Delta \mathbf{y}_{\text{true}}[t-i]-\Delta
-%\mathbf{y}_{\text{pred}}[t-i]}{\Delta \mathbf{y}_{\text{true}[t-i]}}
-%\right| \, , 
-%\end{equation}
-%
-%\noindent where $\Delta \mathbf{y}_{\text{true}}$ is the actual value of the
-%time series $\mathbf{y}$ differences and $\Delta \mathbf{y}_{\text{pred}}$ is
-%their forecast value.
+Since cointegration vectors represent a long-run relationship between the time
+series, they vary little in time. This proposal also includes to obtain new
+cointegration vectors only when this long-term relationship changes. This change
+is detected by tracking the Mean Absolute Percentage Error (MAPE) of the last
+$n$ in-sample forecasts.
 
 
-
-
-%The method proposed consists of
-%a modification of RR considering a sliding window which contains only
-%the last $L$ samples %and the new input $\mathbf{x}_t$, 
-%i.e. $\{\mathbf{x}_i\}_{i=t-L+1}^{t-1}$. 
-
-
-VECM($p$) was defined in equation \ref{eq:vecfull} and its matrix form is:
+VECM($p$) matrix form is:
 
 \begin{equation}\label{eq:vareq}
 \mathbf{B} = 
@@ -75,9 +49,9 @@ VECM($p$) was defined in equation \ref{eq:vecfull} and its matrix form is:
 \mathbf{E} \, , 
 \end{equation}
 
-\noindent where matrix $\mathbf{B}$ is defined in equation
-\ref{eq:vecY}, matrix $\mathbf{X}$ is detailed in equation \ref{eq:vecX}, matrix
-$\mathbf{E}$ in equation \ref{eq:vecE} and matrix $\mathbf{A}$ in equation \ref{eq:vecA}.
+\noindent where matrix $\mathbf{B},\mathbf{X},\mathbf{E}$ and $\mathbf{A}$ were
+previously defined in equations \ref{eq:vecY} , \ref{eq:vecX} , \ref{eq:vecE} and
+\ref{eq:vecA} respectively.
 
 In the traditional VECM the number of rows of matrix $\mathbf{A}$ increases with the number of
 observations $\mathbf{y}_t$. This proposal considers only the most recent $L$
