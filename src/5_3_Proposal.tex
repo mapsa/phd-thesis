@@ -58,6 +58,14 @@ observations $\mathbf{y}_t$. This proposal considers only the most recent $L$
 rows of matrices $\mathbf{A}$ and $\mathbf{B}$ defined as  $\mathbf{A}(t)$ and
 $\mathbf{B}(t)$:
 
+
+\begin{equation}
+\mathbf{B}(t) = \mathbf{A}(t) \mathbf{X}(t) + \mathbf{E}(t)\\
+\label{eq:vareqt}
+\end{equation}
+
+\noindent where,
+
 \begin{equation}
 \label{eq:notation}
 	\mathbf{A}(t) = 
@@ -82,15 +90,9 @@ $\mathbf{B}(t)$:
 \
 \end{equation}
 
-\noindent so that VECM parameters $\mathbf{X}(t)$ are found using the following
-equation:
 
-\begin{equation}
-\mathbf{B}(t) = \mathbf{A}(t) \mathbf{X}(t) + \mathbf{E}(t)\\
-\end{equation}
-
-The RR solution $\mathbf{\hat{X}}(t)$ using the sliding window matrices defined above
-is:
+The RR solution $\mathbf{\hat{X}}(t)$ of equation \ref{eq:vareqt} using the
+sliding window matrices defined above is:
 
 \begin{equation}
 \label{eq:oproblem}
@@ -107,6 +109,20 @@ is:
 \sum_{i=0}^L \mathbf{a}_{t-i}\mathbf{b}_{t-i} 
 \label{eq:W}
 \end{eqnarray*}
+
+\noindent here $\lambda$ corresponds to the regularization parameter (see section
+\ref{sec:regularization}). When $\lambda=0$, the solution is equivalent to OLS.
+
+
+The AAR solution only differs in the calculation $\mathbf{S}(t)$ which is
+updated with the last input received $\mathbf{a}_{L+1}$:
+
+\begin{equation}
+\mathbf{S}(t) =
+\sum_{i=0}^{L+1} \mathbf{a}_{t-i}\mathbf{a}_{t-i}^\top + \lambda \mathbb{I}
+\label{eq:SAAR}
+\end{equation}
+
 
 It is worth noticing that, at the next time step, the matrices $\mathbf{S}(t+1)$
 and $\mathbf{W}(t+1)$ are slightly different to $\mathbf{S}(t)$ and
