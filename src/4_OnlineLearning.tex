@@ -227,7 +227,8 @@ R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
 
 \subsection{Ridge Regression}
 
-Ridge regression was independently proposed by Tikhonov \cite{tikhonov1963} and Phillips \cite{phillips1962}. 
+Ridge regression was independently proposed by Tikhonov \cite{tikhonov1963} and
+Phillips \cite{phillips1962}. 
 One example of regularisation in linear models is Ridge Regression (RR), which is a regularised least squares method.
 The least squares (LS) method is a well known way to solve a regression
 problem. 
@@ -533,7 +534,7 @@ It is known that the prediction error can be express as a decomposition between 
 The solution of OLS is well known $\hat{\mathbf{X}}=(\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}$, and its bias is:
 
 \begin{eqnarray*}
-Bias(\hat{f}(\hat{\mathbf{X}}) &=& E[\hat{\mathbf{X}}] - \mathbf{X} \\
+Bias(\hat{f}(\hat{\mathbf{X}})) &=& E[\hat{\mathbf{X}}] - \mathbf{X} \\
 &=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}] - \mathbf{X} \\
 &=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top (\mathbf{AX})] - \mathbf{X}  \\
 &=& \mathbf{X}  - \mathbf{X}  \\
