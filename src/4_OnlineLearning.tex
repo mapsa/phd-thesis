@@ -210,13 +210,25 @@ Another way to control the complexity of the model is to include in the optimisa
 
 \subsection{Regularization}\label{sec:regularization}
 
-Regularization can be understood using two contexts: learning theory (probabilistic) and inverse problems (deterministic). In the context of learning, regularization refers to techniques allowing to avoid over-fitting and the desire property of the selected estimator is to perform well on new data (to generalize), e.g. regularized least squares. In the context of inverse problems, regularization objective is to stabilise, with respect to noise, a possibly ill-conditioned matrix inversion problem e.g spectral cut-off and Tikhonov regularization or ridge regression (RR)\cite{ tikhonov1977}.
+Regularization can be understood using two contexts: learning theory
+(probabilistic) and inverse problems (deterministic). In the context of
+learning, regularization refers to techniques allowing to avoid over-fitting and
+the desire property of the selected estimator is to perform well on new data (to
+generalize), e.g. regularized least squares. In the context of inverse problems,
+regularization objective is to stabilise, with respect to noise, a possibly
+ill-conditioned matrix inversion problem e.g spectral cut-off and Tikhonov
+regularization or ridge regression (RR)\cite{ tikhonov1977}.
 
-In particular, it is well known that regularization schemes such as RR or Tikhonov regularization can be effectively used in the context of learning \cite{vito2005}.
+In particular, it is well known that regularization schemes such as RR or
+Tikhonov regularization can be effectively used in the context of learning
+\cite{vito2005}.
 
-Tikhonov introduced a regularisation which ensures well-posedness and generalisation of ERM, i.e prevents overfit, by constraining the hypothesis space $\mathcal{H}$ usually called regularised ERM or Tikhonov regularisation.
+Tikhonov introduced a regularisation which ensures well-posedness and
+generalisation of ERM, i.e prevents overfit, by constraining the hypothesis
+space $\mathcal{H}$ usually called regularised ERM or Tikhonov regularisation.
 
-Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a fixed positive parameter $\lambda$ the following:
+Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a
+fixed positive parameter $\lambda$ the following:
 
 \begin{equation} 
 \label{eq:rerm}
