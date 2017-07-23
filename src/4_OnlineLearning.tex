@@ -1,47 +1,79 @@
 \chapter{Machine Learning Models}
 Machine learning is a scientific discipline focused on the development of
 algorithms based on learning from examples. This idea has become central to the
-design of search engines, robots systems and forecasts applications that
-process large data sets. Usually machines designed to forecast financial time
-series requires long training period and therefore they are not suitable to be updated
-with stream data. Online machine learning techniques tackle this problem by updating the model with new
-data or by computing a new model using less data so they can give a response in a
-short period of time.
+design of search engines, robots systems and forecasts applications that process
+large data sets. Usually machines designed to forecast financial time series
+requires long training period and therefore they are not suitable to be updated
+with stream data. Online machine learning techniques tackle this problem by
+updating the model with new data or by computing a new model using less data so
+they can give a response in a short period of time.
 
 \vspace{0.5cm} 
 
 \section{Introduction}
-Machine Learning (ML) studies computer algorithms for learning
-something such as to complete a task, to make accurate predictions or to behave intelligently. The learning is always based on samples and the objective is about to do better in the future based on the past experiences in an automatic way. ML is a sub-area of artificial intelligence and broadly intersects with other fields such as statistics, mathematics, physics and computer science. 
-There are many examples of machine learning problems: time series forecasting, image processing, face detection, spam filtering, weather prediction, search engines, among many others.
+Machine Learning (ML) studies computer algorithms for learning something such as
+to complete a task, to make accurate predictions or to behave intelligently. The
+learning is always based on samples and the objective is about to do better in
+the future based on the past experiences in an automatic way. ML is a sub-area
+of artificial intelligence and broadly intersects with other fields such as
+statistics, mathematics, physics and computer science.  There are many examples
+of machine learning problems: time series forecasting, image processing, face
+detection, spam filtering, weather prediction, search engines, among many
+others.
 
-ML models are often more accurate than what can be created through direct programming. The reason for this is that ML models are data driven and are able to examine large amounts of data.
+ML models are often more accurate than what can be created through direct
+programming. The reason for this is that ML models are data driven and are able
+to examine large amounts of data.
 
-There are three types of ML classified depending on the nature of the learning input or output available to a learning system:
+There are three types of ML classified depending on the nature of the learning
+input or output available to a learning system:
 
 \begin{description}
-\item[Supervised learning]  the input data is a tuple which contains the example input and its desired outputs (also called labels). The list of tuples is called the training set. The concept of supervised learning comes from the supervisor, acting as a teacher in the learning process. The goal is to learn a general rule that maps inputs to outputs optimising a target function. There are two related problem types in supervised learning: classification and regression problems \cite{bishop2006}. Its two mainstream approaches are: support vector machines (SVMs) \cite{vapnik1998} and ensemble learning \cite{breiman1998}. Furthermore, supervised learning can be categorised into offline or batch learning and online learning (see section \ref{sec:onoffline}). 
-\item[Unsupervised learning] also known as clustering \cite{ben2005}. In this type of learning no labels are given and the system has to find a structure on its own, discovering hidden patterns in data.
-\item[Reinforcement learning] is the problem faced by an agent that must learn 
-through trial-and-error interactions with a dynamic environment. It is based on programming agents by reward and punishment without the need to specify how the task is to be achieved \cite{sutton1998}.
+\item[Supervised learning]  the input data is a tuple which contains the example
+input and its desired outputs (also called labels). The list of tuples is called
+the training set. The concept of supervised learning comes from the supervisor,
+acting as a teacher in the learning process. The goal is to learn a general rule
+that maps inputs to outputs optimising a target function. There are two related
+problem types in supervised learning: classification and regression problems
+\cite{bishop2006}. Its two mainstream approaches are: support vector machines
+(SVMs) \cite{vapnik1998} and ensemble learning \cite{breiman1998}. Furthermore,
+supervised learning can be categorised into offline or batch learning and online
+learning (see section \ref{sec:onoffline}). 
+\item[Unsupervised learning] also known as clustering \cite{ben2005}. In this
+type of learning no labels are given and the system has to find a structure on
+its own, discovering hidden patterns in data.
+\item[Reinforcement learning] is the problem faced by an agent that must learn
+through trial-and-error interactions with a dynamic environment. It is based on
+programming agents by reward and punishment without the need to specify how the
+task is to be achieved \cite{sutton1998}.
 \end{description}
 
 
 \section{Statistical learning theory} \label{sec:mltheory}
 
-All ML problems can be viewed as optimisation problems. The ML core task is to define a learning criterion, i.e the function to be optimised. 
+All ML problems can be viewed as optimisation problems. The ML core task is to
+define a learning criterion, i.e the function to be optimised. 
 
-Supervised learning is most popular and most commonly used in modelling financial problems and the assessments of this method and their results in practice are fairly good. Therefore, in this thesis we will adhere to this trend and we will use supervised learning.
+Supervised learning is most popular and most commonly used in modelling
+financial problems and the assessments of this method and their results in
+practice are fairly good. Therefore, in this thesis we will adhere to this trend
+and we will use supervised learning.
 
-Supervised learning consists in finding a learning function $f: X \rightarrow Y$ which models a set of examples, called training set $S$, which have been drawn randomly and independently according to a unknown joint distribution function $p(x,y)$ on $X \times Y$:
+Supervised learning consists in finding a learning function $f: X \rightarrow Y$
+which models a set of examples, called training set $S$, which have been drawn
+randomly and independently according to a unknown joint distribution function
+$p(x,y)$ on $X \times Y$:
 
 
 $$
 S = \{ (x_k,y_k)\in X\times Y : k=1,...,n \}
 $$
 
-\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
+\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of
+regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
 
+
+%=======================HASTA ACA REVISADO PROFE =========================
 A learning algorithm $\mathcal{A}$ takes as input a data set $S \in \mathscr{T}=\mathscr{P}(X\times Y)$ and selects from $\mathcal{H}$ a function $f$ such that $f(x)\approx y $ in a predictive way:
 
 \begin{eqnarray*}
