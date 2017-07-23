@@ -98,7 +98,7 @@ sliding window matrices defined above is:
 \mathbf{\hat{X}}(t)=\mathbf{S}(t)^{-1} \mathbf{W}(t) \, ,
 \end{equation}
 
-\noindent where $\mathbf{S}{t}$ and $\mathbf{W}{t}$ are define as:
+\noindent where $\mathbf{S}{t}$ and $\mathbf{W}{t}$ are defined as:
 
 \begin{eqnarray*}
 \mathbf{S}(t) =&{\bf A}(t)^\top{\bf A}(t)+ \lambda \mathbb{I} &=
@@ -145,8 +145,29 @@ $\mathbf{W}(t)$:
 
 The algorithm~\ref{alg:proposal} shows OVECM using three different
 methods for geting model parameters: OLS, RR, AAR which leads to three different
-algorithms OVECM-OLS, OVECM-RR, OVECM-AAR:
+algorithms OVECM-OLS, OVECM-RR, OVECM-AAR.
+The proposal considers the following:
 
+\begin{itemize}
+\item The function \texttt{getJohansen} returns cointegration vectors given by the
+Johansen method considering the trace statistic test at 95\% level of
+significance. This procedure is called at the first step of the algorithm and
+every time in-sample MAPE ($\mathbf{e}$) exceeds threshold error defined (mean\_error).
+\item The function \texttt{vecMatrix} returns VECM
+matrices $\mathbf{A}(t),\mathbf{B}(t)$ shown in equation~(\ref{eq:notation}). This
+method is only required at the first step.
+\item The function \texttt{vecMatrixOnline} returns new rows $\mathbf{a}_t^\top$ and
+$\mathbf{b}_t^\top$ given new input data $\mathbf{y}_t$.
+\item The Solver class (see algorithm \ref{alg:solver}) obtain VECM parameters  
+using RR, AAR or OLS methods.
+\item The function \texttt{vecMatrixUpdate} updates matrix $\mathbf{A}$ when new
+cointegration vectors are required (matrix $\mathbf{B}$ is not affected). Model
+parameters matrix $\mathbf{X}$ is also updated later.
+\item The number of cointegration vectors is set as a parameter % agregar a alg
+\item RR parameter $\lambda$ was done by cross-validation. %agregar cap timeseries
+\end{itemize}
+
+\newpage
 \begin{algorithm}[ht]
 \begin{algorithmic}[1]
 \REQUIRE $\,$ \\
@@ -194,37 +215,10 @@ $\{\mathbf{y}_{\text{pred}}[L+1],\dots, \mathbf{y}_{\text{pred}}[N]\}$: model pr
 \label{alg:proposal}
 \end{algorithm}
 
-The proposal considers the following:
-
-\begin{itemize}
-\item The function \texttt{getJohansen} returns cointegration vectors given by the
-Johansen method considering the trace statistic test at 95\% level of
-significance. This procedure is called at the first step of the algorithm and
-every time in-sample MAPE ($\mathbf{e}$) exceeds threshold error defined (mean\_error).
-\item The function \texttt{vecMatrix} returns VECM
-matrices $\mathbf{A}(t),\mathbf{B}(t)$ shown in equation~(\ref{eq:notation}). This
-method is only required at the first step.
-\item The function \texttt{vecMatrixOnline} returns new rows $\mathbf{a}_t^\top$ and
-$\mathbf{b}_t^\top$ given new input data $\mathbf{y}_t$.
-\item The Solver class (see algorithm \ref{alg:solver}) obtain VECM parameters  
-using RR, AAR or OLS methods.
-\item The function \texttt{vecMatrixUpdate} updates matrix $\mathbf{A}$ when new
-cointegration vectors are required (matrix $\mathbf{B}$ is not affected). Model
-parameters $\mathbf{X}$ is also updated later.
-%\item The number of cointegration vectors is set as a parameter (aun no lo
-%coloco en el algoritmo).
-%\item In order to set VECM parameter: $L$ and $p$, we use the Akaike Information
-%Criterion (AIC). RR parameter $\lambda$ was done by cross-validation.
-%\item Obtain VECM parameter $\mathbf{X}(t)$ in equation \ref{eq:optsolSLAAR} requires
-%to calculate the inverse of matrix $\mathbf{S}(t+1)$ which is an expensive
-%routine.However, since we already know $\mathbf{S}(t)^{-1}$ we can use
-%Sherman-Morrison-Woodbury twice~\ref{eq:SMW}.
-\end{itemize}
 
 
-
-
-\begin{algorithm}[ht]
+\newpage
+\begin{algorithm}[ht!]
 \begin{algorithmic}[1]
 \REQUIRE $\,$ \\
 method: \{'OLS','RR','AAR'\} \\
@@ -280,12 +274,12 @@ $\mathbf{e}$: in-sample MAPE \\
 %compute an optimal output. The better an online algorithm approximates the
 %optimal solution, the more competitive this algorithm is.
 
-
+\newpage
 The proposal was compared against an optimal online algorithm which is a time varying
-VECM (OOVECM). Algorithm ~\ref{alg:OOVECM} shows this modification:
+VECM (OVECM-OPT). Algorithm ~\ref{alg:OOVECM} shows this modification:
 
 
-\begin{algorithm}[ht]
+\begin{algorithm}[ht!]
 \begin{algorithmic}[1]
 \REQUIRE $\,$ \\
 $\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
@@ -305,7 +299,7 @@ $\{\Delta \mathbf{y}_{\text{pred}}[L+1],\dots,\Delta \mathbf{y}_{\text{pred}}[N]
     \STATE $\text{MAPE} \gets \texttt{mape}(\Delta \mathbf{Y}_{\text{true}}, \Delta
     \mathbf{Y}_{\text{pred}})$
 \end{algorithmic}
-\caption{OOVECM: Optimal Online Vector Error Correction Model}
+\caption{OVECM-OPT: Optimal Online Vector Error Correction Model}
 \label{alg:OOVECM}
 \end{algorithm}
 
@@ -354,7 +348,6 @@ $\{\Delta \mathbf{y}_{\text{pred}}[L+1],\dots,\Delta \mathbf{y}_{\text{pred}}[N]
 %              \\ \color{red}\mathbf{\epsilon}_{T+1}
 %             \end{bmatrix}
 %\end{eqnarray}
-
 
 
 \section{Experiments}
