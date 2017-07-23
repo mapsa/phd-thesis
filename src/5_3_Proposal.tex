@@ -15,7 +15,7 @@ to get better generalisation capability.
 VECM model parameters are traditionally obtained using ordinary least squares
 (OLS) method. OLS has two main problems: is sensitive to input data errors
 and involves many calculations. The former problem is commonly solved using
-Ridge Regression (RR) \cite{hoerl1970} which introduces a regularization
+Ridge Regression (RR) \cite{hoerl1970} that introduces a regularization
 parameter that leads to an unbiased estimation with better generalization
 capability. The second problem of computational complexity depends on the number
 of past values and observations considered.  Recently, online learning
@@ -24,30 +24,29 @@ their simplicity and their ability to update the model when new data is
 available. 
 
 The proposal is to create an online algorithm based on the idea of OVECM
-using either RR or its variant AAR instead of OLS 
-. 
+using either RR or its variant AAR instead of OLS. 
 
 
 \section{Methodology}
 
 OVECM only considers a time varying window of historical data and uses OLS to
-get solve model parameters. This proposal is about using RR or its variant AAR
-as an alternative of OLS to get model parameters.
+get model parameters. This proposal is about using RR or its variant AAR
+as an alternative of OLS to estimate model parameters.
 
 Since cointegration vectors represent a long-run relationship between the time
 series, they vary little in time. This proposal also includes to obtain new
 cointegration vectors only when this long-term relationship changes. This change
-is detected by tracking the Mean Absolute Percentage Error (MAPE) of the last
-$n$ in-sample forecasts.
+is detected by tracking the Mean Absolute Percentage Error (MAPE) defined in the
+equation \ref{eq:MAPE}, of the last $n$ in-sample forecasts.
 
 
 VECM($p$) matrix form is:
 
-\begin{equation}\label{eq:vareq}
+\begin{equation*}
 \mathbf{B} = 
 \mathbf{A} \mathbf{X} + 
 \mathbf{E} \, , 
-\end{equation}
+\end{equation*}
 
 \noindent where matrix $\mathbf{B},\mathbf{X},\mathbf{E}$ and $\mathbf{A}$ were
 previously defined in equations \ref{eq:vecY} , \ref{eq:vecX} , \ref{eq:vecE} and
@@ -61,7 +60,7 @@ $\mathbf{B}(t)$:
 
 \begin{equation}
 \mathbf{B}(t) = \mathbf{A}(t) \mathbf{X}(t) + \mathbf{E}(t)\\
-\label{eq:vareqt}
+\label{eq:vareqt1}
 \end{equation}
 
 \noindent where,
@@ -86,12 +85,12 @@ $\mathbf{B}(t)$:
     & \vdots & \\
     --- & \mathbf{b}_{t} & ---
   \end{tabular}
-\right] \, ,
+\right] \, .
 \
 \end{equation}
 
 
-The RR solution $\mathbf{\hat{X}}(t)$ of equation \ref{eq:vareqt} using the
+The RR solution $\mathbf{\hat{X}}(t)$ of equation \ref{eq:vareqt1} using the
 sliding window matrices defined above is:
 
 \begin{equation}
@@ -111,8 +110,8 @@ sliding window matrices defined above is:
 \end{eqnarray*}
 
 \noindent here $\lambda$ corresponds to the regularization parameter (see section
-\ref{sec:regularization}). When $\lambda=0$, the solution is equivalent to OLS.
-
+\ref{sec:regularization}). When $\lambda=0$, the solution is equivalent to the
+one given by OLS.
 
 The AAR solution only differs in the calculation $\mathbf{S}(t)$ which is
 updated with the last input received $\mathbf{a}_{L+1}$:
@@ -122,7 +121,6 @@ updated with the last input received $\mathbf{a}_{L+1}$:
 \sum_{i=0}^{L+1} \mathbf{a}_{t-i}\mathbf{a}_{t-i}^\top + \lambda \mathbb{I}
 \label{eq:SAAR}
 \end{equation}
-
 
 It is worth noticing that, at the next time step, the matrices $\mathbf{S}(t+1)$
 and $\mathbf{W}(t+1)$ are slightly different to $\mathbf{S}(t)$ and
