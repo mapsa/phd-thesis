@@ -74,27 +74,33 @@ regression problems and $Y = \{1,-1\}$  if it is a classification problem.
 
 
 %=======================HASTA ACA REVISADO PROFE =========================
-A learning algorithm $\mathcal{A}$ takes as input a data set $S \in \mathscr{T}=\mathscr{P}(X\times Y)$ and selects from $\mathcal{H}$ a function $f$ such that $f(x)\approx y $ in a predictive way:
+A learning algorithm $\mathcal{A}$ takes as input a data set $S \in
+\mathscr{T}=\mathscr{P}(X\times Y)$ and selects from $\mathcal{H}$ a function
+$f$ such that $f(x)\approx y $ in a predictive way:
 
 \begin{eqnarray*}
 \mathcal{A}: \mathscr{T} &\rightarrow & \mathcal{H} \\
 S &\rightarrow &\mathcal{A}(S) = f
 \end{eqnarray*}
 
-\noindent where $\mathcal{H}$ is called the {\em hypothesis space}, is the space of functions that the algorithm is allowed to search. The selection of $f$ is based on the minimization of the expected error of the loss function $V(f(x),y)$ defined as:
+\noindent where $\mathcal{H}$ is called the {\em hypothesis space}, i.e. the space
+of functions that the algorithm is allowed to search. The selection of
+$f$ is based on the minimization of the expected error of the loss
+function $V(f(x),y): Y \times Y$ defined as:
 
 \begin{eqnarray*}
- V(f(\cdot),\cdot): X\times Y &\rightarrow & Y \\
-  (x, y) &\rightarrow &V(f(x),y)
+ V & \rightarrow & \mathbb{R}^+ \\
+  (f(x), y) &\rightarrow & V(f(x),y)
 \end{eqnarray*}
 
-\noindent $V(f(x),y)$ denote the price paid for mistakes. Therefore, $V(f(x),y)=0$ if $f(x)=y$.
+\noindent where $V(f(x),y)$ denote the price paid for mistakes, $f:X=\R^m\to Y$ and
+$y=f(x)\in\R$. Therefore, $V(f(x),y)=0$ if $f(x)=y$.
 
 Given a function $f$ a loss function $V$ and a probability distribution $p$ over $X \times Y$, the expected error of $f$ is:
 
 \begin{equation}
 \label{eq:expetedrisk}
-E[V(f(\cdot),\cdot)] = \int_{X\times Y} V(f(x),y)\;dp(x,y)\,,
+E[V(f(x),y)] = \int_{X\times Y} V(f(x),y)\;dp(x,y)\,,
 \end{equation}
 
 
@@ -112,19 +118,41 @@ V(f(x),y) = |f(x)-y| \, .
 
 Since the true distribution is unknown and only training samples are available, the objective is to estimate a function $\hat{f}$ through empirical risk (training error) minimisation (ERM): 
 
+\begin{equation*}
+\hat{f} = \argmin_{f \in \mathcal{H}} R_{\text{emp}}[f] 
+\end{equation*}
+
+\noindent where, 
+
 \begin{equation} 
 \label{eq:erm}
-R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i)
+R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i)   
 \end{equation}
 
-The ERM is a Riemann sum approximation of the expected error of $f$ shown in equation \ref{eq:expetedrisk}, where $dp(x,y) \approx 1/n$.
+The ERM is a Riemann sum approximation of the expected error of $f$ shown in
+equation \ref{eq:expetedrisk}. By the law of large numbers it is known that:
+
+\begin{equation}
+\frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(x),y)]
+\end{equation}
 
 \subsection{Learning algorithms}
-In all learning algorithms that are trained from example data, there is a tradeoff \cite{dietterich2003} between three factors:
+In all learning algorithms that are trained from example data, there is a
+tradeoff \cite{dietterich2003} between three factors:
 \begin{description}
-\item[Complexity of the hypothesis class] for best generalisation, we should adjust the complexity of the learner model $\hat{f}$ to the complexity of the data $f$. The complexity of a learning problem mostly depends on the number of training examples and the size of the searched hypothesis space. In polynomial regression, the complexity parameter is the order of the fitted polynomial, and therefore we need to find a way to choose the best order that minimises the generalisation error, that is, tune the complexity of the model to best fit the complexity of the function inherent in the data.
-\item[Generalisation accuracy on new examples] is the capability of the algorithm to generate the right output for an input instance outside the training set. It is measured by the expected risk (equation \ref{eq:expetedrisk}).
-\item[The amount of training data]  in most cases, generalisation accuracy increases as the amount of training data increases.
+\item[Complexity of the hypothesis class] for best generalisation, we should
+adjust the complexity of the learner model $\hat{f}$ to the complexity of the
+data $f$. The complexity of a learning problem mostly depends on the number of
+training examples and the size of the searched hypothesis space. In polynomial
+regression, the complexity parameter is the order of the fitted polynomial, and
+therefore we need to find a way to choose the best order that minimises the
+generalisation error, that is, tune the complexity of the model to best fit the
+complexity of the function inherent in the data.
+\item[Generalisation accuracy on new examples] is the capability of the
+algorithm to generate the right output for an input instance outside the
+training set. It is measured by the expected risk (equation \ref{eq:expetedrisk}).
+\item[The amount of training data] in most cases, generalisation accuracy
+increases as the amount of training data increases.
 \end{description}
 
 Very complex models will fit the training data better (low bias) but it could overfit it and generalise poorly (high variance), this is also called the bias-variance tradeoff.  Generalisation accuracy can sometimes be improved with more training data. The figure \ref{fig:tradeoff} illustrates how generalisation accuracy depends on the complexity of the model and the amount of training data.
