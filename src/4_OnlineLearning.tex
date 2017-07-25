@@ -94,7 +94,7 @@ function $V(f(x),y): Y \times Y$ defined as:
 \end{eqnarray*}
 
 \noindent where $V(f(x),y)$ denote the price paid for mistakes, $f:X=\R^m\to Y$ and
-$y=f(x)\in\R$. Therefore, $V(f(x),y)=0$ if $f(x)=y$.
+$y=f(x)\in\R$. Therefore, $V(f(x),y)=0$ if $\;f(x)=y$.
 
 Given a function $f$ a loss function $V$ and a probability distribution $p$ over $X \times Y$, the expected error of $f$ is:
 
@@ -144,7 +144,7 @@ tradeoff \cite{dietterich2003} between three factors:
 adjust the complexity of the learner model $\hat{f}$ to the complexity of the
 data $f$. The complexity of a learning problem mostly depends on the number of
 training examples and the size of the searched hypothesis space. In polynomial
-regression, the complexity parameter is the order of the fitted polynomial, and
+regression, the complexity parameter is the degree of the fitted polynomial, and
 therefore we need to find a way to choose the best order that minimises the
 generalisation error, that is, tune the complexity of the model to best fit the
 complexity of the function inherent in the data.
@@ -155,7 +155,7 @@ training set. It is measured by the expected risk (equation \ref{eq:expetedrisk}
 increases as the amount of training data increases.
 \end{description}
 
-Very complex models will fit the training data better (low bias) but it could overfit it and generalise poorly (high variance), this is also called the bias-variance tradeoff.  Generalisation accuracy can sometimes be improved with more training data. The figure \ref{fig:tradeoff} illustrates how generalisation accuracy depends on the complexity of the model and the amount of training data.
+A very complex models will fit the training data better (low bias) but it could overfit it and generalise poorly (high variance), this is also called the bias-variance tradeoff.  Generalisation accuracy can sometimes be improved with more training data. The figure \ref{fig:tradeoff} illustrates how generalisation accuracy depends on the complexity of the model and the amount of training data.
 
 \begin{figure}[!h]
   \centering
