@@ -73,7 +73,6 @@ $$
 regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
 
 
-%=======================HASTA ACA REVISADO PROFE =========================
 A learning algorithm $\mathcal{A}$ takes as input a data set $S \in
 \mathscr{T}=\mathscr{P}(X\times Y)$ and selects from $\mathcal{H}$ a function
 $f$ such that $f(x)\approx y $ in a predictive way:
@@ -136,18 +135,29 @@ equation \ref{eq:expetedrisk}. By the law of large numbers it is known that:
 \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(x),y)]
 \end{equation}
 
+%=======================HASTA ACA REVISADO PROFE =========================
 \subsection{Learning algorithms}
 In all learning algorithms that are trained from example data, there is a
-tradeoff \cite{dietterich2003} between three factors:
+tradeoff between three factors \cite{dietterich2003}:
 \begin{description}
-\item[Complexity of the hypothesis class] for best generalisation, we should
-adjust the complexity of the learner model $\hat{f}$ to the complexity of the
-data $f$. The complexity of a learning problem mostly depends on the number of
-training examples and the size of the searched hypothesis space. In polynomial
-regression, the complexity parameter is the order of the fitted polynomial, and
+\item[Complexity or capacity of the hypothesis class] 
+ 
+
+and can be measured by the Vapnik\-Chervonenkis (VC) dimension 
+
+
+for best generalisation, we should
+adjust the complexity of the learner model $\hat{f}$ o the complexity of the
+data.
+
+In polynomial regression, the complexity parameter is the order of the fitted polynomial, and
 therefore we need to find a way to choose the best order that minimises the
 generalisation error, that is, tune the complexity of the model to best fit the
 complexity of the function inherent in the data.
+
+The complexity of a learning problem mostly depends on the number of
+training examples and the size of the searched hypothesis space. 
+
 \item[Generalisation accuracy on new examples] is the capability of the
 algorithm to generate the right output for an input instance outside the
 training set. It is measured by the expected risk (equation \ref{eq:expetedrisk}).
