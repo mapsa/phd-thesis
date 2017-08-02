@@ -140,20 +140,30 @@ equation \ref{eq:expetedrisk}. By the law of large numbers it is known that:
 In all learning algorithms that are trained from example data, there is a
 tradeoff between three factors \cite{dietterich2003}:
 \begin{description}
-\item[Complexity or capacity of the hypothesis class] 
- can be measured by the Vapnik\-Chervonenkis (VC) dimension 
+\item[Complexity or capacity of the hypothesis class] is defined in terms of the
+Vapnik-Chervonenkis (VC) dimension, which corresponds to the number of training
+points that can be classified exactly by the hypothesis space. More formally,
+the VC dimension of the hypothesis space $\mathcal{H}$ defined over instance
+space $X$ is the size of the largest finite subset of $X$ shattered by
+$\mathcal{H}$. The dataset $S$ is shattered by hypothesis space $\mathcal{H}$ if
+and only if for every dichotomy of $S$ there exists some hypothesis in
+$\mathcal{H}$ consistent with this dichotomy. A dichotomy of a set $S$ is a
+partition of $S$ into two disjoint subsets \cite{vapnik2013nature}.
 
-for best generalisation, we should
-adjust the complexity of the learner model $\hat{f}$ o the complexity of the
-data.
+For example, the VC dimension of the lines in the plane is explained in figure
+\ref{fig:vcdimension}:
 
-In polynomial regression, the complexity parameter is the order of the fitted polynomial, and
-therefore we need to find a way to choose the best order that minimises the
-generalisation error, that is, tune the complexity of the model to best fit the
-complexity of the function inherent in the data.
 
-The complexity of a learning problem mostly depends on the number of
-training examples and the size of the searched hypothesis space. 
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{img/VCdimension}
+  \caption{VC dimension example from \cite{vapnik2013nature}. The left figure
+  shows that three vectors can be shattered by a line in a plane. However, if we
+  add an extra vector $z_4$, it is impossible to shatter them with a
+  plane.Therefore, linear classifiers has VC dimension equals to $d+1$ where $d$
+  is the dimension of the instance space $X$.}
+  \label{fig:vcdimension}
+\end{figure}
 
 \item[Generalisation accuracy on new examples] is the capability of the
 algorithm to generate the right output for an input instance outside the
@@ -162,7 +172,11 @@ training set. It is measured by the expected risk (equation \ref{eq:expetedrisk}
 increases as the amount of training data increases.
 \end{description}
 
-A very complex models will fit the training data better (low bias) but it could overfit it and generalise poorly (high variance), this is also called the bias-variance tradeoff.  Generalisation accuracy can sometimes be improved with more training data. The figure \ref{fig:tradeoff} illustrates how generalisation accuracy depends on the complexity of the model and the amount of training data.
+A very complex models will fit the training data better (low bias) but it could
+overfit it and generalise poorly (high variance), this is also called the
+bias-variance tradeoff.  Generalisation accuracy can sometimes be improved with
+more training data. The figure \ref{fig:tradeoff} illustrates how generalisation
+accuracy depends on the complexity of the model and the amount of training data.
 
 \begin{figure}[!h]
   \centering
