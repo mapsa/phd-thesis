@@ -135,7 +135,7 @@ equation \ref{eq:expetedrisk}. By the law of large numbers it is known that:
 \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(x),y)]
 \end{equation}
 
-%=======================HASTA ACA REVISADO PROFE =========================
+
 \subsection{Learning algorithms}
 In all learning algorithms that are trained from example data, there is a
 tradeoff between three factors \cite{dietterich2003}:
@@ -187,9 +187,9 @@ accuracy depends on the complexity of the model and the amount of training data.
 
 \subsection{The bias-variance tradeoff} \label{sec:biasvar}
 
-Models learning error can be split into two main components: error due to bias and error due to variance. Bias measures how far off in general these models' predictions are from the correct value. Variance is taken as the variability of a model prediction for a given data point.
+Models learning error can be split into two main components: error due to bias and error due to variance. Bias measures the prediction error of the model $\hat{f}$ from the real value, see equation \ref{eq:biastrade}. Variance is taken as the variability of a model prediction for a given data point or its sensitivity to small fluctuations in the input data, see equation \ref{eq:variancetrade}.
 
-If we have a learning model $\hat{f}$, its expected generalisation error on an unseen or testing sample $x$ can be decomposed as follows:
+If we have a learning model $\hat{f}$, its expected generalisation error on a testing sample $x$ can be decomposed as shown in equation \ref{eq:bvtrade} (demo in \cite{geman1992neural}):
 
 \begin{align}
 \label{eq:bvtrade}
@@ -197,48 +197,23 @@ If we have a learning model $\hat{f}$, its expected generalisation error on an u
  & = \mathrm{Bias}(\hat{f}(x))^2 + \mathrm{Var}(\hat{f}(x)) + \sigma^2
 \end{align}
 \noindent where:
-\begin{align*}
- \mathrm{Bias}(\hat{f}(x)) &= \mathrm{E}\big[\hat{f}(x)\big] - f(x) \\
- \mathrm{Var}(\hat{f}(x)) &= \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big] 
-\end{align*}
+\begin{align}
+ \mathrm{Bias}(\hat{f}(x)) &= \mathrm{E}\big[\hat{f}(x)\big] - f(x) \label{eq:biastrade}\\
+ \mathrm{Var}(\hat{f}(x)) &= \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big]  \label{eq:variancetrade}
+\end{align}
 
 
-\textbf{Demo}\quad
+The bias shown in equation \ref{eq:biastrade} can be obtain through resampling of the input data $x$, therefore an average of the predicted values can be calculated. If these prediction values are substantially different to the true value, the bias will be high.
 
-\begin{eqnarray*}
-E[(y-\hat{f}(\mathbf{x}))^2] & =&
-E[(y-f(\mathbf{x})+f(\mathbf{x})-\hat{f}(\mathbf{x}))^2] \\
-&=& E[(B-f(\mathbf{x}))^2] +
-E[(f(\mathbf{x})-\hat{f}(\mathbf{x}))^2] + \dots \\
-& &
-2\cancelto{0}{E[y-f(\mathbf{x})]}E[f(\mathbf{x})-\hat{f}(\mathbf{x})] \\
-&=& \sigma^2 + MSE(\hat{f}(\mathbf{x}))
-\end{eqnarray*}
+The error due to variance is the amount by which the prediction, over one training set, differs from the expected predicted value, over all the training sets. Variance measures how inconsistent are the predictions from one another, over different training sets, not whether they are accurate or not \cite{gutierrez2015machine}.
+%=======================HASTA ACA REVISADO PROFE =========================
 
-\noindent where 
-
-\begin{eqnarray*}
-    MSE(\hat{f}(\mathbf{x})) &=&
-    E[f(\mathbf{x})-\hat{f}(\mathbf{x}))]^2 \\
-    &=& E[f(\mathbf{x})-E[\hat{f}(\mathbf{x})] +
-    E[\hat{f}(\mathbf{x})]-\hat{f}(\mathbf{x}))]^2 \\
-    &=&  E[(f(\mathbf{x})-E[\hat{f}(\mathbf{x})])^2] +
-      E[(\hat{f}(\mathbf{x})-E[\hat{f}(\mathbf{x})])^2] + \dots\\
-    & & E[(f(\mathbf{x})-E[\hat{f}(\mathbf{x})])] 
-    \cancelto{0}{E[(\hat{f}(\mathbf{x})-E[\hat{f}(\mathbf{x})])]} \\
-    &=& Bias(\hat{f}(\mathbf{x}))^2 + Var(\hat{f}(\mathbf{x}))
-\end{eqnarray*}
-
-$\blacksquare$
-
-Bias is introduced by the model selection. Therefore the model building process is repeated (through resampling) and substantially different averages of prediction values are obtained, bias will be high. The error due to variance is the amount by which the prediction, over one training set, differs from the expected predicted value, over all the training sets. Variance measures how inconsistent are the predictions from one another, over different training sets, not whether they are accurate or not.
-
-This generalisation error is unknown, but it can be estimated using a training sample, a testing sample or by estimating the model complexity. Figure \ref{fig:traintesterror} shows prediction error for training and testing sample.  In general, in the training sample prediction error is decreasing with more complex models but it overfit the data and it is not a good model for the test data. Figure \ref{fig:bvtradeoff} shows how testing error can be decomposed into bias and variance components. The best model will be the one has a balance between bias and variance.
+The generalisation error is unknown, but it can be estimated using a training sample, a testing sample or by estimating the model complexity. Figure \ref{fig:traintesterror} shows prediction error for training and testing sample.  In general, in the training sample prediction error is decreasing with more complex models but it overfit the data and it is not a good model for the test data. Figure \ref{fig:bvtradeoff} shows how testing error can be decomposed into bias and variance components. The best model will be the one has a balance between bias and variance.
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/model_complexity}
-  \caption{Training and test error}
+  \caption{Training and test error. Image source is \cite{friedman2001elements}}
   \label{fig:traintesterror}
 \end{figure}
 
