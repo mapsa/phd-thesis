@@ -87,10 +87,11 @@ of functions that the algorithm is allowed to search. The selection of
 $f$ is based on the minimisation of the expected error of the loss
 function $V(f(x),y): Y \times Y$ defined as:
 
-\begin{eqnarray*}
+\begin{eqnarray}
+\label{eq:lossfunction}
  V & \rightarrow & \mathbb{R}^+ \\
   (f(x), y) &\rightarrow & V(f(x),y)
-\end{eqnarray*}
+\end{eqnarray}
 
 \noindent where $V(f(x),y)$ denote the price paid for mistakes, $f:X=\R^m\to Y$ and
 $y=f(x)\in\R$. Therefore, $V(f(x),y)=0$ if $\;f(x)=y$.
@@ -245,7 +246,7 @@ sensitivity to small fluctuations in the input data, see equation
 \ref{eq:variancetrade}.
 
 If we have a learning model $\hat{f}$, its expected generalisation error on a
-testing sample $x$ can be decomposed as shown in equation \ref{eq:bvtrade} (demo
+testing sample $x$ can be decomposed as shown in equation \ref{eq:bvtrade} (proof
 in \cite{geman1992neural}):
 
 \begin{align}
@@ -280,29 +281,45 @@ sets. Variance measures how inconsistent are the predictions from one another,
 over different training sets, not whether they are accurate or not
 \cite{gutierrez2015machine}.
 
-
-This bias-variance tradeoff is the reason why, in order to obtain the best model,
-data is usually broken in three subsets: training set, validation set and
-testing set. Training set is used to determine the model, validation set is used
-to estimate the generalisation error and finally testing set is used to estimate
-the accuracy of the model. Usually the partition is 50\% for training set, 25\%
-for validation and 25\% for testing purposes. This procedure can be extended to
-a Cross Validation (CV) procedure \cite{geisser1975}, usually used when the
-amount of data is limited. Various splitting strategies lead to various CV
-estimates. In K-fold cross-validation the training data is divided randomly into
-K distinct subsets, then the network is trained using K-1 subsets, and tested on
+\subsection{Generalised Cross Validation}
+This bias-variance tradeoff is the reason why the 
+data is usually divided in three subsets: training, validation and
+testing set. The training set is used to construct the model, the validation set
+to estimate the generalisation error and finally the testing set to estimate
+the accuracy of the model. Usually the partition is 50\% for training, 25\%
+for validation and 25\% for testing purposes. When the
+amount of data is limited, this procedure can be extended to
+a Cross Validation (CV) approach \cite{geisser1975} . Various splitting strategies lead to various CV
+estimates. In K-fold cross-validation  \cite{stone1974} the training data is divided randomly into
+K distinct subsets, then the model is trained using K-1 subsets, and tested on
 the remaining subset. The process of training and testing is then repeated for
 each of the K possible choices of the subset omitted from the training. The
-average performance on the K omitted subsets is then our estimate of the
+average performance on the K omitted subsets is the estimate of the
 generalisation performance.
 
+%Another way to control the complexity of the model is to include in the
+%optimisation function not only the generalisation error but a penalisation of
+%high complex models. 
 
-Another way to control the complexity of the model is to include in the
-optimisation function not only the generalisation error but a penalisation of
-high complex models. 
 
+%Since we don't know the data we want to predict, the bias-variance tradeoff is not directly useful to determine $\lambda$. Many techniques have been developed to determine a suitable value for the regularization parameter. However, when no information is available on the error, one of the most popular techniques is the Generalized Cross Validation (GCV) \cite{bauer2011}. GCV originates from the older method leave-one-out Cross Validation.
 
-%=======================HASTA ACA REVISADO PROFE =========================
+%The leave-one-out cross validation method determine a regularization parameter that minimises the average of the squared predictions errors using each solution to predict the missing data value.
+
+%'---------------------------http://robjhyndman.com/hyndsight/crossvalidation/
+%When the data are not independent cross-validation becomes more difficult as leaving out an observation does not remove all the associated information due to the correlations with other observations. 
+
+%For time series forecasting, a cross-validation statistic is obtained as
+%follows: fit the model to the data $y1,\dots,yt$ and let $y^t+1$ denote the forecast
+%of the next observation. Then compute the error $et+1=yt+1-y^t+1$ for the
+%forecast observation.  Repeat step 1 for $t=m,\dots,n−1$ where m is the minimum number
+%of observations needed for fitting the model.
+%Compute the MSE from $em+1∗,…,en∗$.
+
+%An excellent and comprehensive recent survey of cross-validation results is Arlot and Celisse (2010)
+
+%---------------------------------------------------
+
 \subsection{Regularization}\label{sec:regularization}
 
 Regularization can be understood using two contexts: learning theory
@@ -312,43 +329,41 @@ the desire property of the selected estimator is to perform well on new data (to
 generalize), e.g. regularized least squares. In the context of inverse problems,
 regularization objective is to stabilise, with respect to noise, a possibly
 ill-conditioned matrix inversion problem e.g spectral cut-off and Tikhonov
-regularization or ridge regression (RR)\cite{ tikhonov1977}.
+regularization or ridge regression (RR) \cite{ tikhonov1977}.
 
 In particular, it is well known that regularization schemes such as RR or
 Tikhonov regularization can be effectively used in the context of learning
 \cite{vito2005}.
 
-Tikhonov introduced a regularisation which ensures well-posedness and
+Tikhonov introduced a regularization which ensures well-posedness and
 generalisation of ERM, i.e prevents overfit, by constraining the hypothesis
 space $\mathcal{H}$ usually called regularised ERM or Tikhonov regularisation.
 
-Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a
-fixed positive parameter $\lambda$ the following:
+%Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a
+%fixed positive parameter $\lambda$ the following:
+Tikhonov regularisation considers a functional of the form:
 
 \begin{equation} 
 \label{eq:rerm}
-R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
+R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) + \lambda \mathcal{R}(f)
 \end{equation}
 
-\noindent where $\mathcal{R}(f)$ is the regulariser, a penalisation on $f$.
+\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ , $V$ is the loss function defined in the equation \ref{eq:lossfunction} and $\mathcal{R}(f)$ is the regulariser, a penalisation on $f$. One example of regularisation in linear models is Ridge Regression (RR), which is a regularised least squares method.
 
 \subsection{Ridge Regression}
 
-Ridge regression was independently proposed by Tikhonov \cite{tikhonov1963} and
-Phillips \cite{phillips1962}. 
-One example of regularisation in linear models is Ridge Regression (RR), which is a regularised least squares method.
-The least squares (LS) method is a well known way to solve a regression
-problem. 
-LS method consists of minimising the sum of squared errors:
+Ridge regression (RR) was independently proposed by Tikhonov \cite{tikhonov1963} and
+Phillips \cite{phillips1962}. RR corresponds to a regularised least squares method. The least squares (LS) method is a well known way to solve a regression
+problem. LS method consists of minimising the sum of squared errors:
 
 \begin{eqnarray*}
 \label{eq:lsm}
  J(\mathbf{X}) =& \displaystyle \sum_{t=1}^N (f(\mathbf{x}_t)-y_t)^2 \\
- =&\displaystyle \sum_{t=1}^N (\mathbf{\mathbf{X}}^\top {\mathbf{x}}_t-y_t)^2 \\
+ =&\displaystyle \sum_{t=1}^N (\mathbf{\mathbf{A}}^\top {\mathbf{x}}_t-y_t)^2 \\
  =& \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2 
 \end{eqnarray*}
 
-\noindent which is equivalent to find a solution to 
+\noindent where $f(\mathbf{x}_t)={\mathbf{A}}^\top {\mathbf{x}}_t$. To solve equation \ref{eq:lsm} is equivalent to find a solution of:
 \begin{equation}
 \label{eq:regproblem}
 \underset{m \times n}{\mathbf{A}} \enskip \underset{n \times
@@ -369,41 +384,42 @@ which can be written as follows:
 \mathbf{A}^+= (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \, .
 \end{equation}
 
-\textbf{Demo}\quad
 
-To solve equation~(\ref{eq:pseudoinverse}) is equivalent to solve the following
-optimisation problem:
-
-
-\begin{equation}
-\label{eq:RRproblem2}
-\underset{\mathbf{X}(\lambda)}{\text{min}} \quad \|
-\mathbf{C}\mathbf{\mathbf{X}} - \mathbf{F} \|_2^2
-\end{equation}
-
-\noindent where
-
-\begin{equation*}
-	\mathbf{C}=
-	\begin{bmatrix} \quad &\mathbf{A}& \quad \\ \hdashline \quad
-& \sqrt\lambda\mathbb{I}&\quad  
-\end{bmatrix} 
-\quad \text{and} \quad
-	\mathbf{F}=\begin{bmatrix} \quad &\mathbf{Y}& \quad \\ \hdashline \quad
-& \mathbf{0}&\quad  \end{bmatrix} \, .
-\end{equation*}
-
-Applying equation~(\ref{eq:MP}) and considering that $\mathbf{C}^\top
-\mathbf{C} = \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I}$ and 
-$\mathbf{C}^\top \mathbf{F}=\mathbf{A}^\top \mathbf{Y} $ we have:
-
-\begin{eqnarray*}
-\mathbf{X}(\lambda)&=&(\mathbf{C}^\top
-\mathbf{C})^{-1}\mathbf{C}^\top \mathbf{F} \\
-&=& (\mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1} \mathbf{A}^\top \mathbf{Y}
-\end{eqnarray*}
-
-$\blacksquare$
+%\textbf{Demo}\quad
+%
+%To solve equation~(\ref{eq:pseudoinverse}) is equivalent to solve the following
+%optimisation problem:
+%
+%
+%\begin{equation}
+%\label{eq:RRproblem2}
+%\underset{\mathbf{X}(\lambda)}{\text{min}} \quad \|
+%\mathbf{C}\mathbf{\mathbf{X}} - \mathbf{F} \|_2^2
+%\end{equation}
+%
+%\noindent where
+%
+%\begin{equation*}
+%	\mathbf{C}=
+%	\begin{bmatrix} \quad &\mathbf{A}& \quad \\ \hdashline \quad
+%& \sqrt\lambda\mathbb{I}&\quad  
+%\end{bmatrix} 
+%\quad \text{and} \quad
+%	\mathbf{F}=\begin{bmatrix} \quad &\mathbf{Y}& \quad \\ \hdashline \quad
+%& \mathbf{0}&\quad  \end{bmatrix} \, .
+%\end{equation*}
+%
+%Applying equation~(\ref{eq:MP}) and considering that $\mathbf{C}^\top
+%\mathbf{C} = \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I}$ and 
+%$\mathbf{C}^\top \mathbf{F}=\mathbf{A}^\top \mathbf{Y} $ we have:
+%
+%\begin{eqnarray*}
+%\mathbf{X}(\lambda)&=&(\mathbf{C}^\top
+%\mathbf{C})^{-1}\mathbf{C}^\top \mathbf{F} \\
+%&=& (\mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1} \mathbf{A}^\top \mathbf{Y}
+%\end{eqnarray*}
+%
+%$\blacksquare$
 
 
 However, when $\mathbf{A}$ is not full rank, i.e
@@ -427,7 +443,7 @@ singular value decomposition (SVD) of $\mathbf{A}$:
 \mathbf{A}^+ = \mathbf{V_1\Sigma_1^{-1}U_1^\top}
 \end{equation}
 
-\textbf{Demo}\quad
+\textbf{Proof}\quad
 
 In the case matrix $\mathbf{A}$ is non singular, its solution is
 straight forward:
@@ -493,7 +509,7 @@ J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  
 \mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
 \end{equation*}
 
-\textbf{Demo}\quad
+\textbf{Proof}\quad
 
 \begin{eqnarray*}
 J(\mathbf{\mathbf{X}}) &=&  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
@@ -529,7 +545,7 @@ $\blacksquare$
 
 The method is called ridge regression because the term $\lambda \mathbb{I}$ adds positive entries along the diagonal (ridge) to avoid the
 singularity of the covariance matrix $\mathbf{A}^\top \mathbf{A}$. This addition ensures that all of the covariance matrix eigenvalues will be strictly greater than 0, i.e the solution becomes unique.
-
+%=======================HASTA ACA REVISADO PROFE =========================
 
 \subsection{The Lambda parameter}
 
@@ -703,7 +719,7 @@ It can be shown that, in terms of prediction error, ridge (black line)
 is lower than OLS (dotted line)~\cite{hoerl1970}. Ridge regression shows an
 increasing squared bias and a decreasing variance.
 
-\textbf{Demo}\quad
+\textbf{Proof}\quad
 
 Since $Bias(\mathbf{X}(\lambda)) \neq 0$ this imply that
 
@@ -733,26 +749,6 @@ d_i = \frac{\sigma_i^{-1}}{(1+\lambda\sigma_i^{-1})^2}
 \end{equation*}
 
 $\blacksquare$
-
-\subsection{Generalized Cross Validation}
-Since we don't know the data we want to predict, the bias-variance tradeoff is not directly useful to determine $\lambda$. Many techniques have been developed to determine a suitable value for the regularization parameter. However, when no information is available on the error, one of the most popular techniques is the Generalized Cross Validation (GCV) \cite{bauer2011}. 
-GCV originates from the older method leave-one-out Cross Validation \cite{stone1974}.
-
-The leave-one-out cross validation method determine a regularization parameter that minimises the average of the squared predictions errors using each solution to predict the missing data value.
-
-%'---------------------------http://robjhyndman.com/hyndsight/crossvalidation/
-%When the data are not independent cross-validation becomes more difficult as leaving out an observation does not remove all the associated information due to the correlations with other observations. 
-
-%For time series forecasting, a cross-validation statistic is obtained as
-%follows: fit the model to the data $y1,\dots,yt$ and let $y^t+1$ denote the forecast
-%of the next observation. Then compute the error $et+1=yt+1-y^t+1$ for the
-%forecast observation.  Repeat step 1 for $t=m,\dots,n−1$ where m is the minimum number
-%of observations needed for fitting the model.
-%Compute the MSE from $em+1∗,…,en∗$.
-
-%An excellent and comprehensive recent survey of cross-validation results is Arlot and Celisse (2010)
-
-%---------------------------------------------------
 
 
 \subsection{Machine learning algorithms}
@@ -1242,7 +1238,6 @@ is computationally less expensive than the SVD.
 %$\lambda_{\text{QR}} = \frac{\lambda_1 + \lambda_2}{2}$  
 %\end{enumerate}
 
-\newpage
 
 \section{Evaluation methods} \label{sec:evaluation}
 
