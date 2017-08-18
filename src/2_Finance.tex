@@ -37,7 +37,7 @@ day closing all opened positions.
   \centering
   \includegraphics[width=\textwidth]{img/HFTtradestime}
   \caption{Holding time of an opened position of a high frequency trade.Source
-  \cite{aldridge2009}}
+  \cite{aldridge2009}.}
   \label{fig:HFTtimes}
 \end{figure}
 In 2014 HFT represented nearly 50\% of equity trades in the US and more than
@@ -51,7 +51,7 @@ figure shows how revenues in US stocks have fallen the last years.
   \centering
   \includegraphics[width=\textwidth]{img/HFTmarket}
   \caption{Left figure shows HFT market share in the US and Europe. Right figure
-  shows revenue in the US.}
+  shows revenue in the US. Source: TABB Group.}
   \label{fig:HFTmarket}
 \end{figure}
 One of the reasons of this fall is that exchange markets have adapted, having
@@ -77,13 +77,13 @@ A financial market has many components but the most commonly used are money
 markets and capital markets. Money markets are used for short-term basis,
 usually for assets up to one year, for greater periods capital markets are used.
 Capital markets include the stock or equity market and the bond or debt market
-and their movements are the most widely followed.
+and their movements are the most widely followed \cite{aldridge2009}.
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
   \includegraphics[width=0.7\textwidth]{img/capitalmarkets}
-  \caption{Old structure of capital markets.}
+  \caption{Old structure of capital markets. Source \cite{aldridge2009}.}
   \label{fig:capitalmarket}
 \end{figure}
 Figure~\ref{fig:capitalmarket} shows the typical structure of capital markets
@@ -96,7 +96,7 @@ inter-dealer brokers to quickly find the best price for a particular asset among
 the network of other broker-dealers. Occasionally, broker-dealers also deal
 directly with other broker-dealers, particularly for less liquid instruments.
 Broker-dealers clients are institutional investors, corporate clients,
-commercial clients, and high-net-worth individuals.
+commercial clients, and high-net-worth individuals \cite{aldridge2009}.
 
 This centralised structure existed until computer technology allowed a better
 communication structure. Today financial markets are more decentralised
@@ -114,29 +114,31 @@ institutional clients that have also become broke-dealers.
   %\vspace{-0.8cm}
   \centering
   \includegraphics[width=0.8\textwidth]{img/capitalmarketsnow}
-  \caption{Actual structure of capital markets.}
+  \caption{Actual structure of capital markets. Source \cite{aldridge2009}.}
   \label{fig:capitalmarketnow}
 \end{figure}
 
 
 Equity market and foreign exchange market (Forex) are the most popular markets
-for high frequency trading strategies. In the Equity market, stocks
-such as futures and options, exchange-traded funds (ETFs) among others financial
-instruments can be traded. Additionally, in the Forex market, interest rates denominated pair currencies 
-such as EURUSD (Euro to UD dollar) or USDJPY (US dollar to Japanese yen) are traded. Traders of this market are diverse, some of them are
-high frequency traders, long-term investors and corporations. The Forex market
-used to be centralised, only commercial banks had exclusive access to
-inter-dealer networks. Today, Forex market is decentralised and has become the
-biggest market in terms of volume of trading. The main participants are
-international banks geographically dispersed with continuous 24 hours operations
-excepting weekends. Figure~\ref{fig:Forextimes} shows different market trading
-hours in GMT for London, New York, Sydney and Tokyo.
+for high frequency trading strategies \cite{genccay2001introduction}. In the
+Equity market, stocks such as futures and options, exchange-traded funds (ETFs)
+among others financial instruments can be traded. Additionally, in the Forex
+market, interest rates denominated pair currencies such as EURUSD (Euro to UD
+dollar) or USDJPY (US dollar to Japanese yen) are traded. Traders of this
+market are diverse, some of them are high frequency traders, long-term
+investors and corporations. The Forex market used to be centralised, only
+commercial banks had exclusive access to inter-dealer networks. Today, Forex
+market is decentralised and has become the biggest market in terms of volume of
+trading. The main participants are international banks geographically dispersed
+with continuous 24 hours operations excepting weekends.
+Figure~\ref{fig:Forextimes} shows different market trading hours in GMT for
+London, New York, Sydney and Tokyo.
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
   \includegraphics[width=0.8\textwidth]{img/forex-trading-hours.png}
-  \caption{Forex market trading hours (GMT).}
+  \caption{Forex market trading hours (GMT). Source \cite{dailyprice}.}
   \label{fig:Forextimes}
 \end{figure}
 
@@ -149,7 +151,8 @@ There are three periods of overlaps between different trading times:
 \item Sydney and Tokyo from 23:00 GMT to 7:00 GMT 
 \end{itemize}
 
-These overlap hours are very important since the highest volume of trades are expected. Therefore, most HFT strategies are executed in these hours.
+These overlap hours are very important since the highest volume of trades are
+expected. Therefore, most HFT strategies are executed in these hours.
 
 \section{Price formation process}
 
@@ -165,9 +168,9 @@ considering previous executed orders and volume requested.
 Depending on the market conditions, this type of orders could never been executed.
 \item[Stop order] are suitable for investors who are unable to monitor their
 investments for a period of time. Stop order allows to specify the price that a
-position should be closed called stop price. When the stop price is reached a
-market order is executed, this means that market price could not be exactly the same
-specified in the stop order.
+position should be closed; this price is called stop price. When the stop price
+is reached a market order is executed, this means that market price could not be
+exactly the same specified in the stop order.
 \end{description}
 
 In terms of commissions, limit and stop order are more expensive than market orders and
@@ -189,15 +192,17 @@ Figure~\ref{fig:orderbook} illustrates how buyers and sellers are ordered. The
 ask or offer price is the current lower price a seller is willing to accept for
 a good. The bid price corresponds to the current highest price a buyer is
 willing to pay for a good. Orders with the same price are prioritised by
-arrival time and placed on top of the book.  The difference between current ask and bid
-price is called spread and their average is called mid-price.
+arrival time and placed on top of the book.  The difference between current ask
+and bid price is called spread and their average is called mid-price
+\cite{bouchaud2002statistical}.
 
 \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
   \includegraphics[width=0.5\textwidth]{img/orderbook}
   \caption{Order book. Buyers and sellers are ordered according to the bid or
-  ask price and the market determines the mid-price and transacted volume.}
+ask price and the market determines the mid-price and transacted volume. Source
+\cite{gould2013limit}.}
   \label{fig:orderbook}
 \end{figure}
 Today, order books are available and they are a popular source of study among
@@ -207,30 +212,63 @@ problems related with this area.
 
 \section{Efficient market hypothesis}
 
-Efficient Market Hypothesis (EMH) was developed independently by  Paul Samuelson and Eugene Fama in the 1960s.
-EMH also known as the random walk theory states that current stock prices fully reflect available information related to its value and there is no way to earn excess profits
-\cite{fama1970}. EMH requires that all the participants have rational expectations, and investors reactions be random and follow a normal distribution pattern. Thus, any one can be wrong about the market, but the market is always right as a whole.
-There are three common forms of EMH: weak-form efficiency, semi-strong efficiency and strong-form efficiency.
+Efficient Market Hypothesis (EMH) was developed independently by  Paul
+Samuelson and Eugene Fama in the 1960s.  EMH also known as the random walk
+theory states that current stock prices fully reflect available information
+related to its value and there is no way to earn excess profits
+\cite{fama1970}. EMH requires that all the participants have rational
+expectations, and investors reactions be random and follow a normal
+distribution pattern. Thus, any one can be wrong about the market, but the
+market is always right as a whole.  There are three common forms of EMH:
+weak-form efficiency, semi-strong efficiency and strong-form efficiency.
 
-The weak form claims that prices already reflect all past publicly available information. Therefore, future prices cannot be predicted based on analysis of historical data. This implies that future prices movements are determined entirely by information not contained in the past prices and participants are unable to systematically profit from market inefficiencies.
-However, many studies have shown a marked tendency for the stock markets to trend over time periods. Various explanations for such large and apparently non-random price movements have been promulgated. Even Fama has accepted price anomalies which do not follow the weak-form efficiency hypothesis \cite{fama+french2008}.
+The weak form claims that prices already reflect all past publicly available
+information. Therefore, future prices cannot be predicted based on analysis of
+historical data. This implies that future prices movements are determined
+entirely by information not contained in the past prices and participants are
+unable to systematically profit from market inefficiencies.  However, many
+studies have shown a marked tendency for the stock markets to trend over time
+periods. Various explanations for such large and apparently non-random price
+movements have been promulgated. Even Fama has accepted price anomalies which
+do not follow the weak-form efficiency hypothesis \cite{fama+french2008}.
 
-The semi-strong form of the EMH claims that prices instantly change to reflect new public (not private) information such that no excess return can be obtained. 
+The semi-strong form of the EMH claims that prices instantly change to reflect
+new public (not private) information such that no excess return can be
+obtained. 
 
-The strong form of the EMH additionally claims that prices instantly reflect even hidden, private or ``insider" information. 
+The strong form of the EMH additionally claims that prices instantly reflect
+even hidden, private or ``insider" information. 
 
-EMH is related with two approaches to investment analysis: fundamental and technical analysis. Fundamental analysts base their predictions of stock price behaviour on fundamental factors such as internal information of a company, its industry or the economy. Technical analysts, by contrast, consider that all this financial information is already included in the prices and believe that future stock prices can be predicted studying the historical market behaviour. A market technician bases its predictions on historical patterns of prices of volume changes.
+EMH is related with two approaches to investment analysis: fundamental and
+technical analysis. Fundamental analysts base their predictions of stock price
+behaviour on fundamental factors such as internal information of a company, its
+industry or the economy. Technical analysts, by contrast, consider that all
+this financial information is already included in the prices and believe that
+future stock prices can be predicted studying the historical market behaviour.
+A market technician bases his predictions on historical patterns of prices of
+volume changes.
 
-Under the weak form of EMH, strategies based on technical analysis will not be able to produce excess returns. However, the weak form accepts that some forms of fundamental analysis may still provide excess return. Similarly, the semi-strong form of EMH  neither technical or fundamental analysis can produce excess return.
+Under the weak form of EMH, strategies based on technical analysis will not be
+able to produce excess returns. However, the weak form accepts that some forms
+of fundamental analysis may still provide excess return. Similarly, the
+semi-strong form of EMH  neither technical or fundamental analysis can produce
+excess return.
 
-If the stock market efficiently digests all available information, there is little justification for seeking excess returns gains from investing. However, EMH doesn't lessen the importance of investing only change its philosophy. The only way an investor can possibly obtain higher returns is by purchasing riskier investments.
+If the stock market efficiently digests all available information, there is
+little justification for seeking excess returns gains from investing. However,
+EMH doesn't lessen the importance of investing only change its philosophy. The
+only way an investor can possibly obtain higher returns is by purchasing
+riskier investments.
 
- Researches can determine now how efficient a financial market is, i.e how efficiently information is processed.  
+ Researches can determine now how efficient a financial market is, i.e how
+efficiently information is processed.  
 
-EMH is based on rational human behaviour and its validity has been criticised by
-psychologists and behavioural economists who argue that the EMH is based
-on counterfactual assumptions regarding human behaviour, that is,
-rationality. Recent advances in evolutionary psychology and the cognitive
-neurosciences may be able to reconcile the EMH with behavioural
-anomalies. On the other hand, if the EMH is true, the market really walks randomly and therefore there shouldn't be any difference between experienced and novice traders. Kim Man Lui proved the contrary in a controlled experiment \cite{man2013}.
+EMH is based on rational human behaviour and its validity has been criticised
+by psychologists and behavioural economists who argue that the EMH is based on
+counterfactual assumptions regarding human behaviour, that is, rationality.
+Recent advances in evolutionary psychology and the cognitive neurosciences may
+be able to reconcile the EMH with behavioural anomalies. On the other hand, if
+the EMH is true, the market really walks randomly and therefore there shouldn't
+be any difference between experienced and novice traders. Kim Man Lui proved
+the contrary in a controlled experiment \cite{man2013}.
 
