@@ -389,14 +389,48 @@ method.
 \subsection{Ridge Regression}
 
 Ridge regression (RR) was independently proposed by Tikhonov \cite{tikhonov1963}
-and Phillips \cite{phillips1962}. RR corresponds to a regularised least squares
-method. The least squares (LS) method is a well known way to solve a regression
-problem. LS method consists of minimising the sum of squared errors:
+and Phillips \cite{phillips1962}. 
 
+RR corresponds to a regularised least squares
+method. The least squares (LS) method is a well known way to solve a regression
+problem.  
+
+\begin{equation}
+\label{eq:RRdefinitions}
+\mathbf{X} = 
+\left[
+  \begin{array}{cccc}
+    \vertbar & \vertbar &        & \vertbar \\
+    \mathbf{x}_{1}    & \mathbf{x}_{2}    & \ldots & \mathbf{x}_{n}    \\
+    \vertbar & \vertbar &        & \vertbar 
+  \end{array}
+\right]
+\quad , \quad
+\mathbf{A} = 
+\left[
+  \begin{tabular}{c>{$}c<{$}c}
+    --- & \mathbf{a}^{\top}_{1} & ---\\
+    --- & \mathbf{a}^{\top}_{2} & ---\\
+    & \vdots & \\
+    --- & \mathbf{a}^{\top}_{m} & ---
+  \end{tabular}
+\right]
+\quad \text{and} \quad
+\mathbf{Y} = 
+\left[
+  \begin{array}{cccc}
+    \vertbar & \vertbar &        & \vertbar \\
+    \mathbf{y}_{1}    & \mathbf{y}_{2}    & \ldots & \mathbf{y}_{n}    \\
+    \vertbar & \vertbar &        & \vertbar 
+  \end{array}
+\right]
+\end{equation}
+
+LS method consists of minimising the sum of squared errors:
 \begin{eqnarray*}
 \label{eq:lsm}
- J(\mathbf{X}) =& \displaystyle \sum_{t=1}^N (f(\mathbf{x}_t)-y_t)^2 \\
- =&\displaystyle \sum_{t=1}^N (\mathbf{\mathbf{A}}^\top {\mathbf{x}}_t-y_t)^2 \\
+ J(\mathbf{X}) =& \displaystyle \sum_{t=1}^n (f(\mathbf{x}_t)-y_t)^2 \\
+ =&\displaystyle \sum_{t=1}^n (\mathbf{\mathbf{A}}^\top {\mathbf{x}}_t-y_t)^2 \\
  =& \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2 
 \end{eqnarray*}
 
