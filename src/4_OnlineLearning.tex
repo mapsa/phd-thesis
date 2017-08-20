@@ -59,60 +59,92 @@ financial problems and the assessments of this method and their results in
 practice are fairly good. Therefore, in this thesis we will adhere to this trend
 and we will use supervised learning.
 
-Supervised learning consists in finding a learning function $f: X \rightarrow Y$
-which models a set of examples, called training set $S$, which have been drawn
-randomly and independently according to a unknown joint distribution function
-$p(x,y)$ on $X \times Y$:
+%Supervised learning consists in finding a learning function $f: X \rightarrow Y$
+%which models a set of examples, called training set $S$, which have been drawn
+%randomly and independently according to a unknown joint distribution function
+%$p(x,y)$ on $X \times Y$:
+%
+%
+%$$
+%S = \{ (x_k,y_k)\in X\times Y : k=1,...,n \}
+%$$
+%
+%\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of
+%regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
+%
+%
+%A learning algorithm $\mathcal{A}$ takes as input a data set $S \in
+%\mathscr{T}=\mathscr{P}(X\times Y)$ and selects from $\mathscr{H}$ a function
+%$f$ such that $f(\mathbf{x})\approx y $ in a predictive way:
+%
+%\begin{eqnarray*}
+%\mathcal{A}: \mathscr{T} &\rightarrow & \mathscr{H} \\
+%S &\rightarrow &\mathcal{A}(S) = f
+%\end{eqnarray*}
+%
+%\noindent where $\mathscr{H}$ is called the {\em hypothesis space}, i.e. the space
+%of functions that the algorithm is allowed to search. 
 
-
+%------------------------DRAFT PROFE -------------------------------
+The basic setting for supervised learning is a {\em data set\/} $X$, 
+and an  {\em outcome set\/} $Y$.
+For our purposes $X$ will be $\R^m$, $m\in\N$, and $Y$ either $\R$
+in the case of regression problems, or $\{-1,1\}$ in the case of
+classification problems.
+In addition we have a plurality of {\em training sets\/}
 $$
-S = \{ (x_k,y_k)\in X\times Y : k=1,...,n \}
+S=\bigg\{ (\mathbf{x}_k,y_k)\in X\times Y \mid k=1,\dots,n \bigg\}
+\subseteq X\times Y\,,
 $$
+where the members of $S$ have been drawn randomly and independently
+from $X\times Y$ according to an {\em unknown\/} joint distribution
+function $p(\mathbf{x},y)$ on $X\times Y$.
+We gather all these training sets in a subset $\mathscr{T}$ of
+$\mathscr{P}(X\times Y)$.
 
-\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of
-regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
+In addition, there is a {\em learning algorithm\/} $\mathcal{A}$ that
+associates to every data set one and only one learning function
+$f\in\mathscr{H}$.
+Thus $\mathcal{A}$ can be considered as a function:
+$$
+\mathcal{A}:\mathscr{T}\to\mathscr{H}\,,\qquad
+S\mapsto\mathcal{A}(S)=f\quad\forall S\in\mathscr{T}\,.
+$$ 
 
-
-A learning algorithm $\mathcal{A}$ takes as input a data set $S \in
-\mathscr{T}=\mathscr{P}(X\times Y)$ and selects from $\mathcal{H}$ a function
-$f$ such that $f(x)\approx y $ in a predictive way:
+%------------------------FIN DRAFT PROFE -------------------------------
+{\em Supervised learning\/} consists then in finding a {\em learning function\/}
+$f:X\to Y$ that minimisr the expected error of the loss function $V(f(\mathbf{x}),y): Y
+\times Y$ defined as:
 
 \begin{eqnarray*}
-\mathcal{A}: \mathscr{T} &\rightarrow & \mathcal{H} \\
-S &\rightarrow &\mathcal{A}(S) = f
-\end{eqnarray*}
-
-\noindent where $\mathcal{H}$ is called the {\em hypothesis space}, i.e. the space
-of functions that the algorithm is allowed to search. The selection of
-$f$ is based on the minimisation of the expected error of the loss
-function $V(f(x),y): Y \times Y$ defined as:
-
-\begin{eqnarray}
 \label{eq:lossfunction}
  V & \rightarrow & \mathbb{R}^+ \\
-  (f(x), y) &\rightarrow & V(f(x),y)
-\end{eqnarray}
+  (f(\mathbf{x}), y) &\rightarrow & V(f(\mathbf{x}),y)
+\end{eqnarray*}
 
-\noindent where $V(f(x),y)$ denote the price paid for mistakes, $f:X=\R^m\to Y$ and
-$y=f(x)\in\R$. Therefore, $V(f(x),y)=0$ if $\;f(x)=y$.
+\noindent where $V(f(\mathbf{x}),y)$ denote the price paid for mistakes, $f:X=\R^m\to Y$
+and $y=f(\mathbf{x})\in\R$. Therefore, $V(f(\mathbf{x}),y)=0$ if $\;f(\mathbf{x})=y$.
 
-Given a function $f$ a loss function $V$ and a probability distribution $p$ over $X \times Y$, the expected error of $f$ is:
+Given a function $f$ a loss function $V$ and a probability distribution $p$ over
+$X \times Y$, the expected error of $f$ is:
 
 \begin{equation}
 \label{eq:expetedrisk}
-E[V(f(x),y)] = \int_{X\times Y} V(f(x),y)\;dp(x,y)\,,
+%E[V(f(\mathbf{x}),y)] = \int_{X\times Y} V(f(\mathbf{x}),y)\;dp(x,y)\,,
+E\big[ V( f(\cdot),\cdot) \big]
+= \int_{X\times Y} V\big( f(\mathbf{x},y \big)\,dp(\mathbf{x},y)\,.
 \end{equation}
 
 
 For regression, the most common loss function is square loss or L2 loss function:
 \begin{equation}
 \label{eq:l2loss}
-V(f(x),y) = (f(x)-y)^2
+V(f(\mathbf{x}),y) = (f(\mathbf{x})-y)^2
 \end{equation}
 \noindent another option is the L1 loss
 \begin{equation}
 \label{eq:l1loss}
-V(f(x),y) = |f(x)-y| \, .
+V(f(\mathbf{x}),y) = |f(\mathbf{x})-y| \, .
 \end{equation}
 \noindent the choice of loss function here gives rise to several well-known
 learning algorithms such as regularised least squares and support vector
@@ -123,7 +155,7 @@ the objective is to estimate a function $\hat{f}$ through empirical risk
 (training error) minimisation (ERM): 
 
 \begin{equation*}
-\hat{f} = \argmin_{f \in \mathcal{H}} R_{\text{emp}}[f] 
+\hat{f} = \argmin_{f \in \mathscr{H}} R_{\text{emp}}[f] 
 \end{equation*}
 
 \noindent where, 
@@ -137,7 +169,7 @@ The ERM is a Riemann sum approximation of the expected error of $f$ shown in
 equation \ref{eq:expetedrisk}. By the law of large numbers it is known that:
 
 \begin{equation}
-\frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(x),y)]
+\frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(\mathbf{x}),y)]
 \end{equation}
 
 
@@ -148,11 +180,11 @@ tradeoff between three factors \cite{dietterich2003}:
 \item[Complexity or capacity of the hypothesis class] is defined in terms of the
 Vapnik-Chervonenkis (VC) dimension, which corresponds to the number of training
 points that can be classified exactly by the hypothesis space. More formally,
-the VC dimension of the hypothesis space $\mathcal{H}$ defined over instance
+the VC dimension of the hypothesis space $\mathscr{H}$ defined over instance
 space $X$ is the size of the largest finite subset of $X$ shattered by
-$\mathcal{H}$. The dataset $S$ is shattered by hypothesis space $\mathcal{H}$ if
+$\mathscr{H}$. The dataset $S$ is shattered by hypothesis space $\mathscr{H}$ if
 and only if for every dichotomy of $S$ there exists some hypothesis in
-$\mathcal{H}$ consistent with this dichotomy. A dichotomy of a set $S$ is a
+$\mathscr{H}$ consistent with this dichotomy. A dichotomy of a set $S$ is a
 partition of $S$ into two disjoint subsets \cite{vapnik2013nature}.
 
 For example, the VC dimension of the lines in the plane is explained in figure
@@ -251,13 +283,13 @@ in \cite{geman1992neural}):
 
 \begin{align}
 \label{eq:bvtrade}
-\mathrm{E}\Big[\big(y - \hat{f}(x)\big)^2\Big]
- & = \mathrm{Bias}(\hat{f}(x))^2 + \mathrm{Var}(\hat{f}(x)) + \sigma^2
+\mathrm{E}\Big[\big(y - \hat{f}(\mathbf{x})\big)^2\Big]
+ & = \mathrm{Bias}(\hat{f}(\mathbf{x}))^2 + \mathrm{Var}(\hat{f}(\mathbf{x})) + \sigma^2
 \end{align}
 \noindent where:
 \begin{align}
- \mathrm{Bias}(\hat{f}(x)) &= \mathrm{E}\big[\hat{f}(x)\big] - f(x) \label{eq:biastrade}\\
- \mathrm{Var}(\hat{f}(x)) &= \mathrm{E}\Big[ \big( \hat{f}(x) - \mathrm{E}[\hat{f}(x)] \big)^2 \Big]  \label{eq:variancetrade}
+ \mathrm{Bias}(\hat{f}(\mathbf{x})) &= \mathrm{E}\big[\hat{f}(\mathbf{x})\big] - f(\mathbf{x}) \label{eq:biastrade}\\
+ \mathrm{Var}(\hat{f}(\mathbf{x})) &= \mathrm{E}\Big[ \big( \hat{f}(\mathbf{x}) - \mathrm{E}[\hat{f}(\mathbf{x})] \big)^2 \Big]  \label{eq:variancetrade}
 \end{align}
 
 
@@ -337,9 +369,9 @@ Tikhonov regularization can be effectively used in the context of learning
 
 Tikhonov introduced a regularization which ensures well-posedness and
 generalisation of ERM, i.e prevents overfit, by constraining the hypothesis
-space $\mathcal{H}$ usually called regularised ERM or Tikhonov regularisation.
+space $\mathscr{H}$ usually called regularised ERM or Tikhonov regularisation.
 
-%Tikhonov regularisation minimised over the hypothesis space $\mathcal{H}$ for a
+%Tikhonov regularisation minimised over the hypothesis space $\mathscr{H}$ for a
 %fixed positive parameter $\lambda$ the following:
 Tikhonov regularisation considers a functional of the form:
 
@@ -348,12 +380,17 @@ Tikhonov regularisation considers a functional of the form:
 R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) + \lambda \mathcal{R}(f)
 \end{equation}
 
-\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ , $V$ is the loss function defined in the equation \ref{eq:lossfunction} and $\mathcal{R}(f)$ is the regulariser, a penalisation on $f$. One example of regularisation in linear models is Ridge Regression (RR), which is a regularised least squares method.
+\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ , $V$ is the
+loss function defined in the equation \ref{eq:lossfunction} and $\mathcal{R}(f)$
+is the regulariser, a penalisation on $f$. One example of regularisation in
+linear models is Ridge Regression (RR), which is a regularised least squares
+method.
 
 \subsection{Ridge Regression}
 
-Ridge regression (RR) was independently proposed by Tikhonov \cite{tikhonov1963} and
-Phillips \cite{phillips1962}. RR corresponds to a regularised least squares method. The least squares (LS) method is a well known way to solve a regression
+Ridge regression (RR) was independently proposed by Tikhonov \cite{tikhonov1963}
+and Phillips \cite{phillips1962}. RR corresponds to a regularised least squares
+method. The least squares (LS) method is a well known way to solve a regression
 problem. LS method consists of minimising the sum of squared errors:
 
 \begin{eqnarray*}
