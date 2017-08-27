@@ -1,0 +1,177 @@
+% 20161009_Paola_Chapter_3_Part_B.tex --- 31.10.2016
+
+\section{Chapter 3: Remarks from 20161031}
+
+\begin{description}[style=unboxed,leftmargin=0cm,itemsep=3ex]
+
+\myitem{P 39, LL 11-13, \red{3.2.4 Ridge Regression. 
+        Discussion of the equation for $J(\mathbf{X})$}}
+I discuss here the equation for $J(\mathbf{X})$ starting from equation (3.6).
+For any matrix $\mathbf{A}$ let 
+$\mathbf{A}_i$ be the $i$-th row,
+$\mathbf{A}^j$ be the $j$-th column, and
+$\mathbf{A}_i^j$ be the $(i,j)$-element of matrix the $\mathbf{A}$.
+Then:
+\begin{alignat*}{2}
+&\text{$(i,j)$-element of the \red{left} hand side of (3.6)}
+= \mathbf{A}_i\;\mathbf{X}^j\,, &\quad& i=1:n\,,\ j=1:l\,, \\
+&\text{$(i,j)$-element of the \red{right} hand side of (3.6)}
+= \mathbf{Y}_i^j\,, &\quad& i=1:n\,,\ j=1:l\,.
+\end{alignat*}
+If $\|\cdot\|_2$ denotes the Frobenius matrix norm, we would have:
+\begin{equation}\label{20161031:1}
+J(\mathbf{X})
+= \|\mathbf{A}\,\mathbf{X}-\mathbf{Y}\|_2^2
+= \sum_{j=1}^l \left\| \mathbf{A}\,\mathbf{X}^j - \mathbf{Y}^j \right\|_2^2
+= \sum_{i=1}^m \sum_{j=1}^l 
+  \left( \mathbf{A}_i\,\mathbf{X}^j - \mathbf{Y}_i^j \right)^2
+\end{equation}
+Now the first problem is the meaning that you assign to the equality
+\begin{equation}\label{20161031:2}
+J(\mathbf{X})=\sum_{t=1}^N \left(f(\mathbf{x}_t)-y_t\right)^2\,.
+\end{equation}
+Everything is undefined here: $t,\,N,\,f,\,\mathbf{x}_t,y_t$.
+Thus, the equality does not make sense.
+We have to find a plausible interpretation.
+It might be that the term with the sum in the right hand side of
+(\ref{20161031:2}) concides with the last term in (\ref{20161031:1}).
+In this interpretation, 
+\begin{equation}\label{20161031:3}
+f(\mathbf{x}_t) \quad\text{would be}\quad 
+f_i(\mathbf{X}^j):=\mathbf{A}_i\,\mathbf{X}^j\,,
+\end{equation}
+but you would still need two subindices: $i$ and $j$.
+
+One could, of course, introduce a numbering $t=j+(i-1)\,l$ of the
+coefficients $(i,j)$ involved, and hence $N=i\times j$, but then you
+would need expresions of $i$ and $j$ in terms of $t$, which are easy
+to obtain but makes everything too cumbersome.
+
+Another problem is the matrix $\mathbf{A}$ which suddenly appears here,
+without definition.
+One might think that $\mathbf{A}$ is just $\mathbf{X}^T$,
+but then there are problems with the dimension of the matrices in (3.6).
+
+Summarizing, you need to give a clear presentation for the various
+expressions of the functional $J(\mathbf{X})$.
+
+\myitem{P 39, LL 15-19, Eqs. (3.6), (3.7), (3.8)}
+Here you start from equation (3.6), $\mathbf{A}\,\mathbf{X}=\mathbf{Y}$,
+but you have not defined these matrices, except for their dimensions.
+
+Then you say something about the \red{optimal} solution of (3.6).
+What do you mean by \red{optimal} here?
+
+An equation, alone, like (3.6), cannot have an \red{optimal} solution.
+If (3.6) has many solutions, then some of them might be optimal from
+some point of view, regarding --for instance-- some particular mimisation
+or maximisation problems, but they could be not optimal for other
+minimax problems.
+If (3.6) has no solution, then still one can find some $\mathbf{X}$'s
+such that $\mathbf{A}\,\mathbf{X}$ is as close as possible to $\mathbf{Y}$
+in some appropriate sense.
+These are dubbed \red{pseudo-solutions}.
+One of these \red{pseudo-solutions} is obtained via More-Penrose.
+This is clear when $\mathbf{X}$ and $\mathbf{Y}$ are vectors.
+But what is the situation when $\mathbf{X}$ and $\mathbf{Y}$ are matrices
+like here?
+
+Then in (3.7) and (3.8) you talk about $\mathbf{A}^+$ and give the usual
+formula when $\mathbf{X}$ and $\mathbf{Y}$ are vectors.
+Holds this formula when $\mathbf{X}$ and $\mathbf{Y}$ are matrices
+
+Is all this related to the minimisation problem for $J(\mathbf{X})$?
+If yes, you should give proofs!
+
+In an \red{Appendix} you should provide proofs of all claims involving
+(3.6), (3.7), (3.8).
+
+
+\myitem{From P 39, L -7, until P 40, L 3. 
+\red{3.2.4 Ridge Regression. THIS IS AN EXPANDED VERSION OF THE LAST
+ITEM FROM PART A}}
+You present this paragraph as someting called ``Demo''.
+What is it? A proof? A proof of what? 
+What is your claim before starting with ``Demo''?
+
+\red{It seems that your ``Demo'' has to do with the case when
+$\mathbf{A}^T\mathbf{A}$ is not invertible and then you introduce a
+regularisation by means of a parameter $\lambda$.
+But before your ``Demo'' there is no mention of this fact.
+Please clarify!}
+
+You say ``to solve equation (3.8)''.
+But (3.8) is just the definition of More-Penrose!
+
+Are you trying to solve (3.6)?
+If this is true, what is known and what is not known?
+Moreover, what do you mean by \red{solving (3.6)}, specially in the
+case (as in your case) when the equation is \red{overdetermined}?
+
+You should prove the equivalence you claim.
+At least write $\mathbf{C}_\lambda$ to make explicit the dependence of
+$\mathbf{C}$ from the parameter $\lambda$.
+
+I think you should better write something like:
+$$
+(3.9)\rule{50mm}{0pt} \min_{\mathbf X \in \text{\red{???}}}
+\|\mathbf{C}_\lambda\,\mathbf{X}-\mathbf{F}\|
+$$
+You should make clear in which space $\mathbf{X}$ is running for the
+optimisation.
+
+The outcome of this minimisation problem depends on $\lambda$, but
+equation (3.6) does not depend on $\lambda$.
+
+Thus, why is (3.6) equivalent to the minimization problem (3.9)?
+A proof is needed.
+
+Which value of $\lambda$ will you consider for a solution of (3.6) and why?
+
+What is $\mathbf{A}$ and what is the rationale for introducing $\mathbf{C}$
+and $\mathbf{F}$.
+
+The equation for $\mathbf{X}(\lambda)$ in LL 1, 2 in P 40, seems to be a
+More-Penrose solution of $\mathbf{C}_\lambda\,\mathbf{X}=\mathbf{F}$.
+But why this solution coincides with the solution --if it exists-- of the
+minimisation problem?
+
+By the way, is it sure that the minimisation Problem has a solution?
+Is it unique? etc.
+
+\vspace{3ex}
+We are given
+an $m\times n$ matrix of known real coefficients $\mathbf{A}$,
+an $n\times l$ matrix of real unknowns $\mathbf{X}$,
+an $m\times l$ matrix of real known data $\mathbf{Y}$.
+
+Our problem is to find a matrix $\mathbf{X}$ that minimises the functional
+\begin{equation}
+J(\mathbf{X}):=\|\mathbf{A}\,\mathbf{X}-\mathbf{Y}\|_2^2\,,
+\end{equation}
+where $\|\cdot\|_2$ is the Frobenius matrix norm.
+Any matrix $\mathbf{X}$ that minimizes $J(\mathbf{X})$ will be called a
+{\em minimum\/} of $J(\mathbf{X})$.
+
+\vspace{3ex}
+{\bf Claim}. 
+1. A minimum $\mathbf{X}_0$ of $J(\mathbf{X})$ always exist. \\
+1. If $\mathbf{X}_0$ is a minimum of $J(\mathbf{X})$, then
+$\mathbf{X}_0+\mathbf{X}_1$ is also a minimum of $J(\mathbf{X})$
+if and only if: 
+\begin{equation}
+\mathbf{X}_1\in \mathbf{A}^{\perp}:=
+\left\{ \mathbf{X}\in\R^n\times\R^l \mid
+        \mathbf{A}\,\mathbf{X}=\mathbf{0} \right\}\,.
+\end{equation}
+3. If the $n\times n$ matrix $\mathbf{A}^{\mathsf{T}}\,\mathbf{A}$ is
+invertible and $\mathbf{X}$ and $\mathbf{Y}$ are vectors, then 
+the minimum $\mathbf{X}_0$ is given by
+$\mathbf{A}^{\mathsf{T}}\,\mathbf{A}$
+
+\end{description}
+
+\vspace{2ex}
+Reviewing work in progress/DATE: 31.10.2016
+
+%% \end{document}

@@ -1,0 +1,946 @@
+% 20161009_Wuwerzburg_Paolas Thesis Reviewing.tex --- 09.10.2016
+
+%% \documentclass[12pt,reqno]{amsart}
+%% \usepackage{amsfonts,amssymb,amsmath,amsthm,mathrsfs,
+%%             amsopn,amsxtra,amstext,amsbsy}
+%% \usepackage{epsfig}
+%% \usepackage{array}
+%% \usepackage{url}
+%% \usepackage{tikz}
+%% %% \usepackage[spanish]{babel}
+%% \usepackage[utf8x]{inputenc}
+%% \usepackage{fancyhdr}
+%% \usepackage{graphicx}
+%% \usepackage{hyperref,wasysym}
+%% \usepackage{xcolor}
+%% \usepackage{lipsum}
+%% \usepackage{enumerate}
+%% \usepackage{enumitem}% http://ctan.org/pkg/enumitem
+%% \usepackage{verbatim}
+
+
+%% \voffset=-10mm
+%% \oddsidemargin=0pt
+%% \evensidemargin=0pt
+%% \topmargin=-10mm
+%% \headsep=18pt
+%% \headheight=18pt
+%% \footskip=30pt
+%% \topskip=0mm
+%% \textwidth 167mm
+%% \textheight=230mm
+%% \parindent=0em
+%% \marginparsep=0mm
+%% \marginparwidth=0mm
+%% \vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+%% \hfuzz6pt % Don't report over-full h-boxes if over-edge is small
+
+%% % \newtheorem{conjecture}[theorem]{Conjecture}
+%% \newtheorem{definicion}{Definición}
+%% % \newtheorem{theorem}{Theorem}%[section]
+%% % \newtheorem{lemma}[theorem]{Lemma}
+%% % \newtheorem{corollary}[theorem]{Corollary}
+%% % \newtheorem{conjecture}[theorem]{Conjecture}
+%% % \theoremstyle{definition}
+%% % \newtheorem{definition}[theorem]{Definition}
+%% % \newtheorem{example}[theorem]{Example}
+%% % \newtheorem{xca}[theorem]{Exercise}
+%% % \theoremstyle{remark}
+%% % \newtheorem{remark}[theorem]{Remark}
+%% % \numberwithin{equation}{section}
+
+%% % \def\phi{\varphi}
+%% % \def\epsilon{\varepsilon}
+%% \def\RE{\mbox{\rm Re}\,}
+%% \def\IM{\mbox{\rm Im}\,}
+%% % \def\AZ{|z|}
+%% \newcommand{\rectangle}{\fboxsep0pt\fbox{\rule{0.3em}{0pt}\rule{0pt}{1.5ex}}}
+
+%% %-------------------------mathcal
+
+%% \def\A{{\mathcal A }}
+%% \def\CC{{\mathcal C }}
+%% \def\CH{{\mathcal H }}
+%% \def\CK{{\mathcal K }}
+%% \def\CM{{\mathcal M }}
+%% \def\CP{{\mathcal P }}
+%% \def\CS{{\mathcal S }}
+%% \def\CR{{\mathcal R}}
+%% \def\CRu{{\mathcal R}^{\rm u}}
+%% \def\CT{{\mathcal T}}
+%% \def\CTT{\widetilde{{\mathcal T}}}
+%% \def\CW{{\mathcal W}}
+%% \def\Li{{\mbox{\rm Li}}}
+%% \def\WO{{\mathcal W}_{\Omega }}
+
+%% %-------------------------------Bbb
+%% \def\K{{\mathbb K }}
+%% \def\C{{\mathbb C }}
+%% \def\N{{\mathbb N }}
+%% \def\NO{{\mathbb{N}_0 }}
+%% \def\Z{{\mathbb Z }}
+%% \def\R{{\mathbb R }}
+%% \def\U{{\mathbb U }}
+%% \def\D{{\mathbb D }}
+%% %----------------------------Zusammengesetztes
+
+%% \def\DB{\overline{\D}}
+%% \def\Db#1{\overline{\D_{#1}}}
+%% \def\DBR{\overline{\D_\rho}}
+%% \def\DV{de la Vall\'ee Poussin }
+%% \def\d#1{\D_{#1}}
+%% \def\H{{\mathcal H}(\D)}
+%% \def\Hb{{\mathcal H}(\DB)}
+%% \def\HO{{\mathcal H}_0(\D )}
+%% \def\Hoo#1{{\mathcal H}(\overline{\D_{#1}})}
+%% \def\HB#1{{\mathcal H}(\D_{#1})}
+%% \def\Ho#1{{\mathcal H}({#1})}
+%% \def\Hyp{{}_2F_1}
+
+%% \def\achtung#1{\alert{#1}}
+%% \def\blue#1{{\color{blue} #1}}
+%% \def\green#1{{\color{green} #1}}
+%% \def\red#1{{\color{red} #1}}
+
+%% \def\pick{{\mathscr P}}
+%% \def\logpick{{\text{log}\,{\mathscr P}}}
+%% \def\stammpick{\pick_{\!\!\!\raisebox{-2pt}{\scalebox{0.5}{$\int$}}}}
+%% \def\stammpickpick{\stammpick\cap\pick}
+%% \def\stammpicklogpick{\stammpick\cap\logpick}
+%% \def\expstammpicklogpick{e^{\stammpicklogpick}}
+
+%% %-------------------------Bakan-Ruscheweyh-Salinas 2015
+%% \def\mid{\;:\ }
+%% \def\hol#1{\text{Hol}(#1)}
+%% \def\normhol#1#2{\text{Hol}_{#1}(#2)}
+
+%% \DeclareMathOperator*{\cosig}{cosig}
+%% \DeclareMathOperator*{\supp}{supp}
+
+%% %graficos
+%% %\pgfdeclareimage[width=5cm, height=3cm ]{recursiva}{./Png/recursiva.png}
+%% %\pgfdeclareimage[width=5cm, height=5cm ]{alan}{./Png/Turing.jpeg}
+%% %\pgfdeclareimage[width=5cm, height=5cm ]{programa}{./Png/maquina.png}
+%% %\pgfuseimage{lala}
+
+%% \renewcommand{\restriction}{\mathord{|}}
+
+%% \newcommand\blfootnote[1]{%
+%%   \begingroup
+%%   \renewcommand\thefootnote{}\footnote{#1}%
+%%   \addtocounter{footnote}{-1}%
+%%   \endgroup }
+
+%% \title[Paola's Thesis Comments]{Paola's Thesis Comments}
+
+%% \author[L. Salinas]{Luis Salinas}
+
+%% \address{CCTVal and Departamento de Inform\'atica, UTFSM, Valpara\'\i so;
+%%          \newline
+%%          Mathematisches Institut, Universit\"at W\"urzburg;
+%%          \newline
+%%          \today} % October 06, 2016}
+
+%% \email{luis.salinas@usm.cl}
+
+%% \begin{document}
+
+%% \maketitle%
+
+%% \section{Chapter 3: Machine Learning Models.}
+
+%% \def\myitem#1{ \item[\blue{\bf #1}] }
+
+
+\section{Chapter 3: REMARKS FROM 20161019}
+
+
+\begin{description}[style=unboxed,leftmargin=0cm,itemsep=3ex]
+
+\myitem{P 33, Abstract}
+It seems that some commas are missing:
+"\dots training period when \dots" 
+\quad$\longrightarrow$\quad
+"\dots training period, when\dots" \\
+"\dots forecasting where\dots"
+\quad$\longrightarrow$\quad
+"\dots forecasting, where\dots" \\
+But the whole sentence "Usually machines \dots period of time"
+does not make too much sense to me. Please review.
+
+\myitem{P 33, L -4}
+Insert \red{for this} in the text:
+"The reason \red{for this} is that ML models are data driven and are
+able to examine large amounts of data."
+
+\myitem{P 34, section 3.2}\mbox{}\\
+\blue{L 3:}\quad
+"In this thesis we will emphasise\red{d} the supervised learning
+problem since it is the most common way of modelling financial problems."\\
+\blue{COMMENT:}\quad
+(a) \red{d} in ``emphasize\red{d}'' is wrong. \\
+(b) That almost everybody uses this approach is not a good reason for you
+to use it as well!
+Think, for instance, of "almost everybody eats junk food; thus I will
+eat junk food as well"!
+I suggest instead the following phrasing: \\
+\green{\em "Supervised learning is most popular and most commonly used
+in modelling financial problems and the assessments of this method and
+their results in praxis are fairly good. Therefore, in this thesis we
+will adhere to this trend and we will use (an improved version of)
+supervised learning."}
+
+\vspace{1ex}\blue{L 5:}\quad
+"\dots consists in to find\dots"
+\quad$\longrightarrow$\quad
+"\dots consists in finding\dots"\quad (?)  CHECK!
+
+\vspace{1ex}\blue{L 6:}
+"\dots set of examples called training set S which have\dots"
+\quad$\longrightarrow$\quad
+"\dots set of examples, called training set S, which have\dots"
+
+\vspace{1ex}\blue{First formula:}\quad
+There are two "S": a slanted one and a calligraphic one; 
+slanted-S belongs (in set theory sense) to calligraphic-S; 
+slanted S is defined, but what is calligraphic-S?
+
+\vspace{1ex}\blue{First formula notation: }\quad
+Written "$\forall\ i=1...n$"; but it seems to me that the standard
+form (in this format) is "$\forall\ i=1..n$" (two points only) CHECK!
+
+\vspace{1ex}\blue{GENERAL:}\quad Put new names with 
+\verb!\em (\emphasized)!.
+Example: {\em hypothesis space}; 
+What kind of functions are allowed in calligraphic H? 
+Polynomials in several variables? 
+Continuous functions? etc.
+
+\vspace{1ex}\blue{Last sentence:}\quad 
+"\dots $V(f(x),y)$ which expected risk has to be minimised."
+\quad$\longrightarrow$\quad
+"\dots $V(f(x),y)$, THE expected risk, WHICH has to be minimised." CHECK!
+
+\vspace{1ex}
+\red{I sent you some of these last remarks in a mail from August 14.
+I will repeat them in this LaTeX file.
+These last remarks are discussed in a more expanded form below,
+because there are more serious mathematical problems here. 
+There are repetitions among the remarks.}
+
+\myitem{P 34, LL -16 to -1 (section 3.2)}
+``A learning algorithm $\mathcal{A}$ takes as input a data set
+$S\in\mathcal{S}$ and output a function $f_S$:''
+
+It should say ``...and output\red{s} a function...''
+
+\red{HOWEVER, there are more serious problems here and in the
+following paragraphs.}
+
+It is really a bad idea to work with a set $S$ and something
+called $\mathcal{S}$, which seems to be a class of sets like $S$.
+
+To clearly distinguish them, let us call $S$ the \red{set $S$} and
+$\mathcal{S}$, \red{the class $\mathcal{S}$ of sets $S$} or simply
+\red{the class $\mathcal{S}$} for short.
+
+You see, the set $S$ and the class $\mathcal{S}$, as fonts, are almost
+indistinguishable.
+It seems that the set $S$ is a subset of $X\times Y$ and the class
+$\mathcal{S}$ would be the subset of the power set of $X\times Y$
+containing all training sets $S$.
+
+To avoid confusions I suggest to use \verb!\mathscr! fonts and
+call $\mathscr{T}$ your set $\mathcal{S}$.
+The $\mathscr{T}$ stands for "training".
+
+Achtung!: \verb!\mathscr! needs \verb!\usepackage{mathrsfs}!
+
+However, is it really necessary to use $\mathcal{S}$ or $\mathscr{T}$?
+
+Have all sets $S$ in $\mathscr{T}$ the same cardinality?
+
+If not, I think one can safely use the power set $\mathscr{P}(X\times Y)$
+as the set $\mathscr{T}$ and forget $\mathscr{T}$.
+
+But you have to judge whether this would be appropriate or not.
+
+If your $\mathcal{S}$ ( = my $\mathscr{T}$ ) is really a subset of the
+power set of $X\times Y$, then I would suggest to define the set $S$
+simply as
+$$
+S = \{ (x_i,y_i)\in X\times Y : k=1,...,n \}
+$$
+The more serious problem is related to the functions $f_S$.
+
+What is a \red{``learning function''} $f$?
+
+What are the domain and codomain of these functions?
+If your answer is ``$f:X\to Y$'', where $X\subseteq\R^m$ and $Y=\R$ or
+$Y=\{1,-1\}$, then the problems is transferred to the ``loss function''
+$V(f(x),y)$ because then both arguments of $V(\cdot,\cdot)$ lie in $Y=\R$.
+How do you define then the function $V$?
+Suppose that $Y=\R$ as allowed above.
+Then it seems that the loss function $V$ is defined on
+$X\times Y=\R^m\times\R$, i.e. $V:\R^m\times\R\to\R$ assuming that the
+codomain of $V$ is $\R$ (you must declare what the codomain of $V$ is).
+But then, when you write $V(f(x),y)$, then $f(x)$ is in $Y=\R$ and
+hence $V:\R\times\R\to\R$.
+Thus, what is true: $V:\R^m\times\R\to\R$ or $V:\R\times\R\to\R$?
+
+How is the functions $f_S$ related to the sets $S$?
+
+
+\myitem{P 34, PARAGRAPH STARTING AT L -6}
+Something is wrong with this definition. 
+It seems that a learning algorithm $\mathcal{A}$ assigns an object
+$\mathcal{A}(S)$ to each set $S\in\mathscr{T}$.
+          
+What is exactly this object $\mathcal{A}(S)$? 
+
+You say that the object $\mathcal{A}(S)$ is an element of a so called
+"hypothesis space" $\mathcal{H}$.
+But what is this "hypothesis space"?
+You do not really describe the members of this "hypothesis space"
+$\mathcal{H}$.
+You just say that the members of $\mathcal{H}$ are functions.
+But what kind of functions? Domain? Range? What do they do these
+functions?
+
+And furthermore you say that the algorithm $\mathcal{A}$ \red{searches}
+these functions in $\mathcal{H}$.
+How is this search exactly performed?
+
+The whole PARAGRAPH is rather unintelligible.
+Before proceeding any further, a CONCRETE EXAMPLE is needed. 
+We must come back to this definition after we discuss your example.
+
+In the last 2 lines of this paragraph and in the first 2 lines of page
+35 you write:
+
+"The selection of $f_S$ is based on a loss function $V(f(x),y)$
+\red{WHICH} expected risk has to be minimised."
+Instead of \red{WHICH} you should use \blue{WHOSE}, I guess.
+Then comes this formula:
+$$
+E[V(f(x),y)] = \int V(f(x),y)\;dp(x,y)
+$$
+"$V(f(x),y)$ denote the price paid for mistakes. Therefore,
+$V(f(x),y) = 0$ if $f(x) = y$."
+
+There are many comments in order here:\\[1ex]
+
+1. By integrals always put a small space \verb!"\,"! or \verb!"\;"!
+between integrand and differential ($dp(x,y)$ here ).\\[1ex]
+
+2. What is the domain of integration for the integral?
+Judging by the differential, it seems that this domain is $X\times Y$
+and hence the function $f$ is a function from $X$ into (onto?) $Y$.\\[1ex]
+
+3. Then another function appears: $V(f(x),y)$, so that $V$ should be
+defined on $Y\times Y$. Is this true? \\[1ex]
+
+4. Whenever you define functions you must first clearly define its
+domain and its range (codomain).
+The same applies to algorithms.
+If there is not yet a concrete pseudo-code description of an algorithm,
+it is necessary at least to say something about the class of algorithms
+that you are going to consider, and what should your algorithms do.
+An algoritmh is just a kind of function, which operate on a set or
+space of some objects and produce an output, which a subset (consisting
+may be of only one member or none at all!) of objects taken fron some
+other set or space. \\[1ex]
+
+5. It is important to define the units that will be used to measure
+the different variables appearing in your proble.
+But this might be optative. For instance it seems that the value
+$V(f(x),y)$ is measured in USD or EUR. \\[1ex]
+
+6. Your formula has a major problem in the following sense: both sides
+depend on $x$ and $y$, but on the right hand side they are integration
+variables (i.e., running presumably on the whole of $X\times Y$) and
+on the left hand side they seem to denote that the variable representing
+the first argument of $V$ is $x$ running on $X$, and the variable
+representing the second argument of $V$ is $y$ running on $Y$.
+This is cumbersome.
+I suggest:
+$$
+E[V(f(\cdot),\cdot)] = \int_{X\times Y} V(f(x),y)\;dp(x,y)\,,
+$$
+but this must be critically reviewed.
+
+Recall that some lines above you wrote $X=\R^m$, i.e. dimension $m$,
+and $Y=\R$, i.e. dimension $1$.
+Note that in this case $f:X\to Y$ means $f:\R^m\to\R$.
+If you write $V(f(x),y)$, then we are in troubles because the first
+argument of $V$ is now $f(x)$, which is in $\R$.
+Thus, in this case, $V$ should be defined as $V:\R\times\R\to\R$,
+but you wrote before $V:X\times Y\to\R$, i.e., $V:\R^m\times\R\to\R$.
+
+Must then $V(\xi,\eta)$ be defined --for a given $f$-- only on the graph 
+$$
+\{ \big( f(\xi),\eta \big)\mid \xi\in X, \eta\in Y \}\subset\R\times\R
+$$
+and not on the whole of $X\times Y=\R^m\times\R$?
+
+This feeling is re-inforce after looking to equations (3.1) and (3.2).
+But then all would depend on $f$ and I think this is not very rational.
+I would dare to say that that the function $V$ --as well as the differential
+$dp(x,y)$-- is defined (somehow; examples?) on the whole of $X\times Y$:
+$$
+\begin{array}{rccl}
+V: & X\times Y  & \longrightarrow & \R     \\
+   & (\xi,\eta) & \longmapsto     & V(\xi,\eta)
+\end{array}
+\qquad\text{and}\qquad
+\begin{array}{rccl}
+dp: & X\times Y  & \longrightarrow & \R     \\
+    & (\xi,\eta) & \longmapsto     & dp(\xi,\eta)
+\end{array}
+$$
+Under this notation, when $X=\R^m$ and $Y=\R$ there are big problems
+with your equations (3.1) and (3.2):
+$$
+V(\red{\mathbf{x}},y)=(\red{\mathbf{x}}-y)^2 
+\qquad\text{or}\qquad 
+V(\red{\mathbf{x}},y)=|\red{\mathbf{x}}-y|\,,
+\qquad\text{where}\quad\red{\mathbf{x}\in\R^m}\,,\ y\in\R\,.
+$$
+There is no way to assign a sound meaning to these equations.
+
+However, if you now consider a particular function 
+$f:X=\R^m\to Y$, $y=f(x)\in\R$, then these equations \red{can} have a
+sound meaning, namely:
+$$
+V(f(x),y)=(f(x)-y)^2 \qquad\text{or}\qquad V(f(x),y)=|f(x)-y)|
+$$
+because $f(\red{\mathbf{x}})$, for $\red{\mathbf{x}\in\R^m}$,
+and $y$ are now both in $\R$.
+But then $V:\R\times\R\to\R$!
+
+All this is very different from \red{your} equations (3.1), (3.2).
+In these equations (3.1), (3.2) the domain of the function $f$
+would be $X$, but its codomain cannot be $Y$, because if this were the
+case, then $V$ should be defined on $Y\times Y$ which seems to be nonsense
+at this point.
+
+Note that for $X=\R^m$, $Y=\R$ and $f:X=\R^m\longrightarrow Y=\R$
+we have:
+$$
+\begin{array}{rccl}
+V(f(\cdot),\cdot): & \R^m\times\R  & \longrightarrow & \R \\
+   & (x,y) & \longmapsto     & V(f(x),y)
+\end{array}
+\qquad\text{but}\qquad
+\begin{array}{rccl}
+V(\cdot,\cdot): & \R\times\R  & \longrightarrow & \R     \\
+    & (\xi,\eta) & \longmapsto     & V(\xi,\eta)
+\end{array}
+$$
+which is not consistent with your definitions.
+
+Summarizing: you must carefully review this section. In particular,
+you must clarify what is the domain of $V$: $X\times Y$? $Y\times Y$?
+
+
+\myitem{P.35, LL 9-12, Formula (3.3)}
+The same objections as before must be applied here.
+The main problem is with the definition of $V(x,y)$ and $V(f(x),y)$,
+as before.
+We already had $f$ and $f_S$ and now, without any warning, a $\widehat{f}$
+appears.
+How are all these functions (I suppose!) related?
+
+You say ``The objective is to estimate a function $\widehat{f}$ through
+empirical risk (training error) minimisation (ERM).''
+
+To estimate from what set or from where?
+From the class $\mathscr{T}$ of sets $S$?
+This means that in your formula (3.3) you have (at least) to declare
+from where you select the $f$'s and what they are. 
+Discrete functions?
+Are they related to the sets $S$ in $\mathscr{T}$?
+
+Formulas (3.1) and (3.2) would be OK assuming $x\in X=\R^m$ and
+$f:X=\R^m\to\R$.
+But again: what is the relation to the sets $S$?
+In formula (3.3) I suppose that $x$ should be $x_i$ and $y$ should be
+$y_i$. Is this so?
+
+With this interpretation in mind, the right hand side of formula (3.3)
+would be a Riemann sum approximation of the integral in the first line
+of P 35, \red{where $p(x,y)$ is the uniform distribution and hence
+$dp(x,y) \approx 1/n$}.
+Thus, you have:
+$$
+E[V(f(x),y)] \approx R_{\text{emp}}[f]\,.
+$$
+But what is this $R_{\text{emp}}[f]$ conceptually?
+So, this is a well known joint (?) distribution.
+But in the previous page you said that the joint distribution $p(x,y)$
+was \red{unknown}.
+Note that you can arbitrarily change the value of $R_{\text{emp}}[f]$ just
+by arbitrarily changing the unknown joint distribution $p(x,y)$.
+So what is going on here?
+What do you want to estimate and how exactly do you want to do it?
+
+
+\myitem{P 35, several lines}
+
+\blue{L 1:}quad 
+First formula: What is the domain of integration for the integral? 
+Also, separate "$V(f(x),y)$" from "$dp(x, y)$" a little!
+
+\vspace{1ex}
+\blue{L 2:}\quad Separate "V(f(x),y)= 0 if" from "f(x) = y" a little!
+
+\vspace{1ex}
+\blue{L  3:}\quad
+Are you writing "$L2$" for "$L^2$" or "$L_2$"?
+This would be OK if you systematically use "$L2$". Idem for $L1$.
+
+\vspace{1ex}
+\blue{L 15:}\quad
+Complexity of the hypothesis class. 
+What notion of complexity are you using here?
+There are two complexities: one of the learner model, and one of the data.
+An explanation is needed.
+You give a kind of explanation in the case of polynomial regression; 
+is this the one you will be using? 
+Anyway, an explanation is needed.
+
+It says: ``complexity of the learner model $\widehat{f}$ to the
+complexity of the data $f$''
+
+Do you call ``learner model $\widehat{f}$'' the one $f$ you get by
+maximizing (3.3) among nobody knows what?
+
+What is it and how do you compute the ``\red{complexity} of the
+learner model $\widehat{f}$''?
+
+What is the data $f$?
+Has it something to do with the sets $S$?
+
+What is it (definition) and how do you compute the 
+``complexity of the data $f$''?
+
+You say: ``In polynomial regression, the complexity parameter is
+the order of the fitted polynomial''.
+
+Why this is so?
+The word ``complexity'' always suggest how difficult is to perform
+some computation.
+Is this ``difficulty'' related to the something called ``order''
+of a polynomial?
+
+What is the \red{order} of a polynomial?
+Do you mean the \red{degree}?
+
+\vspace{1ex}
+\blue{L -13:}\quad
+"\dots data: generally generalisation accuracy\dots"
+
+Too many "general's" together!
+
+\vspace{1ex}
+\blue{L -11:}\quad
+"Very complex models will\dots"
+\quad$\longrightarrow$\quad
+"a very complex model will..." 
+
+(so that the grammar number of the subject coincides with "it could...".
+
+
+\myitem{P 36, some remarks}
+
+\blue{Figure 3.1.}\quad
+How do you define "Generalization Accuracy"?
+Idem, ``classifier complexity'' and hence "low complexity classifier''?
+\red{How do you measure them?}
+Without these definitions the diagram makes little sense.
+
+\vspace{1ex}
+\blue{Ad (3.4):}\quad
+\red{{\bf NEW (as for 10.10.2016):}\quad
+The presentation here has some problems.
+Formula (3.4) and its proof appears very suddenly.
+How is it connected to the last parapraph 3.2.2. in page 35?
+Why are you interested in dealing with formula (3.4) here? \\[0.6ex]
+More exactly, something like a roadmap is missing here. \\[0.6ex]
+I think somewhere before or in an Appendix you should  define (very well) 
+a minimal set of concepts from Statistics in order to understand the
+various formulas appearing in your work. \\[0.6ex]
+Good modern references should be given for those concepts. \\[0.6ex]
+You use variables like $x$ and $y$ which are usually assumed to be
+continuous variables and hence the base theory would be integration
+theory. \\[0.6ex]
+But it seems to me that in the whole problem you are dealing with,
+samples or discrete values of these variables is what you are using. \\[0.6ex]
+If this is so, I would suggest that you use discrete variables, like
+$x_k$, $y_k$, samples, etc.
+Then you would have simple formulas for defining bias, expected values,
+sigma, etc.
+You should clearly state, for instance:
+\begin{itemize}
+\item
+what are you assuming to be known;
+\item
+what is not known;
+\item
+what quantitities you want to determine;
+\item
+how you intend to determine those quantities;
+\item
+etc.
+\end{itemize}
+}
+
+Is this (3.4) a theorem? a remark?
+It seems a standard formula to me;
+I think there are textbooks discussing this formula.
+But what is $\sigma$ here?
+If it is indeed a formula from the mathematical folklore,
+you could omit the proof and simply put a reference where this proof
+can be found.
+           
+By the way, instead of "Demo" you should write "Proof".
+In the "Demo"-Proof, the ellipsis "\dots" is misleading, since in formulas
+"\dots" is used to show that some terms have been left out, but this not
+the case here \red{since the only term missing in this line is the term
+written in the line immediately below}
+
+\red{Why is it $E[y-f(x)]=0$ here?}
+
+\red{In the second line of the "Demo" appears a "$B$". What is this "$B$"?
+It seems to me, that it should be "$y$".}
+
+
+\myitem{P 37, LL 1-5 (formula).} 
+
+\blue{L 1:}\quad
+"$E[f(x)-\widehat{f}(x))]^2$" has two mistakes:
+
+(1) A parenthesis "(" is missing between "[" and "$f$".
+
+(2) The "${}^2$" should go between ")" and "]", i.e. the "${}^2$" should
+go inside the brackets "$[\dots]$" and not outside.
+
+A general recommendation: use \verb!\widehat! instead of \verb!\hat!;
+\verb!\hat! produces a too tiny wedge.
+
+\blue{L 2:}\quad
+The parenthesis "(" is still missing between "[" and "$f$", and the
+"${}^2$" is still outside the brackets "[...]".
+
+\blue{LL 3-4:}
+Again the problem of the misleading ellipsis "$+\dots$";
+it must be omitted
+
+\red{{\bf GENERAL REMARK:}\quad
+In a scientific paper or in a thesis, you should NOT present ALL
+algebraic details, but just the minimum necessary for the reader
+to understand what is going on.
+Details must always be left to the reader.
+NEVER, but really NEVER, use weird school signs to denote cancelation
+of terms!}
+
+
+\myitem{P 37, L 6.}
+``Bias is introduced by the model selection.'' \\
+How does model selection introduces bias?
+This should be explained.
+
+
+\myitem{P 37, LL 6-17}
+"Therefore the model building process is repeated (through resampling)
+and substantially different averages of prediction values are obtained,
+bias will be high." 
+
+Is this sentence correct?
+It seems to me that a better versiob of this sentence would be:
+
+"Therefore\red{, if} the model building process is repeated (through
+resampling) and substantially different averages of prediction values
+are obtained, \red{then} bias will be high."
+
+Is this your idea? Please discuss!
+
+But I still do not see \red{why this would be so}, i.e., why is it so
+that resampling could produce substantially different averages of
+prediction values.
+When or under what circumstances this occurs?
+You have to prove this implication, or cite some reference where this
+is proved.
+
+\red{You have not yet described the model building process.
+You now should describe it.}
+
+In the next sentences in this paragraph the notion of "model complexity"
+appears again.
+Of course everybody has an intuitive meaning of this concept, but here
+we need a mathematically consistent definition and not only intuitions.
+
+Grammar is again to be reviewed: in the sentence 
+
+\myitem{P 37, L 10}
+"Variance measures how inconsistent are the predictions from one another,
+over different training sets, not whether they are accurate or not."
+
+Inconsistence? Accuracy? Definition and/or references are again needed here.
+ 
+\blue{QUESTION:}\ 
+If this is as claimed, how this would affect the results of your predictions
+in the sequel? 
+What would be the effect on the confidence of your predictions?
+
+The effects on your results could be devastating.
+Thus, how are you planning to avoid these bad effects?
+
+\myitem{P 37, L 17}
+"The best model will be the one has a balance between bias and variance".
+
+Why this is so? 
+Something like "which" or "that" between "the one" and "has a balance".
+
+
+\myitem{P37, Figure 3.2}
+Somewhere near Figure 3.2 (before, after, or in the caption) clear
+definitions of \red{Prediction error} and \red{Model complexity}
+should be given, together with an explanation about how they are
+measured in order to produce the diagram.
+
+Explain the reasons of the behaviour of the red (test sample) and the
+blue (training samples) curves. 
+
+Why the blue one is decreasing? 
+
+Intuitively one can think that the more complex the model (whatever
+this could mean), the more over-fit results and hence less prediction
+error, but precisely this over-fit makes that the generalisation
+capacity of the model will be bad, and hence the error when the model
+is applied to the testing samples will increase (red curve). 
+Is this correct?
+Please discuss, providing the right definitions.
+
+
+\myitem{P 38, L 2}
+``\dots in order to obtain as accurate model as is feasible \dots''\\
+$\rightarrow$
+``\dots in order to obtain as \red{an} accurate model as is feasible \dots''
+You must discuss before (somewhere) the concepts of \red{accuracy} and
+\red{feasibility} you are using.
+
+\myitem{P 38, L 4} 
+"truth target" Is it correct? Or is it "true target"?
+Two times in this line.
+
+\myitem{GENERAL REMARK}
+Pay attention to USA and UK English dialects!
+
+Generalization $\quad\longleftrightarrow\quad$ Generalisation
+
+Optimization  $\quad\longleftrightarrow\quad$ Optimisation
+
+Are "penalisation", "regularisation", etc., English words? Etc.
+
+\myitem{P 38, L 5} 
+``\dots is the reason why in order to obtain the best model, data\dots'' \\
+$\rightarrow$
+``\dots is the reason why, in order to obtain the best model, data\dots'' \\
+Note the comma between ``why'' and ``in''.
+
+\myitem{P 38, L 6} 
+``Training set is used to determine the model, validation set is used 
+to estimate the generalisation error and finally testing set is used
+to estimate the accuracy of the model.'' \\
+$\rightarrow$
+``\red{The} training set is used to \red{construct} the model, 
+\red{the} validation set to estimate the generalisation error and finally
+\red{the} testing set to estimate the accuracy of the model.'' \\
+\red{Note that the suggested sentence has only one ``is used to''.
+We are using here the \blue{ellipsis} feauture of indoeuropean languages.}
+
+Where did you rigorously define \red{generalisation error} and
+\red{model accuracy}?
+
+\myitem{P 38, L 10} 
+``\dots procedure [Gei75], \red{usually used} when\dots''
+Too many \red{``use''} of \red{``uses''}!
+
+\myitem{P 38, L 12}
+``In K-fold cross-validation''\quad References? This is most important
+because there should be an statistical theory as a basis for this
+procedure.
+
+Must the $K$ subsets of data be disjoint?
+
+\myitem{P 38, LL -4, -3; and P 39, LL 1,2}
+This must be expanded.
+You now talk about an optimisation function.
+Which is the optimisation function?
+How is it related to the ``complexity of the model'' (whatever it might be)?
+How is the generalisation error included in this optimisation function?
+Linearly?
+What are the ``high complex models''?
+
+\myitem{PP 38/39, paragraph stating on L -2, and finishing on L 2}
+Did you discussed already what ``ill/well-posed problems'' are?
+Did you include Jean Jacques Hadamard as the source of these concepts?
+References for this circle of ideas?
+How do you prove that ERM is an ill-posed problem?
+Where is this proof?
+
+What is a \red{regularisation} here?
+This concept is usually represented by a functional over a class of
+functions.
+The functional have many different forms and some additional terms
+are introduced as penalisations.
+These additional terms are usually additive, like Lagrange multipliers.
+But not always.
+
+\red{How does it looks like the Tikhonov regularisation? References?}
+
+\red{Why and how does exactly the Tikhonov regularisation prevents
+overfitting?}
+
+You should present clearly your function class (which seems to be your
+$\mathcal H$ space), your optimisation functional, your penalisation
+terms, your regularisation parameters, etc.
+Of course, references are necessary.
+
+\red{Achtung!}
+In L -2 you write ``Regulari\red{z}ation'' but in L -1 you you write 
+``Regulari\red{s}ation''.
+
+\myitem{P 39, LL 3-6}
+It says: ``Tikhonov regularisation minimised over the hypothesis space
+$\mathcal H$ for a fixed positive parameter $\lambda$ the following:''
+
+The sentence is too cumbersome and has mistakes (``minimise'' should be
+``minimises'').
+I suggest:
+
+``Tikhonov regularisation considers a functional of the form
+$$
+( FORMULA (3.5) ) \rule{3cm}{0pt} R_{\text{emp}}[f] 
+= \frac{1}{n} \sum_{i=1}^n V(f(x),y) + \lambda \mathcal{R}(f)
+$$
+where $\lambda$ is a real parameter and $\mathcal{R}(f)$ is the
+regulariser, which is a penalisation on $f$.
+The goal is to minimise the functional $R_{\text{emp}}[f]$ over the
+hypothesis space $\mathcal H$ for a fixed positive parameter $\lambda$.''
+
+There are many things unclear here:
+
+\begin{enumerate}
+\item
+In formula (3.5) the variables $x,y$ on the right hand side have no
+subindex. I assume they are $x_i,y_i$. Is this correct?
+\item
+Where do they run $x,y$, resp $x_i,y_i$?
+\item
+The same objection discussed in a previous item applies here:
+What is known? What is unknown? etc.
+\item
+Is $V$ known? Is it one of those $L^p$-norms? If yes, which one in
+your specific case?
+\item
+What form has your penalisation $\mathcal{R}$?
+\item
+See the problems related to $V(f(x),y)$ discussed above.
+\item
+What exactly is the space of the $f$ functions?
+$\mathcal{H}$?
+How will you represent your functions $f$?
+\item
+How exactly do you plan to perfom the minimisation?
+At least a pseudocode of your minimisation algorithm would be necesary
+at this point.
+\end{enumerate}
+
+\myitem{P 39, L 9}
+``...to solve a regression problem.'' \\
+\quad$\rightarrow$\quad
+``...to solve a \red{linear} regression problem. 
+In this case $f(x)$ has the form $f(x_t)=X^T.\,x_t$, where $X^T$ is an
+appropriate matrix and $x_t\in X=\R^m$.''
+Is it correct that $X=\R^m$ for some $m\in\N$?
+
+\myitem{P 39, equation in lines 11 - 13}
+What are $\mathbf{A}$, $\mathbf{X}$, $\mathbf{x}_t$, $\mathbf{Y}$\,?
+
+What is the relationship between $\mathbf{A}$ and $\mathbf{X}^T$?
+
+What is the relationship between $\mathbf{x}_t$ and $\mathbf{X}^T$?
+
+A random reader of your thesis could think that:
+$$
+\mathbf{X} 
+= \begin{bmatrix} x_1 \\ \vdots \\ x_t \\ \vdots \\ x_N \end{bmatrix}\,,
+\qquad
+\mathbf{Y} 
+= \begin{bmatrix} y_1 \\ \vdots \\ y_t \\ \vdots \\ y_N \end{bmatrix}\,.
+$$
+But these are vectors of dimension $N$.
+In equation (3.6) you say that $\mathbf{X}$ and $\mathbf{Y}$ are matrices
+of dimensiosn $n\times l$ and $m\times l$, respectively.
+
+But then, what could $\mathbf{X}^T$ be?
+Is it a matrix built from sequentially shifted copies of the 
+{\em row vector\/} $\mathbf{X}^T$?
+If yes, you must explain this.
+
+In seems that the equation, as it is, makes no sense!
+Clear definitions are needed.
+
+I suggest you review and present this equation using elementary matrix
+notation. This would make the incoherences evident.
+
+
+\myitem{From P 39, L -7, until P 40, L 3}
+You put this paragraph as someting called ``Demo''.
+What is it? A proof? A proof of what? 
+What is your claim before starting with ``Demo''?
+
+Then you say ``to solve equation (3.8)''.
+But (3.8) is just the definition of More-Penrose!
+
+Are you trying to solve (3.6)?
+If this is true, what is known and what is not known?
+
+You should prove the equivalence you claim.
+At least write $\mathbf{C}_\lambda$ to make explicit the dependence of
+$\mathbf{C}$ from the parameter $\lambda$.
+
+I think you shoud better write something like:
+$$
+(3.9)\rule{50mm}{0pt} \min_{\mathbf X \in \text{???}}
+\|\mathbf{C}_\lambda\,\mathbf{X}-\mathbf{F}\|
+$$
+You should make clear in which space $\mathbf{X}$ is running for the
+optimisation.
+
+The outcome of this minimisation problem depends on $\lambda$, but
+equation (3.6) does not depend on $\lambda$.
+
+Thus, why is (3.6) equivalent to the minimization problem (3.9)?
+A proof is needed.
+
+Which value of $\lambda$ will you consider for a solution of (3.6) and why?
+
+What is $\mathbf{A}$ and what is the rationale for introducing $\mathbf{C}$
+and $\mathbf{F}$.
+
+The equation for $\mathbf{X}(\lambda)$ in LL 1, 2 in P 40, seems to be a
+More-Penrose solution of $\mathbf{C}_\lambda\,\mathbf{X}=\mathbf{F}$.
+But why this solution coincides with the solution --if it exists-- of the
+minimisation problem?
+
+By the way, is it sure that the minimisation Problem has a solution?
+Is it unique? etc.
+
+\end{description}
+
+Reviewing work in progress/DATE: 19.10.2016
+
+%% \end{document}

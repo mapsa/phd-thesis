@@ -1,0 +1,176 @@
+% 20170814_Vina del Mar_Paolas Thesis Reviewing.tex
+
+\documentclass[10pt,reqno]{amsart}
+\usepackage{amsfonts,amssymb,amsmath,amsthm,mathrsfs,
+            amsopn,amsxtra,amstext,amsbsy}
+\usepackage{epsfig}
+\usepackage{array}
+\usepackage{url}
+\usepackage{tikz}
+%% \usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{hyperref,wasysym}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{enumerate}
+\usepackage{enumitem}% http://ctan.org/pkg/enumitem
+\usepackage{verbatim}
+%% \usepackage[strings]{underscore}
+
+\voffset=-10mm
+\oddsidemargin=0pt
+\evensidemargin=0pt
+\topmargin=-10mm
+\headsep=18pt
+\headheight=18pt
+\footskip=30pt
+\topskip=0mm
+\textwidth 167mm
+\textheight=230mm
+\parindent=0em
+\marginparsep=0mm
+\marginparwidth=0mm
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+\hfuzz6pt % Don't report over-full h-boxes if over-edge is small
+
+
+% \newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definicion}{Definición}
+\newtheorem{theorem}{Theorem}%[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{conjecture}[theorem]{Conjecture}
+% \theoremstyle{definition}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{example}[theorem]{Example}
+% \newtheorem{xca}[theorem]{Exercise}
+% \theoremstyle{remark}
+% \newtheorem{remark}[theorem]{Remark}
+% \numberwithin{equation}{section}
+
+% \def\phi{\varphi}
+% \def\epsilon{\varepsilon}
+\def\RE{\mbox{\rm Re}\,}
+\def\IM{\mbox{\rm Im}\,}
+% \def\AZ{|z|}
+\newcommand{\rectangle}{\fboxsep0pt\fbox{\rule{0.3em}{0pt}\rule{0pt}{1.5ex}}}
+
+%-------------------------mathcal
+
+\def\A{{\mathcal A }}
+\def\CC{{\mathcal C }}
+\def\CH{{\mathcal H }}
+\def\CK{{\mathcal K }}
+\def\CM{{\mathcal M }}
+\def\CP{{\mathcal P }}
+\def\CS{{\mathcal S }}
+\def\CR{{\mathcal R}}
+\def\CRu{{\mathcal R}^{\rm u}}
+\def\CT{{\mathcal T}}
+\def\CTT{\widetilde{{\mathcal T}}}
+\def\CW{{\mathcal W}}
+\def\Li{{\mbox{\rm Li}}}
+\def\WO{{\mathcal W}_{\Omega }}
+
+%-------------------------------Bbb
+\def\K{{\mathbb K }}
+\def\C{{\mathbb C }}
+\def\N{{\mathbb N }}
+\def\NO{{\mathbb{N}_0 }}
+\def\Z{{\mathbb Z }}
+\def\R{{\mathbb R }}
+\def\U{{\mathbb U }}
+\def\D{{\mathbb D }}
+%----------------------------Zusammengesetztes
+
+\def\DB{\overline{\D}}
+\def\Db#1{\overline{\D_{#1}}}
+\def\DBR{\overline{\D_\rho}}
+\def\DV{de la Vall\'ee Poussin }
+\def\d#1{\D_{#1}}
+\def\H{{\mathcal H}(\D)}
+\def\Hb{{\mathcal H}(\DB)}
+\def\HO{{\mathcal H}_0(\D )}
+\def\Hoo#1{{\mathcal H}(\overline{\D_{#1}})}
+\def\HB#1{{\mathcal H}(\D_{#1})}
+\def\Ho#1{{\mathcal H}({#1})}
+\def\Hyp{{}_2F_1}
+
+\def\achtung#1{\alert{#1}}
+\def\blue#1{{\color{blue} #1}}
+\def\green#1{{\color{green} #1}}
+\def\red#1{{\color{red} #1}}
+
+\def\pick{{\mathscr P}}
+\def\logpick{{\text{log}\,{\mathscr P}}}
+\def\stammpick{\pick_{\!\!\!\raisebox{-2pt}{\scalebox{0.5}{$\int$}}}}
+\def\stammpickpick{\stammpick\cap\pick}
+\def\stammpicklogpick{\stammpick\cap\logpick}
+\def\expstammpicklogpick{e^{\stammpicklogpick}}
+
+%-------------------------Bakan-Ruscheweyh-Salinas 2015
+\def\mid{\;:\ }
+\def\hol#1{\text{Hol}(#1)}
+\def\normhol#1#2{\text{Hol}_{#1}(#2)}
+
+\DeclareMathOperator*{\cosig}{cosig}
+\DeclareMathOperator*{\supp}{supp}
+
+%graficos
+%\pgfdeclareimage[width=5cm, height=3cm ]{recursiva}{./Png/recursiva.png}
+%\pgfdeclareimage[width=5cm, height=5cm ]{alan}{./Png/Turing.jpeg}
+%\pgfdeclareimage[width=5cm, height=5cm ]{programa}{./Png/maquina.png}
+%\pgfuseimage{lala}
+
+\renewcommand{\restriction}{\mathord{|}}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup }
+
+\title[Paola's Thesis Comments]{Paola's Thesis Comments}
+
+\author[L. Salinas]{Luis Salinas}
+
+\address{CCTVal and Departamento de Inform\'atica, UTFSM, Valpara\'\i so;
+         %% \newline
+         %% Mathematisches Institut, Universit\"at W\"urzburg;
+         \newline
+         \today} % October 06, 2016}
+
+\email{luis.salinas@usm.cl}
+
+\begin{document}
+
+\maketitle%
+
+\def\myitem#1{ \item[\blue{\bf #1}] }
+
+\input{20161019_Paola_Chapter_3_Part_A}
+
+\input{20161031_Paola_Chapter_3_Part_B}
+
+\newpage
+\input{20170814_Paola_Chapter_3_again}
+
+
+\begin{thebibliography}{99}
+\bibitem{Arce-2016}
+Paola Arce, 
+{\em Online Learning Method for Financial Time Series Forecasting\/}.
+Dissertation, UTFSM, \red{June 2016}.
+
+\bibitem{Arce-2017-AUG}
+Paola Arce, 
+{\em Online Learning Method for Financial Time Series Forecasting\/}.
+Dissertation, UTFSM, \red{August 2017}.
+
+\end{thebibliography}
+
+
+
+\end{document}

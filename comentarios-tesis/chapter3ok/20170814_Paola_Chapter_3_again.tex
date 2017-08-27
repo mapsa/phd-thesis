@@ -1,0 +1,668 @@
+%% 20170814_Paola_Chapter_3_again.tex
+
+\red{\section{\Large AUGUST 14, 2017 -- Chapter 3 once again!}}
+
+
+\begin{description}[style=unboxed,leftmargin=0cm,itemsep=3ex]
+
+\myitem{P 36, section 3.2, L 6}
+It says:\quad ``...in finding a learning function $f:X\to Y$
+which models... etc.''
+It is not said here what are $X$ and $Y$; 
+further on it is said. 
+This is not usual in a scientific text.
+Thus, I would suggest a text like this:  
+
+\red{``...in finding a learning function $f:X\to Y$, where $X\subseteq\R^m$
+and $Y\subset\R$, which models a set of examples $S\subseteq X\times Y$,
+called {\em training sets}, which have been drawn randomly and
+independently from $X\times Y$ according to \blue{an} unknown joint
+distribution function $p(x,y)$ on $X\times Y$:
+$$
+S=\big\{ (\mathbf{x}_k,y_k)\in X\times Y \mid k=1,\dots,n \big\}
+$$
+Here, $Y=\R$ in case of regression problems and $Y=\{-1,1\}$ if it is
+a classification problem.''}
+
+\blue{However, below there is a deeper discussion of these facts and
+I propose you a more comprehensive composition.}
+
+
+%% \myitem{P 36, section 3.2, L -4}
+%% The expression $S\in\mathscr{T}=\mathscr{P}(X\times Y)$ seems
+%% unnecessarily complicated.
+
+%% Isn't it the same (and much simpler) to say that the training sets
+%% fulfill $S\subseteq X\times Y$ ?
+
+%% The introduction of $\mathscr{T}$ suggests that you want to have the
+%% possibility of choosing \red{several} training sets $S$ taken from
+%% $\mathscr{T}=\mathscr{P}(X\times Y)$, but this is unnecessary since
+%% if you indeed had several training sets, say, $S_\alpha,\;S_\beta,\;\dots$, 
+%% you coud always consider a super-training set
+%% $S=S_\alpha \cup S_\beta \cup \dots$ and you would achieve the same generality.
+
+%% Thus in the sequel I shall abandone the set $\mathscr{T}$ and shall assume
+%% that we have just \red{ONE} training set $S$ and that this is a \red{subset}
+%% of $X\times Y$: $S\subseteq X\times Y$.
+
+\myitem{P 36, section 3.2, L -3}
+Suddenly the symbol \red{$\mathscr{H}$} appears on the stage!
+But it is not defined before or in the same line!
+Only after the formula for $\mathcal{A}$ there is a hint about
+$\mathscr{H}$.
+This writing style is highly non-standard in math!
+
+\myitem{P 36-37, section 3.2. Some remarks trying to make sense of all these!}
+
+\mbox{}\newline
+After reading your definitions several times, it seems to me that:
+
+\begin{enumerate}
+
+\item
+Which are the references for the many definitions in these pages ?
+
+\item
+The most basic data sets you have are $X\subseteq\R^m$ and $Y\subseteq\R$.
+You distinguish two cases: $Y=\R$, the case of regression problems;
+and $Y=\{-1,1\}$, the case of classification problems.
+
+\item
+Then you have a training set $S\subseteq X\times Y$ of the form:
+$$
+S=\big\{ (\mathbf{x}_k,y_k)\in X\times Y \mid k=1,\dots,n \big\}\,,
+$$
+where the members of $S$ have been drawn randomly and independently
+according to a unknown joint distribution function
+$p(\mathbf{x},y)$ on $X\times Y$.
+
+\item
+The problem is to find a function $f:X\to Y$ such that:
+\begin{itemize}
+\item
+it \red{models} the training set $S$ in the sense that
+$f(\mathbf{x}_k)=y_k$ for all $k=1,\dots,n$; \\
+\red{Is this true? If not, then in what sense $f$ models $S$ ?}
+
+\item
+it has a \red{predictive capacity} in the sense that $f(\mathbf{x})=y$
+for a newly arrived data $(\mathbf{x},y)\in X\times Y\setminus S$.
+\end{itemize}
+These conditions seem to be too restrictive.
+We can weaken them a little by accepting that the function $f:X\to Y$ should:
+\begin{itemize}
+\item
+just \red{closely models} the training set $S$ in the sense that
+$f(\mathbf{x}_k)\approx y_k$ with an error $|f(x_k)-y_k|<\varepsilon$ for
+a given $\varepsilon>0$ and all $k=1,\dots,n$; \\
+\red{Is this true? If not, then in what sense $f$ models $S$ ?}
+\item
+have an \red{approximate predictive capacity} in the sense that
+$f(\mathbf{x})\approx y$ with error $|f(\mathbf{x})-y|<\varepsilon$
+for a newly arrived data $(\mathbf{x},y)\in X\times Y\setminus S$.
+\end{itemize}
+\item 
+This function $f:X\to Y$ should be searched after (and hopefully found)
+among a set of functions $\mathscr{H}$ from $X$ to $Y$.
+
+The set of functions $\mathscr{H}$ is called \red{hypothesis space}.
+
+Technically speaking, $\mathscr{H}$ is a subset of the set $Y^X$
+of \red{all} functions $\varphi:X\to Y$, but this is mathematically too
+technical for our purposes in this work.
+
+For the search process it would be convenient to introduce a topology
+on $\mathscr{H}$, preferrable a norm topology (like an $L^p$-norm for
+instance) and to require topological completeness.
+It would be even better if we would require that $\mathscr{H}$ is Banach
+space, but this would be perhaps too technical for our goals here.
+
+
+\item
+There is also a learning algorithm $\mathcal{A}$ which allows $f$
+to be found in the \red{hypothesis space} $\mathscr{H}$.
+
+We discussed this subject in October last year.
+Please see my remarks from that month.
+
+You now interpret $\mathcal{A}$ as an application (function) from
+$\mathscr{T}\subseteq\mathscr{P}(X\times Y)$ to $\mathscr{H}$, 
+$\mathcal{A}:S\mapsto\mathcal{A}(S)=f$.
+
+\red{Note that you write $\mathscr{T}=\mathscr{P}(X\times Y)$, but
+$\mathscr{T}\subseteq\mathscr{P}(X\times Y)$ gives you more freedom.}
+
+I think there is still a conceptual ``darkness'' associated with 
+``$S\in\mathscr{T}\subseteq\mathscr{P}(X\times Y)$''.
+
+The problem is \red{to find a learning function $f$}, with the
+properties stated above, for some particular (financial) experiment,
+but it is one and only one well defined experiment, for instance,
+the analysis of a vector valued (financial) time series (this would
+be the $\mathbf{x}_k=\left[x_k^1,\dots,x_k^m\right]^T$ for the
+(time-) instants $k=1,\dots,n$, but what would represent the 
+``$y_k\in\R$''?
+But never mind, it will be a real number (possibly $\pm1$) for each $k$.
+
+Now comes the delicate point: for this one and only one experiment
+you have:
+\begin{itemize}
+\item[1.]
+\red{Either} one and only one data set 
+$S\in\mathscr{T}\subseteq\mathscr{P}(X\times Y)$
+and hence your algorithm $\mathcal{A}$ acting on $S$
+produces one and only one learning function $f$, $\mathcal{A}(S)=f$,
+for the whole experiment.
+
+In this case it doesn't make sense (you could, but it doesn't help too
+much!) to consider the algorithm $\mathcal{A}$
+as a mapping $\mathcal{A}:\mathscr{T}\to\mathscr{H}$ since $\mathscr{T}$
+has only one member, namely, $\mathscr{T}=\big\{S\big\}$.
+\item[2.]
+\red{Or} several different data sets
+$S_\alpha,S_\beta,\dots\in\mathscr{T}\subseteq\mathscr{P}(X\times Y)$
+of the same one and only one experiment, and hence your algorithm
+$\mathcal{A}$ acting on $S_\alpha$, $S_\beta$, $\dots$ should produce
+learning functions $\mathcal{A}(S_\alpha)=f_\alpha$, 
+$\mathcal{A}(S_\beta)=f_\beta$, $\dots$
+
+In this case you could have 
+$\mathscr{T}=\big\{ S_\alpha,S_\beta,\dots\big\}$
+and it make sense to consider the algorithm $\mathcal{A}$ as a mapping
+$\mathcal{A}:\mathscr{T}\to\mathscr{H}$:
+$$
+S_\alpha\mapsto \mathcal{A}(S_\alpha)=f_\alpha\in\mathscr{H}\,,\quad
+S_\beta \mapsto \mathcal{A}(S_\beta )=f_\beta \in\mathscr{H}\,,\quad\dots
+$$
+\end{itemize}
+
+
+\item
+\blue{\bf An example of Case 2. as above, to fix the ideas!}
+This would be the case if you consider the data sets 
+$S_\alpha,S_\beta,\dots\in\mathscr{T}\subseteq\mathscr{P}(X\times Y)$
+as \red{segments} or \red{windows} of a time series
+$\big\{(\mathbf{x}_t,y_t)\big\}_{t\in\Z}$ of vectors 
+$(\mathbf{x}_t,y_t)\in\R^m\times\R$, say
+\begin{align*}
+S_\alpha &= \bigg\{ 
+\left( \mathbf{x}_{t_\alpha}, y_{t_\alpha} \right), 
+\left( \mathbf{x}_{t_\alpha+1}, y_{t_\alpha+1} \right), \dots, 
+\left( \mathbf{x}_{t_\alpha+n-1}, y_{t_\alpha+n-1} \right) \bigg\}\,, \\
+S_\beta &= \bigg\{ 
+\left( \mathbf{x}_{t_\beta}, y_{t_\beta} \right), 
+\left( \mathbf{x}_{t_\beta+1}, y_{t_\beta+1} \right),\dots, 
+\left( \mathbf{x}_{t_\beta+n-1}, y_{t_\beta+n-1} \right) \bigg\}\,, \\
+\vdots & \rule{10em}{0ex}\vdots
+\end{align*}
+for $t_\alpha,t_\beta,\dots\in\Z$, which without restriction we can assume
+to be increasing: $t_\alpha<t_\beta<\dots$.
+
+Note that here all data sets $S_\alpha,S_\beta,\dots$ have the same cardinality
+(windows of the same length), namely $n$.
+But this is not obligatory: windows could have different length, but
+computations would then be more cumbersome.
+
+Also note that nothing is said about the convergence of the sequence
+$f_\alpha,f_\beta,\dots$
+In fact this sequence may very well not converge in $\mathscr{H}$.
+The terms of this sequence are functions that model the behaviour of the
+time series within the particular window associated to each data set
+$S_\alpha,S_\beta,\dots$ and what is expected is that the corresponding
+learning functions $f_\alpha,f_\beta,\dots$ have good predictive capacity,
+namely that: 
+\begin{align*}
+\widehat{y}_{t_\beta}
+&:= \mathcal{A}(S_\alpha)(\mathbf{x}_{t_\beta})
+\equiv f_\alpha(\mathbf{x}_{t_\beta}) \approx y_{t_\beta} \quad
+\text{with an error $\big|\widehat{y}_{t_\beta}-y_{t_\beta}\big|<\varepsilon$}\,, \\
+\widehat{y}_{t_\gamma}
+&:= \mathcal{A}(S_\beta)(\mathbf{x}_{t_\gamma})
+\equiv f_\beta(\mathbf{x}_{t_\gamma}) \approx y_{t_\gamma} \quad
+\text{with an error $\big|\widehat{y}_{t_\gamma}-y_{t_\gamma}\big|<\varepsilon$}\,, \\
+\vdots & \rule{10em}{0ex}\vdots
+\end{align*}
+Note that in these equations $f_\alpha$ is evaluated in $\mathbf{x}_{t_\beta}=$
+the $X$-coordinate of the first member of the next ``window'' $S_\beta$.
+
+Similarly, $f_\beta$ is evaluated in $\mathbf{x}_{t_\gamma}=$ the $X$-coordinate
+of the first member of the next ``window'' $S_\gamma$.
+Etc.
+
+Note, however, that each data set in Case 2. is just another version of
+the one and only one data set in Case 1.
+Thus, Case 2. is \red{not} a generalisation of Case 1.
+In fact, Case 2. can be reduced to Case 1. just by taking the union of
+all data sets of Case 2.
+
+\red{\bf Thus, it seems to me that you are considering Case 2.
+I will assume this in the sequel!}
+
+\item\label{referenceFunction}
+Note that there is always an {\em observed\/} or {\em reference function\/}
+$$
+\mathscr{Y}:X\to Y\,,\qquad
+\mathscr{Y}: \mathbf{x}_k \mapsto \mathscr{Y}(\mathbf{x}_k):=y_k\,,
+\quad k=1,\dots,n\,.
+$$
+We will always assume that $\mathscr{Y}\in\mathscr{H}$.
+In fact, $\mathscr{Y}$ is from the very beginning the most natural member
+of $\mathscr{H}$!
+
+Besides this reference function $\mathscr{Y}$ there are the learning
+functions
+$f\in\mathscr{H}$:
+$$
+f:X\to Y\,,\qquad
+f: \mathbf{x}_k \mapsto f(\mathbf{x}_k)=:\widehat{y}_k\,,
+\quad k=1,\dots,n\,.
+$$
+The {\em error function\/} associated to any $f\in\mathscr{H}$
+is defined by:
+$$
+\texttt{Error}_f(\mathbf{x}_k)
+:=|f(\mathbf{x_k})-\mathscr{Y}(\mathbf{x}_k)|=|\widehat{y}_k-y_k|\,,
+\quad k=1,\dots,n\,,
+$$
+where the error function \texttt{Error} should ideally be small, say, 
+$\texttt{Error}(\mathbf{x}_k)<\varepsilon$ for all $k=1,\dots,n$, for
+a given $\varepsilon>0$.
+
+Note that $f,\mathscr{Y}:X\to Y$ but $\texttt{Error}_f:X\to\R_0^+$.
+
+In function-analytic notation we observe that, for $f\in\mathscr{H}$,
+$\texttt{Error}_f$ is a function on $X$:
+$$
+\texttt{Error}_f:X\to\R_0^+\,,\qquad
+\texttt{Error}_f(\mathbf{x}) 
+= |f(\mathbf{x})-\mathscr{Y}(\mathbf{x})| 
+= |\widehat{y} - y| \quad\forall x\in X\,.
+$$
+and since the functions $f$, $\mathscr{Y}$, and hence $\texttt{Error}_f$,
+are defined on the whole of $X$ we can also write for any
+$f\in\mathscr{H}$:
+$$
+\texttt{Error}_f(\mathbf{x})
+= |f(\mathbf{x})-\mathscr{Y}(\mathbf{x})| 
+= |f(\mathbf{x}) - y| = |\widehat{y} - y|\,,\quad \mathbf{x}\in X,\ 
+\text{provided that}\ (\mathbf{x},y)\in S\in\mathscr{T}.
+$$
+
+\item\label{lossFunction}
+For a given $S\in\mathscr{T}$, the algorithm $\mathcal{A}$ selects
+one (and only one) learning function $f\in\mathscr{H}$ by minimising
+the expected error of a {\em loss function\/}:
+$$
+V:Y\times Y\to\R_0^+\,,\qquad V: (y_1,y_2)\mapsto V(y_1,y_2)\,.
+$$
+Note that both arguments of $V$ are points in $Y$.
+The prototype of this loss function in the case $Y=\R$ is the {\em metric\/}
+\begin{equation}\label{BasicLossFunction}
+V(y_1,y_2):=|y_1-y_2|\qquad \forall y_1,y_2\in Y=\R\,. 
+\end{equation} 
+Two simple loss functions for regression problemas derived from
+(\ref{BasicLossFunction}) for $f\in\mathscr{H}$ are:
+$$
+V\big( f(\mathbf{x}),y \big) 
+= |f(\mathbf{x})-y| = |\widehat{y}-y|\,,\quad 
+\mathbf{x}\in X\ \text{and}\ y\in Y\ 
+\text{with}\ (\mathbf{x},y)\in S\in\mathscr{T}\,,
+$$
+which is the so called $L^1$-{\em loss function\/} and:
+$$
+V\big( f(\mathbf{x}),y \big) 
+= \big(f(\mathbf{x})-y\big)^2 = \big( \widehat{y}-y\big)^2\,,\quad 
+\mathbf{x}\in X\ \text{and}\ y\in Y\ 
+\text{with}\ (\mathbf{x},y)\in S\in\mathscr{T}\,,
+$$
+which is the so called {\em square\/} or $L^2$-{\em loss function\/}.
+
+\item
+Note that $V\big( f(\mathbf{x}),y \big)$, $\mathbf{x}\in X$ and $y\in Y$ 
+with $(\mathbf{x},y)\in S\in\mathscr{T}$, is actually a {\em function\/}
+on $X\times Y$:
+$$
+V\big(f(\mathbf{\cdot}),\cdot):X\times Y\to\R_0^+\,,\quad
+\big( \mathbf{x},y \big) \mapsto V\big( f(\mathbf{x}),y \big)\,,\ 
+\text{where}\ (\mathbf{x},y)\in S\in\mathscr{T}\,.
+$$
+Condition ``$(\mathbf{x},y)\in S\in\mathscr{T}$'' is a small nuisance here,
+since the function ``$V\big(f(\mathbf{\cdot}),\cdot)$''  \red{is not defined
+{\em for all\/} $\mathbf{x}\in X$ and {\em all\/} $y\in Y$.}
+But this is inevitable, since the members of the data sets which we are
+dealing with are of the form $(\mathbf{x},y)$.
+It could be even the case that the variable $\mathbf{x}$ does not run on
+the whole of $X$, and this is most surely the case for $y$ regarding $Y$.
+When we come to compute the expected value of the function
+$V\big(f(\mathbf{\cdot}),\cdot)$, we will see an easy solution to
+this ``beauty defect'' by means of a clever probability distribution on
+$X\times Y$ (see (\ref{expectedError}) below ).
+
+There is another function closely related to $V\big(f(\mathbf{\cdot}),\cdot)$
+but different fro that one:
+$$
+V\big(f(\cdot), \mathscr{Y}(\cdot)\big):X\to Y\,,\qquad
+\mathbf{x}\mapsto V\big(f(\mathbf{x}), \mathscr{Y}(\mathbf{x})\big)
+= \big( \widehat{y}, y \big)\,,\qquad f\in\mathscr{H}\,.
+$$
+Note that here we do not need the ``ugly'' condition
+``$(\mathbf{x},y)\in S\in\mathscr{T}$'' because this is built-in in the
+definition of the reference function $\mathscr{Y}:X\to Y$
+(see (\ref{referenceFunction}) above).
+
+\item\label{expectedError}
+Consider a {\em learning function\/} $f\in\mathscr{H}$,
+$f(\mathbf{x})=\widehat{y}$.
+Also consider the {\em reference function\/} $\mathscr{Y}:X\to Y$, 
+$\mathscr{Y}(\mathbf{x})=y$, where $(\mathbf{x},y)\in S\in\mathscr{T}$,
+$S\subseteq X\times Y$.
+
+Note that $S$ may be considered as the {\em graph\/} of $\mathscr{Y}$:
+$$
+\text{Graph}(\mathscr{Y})
+:= \big\{ (\mathbf{x}, y)\in X\times Y \mid \mathscr{Y}(\mathbf{x})=y\big\}
+= S\subseteq X\times Y\quad !
+$$
+There are clearly (many) probability distributions $p$ on $X\times Y$
+such that:
+\begin{equation}\label{probdist}
+p\ \text{assigns probability 0 to all ``events''}\  
+(\mathbf{x},y)\in X\times Y\setminus\text{Graph}(\mathscr{Y})
+= X\times Y\setminus S\,.
+\end{equation}
+Consider, in addition, a given {\em loss function\/} $V:Y\times Y\to\R_0^+$.
+(see (\ref{lossFunction}) above) and a probability distribution $p$ over
+$X\times Y$ with property (\ref{probdist}).
+
+The {\em expected error\/} of $V(f(\cdot),\cdot)$ may then be defined as:
+$$
+E\big[ V( f(\cdot),\cdot) \big]
+= \int_{X\times Y} V\big( f(\mathbf{x},y \big)\,dp(\mathbf{x},y)\,.
+$$
+\color{red}{
+Compare this last formula with your formula (3.3).
+Note that in your formula it doesn't make sense to have the variables
+$\mathbf{x}$ and $y$ on the left-hand-side since this variebles are
+used in the integration on the righ-hand-side, hence they are 
+``destroyed'' by the integration and they are not available any more:
+the whole formul IS NOT a function of $\mathbf{x}$ and $y$.
+
+Also, in these formulas adopt the convention of writing the variable
+$\mathbf{x}$ in {\bf boldface} to recall that this variable is a
+vector in $X=\R^m$.
+
+}
+
+%%%%%%% DRAFT PROPOSAL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{4ex}
+\item
+{\color{blue}
+{\Large\bf A draft proposal.} \\[1ex]
+The basic setting for supervised learning is a {\em data set\/} $X$, 
+and an  {\em outcome set\/} $Y$.
+For our purposes $X$ will be $\R^m$, $m\in\N$, and $Y$ either $\R$
+in the case of regression problems, or $\{-1,1\}$ in the case of
+classification problems.
+In addition we have a plurality of {\em training sets\/}
+$$
+S=\bigg\{ (\mathbf{x}_k,y_k)\in X\times Y \mid k=1,\dots,n \bigg\}
+\subseteq X\times Y\,,
+$$
+where the members of $S$ have been drawn randomly and independently
+from $X\times Y$ according to an {\em unknown\/} joint distribution
+function $p(\mathbf{x},y)$ on $X\times Y$.
+We gather all these training sets in a subset $\mathscr{T}$ of
+$\mathscr{P}(X\times Y)$.
+
+{\em Supervised learning\/} consists then in finding a
+{\em learning function\/} $f:X\to Y$ such that:
+
+%% \begin{itemize}
+%% \item
+%% it \red{models} the training set $S$ in the sense that $f(x_k)=y_k$
+%% for all $k=1,\dots,n$ and
+%% \item
+%% it has a \red{predictive capacity} in the sense that $f(x)=y$ for a
+%% newly arrived data $(x,y)\not\in S$.
+%% \end{itemize}
+%% These conditions seem to be too restrictive.
+%% We can weaken them a little by accepting that the function $f:X\to Y$ should:
+
+\begin{itemize}
+\item
+it closely models the training set $S$ in the sense that
+$f(\mathbf{x}_k)\approx y_k$ with an error
+$|f(\mathbf{x}_k)-y_k|<\varepsilon$ for a given $\varepsilon>0$
+and all $k=1,\dots,n$;
+\red{Is this true? If not, then in what sense $f$ models $S$ ?}
+\item
+it has an approximate predictive capacity in the sense that
+$f(\mathbf{x})\approx y$ with error $|f(\mathbf{x})-y|<\varepsilon$
+for a newly arrived data $(\mathbf{x},y)\in X\times Y\setminus S$.
+\end{itemize}
+The learning function $f:X\to Y$ is to be searched after among a set
+of functions $\mathscr{H}$ from $X$ to $Y$.
+The set of functions $\mathscr{H}$ is called {\em hypothesis space\/}.
+
+%% For the search process it is convenient to consider a vector space
+%% structure and a topology on the hypothesis space $\mathscr{H}$.
+%% A popular topology in the field is the $L^p$-norm topology for some
+%% $p\in\R$ with $1\leq p\leq \infty$.
+%% Topological completeness of $\mathscr{H}$ is convenient as well.
+%% A convenient comprehensive requirement would be that $\mathscr{H}$ be
+%% a Banach space.
+
+In addition, there is a {\em learning algorithm\/} $\mathcal{A}$ that
+associates to every data set one and only one learning function
+$f\in\mathscr{H}$.
+Thus $\mathcal{A}$ can be considered as a function:
+$$
+\mathcal{A}:\mathscr{T}\to\mathscr{H}\,,\qquad
+S\mapsto\mathcal{A}(S)=f\quad\forall S\in\mathscr{T}\,.
+$$ 
+
+PLEASE CONTINUE HERE WITH THE PERTINENT REMARKS WRITTEN ABOVE !
+
+}
+
+\end{enumerate}
+
+\end{description}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\red{\section{\Large AUGUST 19, 2017 -- Chapter 3 once again!}}
+
+\def\bfx{\mathbf{x}}
+
+\begin{description}[style=unboxed,leftmargin=0cm,itemsep=3ex]
+
+\myitem{P 37, L 3}
+It says: ``\dots selection of $f$ is based\dots''.
+It should say: ``\dots selection of $f\in\mathscr{H}$ is based\dots''.
+
+\myitem{P 37, Eqs. (3.1) and (3.2)}
+\mbox{}\newline
+It is NOT advisable to put 2 equation numbers for this only one function!
+
+I guess you now know that the $V$ in (3.1) is wrong.
+
+Moreover, when you write ``$\big(f(\bfx),y\big)\mapsto V\big(f(\bfx),y\big)$''
+in (3.2), you are saying that the {\em domain\/} of your function is
+$f(X)\times Y$ and not $X\times Y$, where $f(X)\subseteq Y$ but it may
+be very well possible that $f(X)\neq Y$ ($f$ could be not {\em onto\/}).
+
+Thus, in $(3.2)$ you are tacitly assuming that the function is defined on
+$f(X)\times Y$, where $f(x)\subseteq Y$.
+
+For equation (3.2) to be correct you should write:
+\begin{equation}\label{20170819:1}
+V:f(X)\times Y\to\R_0^+\,,\qquad
+\big(f(\bfx),y\big)\mapsto V\big(f(\bfx),y\big)\,.
+\end{equation}
+
+Note the difference between \verb|\to|: $\to$\,, 
+and \verb|\mapsto|: $\mapsto$\,.
+
+Note that $\R^+:=\big\{ x\in\R\mid x>0 \big\}$ and
+$\R_0^+:=\big\{ x\in\R\mid x\geq0 \big\}$.
+$V(f(x),y)$ can be 0!
+Hence, instead of $\R^+$ you should write $\R_0^+$.
+
+Here is my suggestion for (3.1), (3.2):
+\begin{equation}\label{20170819:2}
+V(f(\cdot),\cdot):X\times Y\to\R_0^+\,,\qquad
+(\bfx,y)\mapsto V\big(f(\bfx),y\big)
+\end{equation}
+Note that, although the {\em values\/} of the functions (\ref{20170819:1})
+and (\ref{20170819:2}) are the same, namely $V\big(f(\bfx),y\big)$, the
+{\em functions\/} $V$ and $V(f(\cdot),\cdot)$ are {\em very\/} different.
+
+\myitem{P 37, L -6}
+Formula\quad
+$\displaystyle\widehat{f}
+=\underset{f\in\mathscr{H}}{\text{arg min\ }} R_{\text{emp}}[f]$\,.
+
+Don't use \verb|\hat| because the hat is too small: $\hat{f}$ !\quad
+Use \verb|\widehat| instead: $\widehat{f}$.
+
+You are using \verb|\mathcal{H}|: $\mathcal{H}$.
+I like more \verb|\mathscr{H}|: $\mathscr{H}$.
+But this is a matter of taste!
+
+
+\myitem{P 37, formulae (3.3) and (3.6)}
+Formula (3.6) tacitly assumes that the distribution $p$ is actually constant
+although in L. -9 you wrote: 
+``Since the true distribution is {\em unknown\/}...''
+
+There is a contradiction here! Please clarify!
+
+The Riemann sum approximmation of the integral in (3.3) is:
+$$
+\sum_{i=1}^n V\big( f(\bfx_i,y_i \big)\,p(\bfx_i,y_i)\,\frac1n\,,
+$$
+which is different fron your formula (3.6).
+This formula would coincides with your formula (3.6) in the case
+$$
+p(\bfx_i,y_i)=1\quad \text{for all}\ i=1,\dots,n\,.
+$$
+You are tacitly assuming that your data set here is
+$S=\big\{ (\bfx_i,y_i)\mid i=1,\dots,n\big\}\in\mathscr{T}$ and
+that $p(\bfx,y)=0$ for all $(\bfx,y)\in X\times Y\setminus S$.
+Thus everything would be OK for this particular distribution $p$.
+
+\myitem{P 37, formula (3.7)}
+The right hand side of formula (3.7) is wrong:
+it cannot contain variables (like $\bfx\in X$ or $y\in Y$) because these
+would be ``destroyed'' by the operator $E$, producing numerical values.
+This operator $E$ acts on {\em functions\/} like $f$ or $V(f(\cdot),\cdot)$.
+
+This formula should be as follows:
+$$
+\frac1n\,\sum_{i=1}^n V\big( f(\bfx_i,y_i \big)
+\overset{n\to\infty}{\longrightarrow} E\big[ V(f(\cdot),\cdot)\big]\,.
+$$
+
+\myitem{P 38, Complexity \dots of the hypothesis class + Fig. 3.1}
+\mbox{}\newline
+It seems that in the left diagram in Fig. 3.1 the data set is
+$S=\{z_1,z_2,z_3\}$.
+I guess that the possible ``dichotomies'' are the following $3$: 
+$D_1=\big\{ \{z_1\}, \{z_2,z_3\} \big\}$,
+$D_2=\big\{ \{z_2\}, \{z_1,z_3\} \big\}$,
+$D_3=\big\{ \{z_3\}, \{z_1,z_2\} \big\}$.
+There are no other.
+The two components of each one of the 3 dichotomies $D_1, D_2,D_3$ can
+be separated (i.e., shattered) by one line in the {\em plane\/}.
+
+On the right diagram of Fig. 3.1 the data set woul be $S=\{z_1,z_2,z_3,z_4\}$.
+The possible dichotomies are then the following $7$:
+$D_1=\big\{ \{z_1\}, \{z_2,z_3,z_4\} \big\}$,
+$D_2=\big\{ \{z_2\}, \{z_1,z_3,z_4\} \big\}$,
+$D_3=\big\{ \{z_3\}, \{z_1,z_2,z_4\} \big\}$.
+$D_4=\big\{ \{z_4\}, \{z_1,z_2,z_4\} \big\}$.
+$D_5=\big\{ \{z_1,z_2\}, \{z_3,z_4\} \big\}$,
+$D_6=\big\{ \{z_1,z_3\}, \{z_2,z_4\} \big\}$,
+$D_7=\big\{ \{z_1,z_4\}, \{z_2,z_3\} \big\}$,
+If the 4 data $z_1,z_2,z_3,z_4$ are arranged as the vertices of a square
+with sides $z_1z_2$, $z_2z_3$, $z_3z_4$, $z_4z_1$ on a plane, then it is
+impossible to separate the dichothomy
+$D_6=\big\{ \{z_1,z_3\}, \{z_2,z_4\} \big\}$
+by means of a straight line on the plane.
+
+In the left side of Fig. 3.1 you say that you shatter {\em the three vectors\/}
+by {\em lines\/} in a plane.
+You should say that what you separate are the 3 {\em dichotomies\/}.
+Dichotomy is the crucial concept here!
+
+In the right side of Fig. 3.1 yo say that is is impossible to shatter appart
+the 4 vectors by means of a {\em plane\/}.
+This is misleading.
+You should talk of {\em straight lines\/}
+
+Both diagrams, left and right, are planar, 2-dimensional diagrams.
+So you cannot talk about planes on a plane diagram.
+
+The names $z^1$ and $z^2$ of the coordinate axis, are misleading.
+It is better to change them by $x$ and $y$, so that the vectors are
+2-dimensional: $z_k=(x_k,y_k)$,  $k=1,2,3,4$.
+2-dimensional vectors are enough to explain the concept.
+
+Your definition of the VC-dimension is very obscure.
+Compare with the following transcription from Wikipedia
+(\texttt{https://en.wikipedia.org/wiki/VC\_dimension}),
+where the classification model $f$ is a straight line: 
+
+\vspace{2ex}
+\red{{\em
+``$f$ is a straight line as a classification model on points in a
+two-dimensional plane (this is the model used by a perceptron). 
+The line should separate positive data points from negative data points. 
+There exist sets of 3 points that can indeed be shattered using this
+model (any 3 points that are not collinear can be shattered). 
+However, no set of 4 points can be shattered: by Radon's theorem,
+any four points can be partitioned into two subsets with intersecting
+convex hulls, so it is not possible to separate one of these two subsets
+from the other. 
+Thus, the VC-dimension of this particular classifier is 3.''
+}}
+
+\vspace{3ex}
+This is a clear description in order to understand the concept of
+VC-dimension.
+Don't forget the references!
+But, of course, in a PhD thesis (or in a paper) it is NOT vey wise to
+quote Wikipedia.
+You must go to the original sources.
+
+A key point is Radon's theorem in discrete geometry
+($\text{co}(A)$ denotes the convex hull of $A$):
+
+\begin{theorem}[J. Radon]
+Let $S\subset\R^d$ be a subset containing at least $d+2$ elements. 
+Then there exist {\bf disjoint} subsets $A\subset S$ and $B\subset S$
+such that
+$$
+\text{co}(A)\cap\text{co}(B)\neq\emptyset
+$$
+\end{theorem}
+\noindent
+Ref.: B.B. Peterson, {\em ``The Geometry of Radon's Theorem''\/}, The
+American Mathematical Monthly, Vol. 9, No. 9 (Nov., 1972), 949-963.
+
+\vspace{2ex}
+Radon's theorem implies that in $\R^d$ any set of $d+2$ or more points
+(vectors!) has at least one dichotomy which cannot be separated (shattered)
+by any plane in $\R^d$.
+
+Thus the VC-dimension in $\R^d$ cannot be greater than $d+1$.
+
+
+\end{description}
+
+%% END OF FILE
+

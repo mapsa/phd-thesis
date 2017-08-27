@@ -201,7 +201,7 @@ For example, the VC dimension of the lines in the plane is explained in figure
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/VCdimension}
-  \caption{VC dimension example from \cite{vapnik2013nature}. The left figure
+  \caption{VC dimension example from \cite{vapnik2013nature}. The example shows 2-dimensional vectors $z_k=(x_k,y_k)$,  $k=1,2,3,4$. The left figure
   shows that the 3 dichotomies can be shattered by a line in a plane. However, if we
   add an extra vector $z_4$, it is impossible to shatter them with a
   line. Therefore, linear classifiers has VC dimension equals to $d+1$ where $d$
@@ -238,9 +238,9 @@ The relationship between generalisation error and the amount of training or
 input data is intuitive: the more data is given to the learning model $f$, the
 more evidence the algorithm has about the problem. In the limit, the input data
 will contain every possible example, so the algorithm will generalize perfectly.
-However, for some $f \in H$, the best hypothesis $\hat{f}$ might be far away to
+However, for some $f \in \mathscr{H}$, the best hypothesis $\hat{f}$ might be far away to
 the best hypothesis class but it is the best that all the learners can hope.
-Therefore, to choose the right hypothesis class $H$ is crucial. The error of
+Therefore, to choose the right hypothesis class $\mathscr{H}$ is crucial. The error of
 this best hypothesis is formalised as the {\em approximation or generalisation
 error} \cite{niyogi1996relationship}.
 
@@ -251,7 +251,7 @@ small {\em estimation error} is referred to as {\em sample complexity} of the
 problem.
 
 The relationship between the generalisation error and the hypothesis complexity
-is less intuitive. If the class $H$ complexity (VC dimension) increases, then to
+is less intuitive. If the class $\mathscr{H}$ complexity (VC dimension) increases, then to
 mantain an {\em estimation error}, the {\em sample complexity} increases.
 Therefore, if we have a low complex model we will reduce the {\em sample complexity}
 but it will increase {\em generalisation error}. The hypothesis has to be
