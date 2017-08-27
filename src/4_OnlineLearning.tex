@@ -113,14 +113,19 @@ $$
 
 %------------------------FIN DRAFT PROFE -------------------------------
 {\em Supervised learning\/} consists then in finding a {\em learning function\/}
-$f:X\to Y$ that minimisr the expected error of the loss function $V(f(\mathbf{x}),y): Y
+$f:X\to Y$ that minimise the expected error of the loss function $V(f(\mathbf{x}),y): Y
 \times Y$ defined as:
 
-\begin{eqnarray*}
-\label{eq:lossfunction}
- V & \rightarrow & \mathbb{R}^+ \\
-  (f(\mathbf{x}), y) &\rightarrow & V(f(\mathbf{x}),y)
-\end{eqnarray*}
+%\begin{eqnarray*}
+%\label{eq:lossfunction}
+% V & \rightarrow & \mathbb{R}^+ \\
+%  (f(\mathbf{x}), y) &\rightarrow & V(f(\mathbf{x}),y)
+%\end{eqnarray*}
+
+\begin{equation}\label{eq:lossfunction}
+V(f(\cdot),\cdot):X\times Y\to\R_0^+\,,\qquad
+(\bfx,y)\mapsto V\big(f(\bfx),y\big)
+\end{equation}
 
 \noindent where $V(f(\mathbf{x}),y)$ denote the price paid for mistakes, $f:X=\R^m\to Y$
 and $y=f(\mathbf{x})\in\R$. Therefore, $V(f(\mathbf{x}),y)=0$ if $\;f(\mathbf{x})=y$.
@@ -151,11 +156,11 @@ learning algorithms such as regularised least squares and support vector
 machines. %verificar esto
 
 Since the true distribution is unknown and only training samples are available,
-the objective is to estimate a function $\hat{f}$ through empirical risk
+the objective is to estimate a function $\widehat{f}$ through empirical risk
 (training error) minimisation (ERM): 
 
 \begin{equation*}
-\hat{f} = \argmin_{f \in \mathscr{H}} R_{\text{emp}}[f] 
+\widehat{f} = \argmin_{f \in \mathscr{H}} R_{\text{emp}}[f] 
 \end{equation*}
 
 \noindent where, 
@@ -169,7 +174,9 @@ The ERM is a Riemann sum approximation of the expected error of $f$ shown in
 equation \ref{eq:expetedrisk}. By the law of large numbers it is known that:
 
 \begin{equation}
-\frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(\mathbf{x}),y)]
+%\frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(\mathbf{x}),y)]
+\frac1n\,\sum_{i=1}^n V\big( f(\bfx_i,y_i \big)
+\overset{n\to\infty}{\longrightarrow} E\big[ V(f(\cdot),\cdot)\big]\,.
 \end{equation}
 
 
@@ -195,12 +202,29 @@ For example, the VC dimension of the lines in the plane is explained in figure
   \centering
   \includegraphics[width=0.8\textwidth]{img/VCdimension}
   \caption{VC dimension example from \cite{vapnik2013nature}. The left figure
-  shows that three vectors can be shattered by a line in a plane. However, if we
+  shows that the 3 dichotomies can be shattered by a line in a plane. However, if we
   add an extra vector $z_4$, it is impossible to shatter them with a
-  plane.Therefore, linear classifiers has VC dimension equals to $d+1$ where $d$
+  line. Therefore, linear classifiers has VC dimension equals to $d+1$ where $d$
   is the dimension of the instance space $X$.}
   \label{fig:vcdimension}
 \end{figure}
+
+A key point is Radon's theorem in discrete geometry \cite{peterson1972geometry}
+($\text{co}(A)$ denotes the convex hull of $A$):
+
+\begin{theorem}[J. Radon]
+Let $S\subset\R^d$ be a subset containing at least $d+2$ elements. 
+Then there exist {\bf disjoint} subsets $A\subset S$ and $B\subset S$
+such that
+$$
+\text{co}(A)\cap\text{co}(B)\neq\emptyset
+$$
+\end{theorem}
+
+Radon's theorem implies that in $\R^d$ any set of $d+2$ or more vectors has at least one dichotomy which cannot be
+separated (shattered) by any plane in $\R^d$. Thus the VC-dimension in $\R^d$ cannot be greater than $d+1$.
+
+
 
 \item[Generalisation accuracy on new examples] is the capability of the
 algorithm to generate the right output for an input instance outside the
