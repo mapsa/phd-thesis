@@ -1,12 +1,66 @@
 
-\chapter{Conclusion}
+\chapter{Conclusions and Future Work}
+
+Main results and contributions are presented in this chapter along with some
+suggested future work.
+
+\vspace{0.5cm} 
 
 \section{Conclusions of this thesis}
 
-%Model effectiveness is focused on out-of-sample forecast rather than in-sample
-%fitting. This criterion allows our proposal AVECM prediction capability to be
-%expressed rather than just explaining data history.
-%
+This thesis is a multidisciplinary work that involves knowledge of Finance
+and Economics, Time Series, Machine Learning, Parallel Computing and Scientific
+Computing. We specifically addressed the joint dynamic behaviour of financial time
+series that said to be cointegrated. A broadly used approach, called VECM (Vector
+Error Correction Model), characterises this behaviour in terms of forces pulling
+towards equilibrium called cointegration. However, the use of VECM has been
+limited to low frequency time series processed in batch mode. In this thesis we
+explored the use of VECM with high frequency data and we found that the main
+limitation was computational. VECM parameter estimation uses two computationally
+expensive routines: the Johansen method, to obtain cointegration vectors, and
+the ordinary least squares method to solve the system. In this thesis, different
+ways to explore cointegration in high frequency time series were proposed,
+always considering the computational limitations of the VECM.
+
+The study of cointegration in high frequency data was done using two different
+approaches presented in Chapter \ref{chapter:proposal1} and
+\ref{chapter:proposal2}. First, we used a parallel version of VECM, called AVECM
+(Adaptive VECM), which includes a new method to choose VECM parameters based on
+the maximisation of the percentage of cointegration. AVECM was implemented using
+MPI to search on a grid of possible values. Results showed that AVECM improves
+performance measures by finding parameters of L and p maximising the percentage
+of cointegration and also execution times were reduced more than 9 times
+ensuring a response time before the processing of the next data point.
+Secondly, we proposed and online version of VECM (OVECM). OVECM optimises how
+model parameters are obtained using a sliding window of the most recent data.
+OVECM, unlike AVECM, updates the parameters at each step, instead of obtaining
+new ones. This proposal also takes advantage of the long-run relationship
+between the time series in order to obtain improved execution times. OVECM also
+introduces matrix optimisation in order to get the new model in an iterative
+way.  As a result, OVECM took much less than a minute at every
+step making it possible to use with higher frequency data.  
+
 \section{Contributions of this thesis}
 
+
+Based on the observation that cointegration
+relationships are sensitive to the choose of the amount of data and VECM
+parameters,
+
 \section{Future Work}
+
+For future study, it would be interesting to explore the relationship between
+cointegration and performance for more assets, including not only forex rates
+but also stocks. It would also be interesting to include more explaining
+variables such as bid-ask spread and change in volume.
+
+The online approach for other econometrics models it will be also worth of
+study, many of the could be adapted and be used with higher frequency data. In
+this thesis, the online version of OLS was studied, but the online version of
+ridge regression could also be applied to obtain a solution with better
+generalisation capabilities.
+
+Finally, it will be also interesting to improve the out-of-sample forecast
+by considering more explicative variables, to increase window sizes or trying new
+conditions to obtain new cointegration vectors.
+
