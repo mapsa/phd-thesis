@@ -20,10 +20,10 @@ among others.
 
 Forecasting financial time series have been modelled using classical statistical
 approaches. More recently, machine learning models have been extensively used in
-forecasting. However, their main disadvantage is that getting model parameters is a computational challenge.
-The computational complexity of machine learning algorithms has become a
-limiting factor for problems that require processing large volumes of data and
-where response time is crucial.
+forecasting. However, their main disadvantage is that getting model parameters
+is a computational challenge.  The computational complexity of machine learning
+algorithms has become a limiting factor for problems that require processing
+large volumes of data and where response time is crucial.
 
 Therefore, algorithms that process large amount of data in a short periods of
 time are required. Recently, online learning algorithms have been developed to solve
@@ -41,20 +41,30 @@ they are not~\cite{engle87}.  Some models, such as the Vector Error Correction M
 several cointegrated variables.
 
 %%
-In this thesis, an online formulation of the VECM called Online VECM
-(OVECM) is proposed. OVECM is based on the consideration of a sliding window of the most recent data.
-The algorithm introduces matrix optimisations in order to reduce the number of
-operations and also takes into account the fact that cointegration vector space
-doesn't experience large changes with small changes in the input data. Moreover, VECM parameters are obtained using machine learning methods. Our method is later tested using four
-currency rates from the foreign exchange market with different frequencies.  
-On the other hand, in order to improve VECM parameters, an adaptive VECM algorithm is presented called AVECM. AVECM allows VECM parameters to be found by maximising the number of cointegration relations for a given set of parameters on a grid search. This grid search is done in parallel.
+In this thesis, an online formulation of the VECM called Online VECM (OVECM) is
+proposed. OVECM is based on the consideration of a sliding window of the most
+recent data.  The algorithm introduces matrix optimisations in order to reduce
+the number of operations and also takes into account the fact that cointegration
+vector space doesn't experience large changes with small changes in the input
+data. Moreover, VECM parameters are obtained using machine learning methods. Our
+method is later tested using four currency rates from the foreign exchange
+market with different frequencies.  On the other hand, in order to improve VECM
+parameters, an adaptive VECM algorithm is presented called AVECM. AVECM allows
+VECM parameters to be found by maximising the number of cointegration relations
+for a given set of parameters on a grid search. This grid search is done in
+parallel.
 
-Models effectiveness were focused on the out-of-sample forecast rather than on the in-sample fitting. This criteria allows the OVECM and AVECM prediction capability to be expressed rather than just explaining data history. Our method performance is compared with ARIMA which is the most widely used algorithm for modelling a multivariate time series.
+Models effectiveness were focused on the out-of-sample forecast rather than on
+the in-sample fitting. This criteria allows the OVECM and AVECM prediction
+capability to be expressed rather than just explaining data history. Our method
+performance is compared with the naive forecast of the random walk model and
+ARIMA which are the most widely used algorithms for modelling a multivariate
+time series.
 
 
 \section{Research Objectives}
-The main motivation for this research is the development of efficient methods for
-forecasting financial time series.
+The main motivation for this research is the development of efficient methods
+for forecasting financial time series.
 
 The specific objectives of this research are,
 \begin{itemize}
@@ -74,16 +84,16 @@ experiments in order to show when and why proposal performs better.}
 \section{Research Hypothesis}
 
 
-Cointegration concept was introduced by Engle and Granger in 1987 \cite{engle1987} and implies that one or
-more linear combinations of non-stationary variables are stationary even though
-individually they are not.  Moreover Stock and Watson in 1988 \cite{stock+watson1988} observed that
+Cointegration concept was introduced by Engle and Granger in 1987
+\cite{engle1987} and implies that one or more linear combinations of
+non-stationary variables are stationary even though individually they are not.
+Moreover Stock and Watson in 1988 \cite{stock+watson1988} observed that
 cointegration reflects the common stochastic trends providing a useful way to
 understand cointegration relationships. These common stochastic trends can be
 also interpreted as a long-run equilibrium relationships.
 
 Vector error correction model (VECM) introduces this long-run relationship
-among a set of cointegrated variables as an error correction term. VECM is a
-special case of the vector autoregresive model (VAR) model. VAR model
+among a set of cointegrated variables as an error correction term. VAR model
 expresses future values as a linear combination of variables past values.
 However, VAR model cannot be used with non-stationary variables. VECM is a
 linear model but in terms of variable differences. If cointegration exists,
@@ -114,19 +124,21 @@ algorithms for financial time series to be obtained while maintaining good accur
 
 \section{Organisation of this Thesis}
 
-Chapter 1 contains relevant finance concepts required to understand financial
+Chapter \ref{chapter:HFT} contains relevant finance concepts required to understand financial
 time series models such as market hypothesis, frequency, order book generation,
 market microstructure.
-Chapter 2 discuss main time series models including classic ones such as ARMA,
-GARCH and more recent ones such as VECM, VAR and volatility models. %mejorar
-Chapter 3 gives a brief introduction to machine learning and its variant online
-learning. 
-Chapter 4 presents different algorithms propose to forecast financial time
-series using machine learning techniques.
-In Chapter 5 a deep study of foreign exchange market features is presented and
-experiments of cointegration are carried out in order to show its dynamic.
-Chapter 6 presents a discussion of found results and summarise the main
+Chapter \ref{chapter:FTT} discuss main characteristics and concepts of financial
+time series including classic models such as ARMA, ARIMA,
+GARCH and more recent ones such as VECM, VAR and volatility models.
+Chapter \ref{chapter:MLM} gives an introduction to machine learning and its
+variant online learning. 
+Chapter \ref{chapter:proposal1} presents the first proposal called AVECM which
+includes a new parallel method to choose VECM parameters based on the maximisation of the
+percentage of cointegration.
+In Chapter \ref{chapter:proposal2} a second approach is presented called OVECM,
+which is an online version of OVECM for high frequency data.
+Chapter \ref{chapter:conclusions} presents a discussion of found results and summarise the main
 conclusions of this thesis. It also presents some research directions for future
-studied.
+study.
 
 

@@ -256,8 +256,11 @@ Before running the tests, we firstly checked whether the time series were I(1)
 using the Augmented Dickey Fuller (ADF) test with lags $p=1,2,3,4,5$.
 \cite{mackinnon2010} presented critical values for rejection of hypothesis of a
 unit root: -2.62 (1\%), 1.94 (5\%) and 1.62 (10\%).
-\begin{table*}[ht]
-\label{tab:adf}
+Table \ref{tab:adf} shows that all currency rates cannot reject the unit root
+test in their level form considering different lags, but they rejected it with
+their first differences. This means that all of them are I(1) time series and we
+are allowed to use VECM and therefore our proposed AVECM.
+\begin{table}[ht]
 \centering
 \begin{tabular}{llllll}
 \toprule
@@ -282,11 +285,8 @@ $\Delta$ USDJPY & -135.1*  & -135.1*  & -101.2* & -101.2*   & -101.2*\\
 \end{tabular}
 \caption{Unit roots tests for EURUSD, GBPUSD, USDCHF and USDJPY at 10-second
 frequency.}
-\end{table*}
-Table~\ref{tab:adf} shows that all currency rates cannot reject the unit root
-test in their level form considering different lags, but they rejected it with
-their first differences. This means that all of them are I(1) time series and we
-are allowed to use VECM and therefore our proposed AVECM.
+\label{tab:adf}
+\end{table}
 
 \subsection{Performance accuracy}
 
