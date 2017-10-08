@@ -1,0 +1,221 @@
+\documentclass[12pt,reqno]{amsart}
+\usepackage{amsfonts,amssymb,amsmath,amsthm,mathrsfs,
+            amsopn,amsxtra,amstext,amsbsy}
+\usepackage{epsfig}
+\usepackage{array}
+\usepackage{url}
+\usepackage{tikz}
+%% \usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{hyperref,wasysym}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{enumerate}
+\usepackage{enumitem}% http://ctan.org/pkg/enumitem
+\usepackage{verbatim}
+%% \usepackage[strings]{underscore}
+
+\voffset=-10mm
+\oddsidemargin=0pt
+\evensidemargin=0pt
+\topmargin=-10mm
+\headsep=18pt
+\headheight=18pt
+\footskip=30pt
+\topskip=0mm
+\textwidth 167mm
+\textheight=230mm
+\parindent=0em
+\marginparsep=0mm
+\marginparwidth=0mm
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+\hfuzz6pt % Don't report over-full h-boxes if over-edge is small
+
+
+% \newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definicion}{Definición}
+\newtheorem{theorem}{Theorem}%[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{conjecture}[theorem]{Conjecture}
+% \theoremstyle{definition}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{example}[theorem]{Example}
+% \newtheorem{xca}[theorem]{Exercise}
+% \theoremstyle{remark}
+% \newtheorem{remark}[theorem]{Remark}
+% \numberwithin{equation}{section}
+
+% \def\phi{\varphi}
+% \def\epsilon{\varepsilon}
+\def\RE{\mbox{\rm Re}\,}
+\def\IM{\mbox{\rm Im}\,}
+% \def\AZ{|z|}
+\newcommand{\rectangle}{\fboxsep0pt\fbox{\rule{0.3em}{0pt}\rule{0pt}{1.5ex}}}
+
+%-------------------------mathcal
+
+\def\A{{\mathcal A }}
+\def\CC{{\mathcal C }}
+\def\CH{{\mathcal H }}
+\def\CK{{\mathcal K }}
+\def\CM{{\mathcal M }}
+\def\CP{{\mathcal P }}
+\def\CS{{\mathcal S }}
+\def\CR{{\mathcal R}}
+\def\CRu{{\mathcal R}^{\rm u}}
+\def\CT{{\mathcal T}}
+\def\CTT{\widetilde{{\mathcal T}}}
+\def\CW{{\mathcal W}}
+\def\Li{{\mbox{\rm Li}}}
+\def\WO{{\mathcal W}_{\Omega }}
+
+%-------------------------------Bbb
+\def\K{{\mathbb K }}
+\def\C{{\mathbb C }}
+\def\N{{\mathbb N }}
+\def\NO{{\mathbb{N}_0 }}
+\def\Z{{\mathbb Z }}
+\def\R{{\mathbb R }}
+\def\U{{\mathbb U }}
+\def\D{{\mathbb D }}
+%----------------------------Zusammengesetztes
+
+\def\DB{\overline{\D}}
+\def\Db#1{\overline{\D_{#1}}}
+\def\DBR{\overline{\D_\rho}}
+\def\DV{de la Vall\'ee Poussin }
+\def\d#1{\D_{#1}}
+\def\H{{\mathcal H}(\D)}
+\def\Hb{{\mathcal H}(\DB)}
+\def\HO{{\mathcal H}_0(\D )}
+\def\Hoo#1{{\mathcal H}(\overline{\D_{#1}})}
+\def\HB#1{{\mathcal H}(\D_{#1})}
+\def\Ho#1{{\mathcal H}({#1})}
+\def\Hyp{{}_2F_1}
+
+\def\achtung#1{\alert{#1}}
+\def\blue#1{{\color{blue} #1}}
+\def\green#1{{\color{green} #1}}
+\def\red#1{{\color{red} #1}}
+
+\def\pick{{\mathscr P}}
+\def\logpick{{\text{log}\,{\mathscr P}}}
+\def\stammpick{\pick_{\!\!\!\raisebox{-2pt}{\scalebox{0.5}{$\int$}}}}
+\def\stammpickpick{\stammpick\cap\pick}
+\def\stammpicklogpick{\stammpick\cap\logpick}
+\def\expstammpicklogpick{e^{\stammpicklogpick}}
+
+
+\title[CCTVal Research project]{CCTVal Research project}
+
+\author{Paola Arce}
+\author{Werner Kristjanpoller}
+\author{Luis Salinas}
+
+\address{CCTVal and Departamento de Inform\'atica, UTFSM, Valpara\'\i so;
+         %% \newline
+         %% Mathematisches Institut, Universit\"at W\"urzburg;
+         \newline
+         \today} % October 06, 2016}
+
+%\email{luis.salinas@usm.cl}
+
+\begin{document}
+
+\maketitle%
+
+\def\myitem#1{ \item[\blue{\bf #1}] }
+
+\section{Introduction}
+Cointegration is a long-run property of some non-stationary time series where a
+linear combination of those time series is stationary.  This behaviour has been
+studied in finance because cointegration restrictions often improve forecasting.
+The Vector Error Correction Model (VECM)  \cite{engle1987}, is a well-known econometric technique
+that characterises short-run variations of a set of cointegrated time series
+incorporating long-run relationships as an error correction term. However, the use of VECM has been limited to low frequency time series processed in batch mode mainly due to computational limitations. 
+
+The first computational limitation to address is that VECM parameters are obtained using the ordinary least squares (OLS)
+method.  Even though OLS is extensively used, it has over-fitting
+issues and it gets computationally expensive when more data is added. In this project we explore the use of Ridge regression which is commonly used
+instead of OLS since they include a regularisation parameter which could improve
+prediction error. 
+
+The second limitation is the calculation of the cointegration vectors. Our proposal is to avoid their calculation at every step since they represent a long-run relationship between the time series.
+
+For this research project proposal, we will design and evaluate an online version of VECM which optimises how model parameters are obtained so the model can be used with high frequency data. The proposal is an improvement of the online VECM presented in \cite{icpram15} by adding the following modifications:
+\begin{itemize}
+\item The use of RR instead of OLS to get the model parameters. This will imply the finding of the best regularisation parameter at every time step.
+\item The evaluation of the Aggregating Algorithm for Regression (AAR) which is a variation of the online version of Ridge regression.
+\item Addition of rules to define when the cointegration vectors must be recalculated.
+\item Analysis of different time series frequencies to determine where the model works best.
+\item The selection of other relevant data to the model such as bid, ask and volume.
+\end{itemize}
+
+The findings of this project could be easily used as an integration tool
+to detect arbitrage opportunities or risk control in financial time series. Also, the methodology could be extended to other econometric methods which could be benefited of machine learning techniques.
+
+\section{Background}
+
+VECM introduces the long-run
+relationship among a set of cointegrated time series as an error correction
+term. These time series must be integrated of order 1, denoted I(1), i.e. they
+become stationary at their first differences. In finance, I(1) time series are
+very common and to introduce cointegration restrictions in models often improves
+forecasting, see \cite{duy1998}. Therefore, VECM has been widely adopted in
+financial applications \cite{mukherjee1995}, \cite{seong2013},
+\cite{maysami2000} and \cite{arestis2001}. VECM has also been used in pair
+trading, see \cite{herlemont2003}, or models with more than two variables, see
+for example \cite{mukherjee1995} and \cite{engle2004}.
+
+Cointegration relationships can be found in low and high frequency data of two or
+more assets. While cointegration in low frequency data is motivated by a
+long-run equilibrium relationship between economic forces, cointegration in high
+frequency data has its foundation in statistical arbitrage theory which is very helpful
+to detect mean-reverting trades. Information about cointegrated assets in high
+frequency data could be used as an input for high frequency trading strategies,
+using it as a signal to capture small profits in short term trades, see
+\cite{miao2014}. \cite{zhou2001} addressed the benefits of using higher
+frequency data to analize cointegration. \cite{rittler2012} also found that
+cointegration may differ with different data frequencies and could appear
+with increased data frequency.
+
+The use of VECM with high frequency data is mainly limited by computationally
+expensive routines. Firstly, VECM parameters are obtained using the ordinary
+least squares (OLS) it has over-fitting
+issues and is computationally expensive when
+the number of lagged values and data increases. This problem is commonly adressed using
+Ridge Regression (RR) \cite{hoerl1970} which introduces a regularisation
+parameter that leads to an unbiased estimation with better generalisation
+capability. Secondly, obtaining
+cointegration vectors is also an expensive routine because the Johansen method 
+is of order $O(n^3)$ (\cite{johansen1995}).
+\cite{chen2003}, \cite{Arce2017} addressed the advantage of distributed processing over
+conventional rolling window processing. Therefore, our aim is to design
+an online method based on cointegration using RR instead of OLS and that works on a distributed environment so it can be used with high frequency stream data. 
+
+\section{Research Design and Methods}
+We intend to extend the approach presented in \cite{icpram15}, where the proposed method called OVECM only considered a time varying window of historical data using OLS to
+get model parameters. This proposal is about using RR or its variant  The  Aggregating Algorithm for Regression (AAR)  \cite{vovk2001} as an alternative of OLS to estimate model parameters.
+
+Since cointegration vectors represent a long-run relationship between the time
+series, they vary little in time. This proposal also includes to obtain new
+cointegration vectors only when this long-term relationship changes.
+We will estimate the performance of our method using different frequencies of financial time series, so we can measure the effect of cointegration in high frequency data.
+
+\section{Hypothesis}
+
+We hypothesise that a regularisation solution could lead to better forecasting performance than OVECM. RR is usually introduced to get better generalisation capabilities but the choice of the regularisation parameter is a challenge to accomplish this goal.
+
+We also hypothesise that, using high frequency data, cointegration vectors will remain the same for some period of time, since they represent long-run relationship.
+
+
+
+\bibliographystyle{amscls/amsalpha}
+\bibliography{reference}
+
+\end{document}
+
+
