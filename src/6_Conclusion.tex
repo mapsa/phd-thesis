@@ -11,41 +11,80 @@ suggested future work.
 This thesis is a multidisciplinary work that involves knowledge of Finance
 and Economics, Time Series, Machine Learning, Parallel Computing and Scientific
 Computing. We specifically addressed the joint dynamic behaviour of financial time
-series that said to be cointegrated. A broadly used approach, called VECM (Vector
+series that are said to be cointegrated. A broadly used approach, called VECM (Vector
 Error Correction Model), characterises this behaviour in terms of forces pulling
 towards equilibrium called cointegration. However, the use of VECM has been
 limited to low frequency time series processed in batch mode. In this thesis we
 explored the use of VECM with high frequency data and we found that the main
-limitation was computational. VECM parameter estimation uses two computationally
+limitation was computational. The focus of our work was developing a model to improve the performance forecasting of financial time series maintaining good execution times in order to use it with high frequency data. VECM parameter estimation uses two computationally
 expensive routines: the Johansen method, to obtain cointegration vectors, and
 the ordinary least squares method to solve the system. In this thesis, different
 ways to explore cointegration in high frequency time series were proposed,
 always considering the computational limitations of the VECM.
 
 The study of cointegration in high frequency data was done using two different
-approaches presented in Chapter \ref{chapter:proposal1} and
-\ref{chapter:proposal2}. First, we used a parallel version of VECM, called AVECM
-(Adaptive VECM), which includes a new method to choose VECM parameters based on
+approaches presented in Chapters \ref{chapter:proposal1} and
+\ref{chapter:proposal2}, called AVECM and OVECM:
+\begin{description}
+\item[AVECM] AVECM is an adaptive version of VECM which includes a new method to choose VECM parameters based on
 the maximisation of the percentage of cointegration. AVECM was implemented using
-MPI to search on a grid of possible values. Results showed that AVECM improves
+MPI to search on a grid of possible values. We evaluated our results in terms of performance and execution times:
+\begin{description}
+\item[Performance] Results showed that AVECM improves
 performance measures by finding parameters of L and p maximising the percentage
-of cointegration and also execution times were reduced more than 9 times
-ensuring a response time before the processing of the next data point.
-Secondly, we proposed and online version of VECM (OVECM). OVECM optimises how
+of cointegration. AVECM performance was compared against ARIMA and the random walk model. We showed that the out-of-sample performance for AVECM is superior to ARIMA and the naive random walk model in terms of the MSE and $U$-statistic. This result is very important since it is still difficult to outperform ARIMA and the random walk model for standard econometric forecasting models  despite their simplicity. 
+\item[Execution times] execution times were reduced more than 9 times
+ensuring a response time before the processing of the next data point. Despite the fact that high frequency Forex data can be spurious, the model
+performance can be less reliable (and more spurious) relative to the lower
+frequencies (such as 1 minute or 5 minute intervals) adopted by some other
+studies. However, the deficiency is offset by gain in accuracy from parallel
+processing which is capable of searching or examining a much larger state space
+given the same computational time.
+\end{description}
+\item[OVECM] We proposed an online version of VECM (OVECM). OVECM optimises how
 model parameters are obtained using a sliding window of the most recent data.
 OVECM, unlike AVECM, updates the parameters at each step, instead of obtaining
-new ones. This proposal also takes advantage of the long-run relationship
+new ones. This proposal takes advantage of the long-run relationship
 between the time series in order to obtain improved execution times. OVECM also
-introduces matrix optimisation in order to get the new model in an iterative
-way.  As a result, OVECM took much less than a minute at every
+introduces matrix optimisation in order to obtain the new model in an iterative
+way.  
+\begin{description}
+\item[Performance] 
+OVECM was compared with the traditional VECM and ARIMA. Despite the fact that traditional VECM slightly outperformed our proposal, the OVECM execution time is lower. This result can be explained because OVECM avoids the calculation of cointegration vectors at each time step which improves execution times but can affect forecast performance.
+\item[Execution times] OVECM was compared with the traditional VECM and ARIMA
+with the same sliding window sizes. As a result, OVECM outperformed both in terms of
+execution time. This reduction of execution time is mainly because OVECM avoids the cointegration vector calculation using the Johansen method. Aditionally, OVECM took much less than a minute at every
 step making it possible to use with higher frequency data.  
+\end{description}
+\end{description}
+Finally, cointegration information can now easily be used as an integration tool
+to detect arbitrage opportunities or risk control in financial time series.
 
 \section{Contributions of this thesis}
 
+This research helped to integrate machine learning techniques and parallel computing with econometric models such as VECM so they can be used with high frequency data. We also observed that cointegration relationships are sensitive to the choice of the amount of data and VECM parameters and this can be used to improve forecasting performance. We proposed two variations of VECM, OVECM and AVECM which could be extended to other econometric models.
 
-Based on the observation that cointegration
-relationships are sensitive to the choose of the amount of data and VECM
-parameters,
+Regarding the initial objectives defined at the beginning of this thesis we can say:
+
+
+\begin{itemize}
+\item $\Large \mathcal{O}_1$: \emph{A review of the literature on time series
+analysis models including machine learning techniques.}\\
+The literature review was focused in finance, time series concepts and models and machine learning including theory and applications.
+\item $\Large \mathcal{O}_2$: \emph{Development of a set of known features of the
+studied time series and the application to improve forecasting.} \\
+We included specific knowledge about forex rates, which were those used in our experiments, such as trade best trading times, stylised facts, percentage of cointegration, time series frequency, among others.
+\item $\Large \mathcal{O}_3$: \emph{Development of parallel and efficient
+algorithms to ensure quick response times .} \\
+We showed that high performance computing will allow the use of computationally expensive methods to forecast high frequency data ensuring quick response times.
+\item $\Large \mathcal{O}_4$: \emph{Deep mathematical analysis of the proposal
+and financial concepts involved.} \\
+The two proposals were presented with a strong mathematical foundation, we added definitions and proofs of all the concepts involved.
+\item $\Large \mathcal{O}_5$: \emph{Design and implement representative set of
+experiments in order to show when and why the proposal performs better.}
+All the experiments were designed to give a general view of the method performance. We clearly showed the use and limitations of our proposals.
+\end{itemize}
+
 
 \section{Future Work}
 
@@ -54,13 +93,13 @@ cointegration and performance for more assets, including not only forex rates
 but also stocks. It would also be interesting to include more explaining
 variables such as bid-ask spread and change in volume.
 
-The online approach for other econometrics models it will be also worth of
-study, many of the could be adapted and be used with higher frequency data. In
+The online approach for other econometrics models it will be also worthy of 
+study. Many of them could be adapted and used with higher frequency data. In
 this thesis, the online version of OLS was studied, but the online version of
 ridge regression could also be applied to obtain a solution with better
 generalisation capabilities.
 
 Finally, it will be also interesting to improve the out-of-sample forecast
-by considering more explicative variables, to increase window sizes or trying new
+by considering more explicative variables, to increase window sizes or try different
 conditions to obtain new cointegration vectors.
 

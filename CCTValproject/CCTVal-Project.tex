@@ -109,7 +109,7 @@
 \def\expstammpicklogpick{e^{\stammpicklogpick}}
 
 
-\title[CCTVal Research project]{CCTVal Research project}
+\title[CCTVal Research project proposal]{CCTVal Research project proposal}
 
 \author{Paola Arce}
 \author{Werner Kristjanpoller}
@@ -155,20 +155,17 @@ For this research project proposal, we will design and evaluate an online versio
 \end{itemize}
 
 The findings of this project could be easily used as an integration tool
-to detect arbitrage opportunities or risk control in financial time series. Also, the methodology could be extended to other econometric methods which could be benefited of machine learning techniques.
+to detect arbitrage opportunities or risk control in financial time series. Also, the methodology could be extended to other econometric methods which could be enhanced by machine learning techniques.
 
 \section{Background}
 
-VECM introduces the long-run
-relationship among a set of cointegrated time series as an error correction
-term. These time series must be integrated of order 1, denoted I(1), i.e. they
+In order to use the VECM, the time series must be integrated of order 1, denoted I(1), i.e. they
 become stationary at their first differences. In finance, I(1) time series are
-very common and to introduce cointegration restrictions in models often improves
-forecasting, see \cite{duy1998}. Therefore, VECM has been widely adopted in
-financial applications \cite{mukherjee1995}, \cite{seong2013},
-\cite{maysami2000} and \cite{arestis2001}. VECM has also been used in pair
-trading, see \cite{herlemont2003}, or models with more than two variables, see
+very common. VECM introduces the cointegration relationship as an error correction
+term which often improves forecasting, see \cite{duy1998}. Therefore, VECM has been widely adopted in
+financial applications \cite{mukherjee1995,seong2013,maysami2000,arestis2001}. VECM has also been used in pair trading, see \cite{herlemont2003}, or models with more than two variables, see
 for example \cite{mukherjee1995} and \cite{engle2004}.
+
 
 Cointegration relationships can be found in low and high frequency data of two or
 more assets. While cointegration in low frequency data is motivated by a
@@ -178,38 +175,40 @@ to detect mean-reverting trades. Information about cointegrated assets in high
 frequency data could be used as an input for high frequency trading strategies,
 using it as a signal to capture small profits in short term trades, see
 \cite{miao2014}. \cite{zhou2001} addressed the benefits of using higher
-frequency data to analize cointegration. \cite{rittler2012} also found that
+frequency data to analyse cointegration. \cite{rittler2012} also found that
 cointegration may differ with different data frequencies and could appear
 with increased data frequency.
 
 The use of VECM with high frequency data is mainly limited by computationally
-expensive routines. Firstly, VECM parameters are obtained using the ordinary
-least squares (OLS) it has over-fitting
+expensive routines:
+\begin{itemize}
+\item VECM parameters are obtained using the ordinary
+least squares (OLS) which has over-fitting
 issues and is computationally expensive when
-the number of lagged values and data increases. This problem is commonly adressed using
-Ridge Regression (RR) \cite{hoerl1970} which introduces a regularisation
+the number of lagged values and data increases. This problem is commonly addressed using
+Ridge Regression (RR) \cite{hoerl1970}. RR introduces a regularisation
 parameter that leads to an unbiased estimation with better generalisation
-capability. Secondly, obtaining
-cointegration vectors is also an expensive routine because the Johansen method 
-is of order $O(n^3)$ (\cite{johansen1995}).
-\cite{chen2003}, \cite{Arce2017} addressed the advantage of distributed processing over
-conventional rolling window processing. Therefore, our aim is to design
-an online method based on cointegration using RR instead of OLS and that works on a distributed environment so it can be used with high frequency stream data. 
+capability. 
+\item The Johansen method is used to obtain 
+cointegration vectors and it is also an expensive routine  of order $O(n^3)$  \cite{johansen1995}. A distributed processing approach has been used recently successfully reducing execution times, see \cite{chen2003}, \cite{Arce2017}. Specially in \cite{Arce2017}we showed the advantage of distributed processing over conventional rolling window processing.
+\end{itemize}
+Therefore, our aim is to design an online method based on cointegration using RR instead of OLS and that works on a distributed environment so it can be used with high frequency stream data. 
 
 \section{Research Design and Methods}
-We intend to extend the approach presented in \cite{icpram15}, where the proposed method called OVECM only considered a time varying window of historical data using OLS to
-get model parameters. This proposal is about using RR or its variant  The  Aggregating Algorithm for Regression (AAR)  \cite{vovk2001} as an alternative of OLS to estimate model parameters.
 
-Since cointegration vectors represent a long-run relationship between the time
-series, they vary little in time. This proposal also includes to obtain new
-cointegration vectors only when this long-term relationship changes.
+In this proposal, we will extend the approach presented in \cite{icpram15}. In this article we proposed method called OVECM that only considered a time varying window of historical data using OLS to get model parameters. This proposal will explore the use of RR or its variant The  Aggregating Algorithm for Regression (AAR)  \cite{vovk2001} as an alternative of OLS to estimate model parameters.
+
+Additionally, since cointegration vectors represent a long-run relationship between the time
+series, they vary little in time. Therefore, we plan to obtain new
+cointegration vectors only when this long-term relationship changes, this can be tracked using a threshold of forecast error for example.
+
 We will estimate the performance of our method using different frequencies of financial time series, so we can measure the effect of cointegration in high frequency data.
 
 \section{Hypothesis}
 
 We hypothesise that a regularisation solution could lead to better forecasting performance than OVECM. RR is usually introduced to get better generalisation capabilities but the choice of the regularisation parameter is a challenge to accomplish this goal.
 
-We also hypothesise that, using high frequency data, cointegration vectors will remain the same for some period of time, since they represent long-run relationship.
+We also hypothesise that, using high frequency data, cointegration vectors will remain the same for some period of time, since they represent long-run relationships.
 
 
 
