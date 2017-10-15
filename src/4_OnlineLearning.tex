@@ -202,7 +202,7 @@ For example, the VC dimension of the lines in the plane is explained in figure
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/VCdimension}
-  \caption{VC dimension example from \cite{vapnik2013nature}. The example shows 2-dimensional vectors $z_k=(x_k,y_k)$,  $k=1,2,3,4$. The left figure
+  \caption[VC dimension example]{VC dimension example from \cite{vapnik2013nature}. The example shows 2-dimensional vectors $z_k=(x_k,y_k)$,  $k=1,2,3,4$. The left figure
   shows that the 3 dichotomies can be shattered by a line in a plane. However, if we
   add an extra vector $z_4$, it is impossible to shatter them with a
   line. Therefore, linear classifiers has VC dimension equals to $d+1$ where $d$
@@ -264,7 +264,7 @@ accuracy depends on the complexity of the model and the amount of training data.
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/3tradeoff}
-  \caption{Tradeoff in empirical learning from \cite{dietterich2003}. The
+  \caption[Tradeoff in empirical learning ]{Tradeoff in empirical learning from \cite{dietterich2003}. The
 generalization accuracy is not affected by the amount of examples for low
 complex classifiers. However, for some more complex classifiers, the number of
 examples improves the generalization accuracy. The key is to find the best
@@ -287,7 +287,7 @@ not a good model for the test data.
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/model_complexity}
-  \caption{Training and test error. Image source is
+  \caption[Training and test error]{Training and test error. Image source is
 \cite{friedman2001elements}.The blue curve represents the training error which
 decreases with more complex models. However, the model starts to overfit the
 data reducing the generalisation capacity of the model,this occurs when the
@@ -801,7 +801,7 @@ Var(\mathbf{X}(\lambda)) &=& Var(\mathbf{W}\hat{\mathbf{X}}) \\
 
 \begin{figure}[h!]
 \includegraphics[width=\linewidth]{img/biasvariance}
-\caption{Bias-variance tradeoff depending on lambda. Dotted line corresponds to OLS prediction error (invariant with lambda). Black line corresponds to RR prediction error which can be decomposed in $Bias^2$ (in red) + Variance (in blue).}
+\caption[Bias-variance tradeoff depending on lambda]{Bias-variance tradeoff depending on lambda. Dotted line corresponds to OLS prediction error (invariant with lambda). Black line corresponds to RR prediction error which can be decomposed in $Bias^2$ (in red) + Variance (in blue).}
 \label{fig:biasvariance}
 \end{figure}	
 
@@ -859,7 +859,7 @@ ANN is inspired by biological learning systems organised into layers and have un
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.8\textwidth]{img/ffn}
-  \caption{Feed-forward neural network (FFN). FNN consists of an input layer, an output layer and at least one hidden layer between the input and output layer. }
+  \caption[Feed-forward neural network (FFN)]{Feed-forward neural network (FFN). FNN consists of an input layer, an output layer and at least one hidden layer between the input and output layer. }
   \label{fig:ffn}
 \end{figure}
 
