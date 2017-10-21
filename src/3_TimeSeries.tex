@@ -18,17 +18,17 @@ analysis considering these two approaches.
 
 \section{Characteristics of Financial Time Series}
 There are several characteristics and concepts of financial time series and here we will discuss the more important ones.
-\subsection{Stylized facts of asset returns}
-\label{sec:stylizedfacts}
+\subsection{Stylised facts of asset returns}
+\label{sec:stylisedfacts}
 
 There are several known features exhibited by financial instruments called
-stylized facts, which have been empirically studied and some of them have been
-documented only recently and accepted as truth. Stylized facts are usually
+stylised facts, which have been empirically studied and some of them have been
+documented only recently and accepted as truth. Stylised facts are usually
 formulated in terms of qualitative properties of asset returns and may not be
 precise enough to distinguish among different parametric models.
 \cite{cont2001}.
 
-Some stylized facts which are common to a wide set of financial assets
+Some stylised facts which are common to a wide set of financial assets
 \cite{sewell2011} are:
 
 \begin{description}
@@ -57,12 +57,13 @@ Figure \ref{fig:returnacf} shows the ACF of the returns of SPY stock where the c
 \end{figure}
 \item[Distribution] The distribution of returns is approximately symmetric and
 has high kurtosis (i.e fat tails and a peaked centre compared with the normal
-distribution). However, distribution of returns whose were obtained from higher
-frequencies looks more like a normal distribution.
+distribution). 
 The returns distribution tails are larger than
  what is hypothesised by common data generation process (generally normal
  distribution assumption). In the markets, fat tails are an undesirable feature
- because of the additional risk they imply.  In the figure \ref{fig:returndist}
+ because of the additional risk they imply.  However, distribution of returns whose were obtained from higher
+frequencies looks more like a normal distribution.
+In the figure \ref{fig:returndist}
  is shown the SPY returns distribution based on daily dates from the period 1st
  July 1998 to 4th April 2013. The distribution was compared against the normal
  distribution which clearly doesn't fit the data.  
@@ -94,8 +95,8 @@ to that of the time shifted set, more precisely: \[ P\{y_{t_1} \leq
 c_1,\dots,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,\dots,y_{t_L+h} \leq c_L\}
 \quad \forall L \in \mathbb{N}, \forall h \in \mathbb{Z}\] \noindent where
 $c_1,\dots,c_L$ are constants.  This definition is too strong and difficult to
-assess it from a single data set. The weak version of this definition imposes
-conditions only on the two first two moments.
+assess from a single data set. The weak version of this definition imposes
+conditions only on the first two moments.
 
 A weakly stationary time series is a process which mean, variance and auto
 covariance do not change over time: \begin{eqnarray*} E(y_t) &=& \mu  \quad
@@ -105,11 +106,11 @@ covariance do not change over time: \begin{eqnarray*} E(y_t) &=& \mu  \quad
 
 \noindent with $\lambda(s,t) = E[(y_s-\mu)(y_t - \mu)]$ 
 
-In finance, a shock represents an unexpected change in a variable or a in its
-error term in a particular time period. For stationary time series, shocks to
+One of the consequences of stationary processes is how they recover from a shock. A shock represents an unexpected change in a variable or a in its
+error term in a particular period of time. For stationary time series, shocks to
 the system will gradually die away. That is, a shock during time $t$ will have a
 smaller effect in time $t+1$, a smaller effect on $t+2$ and so on. For
-non-stationary data, the persistence of shocks will always be infinite. 
+non-stationary data, the persistence of shocks will always have permanent effects because is not a mean-reverting process. 
 
 \subsection{Non-stationary processes}
 
@@ -156,7 +157,7 @@ The use of non-stationary data can lead to spurious regressions. Spurious
 regression dates back to Yule in 1926 \cite{yule1926}. If two stationary
 variables are generated as independent random series and are trending over
 time, when one of those variables is regressed on the other, they could have a
-high $R^2$ even if the two are totally unrelated. So, if standard regression
+high coefficient of determination ($R^2$) even if the two are totally unrelated. So, if standard regression
 techniques are applied to non-stationary data, it could look good under
 standard measures but valueless \cite{brooks2002}.
 The
@@ -459,9 +460,9 @@ The volatility of a stock is not directly observable \cite{tsay2005,engle1993}. 
 
 
 
-\subsubsection{Realized volatility} is also known as historic volatility and
+\subsubsection{Realised volatility} is also known as historic volatility and
 it is the actual variance in the price of a stock over time.
-Realized volatility is measured in terms of the standard deviation
+Realised volatility is measured in terms of the standard deviation
 using the historical stock prices. It is commonly calculated based on
 intraday price returns:
 \begin{equation}
@@ -469,7 +470,7 @@ intraday price returns:
 r_{t,n}=100(\ln(p_{t,n}) - \ln(p_{t,n-1}))
 \end{equation}
 \noindent where $p_{t,n}$ is the price observed at day $t=1,\dots,T$ and
-intraday sample $n=2,\dots,N$. Realized volatility is defined as:
+intraday sample $n=2,\dots,N$. Realised volatility is defined as:
 \begin{equation}
 \label{eq:rv}
     \hat{\sigma}(t) = \sum_{n=1}^N r_{t,n}^2 \, , 
@@ -478,7 +479,7 @@ intraday sample $n=2,\dots,N$. Realized volatility is defined as:
 number of days. 
 In order to include overnight returns, Hansen and
 Lunde~\cite{hansen+lunde2005} introduced a scaling version of
-realized volatility using the following definitions:
+realised volatility using the following definitions:
 \begin{eqnarray}
 r_{t}&=&100(\ln(p_{t,N}) - \ln(p_{t-1,N})) \label{eq: ret 1} \\
 \bar{\rho}(t) &=& \sum_{t=1}^T r_{t}^2  \label{eq: ret 2} \, .
@@ -486,20 +487,20 @@ r_{t}&=&100(\ln(p_{t,N}) - \ln(p_{t-1,N})) \label{eq: ret 1} \\
 \noindent where equation~(\ref{eq: ret 1}) represents overnight 
 returns and the volatility as 
 equation~(\ref{eq: ret 2}), where $p_{t,N}$ is the last intraday 
-sample at day $t$. The scaled realized volatility $\rho(t)$ is 
+sample at day $t$. The scaled realised volatility $\rho(t)$ is 
 defined as:
 \begin{eqnarray}
 \label{eq:srv}
 \rho(t) = \gamma \hat{\rho}(t) \, , \qquad & \qquad \gamma = \displaystyle \frac{\bar{\rho}(t)}{\displaystyle\sum_{t=1}^T \hat{\rho}(t)}
 \end{eqnarray}
-Realized volatility has also been defined as the absolute value return or as
+Realised volatility has also been defined as the absolute value return or as
 the mean of the sum of intraday squared returns at short intervals of time. The
 majority of research carried out in the literature obtain the daily volatility
 as the daily squared returns as is shown in equation~(\ref{eq: ret 2}).
 However, it has been proven that this measurement noise is too high for
 observing the true volatility process~\cite{andersen+bollerslev1998}. Hansen
 and Lunde~\cite{hansen+lunde2006} stated that the use of a noisy proxy could
-result in an inferior model being chosen as the best one. The realized
+result in an inferior model being chosen as the best one. The realised
 volatility, as calculated by the cumulative sum of squared intraday returns and
 shown in equation (\ref{eq:rv}), is less noisy and doesn't lead to choosing an
 inferior model.   
@@ -605,11 +606,11 @@ volatility is called the implied volatility of an option. Additionally, some
 models obtain implied volatility from futures (other derivative from prices). 
 
 
-For trading strategies, the interest is centred in forecasting realized
+For trading strategies, the interest is centred in forecasting realised
 volatility over the life of an option and to take advantage when this
 volatility differs from the implied volatility. This is called volatility
 arbitrage. For example, a trader will buy an option and hedge the underlying
-asset if the implied volatility is under the realized volatility. 
+asset if the implied volatility is under the realised volatility. 
 
 
 \subsection{Volatility methods}
@@ -617,7 +618,7 @@ asset if the implied volatility is under the realized volatility.
 In the existing literature, there are four main classes of asset
 return volatility models: the general autoregressive conditional
 heteroskedasticity (GARCH) models, the stochastic volatility (SV)
-models, the realized volatility models and the machine learning based
+models, the realised volatility models and the machine learning based
 models. A comparison of the first three models can be found
 in~\cite{wei2012}. 
 
@@ -655,10 +656,10 @@ true. There are several SV models and the most well-known and popular is the
 Heston model~\cite{heston1993}. Additional information about SV models can be
 found in~\cite{shephard1995}. 
 
-The realized volatility constructed from high frequency intraday returns gave
-rise to the realized volatility models mainly because the realized volatility
+The realised volatility constructed from high frequency intraday returns gave
+rise to the realised volatility models mainly because the realised volatility
 series is much more homoskedastic and seems to be a long memory
-process~\cite{andersonetal2003}. For realized volatility, the autoregressive
+process~\cite{andersonetal2003}. For realised volatility, the autoregressive
 fractionally integrated moving average (ARFIMA) process emerged as a standard
 model~\cite{chenetal2010} and many variations have been studied, but all of
 them produce similar forecasting results to the ARFIMA(1,d,1)
