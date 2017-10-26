@@ -1,0 +1,181 @@
+\chapter{Proofs}
+Some useful proofs for the understanding of this thesis.
+\section{The pseudo-inverse computed using the compact
+singular value decomposition (SVD)} \label{app:pseudoproof}
+\begin{equation}
+\mathbf{A}^+ = \mathbf{V_1\Sigma_1^{-1}U_1^\top}
+\end{equation}
+
+\textbf{Proof}\quad
+
+In the case matrix $\mathbf{A}$ is non singular, its solution is
+straight forward:
+
+\begin{equation}
+\label{OLSsolution2}
+    \mathbf{\mathbf{X}}=\mathbf{A}^{-1}\mathbf{Y}
+\end{equation}
+
+
+Since the problem shown in equation~(\ref{eq:regproblem}) has not
+solution, the minimum norm given by equation~(\ref{OLSsolution2}) is
+obtained by solving the equivalent problem:
+
+\begin{equation*}
+\label{eq:proyectorsol}
+\mathbf{A \hat{\mathbf{X}} = PY} 
+\end{equation*}
+
+
+\noindent where $\mathbf{P=U_1 U_1^\top}$ is the projection onto the
+Col($\mathbf{A}$). 
+
+Since $\mathbf{V} = [\underset{(n \times k)}{\mathbf{V_1}} |
+\underset{(n \times k)}{\mathbf{V_2}}]$ and $\mathbf{V_1^\top V_2 =
+0}$ we can express $\mathbf{\hat{\mathbf{X}}} = \mathbf{V_1 \mathbf{X}_1 + V_2 \mathbf{X}_2}$
+with $\mathbf{\mathbf{X}_2=0}$ because $\mathbf{\hat{\mathbf{X}}}$ lives in the
+$\text{Row}(\mathbf{A})$ given by $\mathbf{V_1}$, so we have:
+
+\begin{eqnarray*}
+\mathbf{A \hat{\mathbf{X}}} &=& \mathbf{PY} \\
+\mathbf{U_1 \Sigma_1 V_1^\top \hat{\mathbf{X}}} &=& \mathbf{U_1 U_1^\top Y} \\
+\mathbf{ V_1^\top \hat{\mathbf{X}}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top Y} \\ 
+\mathbf{ V_1^\top V_1 \mathbf{X}_1} &=& \mathbf{\Sigma_1^{-1}
+U_1^\top Y} \\
+\mathbf{\mathbf{X}_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top Y}
+\end{eqnarray*}
+
+\noindent from this result we can obtain $\mathbf{\hat{\mathbf{X}}}$ and
+therefore the pseudo-inverse expression:
+
+\begin{eqnarray*}
+\mathbf{\hat{\mathbf{X}}} &=& \mathbf{V_1 \mathbf{X}_1} \\
+                &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top Y} \\
+\mathbf{A^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
+\end{eqnarray*}
+
+$\blacksquare$
+
+\section{Ridge regression optimal solution}\label{app:rroptsection}
+
+\begin{equation*}
+\mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
+\end{equation*}
+
+
+\textbf{Proof}\quad
+
+\begin{eqnarray*}
+J(\mathbf{\mathbf{X}}) &=&  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
+ \| \mathbf{\mathbf{X}}\| ^2 \\
+ &=&  \sum_{t=1}^N (\mathbf{\mathbf{X}}^\top {\bf a}_t-y_t)^2 + \lambda \sum_{i=1}^p \mathbf{X}_i^2 \\
+ &=& (\mathbf{X}^\top a_1-y_1)^2 + \dots + (\mathbf{X}^\top a_N-y_N)^2 + \lambda (\mathbf{X}_1^2+\dots+\mathbf{X}_p^2)
+\end{eqnarray*}
+\noindent taking derivatives
+ \begin{eqnarray*}
+ \frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}_1}&=& 
+ 2(\mathbf{X}^\top \mathbf{a}_1-y_1)\mathbf{a}_{11} + \dots + 2(\mathbf{X}^\top \mathbf{a}_N-y_N)\mathbf{a}_{N1} + 2\lambda \mathbf{X}_1 \\
+ &=& 2\mathbf{a}_1^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}_1\\
+& \vdots &\\
+  \frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}_p}&=& 
+ 2\mathbf{a}_p^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}_p 
+\end{eqnarray*}
+
+Then we have that:
+\begin{eqnarray*}
+\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}&=& 
+ 2\mathbf{A}^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}
+\end{eqnarray*}
+Since $\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}=0$ we have:
+\begin{eqnarray*}
+2\mathbf{A}^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}&=&0 \\
+\mathbf{A}^\top\mathbf{A}\mathbf{X} - \mathbf{A}^\top\mathbf{Y} + \lambda\mathbf{X} &=& 0\\
+(\mathbf{A}^\top\mathbf{A}+\lambda\mathbb{I})\mathbf{X} &=&  \mathbf{A}^\top\mathbf{Y} \\
+\mathbf{X} &=& (\mathbf{A}^\top\mathbf{A}+\lambda\mathbb{I})^{-1}  \mathbf{A}^\top\mathbf{Y}
+\end{eqnarray*}
+
+$\blacksquare$
+
+\section{Bias and Variance}\label{app:biasandvariance}
+
+The OLS bias can be obtained as:
+
+\begin{eqnarray*}
+Bias(\hat{f}(\hat{\mathbf{X}})) &=& E[\hat{\mathbf{X}}] - \mathbf{X} \\
+&=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}] - \mathbf{X} \\
+&=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top (\mathbf{AX})] - \mathbf{X}  \\
+&=& \mathbf{X}  - \mathbf{X}  \\
+&=&  0
+\end{eqnarray*}
+
+The Ridge Regression bias can be obtained as:
+
+\begin{eqnarray*}
+\mathbf{X}(\lambda) &=&( \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \\
+&=& (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1} (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y} \\
+&=&  (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1}  \hat{\mathbf{X}} \\
+&=& \mathbf{W} \hat{\mathbf{X}} 
+\end{eqnarray*}
+
+\noindent where $\mathbf{W}  = (\mathbb{I} + \lambda (\mathbf{A}^\top
+\mathbf{A})^{-1})^{-1}  $ it is defined for simplicity. Ridge
+regression bias is then obtained as:
+
+\begin{eqnarray*}
+Bias(\mathbf{X}(\lambda)) &=& E[\mathbf{X}(\lambda)] - \mathbf{X} \\
+&=& E[\mathbf{W}\hat{\mathbf{X}}] - \mathbf{X} \\
+&=&  \mathbf{W} \mathbf{X} - \mathbf{X} \neq 0 
+\end{eqnarray*}
+
+
+The variance of OLS is:
+
+\begin{equation*}
+Var(\hat{\mathbf{X}}) = \sigma^2 (\mathbf{A}^\top \mathbf{A} )^{-1}
+\end{equation*}
+
+\noindent and the variance of ridge regression is:
+
+\begin{eqnarray*}
+Var(\mathbf{X}(\lambda)) &=& Var(\mathbf{W}\hat{\mathbf{X}}) \\
+&=& E[(\mathbf{W}\hat{\mathbf{X}}-E[\mathbf{W}\hat{\mathbf{X}}])(\mathbf{W}\hat{\mathbf{X}}-E[\mathbf{W}\hat{\mathbf{X}}])^\top] \\
+&=& \mathbf{W}E[(\hat{\mathbf{X}}-E[\hat{\mathbf{X}}])(\hat{\mathbf{X}}-E[\hat{\mathbf{X}}])^\top] \mathbf{W}^\top \\
+&=& \mathbf{W}Var(\hat{\mathbf{X}})\mathbf{W}^\top \\
+&=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top
+\end{eqnarray*}
+
+\section{Ridge regression shows an
+increasing squared bias and a decreasing variance} \label{app:rrbiasvar}
+
+\textbf{Proof}\quad
+
+Since $Bias(\mathbf{X}(\lambda)) \neq 0$ this imply that
+
+\begin{equation*}
+Bias(\mathbf{X}(\lambda)) ^2 > 0 
+\end{equation*}
+
+\noindent we know that $\mathbf{A}^\top
+\mathbf{A}$ has an eigenvalue decomposition $\mathbf{A}^\top
+\mathbf{A} = \mathbf{V} \Sigma \mathbf{V}^{-1}$.
+
+
+\begin{eqnarray*}
+Var(\mathbf{X}(\lambda)) &=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top\\
+Var(\mathbf{X}(\lambda)) &=& \sigma^2 (\mathbb{I} + \lambda (\mathbf{A}^\top
+\mathbf{A})^{-1})^{-1} (\mathbf{A}^\top \mathbf{A} )^{-1}((\mathbb{I} + \lambda (\mathbf{A}^\top
+\mathbf{A})^{-1})^{-1} )^\top \\
+&=& \sigma^2 (\mathbb{I} + \lambda (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1} (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1}((\mathbb{I} + \lambda (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1})^{-1} )^\top \\
+&=& \sigma^2 \mathbf{V} (\mathbb{I} + \lambda \Sigma^{-1})^{-1} \Sigma^{-1} (\mathbb{I} + \lambda \Sigma^{-1})^{-1}  \mathbf{V}^{-1}\\
+&=& \sigma^2 \mathbf{V} \mathbf{D}^{-1} \mathbf{V}^{-1}
+\end{eqnarray*}
+
+\noindent where $\mathbf{D}^{-1}  = (\mathbb{I} + \lambda \Sigma^{-1})^{-1} \Sigma^{-1} (\mathbb{I} + \lambda \Sigma^{-1})^{-1}$ is a diagonal matrix with coefficients:
+
+\begin{equation*}
+d_i = \frac{\sigma_i^{-1}}{(1+\lambda\sigma_i^{-1})^2}
+\end{equation*}
+
+$\blacksquare$
+
+

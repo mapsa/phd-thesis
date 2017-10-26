@@ -6,7 +6,7 @@ design of search engines, robots systems and forecasts applications that process
 large data sets. Usually machines designed to forecast financial time series
 requires long training period and therefore they are not suitable to be updated
 with stream data. Online machine learning techniques tackle this problem by
-updating the model with new data or by computing a new model using less data so
+updating the model with new data or by computing a new model considering less data so
 they can give a response in a short period of time.
 
 \vspace{0.5cm} 
@@ -383,7 +383,7 @@ Regularization can be understood using two contexts: learning theory
 (probabilistic) and inverse problems (deterministic). In the context of
 learning, regularization refers to techniques allowing to avoid over-fitting and
 the desire property of the selected estimator is to perform well on new data (to
-generalize), e.g. regularized least squares. In the context of inverse problems,
+generalise), e.g. regularized least squares. In the context of inverse problems,
 regularization objective is to stabilise, with respect to noise, a possibly
 ill-conditioned matrix inversion problem e.g spectral cut-off and Tikhonov
 regularization or ridge regression (RR) \cite{ tikhonov1977}.
@@ -420,6 +420,15 @@ RR corresponds to a regularised least squares
 method. The least squares (LS) method is a well known way to solve a regression
 problem.  
 
+LS method consists of minimising the sum of squared errors:
+\begin{eqnarray*}
+\label{eq:lsm}
+ J(\mathbf{X}) =& \displaystyle \sum_{t=1}^n (f(\mathbf{x}_t)-y_t)^2 \\
+ =&\displaystyle \sum_{t=1}^n (\mathbf{\mathbf{A}}^\top {\mathbf{x}}_t-y_t)^2 \\
+ =& \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2 
+\end{eqnarray*}
+
+\noindent where 
 \begin{equation}
 \label{eq:RRdefinitions}
 \mathbf{X} = 
@@ -451,15 +460,9 @@ problem.
 \right]
 \end{equation}
 
-LS method consists of minimising the sum of squared errors:
-\begin{eqnarray*}
-\label{eq:lsm}
- J(\mathbf{X}) =& \displaystyle \sum_{t=1}^n (f(\mathbf{x}_t)-y_t)^2 \\
- =&\displaystyle \sum_{t=1}^n (\mathbf{\mathbf{A}}^\top {\mathbf{x}}_t-y_t)^2 \\
- =& \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2 
-\end{eqnarray*}
+\noindent and $f(\mathbf{x}_t)={\mathbf{A}}^\top {\mathbf{x}}_t$. 
 
-\noindent where $f(\mathbf{x}_t)={\mathbf{A}}^\top {\mathbf{x}}_t$. To solve equation \ref{eq:lsm} is equivalent to find a solution of:
+To solve equation \ref{eq:lsm} is equivalent to find a solution of:
 \begin{equation}
 \label{eq:regproblem}
 \underset{m \times n}{\mathbf{A}} \enskip \underset{n \times
@@ -539,55 +542,7 @@ singular value decomposition (SVD) of $\mathbf{A}$:
 \mathbf{A}^+ = \mathbf{V_1\Sigma_1^{-1}U_1^\top}
 \end{equation}
 
-\textbf{Proof}\quad
-
-In the case matrix $\mathbf{A}$ is non singular, its solution is
-straight forward:
-
-\begin{equation}
-\label{OLSsolution}
-    \mathbf{\mathbf{X}}=\mathbf{A}^{-1}\mathbf{Y}
-\end{equation}
-
-
-Since the problem shown in equation~(\ref{eq:regproblem}) has not
-solution, the minimum norm given by equation~(\ref{OLSsolution}) is
-obtained by solving the equivalent problem:
-
-\begin{equation*}
-\label{eq:proyectorsol}
-\mathbf{A \hat{\mathbf{X}} = PY} 
-\end{equation*}
-
-
-\noindent where $\mathbf{P=U_1 U_1^\top}$ is the projection onto the
-Col($\mathbf{A}$). 
-
-Since $\mathbf{V} = [\underset{(n \times k)}{\mathbf{V_1}} |
-\underset{(n \times k)}{\mathbf{V_2}}]$ and $\mathbf{V_1^\top V_2 =
-0}$ we can express $\mathbf{\hat{\mathbf{X}}} = \mathbf{V_1 \mathbf{X}_1 + V_2 \mathbf{X}_2}$
-with $\mathbf{\mathbf{X}_2=0}$ because $\mathbf{\hat{\mathbf{X}}}$ lives in the
-$\text{Row}(\mathbf{A})$ given by $\mathbf{V_1}$, so we have:
-
-\begin{eqnarray*}
-\mathbf{A \hat{\mathbf{X}}} &=& \mathbf{PY} \\
-\mathbf{U_1 \Sigma_1 V_1^\top \hat{\mathbf{X}}} &=& \mathbf{U_1 U_1^\top Y} \\
-\mathbf{ V_1^\top \hat{\mathbf{X}}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top Y} \\ 
-\mathbf{ V_1^\top V_1 \mathbf{X}_1} &=& \mathbf{\Sigma_1^{-1}
-U_1^\top Y} \\
-\mathbf{\mathbf{X}_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top Y}
-\end{eqnarray*}
-
-\noindent from this result we can obtain $\mathbf{\hat{\mathbf{X}}}$ and
-therefore the pseudo-inverse expression:
-
-\begin{eqnarray*}
-\mathbf{\hat{\mathbf{X}}} &=& \mathbf{V_1 \mathbf{X}_1} \\
-                &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top Y} \\
-\mathbf{A^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
-\end{eqnarray*}
-
-$\blacksquare$
+Proof can be found in the appendix section \ref{app:pseudoproof}.
 
 
 In order to avoid the singularity of the matrix $\mathbf{A}^\top \mathbf{A}$, a regularisation term $\lambda$ is introduced: 
@@ -605,43 +560,12 @@ J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  
 \mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
 \end{equation*}
 
-\textbf{Proof}\quad
+Proof can be found in section \ref{app:rroptsection}.
 
-\begin{eqnarray*}
-J(\mathbf{\mathbf{X}}) &=&  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
- \| \mathbf{\mathbf{X}}\| ^2 \\
- &=&  \sum_{t=1}^N (\mathbf{\mathbf{X}}^\top {\bf a}_t-y_t)^2 + \lambda \sum_{i=1}^p \mathbf{X}_i^2 \\
- &=& (\mathbf{X}^\top a_1-y_1)^2 + \dots + (\mathbf{X}^\top a_N-y_N)^2 + \lambda (\mathbf{X}_1^2+\dots+\mathbf{X}_p^2)
-\end{eqnarray*}
-\noindent taking derivatives
- \begin{eqnarray*}
- \frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}_1}&=& 
- 2(\mathbf{X}^\top \mathbf{a}_1-y_1)\mathbf{a}_{11} + \dots + 2(\mathbf{X}^\top \mathbf{a}_N-y_N)\mathbf{a}_{N1} + 2\lambda \mathbf{X}_1 \\
- &=& 2\mathbf{a}_1^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}_1\\
-& \vdots &\\
-  \frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}_p}&=& 
- 2\mathbf{a}_p^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}_p 
-\end{eqnarray*}
-
-Then we have that:
-\begin{eqnarray*}
-\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}&=& 
- 2\mathbf{A}^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}
-\end{eqnarray*}
-Since $\frac{\partial J(\mathbf{\mathbf{X}})}{\partial \mathbf{X}}=0$ we have:
-\begin{eqnarray*}
-2\mathbf{A}^\top(\mathbf{A}\mathbf{X}-\mathbf{Y}) + 2\lambda\mathbf{X}&=&0 \\
-\mathbf{A}^\top\mathbf{A}\mathbf{X} - \mathbf{A}^\top\mathbf{Y} + \lambda\mathbf{X} &=& 0\\
-(\mathbf{A}^\top\mathbf{A}+\lambda\mathbb{I})\mathbf{X} &=&  \mathbf{A}^\top\mathbf{Y} \\
-\mathbf{X} &=& (\mathbf{A}^\top\mathbf{A}+\lambda\mathbb{I})^{-1}  \mathbf{A}^\top\mathbf{Y}
-\end{eqnarray*}
-
-$\blacksquare$
 
 
 The method is called ridge regression because the term $\lambda \mathbb{I}$ adds positive entries along the diagonal (ridge) to avoid the
 singularity of the covariance matrix $\mathbf{A}^\top \mathbf{A}$. This addition ensures that all of the covariance matrix eigenvalues will be strictly greater than 0, i.e the solution becomes unique.
-%=======================HASTA ACA REVISADO PROFE =========================
 
 \subsection{The Lambda parameter}
 
@@ -667,7 +591,6 @@ coefficients:
 \caption{Shrink of regression coefficients}
 \label{fig:shrinks}
 \end{figure}
-
 
 
 On the other hand, the effect of adding the term $\lambda \mathbb{I}$
@@ -750,37 +673,18 @@ reduce the expected prediction error by reducing variance, considering a biased
 estimator. 
 It is known that the prediction error can be express as a decomposition between bias and variance.
 
-The solution of OLS is well known $\hat{\mathbf{X}}=(\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}$, and its bias is:
-
-\begin{eqnarray*}
-Bias(\hat{f}(\hat{\mathbf{X}})) &=& E[\hat{\mathbf{X}}] - \mathbf{X} \\
-&=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}] - \mathbf{X} \\
-&=& E[ (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top (\mathbf{AX})] - \mathbf{X}  \\
-&=& \mathbf{X}  - \mathbf{X}  \\
-&=&  0
-\end{eqnarray*}
-
+The solution of OLS is well known $\hat{\mathbf{X}}=(\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y}$, and its bias ($Bias(\hat{f}(\hat{\mathbf{X}})$)  is 0 (Proof in section \ref{app:biasandvariance}).
 
 The bias of ridge regression when $\mathbf{A A^\top}$ is non-singular
 can be obtained expressing ridge regression solution
 $\mathbf{\lambda}$ in terms of OLS solution $\hat{\mathbf{X}}$:
 
-\begin{eqnarray*}
-\mathbf{X}(\lambda) &=&( \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \\
-&=& (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1} (\mathbf{A}^\top \mathbf{A})^{-1}\mathbf{A}^\top \mathbf{Y} \\
-&=&  (\mathbb{I} + \lambda (\mathbf{A}^\top \mathbf{A})^{-1})^{-1}  \hat{\mathbf{X}} \\
-&=& \mathbf{W} \hat{\mathbf{X}} 
-\end{eqnarray*}
-
-\noindent where $\mathbf{W}  = (\mathbb{I} + \lambda (\mathbf{A}^\top
-\mathbf{A})^{-1})^{-1}  $ it is defined for simplicity. Ridge
-regression bias is then obtained as:
-
-\begin{eqnarray*}
-Bias(\mathbf{X}(\lambda)) &=& E[\mathbf{X}(\lambda)] - \mathbf{X} \\
-&=& E[\mathbf{W}\hat{\mathbf{X}}] - \mathbf{X} \\
-&=&  \mathbf{W} \mathbf{X} - \mathbf{X} \neq 0 
-\end{eqnarray*}
+\begin{equation}
+ Bias(\mathbf{X}(\lambda))  = \mathbf{W} \mathbf{X} - \mathbf{X} \neq 0 
+ \end{equation}
+ 
+ \noindent where $\mathbf{W}  = (\mathbb{I} + \lambda (\mathbf{A}^\top
+\mathbf{A})^{-1})^{-1}  $
 
 
 The variance of OLS is:
@@ -791,13 +695,11 @@ Var(\hat{\mathbf{X}}) = \sigma^2 (\mathbf{A}^\top \mathbf{A} )^{-1}
 
 \noindent and the variance of ridge regression is:
 
-\begin{eqnarray*}
-Var(\mathbf{X}(\lambda)) &=& Var(\mathbf{W}\hat{\mathbf{X}}) \\
-&=& E[(\mathbf{W}\hat{\mathbf{X}}-E[\mathbf{W}\hat{\mathbf{X}}])(\mathbf{W}\hat{\mathbf{X}}-E[\mathbf{W}\hat{\mathbf{X}}])^\top] \\
-&=& \mathbf{W}E[(\hat{\mathbf{X}}-E[\hat{\mathbf{X}}])(\hat{\mathbf{X}}-E[\hat{\mathbf{X}}])^\top] \mathbf{W}^\top \\
-&=& \mathbf{W}Var(\hat{\mathbf{X}})\mathbf{W}^\top \\
-&=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top
-\end{eqnarray*}
+\begin{equation*}
+Var(\mathbf{X}(\lambda)) = \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top
+\end{equation*}
+
+Proof in section \ref{app:biasandvariance}.
 
 \begin{figure}[h!]
 \includegraphics[width=\linewidth]{img/biasvariance}
@@ -813,38 +715,8 @@ Despite OLS has zero bias,
 its variance is greater than ridge for small values of $\lambda$.
 It can be shown that, in terms of prediction error, ridge (black line)
 is lower than OLS (dotted line)~\cite{hoerl1970}. Ridge regression shows an
-increasing squared bias and a decreasing variance.
+increasing squared bias and a decreasing variance. See proof in section \ref{app:rrbiasvar}.
 
-\textbf{Proof}\quad
-
-Since $Bias(\mathbf{X}(\lambda)) \neq 0$ this imply that
-
-\begin{equation*}
-Bias(\mathbf{X}(\lambda)) ^2 > 0 
-\end{equation*}
-
-\noindent we know that $\mathbf{A}^\top
-\mathbf{A}$ has an eigenvalue decomposition $\mathbf{A}^\top
-\mathbf{A} = \mathbf{V} \Sigma \mathbf{V}^{-1}$.
-
-
-\begin{eqnarray*}
-Var(\mathbf{X}(\lambda)) &=& \sigma^2 \mathbf{W}(\mathbf{A}^\top \mathbf{A} )^{-1}\mathbf{W}^\top\\
-Var(\mathbf{X}(\lambda)) &=& \sigma^2 (\mathbb{I} + \lambda (\mathbf{A}^\top
-\mathbf{A})^{-1})^{-1} (\mathbf{A}^\top \mathbf{A} )^{-1}((\mathbb{I} + \lambda (\mathbf{A}^\top
-\mathbf{A})^{-1})^{-1} )^\top \\
-&=& \sigma^2 (\mathbb{I} + \lambda (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1} (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1}((\mathbb{I} + \lambda (\mathbf{V} \Sigma \mathbf{V}^{-1})^{-1})^{-1} )^\top \\
-&=& \sigma^2 \mathbf{V} (\mathbb{I} + \lambda \Sigma^{-1})^{-1} \Sigma^{-1} (\mathbb{I} + \lambda \Sigma^{-1})^{-1}  \mathbf{V}^{-1}\\
-&=& \sigma^2 \mathbf{V} \mathbf{D}^{-1} \mathbf{V}^{-1}
-\end{eqnarray*}
-
-\noindent where $\mathbf{D}^{-1}  = (\mathbb{I} + \lambda \Sigma^{-1})^{-1} \Sigma^{-1} (\mathbb{I} + \lambda \Sigma^{-1})^{-1}$ is a diagonal matrix with coefficients:
-
-\begin{equation*}
-d_i = \frac{\sigma_i^{-1}}{(1+\lambda\sigma_i^{-1})^2}
-\end{equation*}
-
-$\blacksquare$
 
 
 \subsection{Machine learning algorithms}
