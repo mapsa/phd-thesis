@@ -386,7 +386,7 @@ the desire property of the selected estimator is to perform well on new data (to
 generalise), e.g. regularized least squares. In the context of inverse problems,
 regularization objective is to stabilise, with respect to noise, a possibly
 ill-conditioned matrix inversion problem e.g spectral cut-off and Tikhonov
-regularization or ridge regression (RR) \cite{ tikhonov1977}.
+regularization or ridge regression (RR) \cite{ tikhonov1977}. More details in section \ref{app:effcomp}.
 
 In particular, it is well known that regularization schemes such as RR or
 Tikhonov regularization can be effectively used in the context of learning
@@ -555,10 +555,10 @@ J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  
 
 \noindent which optimal solution $\mathbf{\mathbf{X}}_*$ is well known: 
 
-\begin{equation*}
+\begin{equation}
 \label{eq:optsolRR}
 \mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
-\end{equation*}
+\end{equation}
 
 Proof can be found in section \ref{app:rroptsection}.
 
@@ -742,8 +742,7 @@ based on theory in statistical learning \cite{cortes1995}.  SVM tunes the capaci
 maximising the margin between the training patterns and the decision boundary. The
 solution is expressed as a linear combination of supporting patterns, which are the training patterns close to the decision boundary, called the support vectors.
 
-The major difference between SVM and ANN is in the error optimisation. In ANN, the aim of learning is to obtain a set of weight values which minimise the training error 
-minimum while training adjust the capacity of the machine. 
+The major difference between SVM and ANN is the error optimisation. In ANN, the aim of learning is to obtain a set of weight values which minimise the training error while training adjust the capacity of the machine.
 
 For nonlinear case, SVM mapped the data sets of input space into a higher dimensional feature space, which is linear and the large margin learning algorithm is then applied. However, the mapping can be implicitly done by kernel functions. In the high dimensional feature space, simpler and linear hyper plane classifiers that have maximal margin between the classes can be obtained.
 
@@ -763,13 +762,11 @@ execution time is critical and new data is required to be included in the model,
 online learning algorithms are a better option.
 
 In batch learning, the training phase is commonly a computationally expensive
-process. Therefore, when new data arrives it can't be included easily to the
+process. Therefore, when new data arrives it can't be included easily into the
 model. Moreover, it could happen that we won't have enough time to process the
 new data before more data arrives. In online learning algorithms there is no
-training phase, but the model is updated and evaluated at every time step. This
+training phase, the model is updated and evaluated at every time step. This
 model updating is computationally less expensive than a training phase.
-
-
 
 Online algorithms allow incremental learning by processing one instance at a
 time. This is done updating the current model instead of building the model from
@@ -876,7 +873,7 @@ $T$ trials as:
 L_T = \sum_{t=1}^T l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)
 \end{equation*}
 
-The objective is minimize this loss function for all instances.
+The objective is to minimise this loss function for all instances.
 The quality of online learning algorithms is measured by a quantity known as
 regret which is the difference between the performance of the online algorithm
 and its optimal predictor $E^* \in \Theta$ given by:
@@ -894,13 +891,6 @@ Therefore regret is defined as:
 \begin{equation*}
 R_T = L_T - L^*_T
 \end{equation*}
-
-
-\subsection{Competitive analysis}
-
-Competitive analysis was designed for analysing the performance of an online algorithm compared with its optimal offline algorithm. An optimal offline algorithm can view the sequences of requests in advance. The effectiveness of an online algorithm \cite{sleator1985} may be measured by its competitive ratio which is the worst-case ratio of the online algorithm and the optimal offline algorithm.
-
-
 
 \subsection{Online Ridge Regression}
 
@@ -985,12 +975,6 @@ vector $\mathbf{x}_{m+1}$ to solve the model parameters:
 \sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t \, .
 \end{equation}
 
-If we define $\displaystyle\mathbf{S}= \sum_{t=1}^{m+1} \mathbf{a}_t
-\mathbf{a}_t  ^\intercal + \gamma \mathbb{I} $ and $\mathbf{W}=
-\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t$, the
-algorithm~\ref{alg:AAR} is slightly different to the algorithm~\ref{alg:RR}, 
-which updated matrix $\mathbf{S}$ before making the prediction:
-
 \begin{algorithm}[ht]
 \begin{algorithmic}[1]
 \REQUIRE $\,$ \\
@@ -1014,139 +998,17 @@ and $\mathbf{W}=0$
 \label{alg:AAR}
 \end{algorithm}
 
+If we define $\displaystyle\mathbf{S}= \sum_{t=1}^{m+1} \mathbf{a}_t
+\mathbf{a}_t  ^\intercal + \gamma \mathbb{I} $ and $\mathbf{W}=
+\displaystyle\sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t$, the
+algorithm~\ref{alg:AAR} is slightly different to the algorithm~\ref{alg:RR}, 
+which updated matrix $\mathbf{S}$ before making the prediction.
 
-\subsection{Efficient computation}
-In regression problems we always require getting a matrix inverse which is
-computationally expensive. However, in stream data problems there is a way to
-obtain a matrix inverse approximation using the Sherman-Morrison-Woodbury. This
-formula allows to get the inverse of a matrix $\mathbf{A+uv^\top}$ if we previously calculated the
-inverse of $\mathbf{A}$ as follows:
+\subsection{Competitive analysis}
 
-\begin{equation}
-\label{eq:SMW}
-(\mathbf{A+uv^\top})^{-1}=\mathbf{A}^{-1}-
-\frac{\mathbf{A^{-1}uv^\top A^{-1}}}{\mathbf{1+v^\top A^{-1}u}}
-\end{equation}
+Competitive analysis was designed for analysing the performance of an online algorithm compared with its optimal offline algorithm. An optimal offline algorithm can view the sequences of requests in advance. The effectiveness of an online algorithm \cite{sleator1985} may be measured by its competitive ratio which is the worst-case ratio of the online algorithm and the optimal offline algorithm.
 
 
-Alternatively, Coleman and
-Sun~\cite{coleman+sun2010} presented an iterative algorithm which
-uses $\mathbf{X}(\lambda)$ to approximate $\mathbf{X}(0)$.
-
-
-Using the compact SVD (shown in equation~(\ref{eq:compactsvd}))
-$\mathbf{X}(\lambda)$ is expressed as follows:
-
-
-\begin{eqnarray}
-\label{eq:optsolRRsvd}
-\mathbf{X}(\lambda) & = & (\mathbf{A}^\top \mathbf{A}+ \lambda
-\mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \nonumber \\
-& = &\mathbf{V}_1(\Sigma_1^2+\lambda \mathbb{I})^{-1}\mathbf{\Sigma_1
-U_1^\top Y}
-\end{eqnarray}
-
-\noindent where is easy to see that $\mathbf{X}(\lambda) \rightarrow
-\mathbf{\hat{X}}=\mathbf{V}_1 \mathbf{\Sigma}_1^{-1}\mathbf{U}_1^\top
-\mathbf{Y}$ as $\lambda \rightarrow 0$. 
-
-The method consists in obtaining $\mathbf{X}(\lambda)$ and then refine
-by adding more terms of its Taylor expansion to approximate
-$\mathbf{X}(0) = \mathbf{\hat{X}}$. The Taylor expansion about $\lambda_0$ is:
-
-\begin{equation}
-\label{eq:taylor}
-    \mathbf{X}(\lambda)=\mathbf{X}(\lambda_0) + \sum_{k=1}^\infty
-    \mathbf{s}_k(\lambda-\lambda_0)^{k}
-\end{equation}
-
-
-\noindent where $\mathbf{s}_k=\frac{1}{k!}\mathbf{X}(\lambda)^{(k)}$
-and $\mathbf{X}(\lambda)^{(k)}$ is obtained by taking differences 
-$\frac{\partial}{\partial \lambda}$ of:  
-
-\begin{eqnarray*}
-(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) \mathbf{X}(\lambda) & = & \mathbf{A}^\top \mathbf{Y}\\
-(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) \mathbf{X}(\lambda)^{(1)} + \mathbf{X}(\lambda)& = & 0 \\
-\mathbf{X}(\lambda)^{(1)}  &=& -(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) ^{-1} \mathbf{X}(\lambda) \\
-\mathbf{X}(\lambda)^{(2)}  &=& -2(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) ^{-1} \mathbf{X}(\lambda)^{(1)} \\
-& \vdots & \\
-\mathbf{X}(\lambda)^{(k)}  &=& -k(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) ^{-1} \mathbf{X}(\lambda)^{(k-1)} 
-\end{eqnarray*}
-
-
-
-\noindent for $\lambda=0$ we have:
-
-\begin{equation}
-\label{eq:taylor}
-    \mathbf{X}(0)=\mathbf{X}(\lambda_0) + \sum_{k=1}^\infty
-     (-1)^k \mathbf{s}_k \lambda_0^k
-\end{equation}
-
-
-\noindent therefore in order to ensure convergence, we can see that$\lambda_0$
-selection cannot be large. 
-
-The algorithm for computing $\mathbf{X}(0)$ is the following:
-
-\begin{algorithm}[H]
-\begin{algorithmic}[1]
-\REQUIRE $\,$ \\
-$\mathbf{A}$: design matrix \\
-$\mathbf{Y}$: response matrix \\
-$\lambda$: rank deficient parameter \\
-\ENSURE  $\,$ \\
-$\mathbf{X}$: parameters \\
-\STATE $\mathbf{M}=\mathbf{A^\top A}$ \\
-\STATE Initialize $\mathbf{Q R}=\mathbf{M}$ \\
-\STATE $\mathbf{X} = \mathbf{R^{-1}Q^\top Y}$ \\
-\STATE $\mathbf{s} = \mathbf{X}$ \\
-\FOR { $i = 1,2,3,\dots$ }
-	\STATE $\mathbf{s} =
-        -(\mathbf{M}+\lambda\mathbb{I})^{-1}\mathbf{s}$\\
-	\STATE $\mathbf{X}=\mathbf{X} + (-1)^i {\color{red}\mathbf{s}
-        \lambda^i}$
-\ENDFOR
-\end{algorithmic}
-\caption{Algorithm for handling rank deficient matrices}
-\label{alg:coleman}
-\end{algorithm}
-
-The algorithm~\ref{alg:coleman} solves equation~(\ref{eq:taylor}). However, this
-version is unstable since typically $\|\mathbf{s}\|$ is very large and
-$\lambda^i$ is very small ($\lambda$ is small).
-
-The following algorithm shows a more stable version of
-algorithm~\ref{alg:coleman}.
-
-
-\begin{algorithm}[H]
-\begin{algorithmic}[1]
-\REQUIRE $\,$ \\
-$\mathbf{A}$: design matrix \\
-$\mathbf{Y}$: response matrix \\
-$\lambda$: rank deficient parameter \\
-\ENSURE  $\,$ \\
-$\mathbf{X}$: parameters \\
-\STATE $\mathbf{M}=\mathbf{A^\top A}$ \\
-\STATE Initialize $\mathbf{Q R}=\mathbf{M}$ \\
-\STATE $\mathbf{X} = \mathbf{R^{-1}Q^\top Y}$ \\
-\STATE $\mathbf{t} = \mathbf{X}$ \\
-\FOR { $i = 1,2,3,\dots$ }
-        \STATE $\mathbf{t} =\lambda \mathbf{t}$  
-        \STATE $\mathbf{t} =  -(\mathbf{M}+\lambda\mathbb{I})^{-1}\mathbf{t}$
-	\STATE $\mathbf{X}=\mathbf{X} + \mathbf{t}$
-\ENDFOR
-\end{algorithmic}
-\caption{Algorithm for handling rank deficient matrices improved}
-\label{alg:colemanimproved}
-\end{algorithm}
-
-Both algorithms are equivalent, but algorithm~\ref{alg:colemanimproved} is more
-stable and converges in typically less than 10 steps.
-It is important to notice that the QR factorisation is computed only once and it
-is computationally less expensive than the SVD.
 
 
 %Despite the bias-variance tradeoff provides a conceptual framework for
@@ -1205,7 +1067,7 @@ is computationally less expensive than the SVD.
 %\item The $\lambda_{\text{QR}}$ approximation is obtained as:
 %$\lambda_{\text{QR}} = \frac{\lambda_1 + \lambda_2}{2}$  
 %\end{enumerate}
-
+\newpage
 
 \section{Evaluation methods} \label{sec:evaluation}
 
@@ -1243,9 +1105,7 @@ large impact on RMSE due to squaring forecast error.
 \end{equation}
 \item[$U$-statistic] the Theil's $U$-statistic, presented by
 \cite{theil1966}, is a unit free measure obtained as the ratio between the root
-MSE (RMSE) of a model and the RMSE of the naive random walk model. A
-$U$-statistic less than 1 implies the performance is better than the naive
-model.
+MSE (RMSE) of a model and the RMSE of the naive random walk model. 
 \end{description}
 
 

@@ -178,4 +178,136 @@ d_i = \frac{\sigma_i^{-1}}{(1+\lambda\sigma_i^{-1})^2}
 
 $\blacksquare$
 
+\section{Efficient computation}\label{app:effcomp}
+In regression problems we always require getting a matrix inverse which is
+computationally expensive. However, in stream data problems there is a way to
+obtain a matrix inverse approximation using the Sherman-Morrison-Woodbury. This
+formula allows to get the inverse of a matrix $\mathbf{A+uv^\top}$ if we previously calculated the
+inverse of $\mathbf{A}$ as follows:
+
+\begin{equation}
+\label{eq:SMW}
+(\mathbf{A+uv^\top})^{-1}=\mathbf{A}^{-1}-
+\frac{\mathbf{A^{-1}uv^\top A^{-1}}}{\mathbf{1+v^\top A^{-1}u}}
+\end{equation}
+
+
+Alternatively, Coleman and
+Sun~\cite{coleman+sun2010} presented an iterative algorithm which
+uses $\mathbf{X}(\lambda)$ to approximate $\mathbf{X}(0)$.
+
+
+Using the compact SVD (shown in equation~(\ref{eq:compactsvd}))
+$\mathbf{X}(\lambda)$ is expressed as follows:
+
+
+\begin{eqnarray}
+\label{eq:optsolRRsvd}
+\mathbf{X}(\lambda) & = & (\mathbf{A}^\top \mathbf{A}+ \lambda
+\mathbb{I})^{-1}\mathbf{A}^\top \mathbf{Y} \nonumber \\
+& = &\mathbf{V}_1(\Sigma_1^2+\lambda \mathbb{I})^{-1}\mathbf{\Sigma_1
+U_1^\top Y}
+\end{eqnarray}
+
+\noindent where is easy to see that $\mathbf{X}(\lambda) \rightarrow
+\mathbf{\hat{X}}=\mathbf{V}_1 \mathbf{\Sigma}_1^{-1}\mathbf{U}_1^\top
+\mathbf{Y}$ as $\lambda \rightarrow 0$. 
+
+The method consists in obtaining $\mathbf{X}(\lambda)$ and then refine
+by adding more terms of its Taylor expansion to approximate
+$\mathbf{X}(0) = \mathbf{\hat{X}}$. The Taylor expansion about $\lambda_0$ is:
+
+\begin{equation}
+\label{eq:taylor}
+    \mathbf{X}(\lambda)=\mathbf{X}(\lambda_0) + \sum_{k=1}^\infty
+    \mathbf{s}_k(\lambda-\lambda_0)^{k}
+\end{equation}
+
+
+\noindent where $\mathbf{s}_k=\frac{1}{k!}\mathbf{X}(\lambda)^{(k)}$
+and $\mathbf{X}(\lambda)^{(k)}$ is obtained by taking differences 
+$\frac{\partial}{\partial \lambda}$ of:  
+
+\begin{eqnarray*}
+(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) \mathbf{X}(\lambda) & = & \mathbf{A}^\top \mathbf{Y}\\
+(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) \mathbf{X}(\lambda)^{(1)} + \mathbf{X}(\lambda)& = & 0 \\
+\mathbf{X}(\lambda)^{(1)}  &=& -(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) ^{-1} \mathbf{X}(\lambda) \\
+\mathbf{X}(\lambda)^{(2)}  &=& -2(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) ^{-1} \mathbf{X}(\lambda)^{(1)} \\
+& \vdots & \\
+\mathbf{X}(\lambda)^{(k)}  &=& -k(\mathbf{A}^\top \mathbf{A}+ \lambda\mathbb{I}) ^{-1} \mathbf{X}(\lambda)^{(k-1)} 
+\end{eqnarray*}
+
+
+
+\noindent for $\lambda=0$ we have:
+
+\begin{equation}
+\label{eq:taylor}
+    \mathbf{X}(0)=\mathbf{X}(\lambda_0) + \sum_{k=1}^\infty
+     (-1)^k \mathbf{s}_k \lambda_0^k
+\end{equation}
+
+
+\noindent therefore in order to ensure convergence, we can see that $\lambda_0$ cannot be large. 
+
+The algorithm for computing $\mathbf{X}(0)$ is the following:
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{A}$: design matrix \\
+$\mathbf{Y}$: response matrix \\
+$\lambda$: rank deficient parameter \\
+\ENSURE  $\,$ \\
+$\mathbf{X}$: parameters \\
+\STATE $\mathbf{M}=\mathbf{A^\top A}$ \\
+\STATE Initialize $\mathbf{Q R}=\mathbf{M}$ \\
+\STATE $\mathbf{X} = \mathbf{R^{-1}Q^\top Y}$ \\
+\STATE $\mathbf{s} = \mathbf{X}$ \\
+\FOR { $i = 1,2,3,\dots$ }
+	\STATE $\mathbf{s} =
+        -(\mathbf{M}+\lambda\mathbb{I})^{-1}\mathbf{s}$\\
+	\STATE $\mathbf{X}=\mathbf{X} + (-1)^i {\color{red}\mathbf{s}
+        \lambda^i}$
+\ENDFOR
+\end{algorithmic}
+\caption{Algorithm for handling rank deficient matrices}
+\label{alg:coleman}
+\end{algorithm}
+
+The algorithm~\ref{alg:coleman} solves equation~(\ref{eq:taylor}). However, this
+version is unstable since typically $\|\mathbf{s}\|$ is very large and
+$\lambda^i$ is very small ($\lambda$ is small).
+
+The following algorithm shows a more stable version of
+algorithm~\ref{alg:coleman}.
+
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{A}$: design matrix \\
+$\mathbf{Y}$: response matrix \\
+$\lambda$: rank deficient parameter \\
+\ENSURE  $\,$ \\
+$\mathbf{X}$: parameters \\
+\STATE $\mathbf{M}=\mathbf{A^\top A}$ \\
+\STATE Initialize $\mathbf{Q R}=\mathbf{M}$ \\
+\STATE $\mathbf{X} = \mathbf{R^{-1}Q^\top Y}$ \\
+\STATE $\mathbf{t} = \mathbf{X}$ \\
+\FOR { $i = 1,2,3,\dots$ }
+        \STATE $\mathbf{t} =\lambda \mathbf{t}$  
+        \STATE $\mathbf{t} =  -(\mathbf{M}+\lambda\mathbb{I})^{-1}\mathbf{t}$
+	\STATE $\mathbf{X}=\mathbf{X} + \mathbf{t}$
+\ENDFOR
+\end{algorithmic}
+\caption{Algorithm for handling rank deficient matrices improved}
+\label{alg:colemanimproved}
+\end{algorithm}
+
+Both algorithms are equivalent, but algorithm~\ref{alg:colemanimproved} is more
+stable and converges in typically less than 10 steps.
+It is important to notice that the QR factorisation is computed only once and it
+is computationally less expensive than the SVD.
+
 
