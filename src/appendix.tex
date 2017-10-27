@@ -1,5 +1,48 @@
 \chapter{Proofs}
 Some useful proofs for the understanding of this thesis.
+
+\section{Pseudo-inverse computed using the compact SVD}\label{app:pscsvd}
+
+\textbf{Proof}\quad
+
+Since $\mathbf{A}$ is singular the problem shown in
+equation~(\ref{eq:regressionproblem}) has not solution, the minimum norm given
+by equation~(\ref{eq:MP}) is obtained by solving the equivalent problem:
+
+\begin{equation*}
+\label{eq:proyectorsol}
+\mathbf{A \hat{X} = PB} 
+\end{equation*}
+
+\noindent where $\mathbf{P=U_1 U_1^\top}$ is the projection onto the
+Col($\mathbf{A}$). 
+
+Since $\mathbf{V} = [\underset{(n \times k)}{\mathbf{V_1}} |
+\underset{(n \times k)}{\mathbf{V_2}}]$ and $\mathbf{V_1^\top V_2 =
+0}$ we can express $\mathbf{\hat{X}} = \mathbf{V_1 x_1 + V_2 x_2}$
+with $\mathbf{x_2=0}$ because $\mathbf{\hat{X}}$ lives in the
+$\text{Row}(\mathbf{A})$ given by $\mathbf{V_1}$, so we have:
+
+\begin{eqnarray*}
+\mathbf{A \hat{X}} &=& \mathbf{PB} \\
+\mathbf{U_1 \Sigma_1 V_1^\top \hat{X}} &=& \mathbf{U_1 U_1^\top B} \\
+\mathbf{ V_1^\top \hat{X}} &=&  \mathbf{\Sigma_1^{-1} U_1^\top B} \\ 
+\mathbf{ V_1^\top V_1 x_1} &=& \mathbf{\Sigma_1^{-1}
+U_1^\top B} \\
+\mathbf{x_1}&=& \mathbf{\Sigma_1^{-1} U_1^\top B}
+\end{eqnarray*}
+
+\noindent from this result we can obtain $\mathbf{\hat{X}}$ and
+therefore the pseudo-inverse expression:
+
+\begin{eqnarray*}
+\mathbf{\hat{X}} &=& \mathbf{V_1 x_1} \\
+                &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top B} \\
+\mathbf{A^+} &=& \mathbf{V_1 \Sigma_1^{-1} U_1^\top} \, .
+\end{eqnarray*}
+
+$\blacksquare$
+
 \section{The pseudo-inverse computed using the compact
 singular value decomposition (SVD)} \label{app:pseudoproof}
 \begin{equation}
