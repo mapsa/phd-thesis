@@ -1,6 +1,5 @@
-%\documentclass[xcolor=dvipsnames]{beamer}
-\documentclass[compress,red]{beamer}
-\mode<presentation>
+\documentclass{beamer}
+\usetheme{metropolis}
 %\usepackage[spanish,activeacute]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
@@ -18,11 +17,6 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \def\R{{\mathbb R }}
 \def\N{{\mathbb N }}
-\usetheme{Warsaw}
-% other themes: AnnArbor, Antibes, Bergen, Berkeley, Berlin, Boadilla, boxes, CambridgeUS, Copenhagen, Darmstadt, default, Dresden, Frankfurt, Goettingen,
-% Hannover, Ilmenau, JuanLesPins, Luebeck, Madrid, Maloe, Marburg, Montpellier, PaloAlto, Pittsburg, Rochester, Singapore, Szeged, classic
-%\usecolortheme{lily}
-% color themes: albatross, beaver, beetle, crane, default, dolphin, dov, fly, lily, orchid, rose, seagull, seahorse, sidebartab, structure, whale, wolverine
 
 %define your own colours:
 \definecolor{Red}{rgb}{1,0,0}
@@ -44,30 +38,18 @@
 \xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
 \xdefinecolor{purpleish}{cmyk}{0.75,0.75,0,0}
 
-\useoutertheme[subsection=false]{smoothbars}
 
-\setbeamertemplate{blocks}[rounded][shadow=true]
+\author{Paola Arce \\ Departamento de Inform\'atica, UTFSM \\ Thesis advisor: Luis Salinas}
+\date{December 15, 2017}
+\title{Online learning methods for financial time series forecasting}
+\subtitle{PhD Thesis Defense}
 
-\author[P. Arce et al.]{Paola
-Arce\inst{1}\and Jonathan Antognini\inst{1}\and Werner Kristjanpoller
-\inst{2}\and Luis Salinas\inst{1,3}}
-
-\institute[UTFSM]{
-\inst{1} Departamento de Inform\'atica, UTFSM, Chile \\
-\inst{2} Departamento de Industrias, UTFSM, Chile \\
-\inst{3} CCTVal, UTFSM, Chile
+\titlegraphic{
+    \tikz[overlay,remember picture]
+        \node[at=(current page.south east), anchor=south east] {
+            \includegraphics[height=1.5cm]{img/DIT}
+        };
 }
-
-\date[ISCEF 2016]{4th International Symposium in Computational Economics and Finance 2016}
-\title[Cointegration model
-for forecasting HF financial time series]{\Large Fast and adaptive cointegration based model for forecasting high frequency financial time series}
-
-
-%\titlegraphic{
-%   \includegraphics[width=1cm]{img/logo_DI}\hspace*{2.5cm}~%
-%   \includegraphics[width=1.5cm]{img/logo_UTFSM}\hspace*{2.5cm}~%
-%   \includegraphics[width=1cm]{img/logo_IND}
-%}
 
 \begin{document}
 \begin{frame}[plain]
@@ -88,11 +70,14 @@ for forecasting HF financial time series]{\Large Fast and adaptive cointegration
 %\end{frame}
 
 \section{Introduction}
-\subsection{Motivation}
 
 \begin{frame}
 \frametitle{Motivation}
-Most financial time series are non-stationary in nature. This implies that the statistical properties, such as mean and variance of the data change over time.
+Most financial time series are non-stationary in nature. This implies that the statistical properties, such as mean and variance of the data change over time. Therefore, financial time series forecasting is still a challenge.
+\begin{figure}
+\includegraphics[width=0.4\paperwidth]{img/forecast}
+\end{figure}
+
 \end{frame}
 
 \begin{frame}
