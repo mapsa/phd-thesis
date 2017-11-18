@@ -63,7 +63,7 @@
 
 \titlegraphic{
     \tikz[overlay,remember picture]
-        \node[at=(current page.south east), anchor=south east] {
+        \node[at=(current page.south), anchor=south] {
             \includegraphics[height=1.5cm]{img/DIT}
         };
 }
@@ -74,17 +74,17 @@
 \end{frame}
 
 
-%\begin{frame}
-%\frametitle{Outline}
-%\begin{itemize}
-%\item Motivation: economic relations
-%\item Cointegration and Integration concepts
-%\item VECM model
-%\item Proposal
-%\item Experiments
-%\item Conclusions
-%\end{itemize}
-%\end{frame}
+\begin{frame}
+\frametitle{Outline}
+\begin{itemize}
+\item Motivation: economic relations
+\item Cointegration and Integration concepts
+\item VECM model
+\item Proposal
+\item Experiments
+\item Conclusions
+\end{itemize}
+\end{frame}
 
 \section{Introduction}
 
@@ -102,15 +102,64 @@ Most financial time series are non-stationary in nature. This implies that the s
 \includegraphics[width=0.9\paperwidth]{img/motivation.png}
 \end{frame}
 
+\begin{frame}[t,fragile]{Random walk and Cointegration Illustration}
+ \begin{itemize}
+  \item<1-> The drunkard's walk
+  \item<2-> The dog's walk
+  %\item<3-> The drunk and dog's walk
+ \end{itemize}
+ 
+\begin{columns}
+\begin{column}{.4\linewidth}<1->
+\begin{center}
+        \begin{tikzpicture}[overlay]
+            \node[yshift=-50] (img2) {\includegraphics[scale=1.4]{img/drunk}};
+        \end{tikzpicture}
+\end{center}
+\end{column}
+\begin{column}{.08\linewidth}<2->
+        \begin{tikzpicture}[overlay]
+            \node[yshift=-50] (img2) {\includegraphics[scale=0.06]{img/dog}};
+        \end{tikzpicture}
+\end{column}
+%\begin{column}{.5\linewidth}<3->
+%    \begin{center}
+%        \begin{tikzpicture}[overlay]
+%            \node[yshift=-50] (img2) {\includegraphics[scale=0.1]{img/mananddog}};
+%        \end{tikzpicture}
+%    \end{center}
+%\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[t,fragile]{Random walk and Cointegration Illustration}
+ \begin{itemize}
+  \item The drunk and dog's walk
+ \end{itemize}
+    \begin{center}
+        \begin{tikzpicture}[overlay]
+            \node[yshift=-60] (img2) {\includegraphics[scale=0.1]{img/mananddog}};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+
+
+
 \begin{frame}
 \frametitle{Motivation}
-\begin{itemize}
-\item Financial time series are mainly non-stationary.  However, one or more linear
-combinations of non-stationary time series can be stationary even though
-individually they are not. When this happens it is said they have a long-run
-equilibrium relationship and the variables are \textbf{cointegrated}.
-\item The Vector Error correction model (VECM) is used to model cointegrated time series but is used only with batch data and rarely used with high frequency data.
-\end{itemize}
+
+The relationship between non-stationary time series can be modelled if exists a linear combination of them that turns out to be stationary.
+%Financial time series are mainly non-stationary.  However, one or more linear
+%combinations of non-stationary time series can be stationary even though
+%individually they are not. 
+When this happens it is said they have a long-run
+equilibrium relationship and the variables are {\color{red} cointegrated}.
+\
+% The Vector Error correction model (VECM) is used to model cointegrated time series but is used only with batch data and rarely used with high frequency data.
+
 \end{frame}
 
 
