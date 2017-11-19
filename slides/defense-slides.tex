@@ -98,11 +98,122 @@ Most financial time series are non-stationary in nature. This implies that the s
 \end{frame}
 
 \begin{frame}
-\hspace*{-4mm}
-\includegraphics[width=0.9\paperwidth]{img/motivation.png}
+\frametitle{Stationarity}
+\begin{block}{Strong definition}
+
+The hole distribution of the variable does not depend on time, more precisely:
+\small
+\begin{equation*}
+P\{y_{t_1} \leq
+c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspace\forall L \in \mathbb{N}, \forall h \in \mathbb{Z}
+\end{equation*}
+\end{block}
 \end{frame}
 
-\begin{frame}[t,fragile]{Random walk and Cointegration Illustration}
+\begin{frame}
+\frametitle{Stationarity}
+\begin{block}{Weak definition}
+
+A weakly stationary time series is a process which mean, variance and auto covariance do not change over time:
+\small
+{\color{blue}
+ \begin{eqnarray*} E(y_t) &=& \mu  \quad
+\forall t \in \mathbb{N} \\ E(y^2_t) &=& \sigma^2  \quad \forall t \in
+\mathbb{N} \\ \lambda(s,t)&=&\lambda(s+h,t+h) \quad \forall s,t \in \mathbb{N},
+\forall h \in \mathbb{Z} \end{eqnarray*}}
+\end{block}
+One of the consequences of stationary processes is how they recover from a shock. A shock represents an unexpected change in a variable or a in its error term in a particular period of time. For stationary time series, shocks to the system will gradually die away. 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Non-stationary processes}
+There are different types of non-stationary time series models often found in economics:
+\begin{block}{Deterministic trend}
+ Deterministic trend or trend stationary
+processes have the following form:
+{\color{blue}
+\[
+y_t = f(t) + \epsilon_{t}
+\]}
+\noindent where $\epsilon_{t}$ represents a stationary error term (with mean 0 and variance $\sigma^2$) and $f(t)$ is a deterministic function of time.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Non-stationary processes}
+
+\begin{block}{Stochastic trend}
+Stochastic trend processes are also called {\color{red}unit root or I(1)} and have the following form:
+{\color{blue}
+\[
+y_t = \mu + y_{t-1} + \epsilon_t
+\]}
+\noindent where $\epsilon_t$ is a stationary process. When $\mu = 0 $ the process is called pure random walk and when $\mu \neq 0$  the process is called random walk with drift.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Integration }
+\begin{block}{Integration of order $d$}
+A time series $\mathbf{y}$ is said to be integrated of order $d$ if after
+differentiating the variable $d$ times, we get an stationary process, more precisely:
+\[
+(1-L)^d \mathbf{y} \sim \text{I(0)} \, ,
+\]
+\noindent where I(0) is a stationary time series and $L$ is the lag operator:
+\[
+(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
+\]
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Integration example}
+\begin{columns}
+\column[t]{5cm}
+High frequency financial time series are commonly an I(1) process 
+\begin{center}
+\includegraphics[width=0.85\textwidth]{img/EURUSD}
+\end{center}
+\column[t]{5cm}
+Since their differences are stationary (I(0) process).
+\newline
+\begin{center}
+\includegraphics[width=0.85\textwidth]{img/DEURUSD}
+\end{center}
+\end{columns}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Spurious regression}
+Standard regression techniques are applied to non-stationary data.
+The use of non-stationary data can lead to spurious regressions.  
+
+%\begin{block}{Spurious regression}
+%If two stationary
+%variables are generated as independent random series and are trending over time, when one of those variables is regressed on the other, they could have a high coefficient of determination ($R^2$) even if the two are totally unrelated. 
+%\end{block}
+
+\begin{columns}
+\begin{column}{.45\linewidth}<1->
+\begin{figure}
+\includegraphics[width=0.4\paperwidth]{img/spurious1}
+\end{figure}
+\end{column}
+\begin{column}{.45\linewidth}<2->
+\begin{figure}
+\includegraphics[width=0.4\paperwidth]{img/spurious2}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[t,fragile]{Random walk Illustration}
  \begin{itemize}
   \item<1-> The drunkard's walk
   \item<2-> The dog's walk
@@ -132,7 +243,6 @@ Most financial time series are non-stationary in nature. This implies that the s
 \end{columns}
 \end{frame}
 
-
 \begin{frame}[t,fragile]{Random walk and Cointegration Illustration}
  \begin{itemize}
   \item The drunk and dog's walk
@@ -146,6 +256,12 @@ Most financial time series are non-stationary in nature. This implies that the s
 
 
 \begin{frame}
+\hspace*{-4mm}
+\includegraphics[width=0.9\paperwidth]{img/motivation.png}
+\end{frame}
+
+
+\begin{frame}
 \frametitle{Motivation}
 
 The relationship between non-stationary time series can be modelled if a stationary linear combination is shown to exist.
@@ -154,9 +270,26 @@ The relationship between non-stationary time series can be modelled if a station
 %individually they are not. 
 When this happens it is said they have a long-run
 equilibrium relationship and the variables are {\color{red} cointegrated}.
-\
+\end{frame}
+
+\begin{frame}
+\frametitle{Cointegration}
+\begin{block}{Cointegration definition}
+Let {\color{blue}$\mathbf{y} = \{\mathbf{y}^1, \dots, \mathbf{y}^l\}$} be a set of $l$
+time series of order I(1) which are said to be cointegrated if a vector
+$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^l$  exists such that the
+time series,
+
+\begin{equation*}
+ \mathbf{Z}_t:= \beta^\top \mathbf{y} = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
+ \text{I(0)}\, .
+\end{equation*}
+\end{block}
+In other words, a set of I(1) variables is said to be cointegrated if
+a linear combination of them exists which is I(0).
 
 \end{frame}
+
 
 \tikzstyle{every picture}+=[remember picture]
 \everymath{\displaystyle}
@@ -182,85 +315,37 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
         \tikz[baseline]{
             \node[fill=green!20,anchor=base] (t3)
             {$c$};
-        }}_\text{Constant}
+        }}_\text{Intercept}
         +
         \underbrace{
         \tikz[baseline]{
             \node[fill=yellow!20,anchor=base] (t3)
             {$\mathbf{\epsilon}_t $};
-        }}_\text{i.i.e}
+        }}_\text{i.i.d}
 \end{equation*}
 
 \end{frame}
 
 
 \begin{frame}
-The Vector Error correction model (VECM) is used to model cointegrated time series but is used only with batch data and rarely used with high frequency data.
+\begin{alertblock}{VECM limitation}
+The Vector Error correction model (VECM) is used to model cointegrated time series but only with batch data and rarely used with high frequency data.
+\end{alertblock}
 \end{frame}
-
-
-
 
 \subsection{Proposal}
 \begin{frame}
 \frametitle{Proposal}
-\begin{block}{}
+\begin{block}{Proposal}
 To use VECM with high frequency data where the best parameters are updated when new data is available and do this is done in a fast way.
 \end{block}
 \end{frame}
 
 %\section{Background}
-%%
-%%\begin{frame}
-%%\frametitle{Integration }
-%%\begin{block}{Integration of order $d$}
-%%A time series $\mathbf{y}$ is said to be integrated of order $d$ if after
-%%differentiating the variable $d$ times, we get an stationary process, more precisely:
-%%\[
-%%(1-L)^d \mathbf{y} \sim \text{I(0)} \, ,
-%%\]
-%%\noindent where I(0) is a stationary time series and $L$ is the lag operator:
-%%\[
-%%(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
-%%\]
-%%\end{block}
-%%\end{frame}
-%%
-%%\subsection{Integration example}
-%%\begin{frame}
-%%\frametitle{Financial Time Series}
-%%\begin{columns}
-%%\column[t]{5cm}
-%%High frequency financial time series are commonly an I(1) process 
-%%\begin{center}
-%%\includegraphics[width=0.85\textwidth]{img/EURUSD}
-%%\end{center}
-%%\column[t]{5cm}
-%%Since their differences are stationary (I(0) process).
-%%\begin{center}
-%%\includegraphics[width=0.85\textwidth]{img/DEURUSD}
-%%\end{center}
-%%\end{columns}
-%%\end{frame}
+%
 %
 %\subsection{Cointegration}
-%\begin{frame}
-%\frametitle{Cointegration}
-%\begin{block}{Cointegration definition}
-%Let $\mathbf{y} = \{\mathbf{y}^1, \dots, \mathbf{y}^l\}$ be a set of $l$
-%time series of order I(1) which are said to be cointegrated if a vector
-%$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^l$  exists such that the
-%time series,
-%
-%\begin{equation*}
-% \mathbf{Z}_t:= \beta^\top \mathbf{y} = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
-% \text{I(0)}\, .
-%\end{equation*}
-%\end{block}
-%In other words, a set of I(1) variables is said to be cointegrated if
-%a linear combination of them exists which is I(0).
-%
-%\end{frame}
+
 %
 %\subsection{Vector Autorregresive models}
 %\begin{frame}
