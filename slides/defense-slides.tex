@@ -145,32 +145,70 @@ Most financial time series are non-stationary in nature. This implies that the s
 \end{frame}
 
 
-
-
-
 \begin{frame}
 \frametitle{Motivation}
 
-The relationship between non-stationary time series can be modelled if exists a linear combination of them that turns out to be stationary.
+The relationship between non-stationary time series can be modelled if a stationary linear combination is shown to exist.
 %Financial time series are mainly non-stationary.  However, one or more linear
 %combinations of non-stationary time series can be stationary even though
 %individually they are not. 
 When this happens it is said they have a long-run
 equilibrium relationship and the variables are {\color{red} cointegrated}.
 \
-% The Vector Error correction model (VECM) is used to model cointegrated time series but is used only with batch data and rarely used with high frequency data.
+
+\end{frame}
+
+\tikzstyle{every picture}+=[remember picture]
+\everymath{\displaystyle}
+\begin{frame}
+\frametitle{The Vector Error correction}
+\tikzstyle{na} = [baseline=-.5ex]
+
+The Vector Error correction model (VECM) is used to model cointegrated time series.
+
+\Large
+\begin{equation*}
+ \Delta \mathbf{y}_t = \underbrace{
+        \tikz[baseline]{
+            \node[fill=red!20,ellipse,anchor=base] (t1)
+            {$ \Omega\mathbf{y}_{t-1}$};
+        }}_\text{Error correction term} +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=blue!20,anchor=base] (t2)
+            {$\sum_{i=1}^{p-1} \phi_i^* \Delta \mathbf{y}_{t-i} $};
+        }}_\text{Autorregresive term} +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=green!20,anchor=base] (t3)
+            {$c$};
+        }}_\text{Constant}
+        +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=yellow!20,anchor=base] (t3)
+            {$\mathbf{\epsilon}_t $};
+        }}_\text{i.i.e}
+\end{equation*}
 
 \end{frame}
 
 
-%\subsection{Proposal}
-%\begin{frame}
-%\frametitle{Proposal}
-%\begin{block}{}
-%To use VECM with high frequency data where the best parameters are updated when new data is available and do this is done in a fast way.
-%\end{block}
-%\end{frame}
-%
+\begin{frame}
+The Vector Error correction model (VECM) is used to model cointegrated time series but is used only with batch data and rarely used with high frequency data.
+\end{frame}
+
+
+
+
+\subsection{Proposal}
+\begin{frame}
+\frametitle{Proposal}
+\begin{block}{}
+To use VECM with high frequency data where the best parameters are updated when new data is available and do this is done in a fast way.
+\end{block}
+\end{frame}
+
 %\section{Background}
 %%
 %%\begin{frame}
@@ -256,21 +294,7 @@ equilibrium relationship and the variables are {\color{red} cointegrated}.
 %
 %
 %
-%\begin{frame}
-%\frametitle{VECM: Vector Error Correction model}
-%\begin{block}{VECM}
-%
-%It is obtained by replacing the form {\color{red} $\Delta
-%\mathbf{y}_t = \mathbf{y}_t - \mathbf{y}_{t-1}$} in the VAR form.
-%{\color{blue}
-%\begin{equation}
-% \label{eq:vec}
-% \Delta \mathbf{y}_t = 
-% \underbrace{ \Omega\mathbf{y}_{t-1}}_\text{Error correction term} + 
-% \sum_{i=1}^{p-1}
-%\phi_i^* \Delta \mathbf{y}_{t-i}  + \mathbf{c} + \mathbf{\epsilon}_t \quad ,
-%\end{equation}}
-%\end{block}
+
 %
 %\noindent where 
 %%coefficients matrices $\Omega$ and $\phi_i^*$ are
