@@ -94,7 +94,6 @@ Most financial time series are non-stationary in nature. This implies that the s
 \begin{figure}
 \includegraphics[width=0.4\paperwidth]{img/forecast}
 \end{figure}
-
 \end{frame}
 
 \begin{frame}
@@ -326,11 +325,36 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
 
 \end{frame}
 
+\begin{frame}
+\frametitle{$\Omega$ matrix properties}
+The matrix $\Omega$ has the following properties:
+\begin{itemize}
+\item If $\Omega = 0$ there is no cointegration
+\item If $rank(\Omega)=l$ i.e full rank, then the time series are not
+I(1) but stationary
+\item If $rank(\Omega)=r,\quad 0 < r < l$ then, there is cointegration
+and the matrix $\Omega$ can be expressed as $\Omega =
+\alpha \beta^\top$, where $\alpha$ and $\beta$ are $(l \times r)$
+matrices and $rank(\alpha)=rank(\beta)=r$.
+\end{itemize}
+The columns of $\beta$ contains the cointegration vectors and the rows of
+$\alpha$ correspond with the adjusted vectors. $\beta$ is obtained by Johansen
+procedure whereas $\alpha$ has to be determined as a
+variable in the VECM.
+\end{frame}
+
 
 \begin{frame}
 \begin{alertblock}{VECM limitation}
 The Vector Error correction model (VECM) is used to model cointegrated time series but only with batch data and rarely used with high frequency data.
 \end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Online learning}
+\begin{figure}
+\includegraphics[width=0.8\paperwidth]{img/onlinelearning}
+\end{figure}
 \end{frame}
 
 \subsection{Proposal}
@@ -391,23 +415,6 @@ To use VECM with high frequency data where the best parameters are updated when 
 %\end{eqnarray*}
 %\end{frame}
 %
-%\begin{frame}
-%\frametitle{$\Omega$ matrix properties}
-%The matrix $\Omega$ has the following properties:
-%\begin{itemize}
-%\item If $\Omega = 0$ there is no cointegration
-%\item If $rank(\Omega)=l$ i.e full rank, then the time series are not
-%I(1) but stationary
-%\item If $rank(\Omega)=r,\quad 0 < r < l$ then, there is cointegration
-%and the matrix $\Omega$ can be expressed as $\Omega =
-%\alpha \beta^\top$, where $\alpha$ and $\beta$ are $(l \times r)$
-%matrices and $rank(\alpha)=rank(\beta)=r$.
-%\end{itemize}
-%The columns of $\beta$ contains the cointegration vectors and the rows of
-%$\alpha$ correspond with the adjusted vectors. $\beta$ is obtained by Johansen
-%procedure whereas $\alpha$ has to be determined as a
-%variable in the VECM.
-%\end{frame}
 %
 %
 %\begin{frame}
