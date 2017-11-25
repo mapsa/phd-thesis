@@ -8,6 +8,8 @@
 \usepackage{adjustbox}
 \usepackage{color}
 \usepackage{tikz}
+\usepackage{array}
+\usepackage{booktabs}
 \usetikzlibrary{shapes,arrows}
 \usepackage{multicol}
 \usepackage{hhline}
@@ -113,7 +115,7 @@ c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspac
 \frametitle{Stationarity}
 \begin{block}{Weak definition}
 
-A weakly stationary time series is a process which mean, variance and auto covariance do not change over time:
+A weak stationary time series is a process which mean, variance and auto covariance do not change over time:
 \small
 {\color{blue}
  \begin{eqnarray*} E(y_t) &=& \mu  \quad
@@ -326,6 +328,39 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
 \end{frame}
 
 \begin{frame}
+\frametitle{VECM matrix form}
+\small
+\begin{equation*}
+\underbrace{
+      \begin{bmatrix}
+       \mathbf{\Delta y}_{p+1}  \\ 
+       \mathbf{\Delta y}_{p+2}  \\ 
+       \vdots                   \\ 
+       \mathbf{\Delta y}_N      
+      \end{bmatrix}}_{\mathbf{B} } =
+\arraycolsep=1.4pt  
+\underbrace{\begin{bmatrix}
+   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
+  \end{bmatrix}}_{\mathbf{X}^\top}
+\underbrace{\begin{bmatrix}
+ \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
+ \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
+ \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
+ \vdots                  & \vdots                 & \ddots&  \vdots                   \\
+ \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
+ 1                      & 1                       & \dots     & 1   
+ \end{bmatrix}}_{\mathbf{A}^\top}
++
+\underbrace{\begin{bmatrix}
+              \mathbf{\epsilon}_{p+1} \\ 
+              \mathbf{\epsilon}_{p+2} \\ 
+              \vdots \\ 
+              \mathbf{\epsilon}_N
+             \end{bmatrix}}_{\mathbf{E}^\top}
+\end{equation*}
+\end{frame}
+
+\begin{frame}
 \frametitle{$\Omega$ matrix properties}
 The matrix $\Omega$ has the following properties:
 \begin{itemize}
@@ -345,165 +380,88 @@ variable in the VECM.
 
 
 \begin{frame}
-\begin{alertblock}{VECM limitation}
-The Vector Error correction model (VECM) is used to model cointegrated time series but only with batch data and rarely used with high frequency data.
-\end{alertblock}
+\frametitle{VECM limitations}
+
+The Vector Error correction model (VECM) is used to model cointegrated time series but only with batch data and rarely used with high frequency data  mainly due to computational limitations:
+
+\begin{itemize}
+\item Calculation of the cointegration vectors
+\item VECM parameters are obtained using the ordinary least squares (OLS) method.
+\end{itemize}
+
 \end{frame}
 
-\begin{frame}
-\frametitle{Online learning}
-\begin{figure}
-\includegraphics[width=0.8\paperwidth]{img/onlinelearning}
-\end{figure}
-\end{frame}
 
-\subsection{Proposal}
+
+
+\section{Proposal}
 \begin{frame}
 \frametitle{Proposal}
 \begin{block}{Proposal}
-To use VECM with high frequency data where the best parameters are updated when new data is available and do this is done in a fast way.
+To adapt VECM to be used with high frequency data, where the best parameters are updated when new data.
+\end{block}
+
+\begin{block}{Hypothesis}
+An algorithm based on cointegration and high
+performance computing will allow faster forecasting
+algorithms for financial time series to be obtained while maintaining good accuracy levels.
 \end{block}
 \end{frame}
 
-%\section{Background}
-%
-%
-%\subsection{Cointegration}
+\section{First Contribution}
+\begin{frame}
+\frametitle{First approach}
+To use VECM with high frequency data, where optimised parameters are obtained when new data. The optimisation was made in a distributed environment.
+\end{frame}
 
-%
-%\subsection{Vector Autorregresive models}
-%\begin{frame}
-%\frametitle{VECM: Vector Error Correction model}
-%
-%VECM is a special form of a Vector Autorregresive model (VAR) for I(1)
-%variables $\mathbf{y}$ that are also cointegrated. Let 
-%
-%\begin{equation*}
-%\label{eq:variables}
-%\mathbf{y}_t = 
-%\begin{bmatrix} y_{1,t} & y_{2,t} & \dots & y_{l,t}
-%\end{bmatrix}^\top \, \qquad t=p+1, \dots N. 
-%\end{equation*}
-%
-%\begin{block}{VAR}
-%VAR($p$) model describes the behaviour of a set of $l$
-%endogenous variables as a linear combination of their last $p$ values:
-%{\color{blue}
-%\begin{equation*}
-%\label{eq:var}
-% \mathbf{y}_t = \phi_1 \mathbf{y}_{t-1}  + \dots +   \phi_p\mathbf{y}_{t-p}
-%+ \mathbf{c} + \mathbf{\epsilon}_t \, ,
-%\end{equation*}}
-%\noindent where  ${\phi_1,\dots,\phi_p}$ are $l \times l$
-%matrices of real coefficients,
-%$\mathbf{\epsilon}_{p+1},\dots,\mathbf{\epsilon}_N$ are error terms,
-%$\mathbf{c}$ is a constant vector and $N$ is the total number of samples.
-%\end{block}
-%\end{frame}
-%
-%
-%
 
-%
-%\noindent where 
-%%coefficients matrices $\Omega$ and $\phi_i^*$ are
-%%function of matrices $\phi_i$ as follows:
-%
-%\begin{eqnarray*}
-%\phi_i^* &: =& -\sum_{j=i+1}^{p} \phi_j \\
-%\Omega &: =& -(\mathbb{I}-\phi_1-\dots-\phi_p) 
-%\end{eqnarray*}
-%\end{frame}
-%
-%
-%
-%\begin{frame}
-%\frametitle{VECM matrix form}
-%\small
-%\begin{equation*}
-%\underbrace{
-%      \begin{bmatrix}
-%       \mathbf{\Delta y}_{p+1}  \\ 
-%       \mathbf{\Delta y}_{p+2}  \\ 
-%       \vdots                   \\ 
-%       \mathbf{\Delta y}_N      
-%      \end{bmatrix}}_{\mathbf{B} } =
-%\arraycolsep=1.4pt  
-%\underbrace{\begin{bmatrix}
-%   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
-%  \end{bmatrix}}_{\mathbf{X}^\top}
-%\underbrace{\begin{bmatrix}
-% \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
-% \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
-% \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
-% \vdots                  & \vdots                 & \ddots&  \vdots                   \\
-% \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
-% 1                      & 1                       & \dots     & 1   
-% \end{bmatrix}}_{\mathbf{A}^\top}
-%+
-%\underbrace{\begin{bmatrix}
-%              \mathbf{\epsilon}_{p+1} \\ 
-%              \mathbf{\epsilon}_{p+2} \\ 
-%              \vdots \\ 
-%              \mathbf{\epsilon}_N
-%             \end{bmatrix}}_{\mathbf{E}^\top}
-%\end{equation*}
-%\end{frame}
-%
-%\section{Proposal}
-%\subsection{Motivation}
-%\begin{frame}
-%\frametitle{VECM difficulties in an online context}
-%\begin{itemize}
-%\item VECM assumes cointegration vectors do not change in time. However, these might change due to several economic factors.
-%\item To get updated cointegration vectors in time is computationally expensive because 
-%the Johansen method and OLS are used to obtain them. It would be good to know how the number of cointegration vectors are affected by the number of data used $L$ and the number of lags of VECM $p$.
-%\end{itemize}
-%\end{frame}
-%
-%
-%\begin{frame}
-%\frametitle{Data}
-%\begin{itemize}
-%\item Tests were carried out using four foreign exchange rates all related to
-%USD: EURUSD, GBPUSD, USDCHF and USDJPY. 
-%\item This data was collected from Dukascopy, a free
-%database which gives access to the Swiss Foreign Exchange marketplace.
-%\item The tests were done using 10-seconds frequency from ask prices
-%from the 11th to the 15th of August 2014. 
-%%\item Since one day corresponds to 8640 data points and we used 5 days of data, we have 43,200 data points in total.
-%\end{itemize}
-%\end{frame}
-%
-%
-%\begin{frame}
-%\frametitle{Cointegration vectors distribution}
-%\begin{figure}[!h]
-%  %\vspace{-0.8cm}
-%  \centering
-%  \includegraphics[width=0.75\textwidth]{img/histCointVectors-offset20520-p-1-freq-10s}
-%  \caption{Histogram of the number of cointegration vectors using $p=1$. Four
-%  possible values for $L$ are shown (100, 2000, 3000 and 4000).}
-%  \label{fig:hists}
-%\end{figure}
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Percentage of cointegration}
-%Since $r=0$ means no cointegration and $r=l=4$ reveals that no process is I(1) but stationary.
-%The interesting cases of cointegration are those where $r$ lies strictly
-%between $0$ and $l$, i.e. $0<r<l$.
-%\begin{block}{Percentage of cointegration (PC)}
-%{\color{blue}
-%\begin{equation*} \label{eq:pcoint}
-%PC = 
-%\frac{\#\{ it \mid \text{$it$ has $r$ c.v. with $0<r<l$}\}}
-%     {\#it}\times 100
-%\end{equation*}}
-%\end{block}
-%\end{frame}
-%
-%
+\subsection{Data}
+\begin{frame}
+\frametitle{Data}
+\begin{itemize}
+\item Tests were carried out using four foreign exchange rates all related to
+USD: EURUSD, GBPUSD, USDCHF and USDJPY. 
+\item This data was collected from Dukascopy, a free
+database which gives access to the Swiss Foreign Exchange marketplace.
+\item The tests were done using 10-seconds frequency from ask prices
+from the 11th to the 15th of August 2014. 
+%\item Since one day corresponds to 8640 data points and we used 5 days of data, we have 43,200 data points in total.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Cointegration vectors distribution}
+  \begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+   \includegraphics[width=0.65\textwidth]{img/51_Fig1}
+  \caption[Distribution of the number of cointegration vectors using $p=1$ lags]{Distribution of the number of cointegration vectors using $p=1$ lags.
+  Four possible values for windows size $L$ are shown (2, 6, 10 and 14) hours (1
+  hour = 360 data points).}
+  \label{fig:hists}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Percentage of cointegration}
+Since $r=0$ means no cointegration and $r=l=4$ reveals that no process is I(1) but stationary.
+The interesting cases of cointegration are those where $r$ lies strictly
+between $0$ and $l$, i.e. $0<r<l$.
+\begin{block}{Percentage of cointegration (PC)}
+{\color{blue}
+\begin{equation*} \label{eq:pcoint}
+PC = 
+\frac{\#\{ it \mid \text{$it$ has $r$ c.v. with $0<r<l$}\}}
+     {\#it}\times 100
+\end{equation*}}
+\end{block}
+\end{frame}
+
+
 %\begin{frame}
 %\frametitle{PC vs MSE}
 %\begin{figure}[ht!]
@@ -517,39 +475,40 @@ To use VECM with high frequency data where the best parameters are updated when 
 %\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%\subsection{AVECM}
-%\begin{frame}
-%\frametitle{Proposal: Adaptive VECM algorithm (AVECM)}
-%\begin{itemize}
-%\item We proposed to choose $L$ and $p$ in order to maximise the percentage of
-%cointegration $PC$ in the near past. This process was done every time that new data was processed. 
-%\item To use a distributed environment to make this parameters search, since this is the most expensive routine.
-%\end{itemize}
-%\end{frame}
-%
-%
-%%\begin{frame}
-%%\frametitle{AVECM Algorithm}
-%%\begin{algorithmic}[1]
-%%\REQUIRE $\,$ \\
-%%$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
-%%$j$: Starting point of testing \\
-%%$it$: Ending point of testing \\
-%%$ps$: list of $p$ values \\
-%%$Ls$: list of $L$ values ($L<N$) \\
-%%$m$: Iterations to determine parameters ($m < N-L$)\\
-%%\ENSURE  $\,$ \\
-%%$\{ \hat{\mathbf{y}}[1],\dots,\hat{\mathbf{y}}[it]\}$: prediction vectors \\
-%%\FOR { $i =j$ to $it$ }
-%%   \STATE $\mathbf{Y} \gets \mathbf{y}[:,i-1]$
-%%    \STATE $L,p \gets
-%%    \texttt{get\_best\_params}(Ls,ps,m,\mathbf{Y})$
-%%        \STATE $model = \text{VECM}(\mathbf{Y},L, p)$
-%%        \STATE $\hat{\mathbf{y}}[i-j] = model.predict()$
-%%\ENDFOR
-%%\end{algorithmic}
-%%\end{frame}
-%
+\subsection{AVECM}
+\begin{frame}
+\frametitle{Adaptive VECM algorithm (AVECM)}
+\begin{itemize}
+\item We proposed to choose $L$ and $p$ in order to maximise the percentage of
+cointegration $PC$ in the near past. This process was done every time that new data was processed. 
+\item To use a distributed environment to make this parameters search, since this is the most expensive routine.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{AVECM Algorithm}
+\small
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
+$j$: Starting point of testing \\
+$it$: Ending point of testing \\
+$ps$: list of $p$ values \\
+$Ls$: list of $L$ values ($L<N$) \\
+$m$: Iterations to determine parameters ($m < N-L$)\\
+\ENSURE  $\,$ \\
+$\{ \hat{\mathbf{y}}[1],\dots,\hat{\mathbf{y}}[it]\}$: prediction vectors \\
+\FOR { $i =j$ to $it$ }
+   \STATE $\mathbf{Y} \gets \mathbf{y}[:,i-1]$
+    \STATE $L,p \gets
+    \texttt{get\_best\_params}(Ls,ps,m,\mathbf{Y})$
+        \STATE $model = \text{VECM}(\mathbf{Y},L, p)$
+        \STATE $\hat{\mathbf{y}}[i-j] = model.predict()$
+\ENDFOR
+\end{algorithmic}
+\end{frame}
+
 %\subsection{Model comparison} 
 %\begin{frame}
 %\frametitle{Random walk}
@@ -574,26 +533,8 @@ To use VECM with high frequency data where the best parameters are updated when 
 %\end{equation}
 %\noindent with coefficients $\phi_p \neq 0$, $\theta_q \neq 0$ and $\sigma_{\epsilon}^2 > 0$.
 %\end{frame}
-%
-%\begin{frame}
-%\frametitle{Results}
-%\begin{tabular}{ccccccc}
-%
-%& \multicolumn{3}{l}{MSE} & &
-%\multicolumn{2}{c}{$U$-statistic} \\ 
-%\hhline{~---~--} \\
-% &
-%AVECM & ARIMA & p-value & &
-%AVECM & ARIMA \\ 
-%
-%\hline
-% EURUSD & 1.07 e-09 & 1.14 e-09 &  9.25 e-12 & & 0.6863 & 0.7108\\
-% GBPUSD & 1.66 e-09 & 1.74 e-09 &  6.95 e-02 & & 0.6866 & 0.7025\\
-% USDCHF & 5.85 e-10 & 6.35 e-10 &  2.89 e-14 & & 0.6803 & 0.7091\\
-% USDJPY  & 6.34 e-06 & 6.51 e-06 &  6.85 e-05 & & 0.6964 & 0.7057\\
-% \end{tabular}
-%\end{frame}
-%
+
+
 %%\begin{frame}
 %%\frametitle{Evaluation methods}
 %%\begin{block}{MSE}
@@ -614,99 +555,278 @@ To use VECM with high frequency data where the best parameters are updated when 
 %\section{Experiments}
 %\subsection{Uno}
 %
-%%\begin{frame}
-%%\frametitle{Unit root tests}
-%%VECM can only be used if the time series are I(1). Therefore, 
-%%before running the tests, we firstly checked whether the time series were
-%%I(1) using the Augmented Dickey Fuller (ADF) test with lags $p=1,2,3,4,5$.
-%%\end{frame}
-%%
-%%\begin{frame}
-%%\frametitle{Performance accuracy}
-%%\small
-%%\begin{tabular}{ccccccc}
-%%& \multicolumn{3}{l}{MSE} & &
-%%\multicolumn{2}{c}{$U$-statistic} \\ 
-%%\hhline{~---~--} \\
-%% & AVECM & ARIMA & p-value & &
-%%AVECM & ARIMA \\ 
-%%
-%%\hline
-%% EURUSD & 1.0702 e-09 & 1.1481 e-09 &  9.250 e-12 & & 0.6863 & 0.7108\\
-%% GBPUSD & 1.6630 e-09 & 1.7408 e-09 &  6.951 e-02 & & 0.6866 & 0.7025\\
-%% USDCHF & 5.8503 e-10 & 6.3545 e-10 &  2.899 e-14 & & 0.6803 & 0.7091\\
-%% USDJPY  & 6.3483 e-06 & 6.5194 e-06 &  6.853 e-05 & & 0.6964 & 0.7057
-%% \end{tabular}
-%% \end{frame}
+\begin{frame}
+\frametitle{Unit root tests}
+VECM can only be used if the time series are I(1). Therefore, 
+before running the tests, we firstly checked whether the time series were
+I(1) using the Augmented Dickey Fuller (ADF) test with lags $p=1,2,3,4,5$.
+\begin{table}[ht]
+\centering
+\tiny
+\begin{tabular}{llllll}
+\toprule
+{Variable} & {ADF(1)} & {ADF(2)} & {ADF(3)} & {ADF(4)} & {ADF(5)}\\ 
+\midrule
+EURUSD &  -0.052   & -0.054  & -0.054  & -0.054  & -0.054  \\
+GBPUSD &  -0.744  & -0.784  & -0.805  & -0.837  & -0.846  \\
+USDCHF &  -0.476   & -0.493  & -0.493  & -0.495  & -0.502  \\
+USDJPY &  0.357   & 0.360  & 0.360  & 0.367  & 0.367  \\
+$\Delta$ EURUSD & -128.4*  & -128.4*  & -96.85* & -89.12*   & -89.12*\\
+$\Delta$ GBPUSD & -131.4*  & -112.7*  & -102.5* & -92.86*   & -88.29*\\
+$\Delta$ USDCHF & -127.8*  & -127.8*  & -96.94* & -88.82*   & -80.79*\\
+$\Delta$ USDJPY & -135.1*  & -135.1*  & -101.2* & -101.2*   & -101.2*\\
+\bottomrule
+\addlinespace[1ex]
+\multicolumn{6}{l}{ \textsuperscript{*} Indicates significance at 1\% level}
+\end{tabular}
+\caption{Unit roots tests for EURUSD, GBPUSD, USDCHF and USDJPY at 10-second
+frequency.}
+\label{tab:adf}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Performance accuracy}
+\small
+\begin{tabular}{ccccccc}
+& \multicolumn{3}{l}{MSE} & &
+\multicolumn{2}{c}{$U$-statistic} \\ 
+\hhline{~---~--} \\
+ & AVECM & ARIMA & p-value & &
+AVECM & ARIMA \\ 
+
+\hline
+ EURUSD & 1.0702 e-09 & 1.1481 e-09 &  9.250 e-12 & & 0.6863 & 0.7108\\
+ GBPUSD & 1.6630 e-09 & 1.7408 e-09 &  6.951 e-02 & & 0.6866 & 0.7025\\
+ USDCHF & 5.8503 e-10 & 6.3545 e-10 &  2.899 e-14 & & 0.6803 & 0.7091\\
+ USDJPY  & 6.3483 e-06 & 6.5194 e-06 &  6.853 e-05 & & 0.6964 & 0.7057
+ \end{tabular}
+ \end{frame}
 %%For AVECM we considered different number of iterations (parameter $m$ in algorithm \ref{alg:AVECM}): 10, 50 and 100. We tried 12, 24 and 47 different pair of combinations for $L$ and $p$. Possible values for $L$ were in the interval $[100,4000]$ and $p$ can have values in between $[1,5]$. Best AVECM performance was compared against ARIMA and the random walk model.
 %%Table~\ref{tab:stats} shows the out-of-sample performance measures: MSE and $U$-statistic for AVECM and ARIMA. In terms of both measures we found that AVECM is superior to ARIMA and the naive random walk model. We also included the p-value that proves that the difference in the MSE is significant at the 99\% significance level in three of the four currency rates and at 90\% in the case of GBPUSD. The $U$-statistic shows that AVECM and ARIMA are superior to the naive random walk model and that our proposal is also superior to ARIMA.
 %
 %
 %
-%\begin{frame}
-%\frametitle{Parallel implementation}
-%The function that get best parameters $L$ and $p$ was implemented using MPI in Python. MPI allows large-scale parallel applications
-%with wide portability to be built, being able to run in large clusters
-%or on local computers.
-%We tested our proposal in a cluster with 2 servers Xeon E5-2667 (2.90GHz)
-%of 24 cores each (48 cores in total) and 24GB RAM.
-%\end{frame}
+\begin{frame}
+\frametitle{Parallel implementation}
+The function that get best parameters $L$ and $p$ was implemented using MPI in Python. MPI allows large-scale parallel applications
+with wide portability to be built, being able to run in large clusters
+or on local computers.
+Tests ran in a cluster with 2 servers Xeon E5-2667 (2.90GHz)
+of 24 cores each (48 cores in total) and 24GB RAM.
+Parameter settings:
+\begin{itemize}
+%\item Parameter $it=100$
+\item The $L$ parameter was always chosen between 100 and 4000 and $p$ always took values
+between 1 and 5. 
+\item Parameter $nparams$ represents the number of pairs ($L$,$p$) used to maximise the percentage of cointegration. 
+\end{itemize}
+\end{frame}
 %
-%\begin{frame}
-%\frametitle{Parameters setting}
-%\begin{itemize}
-%%\item Parameter $it=100$
-%\item The $L$ parameter was always chosen between 100 and 4000 and $p$ always took values
-%between 1 and 5. 
-%\item Parameter $nparams$ represents the number of pairs ($L$,$p$) used to maximise the percentage of cointegration. 
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Execution times}
-%\begin{figure}[ht]
-%  \centering
-%  \includegraphics[width=0.75\textwidth]{img/extimes}
-%  \caption{Computing time of sequential and parallel algorithm is shown in the
-%  upper figure. Speed-up is shown below.}
-%  \label{fig:extimes}
-%% The superior figure \ref{fig:extimes} shows that best performance accuracy measurements are
-%%achieved in times near or below 10 seconds in the parallel version. Contrarily,
-%%serial times are high, above 10 seconds in most cases. Figure~\ref{fig:extimes} also shows the speed-up in computing time for AVECM which is near 9X if we use more than 25 parameters ($nparams$).
-%%Execution times do not consider the loading data time, just that of finding
-%%best parameters and matrix operations. The time MPI spends
-%%transferring data and synchronising processes is about two seconds independently
-%%of the number of processes considered. Execution times were measured using the Time python library.
-%\end{figure}
-%
-%\end{frame}
-%
-%\section{Conclusions}
-%\subsection{Uno}
-%\begin{frame}
-%\frametitle{Conclusions}
-%\begin{itemize}
-%\item Cointegration relations change with time. We empirically showed that the Johansen method is sensitive to the number of lags but also to the amount of data considered.
-%\item We found that out-of-sample forecast performance MSE is related to the {\em percentage of cointegration\/}.  
-%\item VECM improves performance measures by finding
-%parameters of $L$ and $p$ maximising the percentage of cointegration.
-%\item Increasing the number of parameters will always lead to
-%better performance measures.
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Conclusions}
-%\begin{itemize}
-%\item The parallel implementation allowed the execution times to be reduced
-%more than 9 times and therefore a response time was obtain before 10
-%seconds. 
-%\item For future study, it would be interesting to explore the relationship between
-%cointegration and performance in order to propose new criteria for
-%improving VECM parameters. It would also be interesting to include more 
-%explaining variables such as bid-ask spread and change in volume.
-%\end{itemize}
-%\end{frame}
+\begin{frame}
+\frametitle{Execution times}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{img/51_Fig3}
+  \caption[Computing time and Speed-up]{Computing time of sequential and parallel algorithm is shown in the
+  upper figure. Speed-up is shown below.}
+  \label{fig:extimes}
+\end{figure}
+\end{frame}
+
+
+\section{Conclusions}
+\subsection{Uno}
+\begin{frame}
+\frametitle{Conclusions}
+\begin{itemize}
+\item Cointegration relations change with time. We empirically showed that the Johansen method is sensitive to the number of lags but also to the amount of data considered.
+\item We found that out-of-sample forecast performance MSE is related to the {\em percentage of cointegration\/}.  
+\item VECM improves performance measures by finding
+parameters of $L$ and $p$ maximising the percentage of cointegration.
+\item Increasing the number of parameters will always lead to
+better performance measures.
+\item The parallel implementation allowed the execution times to be reduced
+more than 9 times and therefore a response time was obtain before 10
+seconds. 
+\end{itemize}
+\end{frame}
+
+\section{Second Contribution}
+
+\begin{frame}
+\frametitle{Second approach}
+ Recently, online learning algorithms have been proposed to solve problems with large data sets because of their simplicity and their ability to update the model when new data is
+available.
+\begin{figure}
+\includegraphics[width=0.6\paperwidth]{img/onlinelearning}
+\end{figure} 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Proposal: Online VECM algorithm (OVECM)}
+\begin{itemize}
+\item Considers only a sliding window of the $L$ most recent data. 
+\item Since cointegration vectors represent long-run relationships they vary
+little in time. OVECM obtains these vectors only when they need to be updated. 
+\item This updating is done when MAPEs of the last $n$ inputs is above a certain
+error given by a threshold 
+\item OVECM also implements matrix optimisations in order to reduce execution time,
+such as updating matrices with new data, removing old data and introducing new
+cointegration vectors.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Methodology}
+OVECM were compared against VECM and ARIMA. VECM and ARIMA are called with a
+sliding window of the most recent data, whereby the models are updated at every
+time step. Therefore, we named them SLVECM and SLARIMA.
+\end{frame}
+
+\subsection{Parameters}
+\begin{frame}
+\frametitle{Parameters optimization}
+VECM order and ARIMA parameters were selected using AIC.
+
+\begin{table}[ht]
+\label{tab:params}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Windows size $L$ & VECM & ARIMA\\
+ $L$ & order $(p)$ & order $(p,d,q)$ \\
+\hline
+100 & 2 & p=2,d=1,q=1\\
+400 & 5 & p=1,d=1,q=1\\
+700 & 3 &p=2,d=1,q=1\\
+1000 &3 & p=2,d=1,q=1\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Execution times}
+We ran 400 iterations of OVECM and SLVECM . SLARIMA was based on the ARIMA procedure
+of the statsmodels library and therefore its execution time is excluded.
+%because its is not comparable with OVECM and SLVECM. SLARIMA was created based
+%on statsmodels library routine ARIMA.
+\begin{center}
+\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+           max width=\textwidth}{
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+& $L$ & order & e  & Time[s] \\
+\hline
+OVECM & 100 &p=2  & 0      & 2.492\\
+OVECM & 100 &p=2  & 0.0026  & 1.606\\
+SLVECM & 100 &p=2& -- & 2.100\\
+\hline
+OVECM & 400 & p=5  & 0      & 3.513\\
+OVECM & 400 &p=5  & 0.0041  & 2.569\\
+SLVECM & 400 & p=5 & -- & 3.222\\
+\hline
+OVECM & 700 &p=3  & 0      & 3.296\\
+OVECM & 700 &p=3  & 0.0032  & 2.856\\
+SLVECM & 700 &p=3 & -- & 3.581\\
+\hline
+OVECM & 1000 & p=3 & 0      & 4.387\\
+OVECM & 1000 & p=3  & 0.0022  & 2.408\\
+SLVECM & 1000 & p=3  & -- & 3.609\\
+\hline
+\end{tabular}
+}\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Performance accuracy}
+\tiny
+\begin{table}[H]
+\caption{Model measures}
+\label{tab:stats}
+\begin{center}
+\begin{tabular}{|l|l|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{Model} & \multicolumn{3}{|c|}{In-sample} &
+\multicolumn{3}{|c|}{Out-of-sample} \\ 
+\hline
+\hline
+Method & $L$ & Parameters &  
+MAPE & MAE& RMSE& 
+MAPE & MAE& RMSE \\
+\hline
+ OVECM  &   100  &  P=2 e=0.0026 &  0.00263&  0.00085&  0.00114&  0.00309&  0.00094&  0.00131\\
+ OVECM  &   400  &  P=5 e=0.0041&  0.00378&  0.00095&  0.00127&  0.00419&  0.00103&  0.00143\\
+ OVECM  &   700  &  P=3 e=0.0032&  0.00323&  0.00099&  0.00130&  0.00322&  0.00097&  0.00132\\
+ OVECM  &   1000 &  P=3 e=0.0022&  
+ \textbf{0.00175}&  \textbf{0.00062}&  \textbf{0.00087} &  
+ \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
+\hline
+ SLVECM  &   100 &  P=2 &  0.00262&  0.00085&  0.00113&  0.00310&  0.00095&  0.00132\\
+ SLVECM  &   400 &  P=5 &  0.00375&  0.00095&  0.00126&  0.00419&  0.00103&  0.00143\\
+ SLVECM  &   700 &  P=3 &  0.00324&  0.00099&  0.00130&  0.00322&  0.00098&  0.00132\\
+ SLVECM  &   1000&  P=3 &  
+ \textbf{0.00174}&  \textbf{0.00061}&  \textbf{0.00087}&  
+ \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
+\hline
+SLARIMA & 100  &p=2 d=1 q=1 & 0.00285  &  0.00110  &  0.00308  &  0.00312  &0.00098  &  0.00144 \\
+SLARIMA & 400  &p=1 d=1 q=1 & 0.00377  &  0.00101  &  0.00128  &  0.00418 & 0.00106 & 0.00145 \\
+SLARIMA & 700  &p=2 d=1 q=1 & 0.00329  &  0.00102  &  0.00136  &  0.00324  & 0.00097  &  0.00133 \\
+SLARIMA & 1000 &p=2 d=1 q=1 & \textbf{0.00281}  & \textbf{0.00074}  &  \textbf{0.00105}  &  \textbf{0.00177} & \textbf{0.00063}  &  \textbf{0.00092} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusions}
+\begin{itemize}
+\item  OVECM considerably reduces execution times
+without compromising solution accuracy.  
+\item OVECM was compared with VECM and ARIMA
+with the same sliding window sizes and OVECM outperformed both in terms of
+execution time. 
+\item Traditional VECM slightly outperformed our proposal but the
+OVECM execution time is lower.
+\item We could see that our algorithm took much less than a minute at every
+step. This means that it could also be used with higher frequency data and would
+still provide responses before new data arrives.  
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Summary of Contributions}
+\begin{itemize}
+\item Two different approaches based on cointegration were presented: an adaptive version of VECM and an online approach.
+\item The concept of cointegration can now be used with high frequency time series.
+\item VECM computational limitations can either be tackled using a distribution computations or considering an online approach.
+\item An interesting connection between the percentage cointegration and forecasting performance.
+\item Cointegration information can be used as an integration tool to detect arbitrage opportunities.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Author Contributions}
+\begin{itemize}
+\item 1
+\item 2
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Future research}
+\begin{itemize}
+\item 1
+\item 2
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[plain,c]
 \begin{center}
@@ -714,6 +834,8 @@ To use VECM with high frequency data where the best parameters are updated when 
 \Huge Questions?
 \end{center}
 \end{frame}
+
+
 %Have a slide for each of the following
 %9 Problem statement or Hypothesis
 %9 “Why is this a Hard Problem?”
