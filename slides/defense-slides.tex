@@ -1,17 +1,19 @@
 \documentclass{beamer}
 \usetheme{Warsaw}
+%\usecolortheme{lily}
 %\usetheme{metropolis}
 %\usepackage[spanish,activeacute]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{amsmath,amsfonts,amssymb}
-\usepackage{adjustbox}
 \usepackage{color}
 \usepackage{tikz}
 \usepackage{array}
+%\usepackage{graphicx}
+\usepackage{adjustbox}
 \usepackage{booktabs}
 \usetikzlibrary{shapes,arrows}
-\usepackage{multicol}
+%\usepackage{multicol}
 \usepackage{hhline}
 \usepackage{pgf}
 \usepackage{algorithm} 
@@ -21,42 +23,46 @@
 \def\R{{\mathbb R }}
 \def\N{{\mathbb N }}
 
-   \definecolor{myblue1}{RGB}{35,119,189}
-    \definecolor{myblue2}{RGB}{95,179,238}
-    \definecolor{myblue3}{RGB}{129,168,207}
-    \definecolor{myblue4}{RGB}{26,89,142}
+%   \definecolor{myblue1}{RGB}{35,119,189}
+%    \definecolor{myblue2}{RGB}{95,179,238}
+%    \definecolor{myblue3}{RGB}{129,168,207}
+%    \definecolor{myblue4}{RGB}{26,89,142}
+%
+%    \setbeamercolor*{structure}{fg=myblue1,bg=blue}
+%    \setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+%    \setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
+%    \setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+%    \setbeamercolor*{palette quaternary}{fg=black,bg=white}
+%
+%    \setbeamercolor*{item projected}{fg=red,bg=myblue3!80}
+%    \setbeamercolor*{block title example}{fg=white,bg=myblue4}
+%    \setbeamercolor*{frametitle}{fg=black}
+%
+%    \setbeamertemplate{blocks}[rounded][shadow=true]
+%
+%    \makeatletter
+%    \pgfdeclarehorizontalshading[frametitle.bg,frametitle right.bg]{beamer@frametitleshade}{\paperheight}{%
+%      color(0pt)=(myblue2);
+%      color(\paperwidth)=(white)}
+%
+%    \defbeamertemplate*{footline}{mysplit theme}
+%    {%
+%      \leavevmode%
+%      \hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fill,rightskip=.3cm]{author in head/foot}%
+%        \usebeamerfont{author in head/foot}\insertshortauthor
+%      \end{beamercolorbox}%
+%      \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+%        \usebeamerfont{title in head/foot}\insertshorttitle\hfill
+%        \insertframenumber/\inserttotalframenumber\hspace*{0.5em}
+%      \end{beamercolorbox}}%
+%      \vskip0pt%
+%    }
+%    \makeatother
 
-    \setbeamercolor*{structure}{fg=myblue1,bg=blue}
-    \setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
-    \setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
-    \setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
-    \setbeamercolor*{palette quaternary}{fg=black,bg=white}
-
-    \setbeamercolor*{item projected}{fg=red,bg=myblue3!80}
-    \setbeamercolor*{block title example}{fg=white,bg=myblue4}
-    \setbeamercolor*{frametitle}{fg=black}
-
-    \setbeamertemplate{blocks}[rounded][shadow=true]
-
-    \makeatletter
-    \pgfdeclarehorizontalshading[frametitle.bg,frametitle right.bg]{beamer@frametitleshade}{\paperheight}{%
-      color(0pt)=(myblue2);
-      color(\paperwidth)=(white)}
-
-    \defbeamertemplate*{footline}{mysplit theme}
-    {%
-      \leavevmode%
-      \hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fill,rightskip=.3cm]{author in head/foot}%
-        \usebeamerfont{author in head/foot}\insertshortauthor
-      \end{beamercolorbox}%
-      \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
-        \usebeamerfont{title in head/foot}\insertshorttitle\hfill
-        \insertframenumber/\inserttotalframenumber\hspace*{0.5em}
-      \end{beamercolorbox}}%
-      \vskip0pt%
-    }
-    \makeatother
-
+\usebackgroundtemplate{%             declare it
+\tikz[overlay,remember picture] \node[opacity=0.2, at=(current page.center)] {
+   \includegraphics[height=\paperheight,width=\paperwidth]{img/background}};
+}
 
 \author[Paola Arce]{Paola Arce \\ Departamento de Inform\'atica, UTFSM \\ Thesis advisor: Luis Salinas}
 \date{December 15, 2017}
@@ -65,16 +71,17 @@
 
 \titlegraphic{
     \tikz[overlay,remember picture]
-        \node[at=(current page.south), anchor=south] {
+        \node[at=(current page.south east), anchor=south east] {
             \includegraphics[height=1.5cm]{img/DIT}
         };
 }
 
 \begin{document}
+
 \begin{frame}[plain]
 \titlepage
 \end{frame}
-
+\usebackgroundtemplate{ } 
 
 \begin{frame}
 \frametitle{Outline}
@@ -115,7 +122,7 @@ c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspac
 \frametitle{Stationarity}
 \begin{block}{Weak definition}
 
-A weak stationary time series is a process which mean, variance and auto covariance do not change over time:
+A weakly stationary time series is a process which mean, variance and auto covariance do not change over time:
 \small
 {\color{blue}
  \begin{eqnarray*} E(y_t) &=& \mu  \quad
@@ -300,7 +307,7 @@ a linear combination of them exists which is I(0).
 
 The Vector Error correction model (VECM) is used to model cointegrated time series.
 
-\Large
+{\Large
 \begin{equation*}
  \Delta \mathbf{y}_t = \underbrace{
         \tikz[baseline]{
@@ -324,6 +331,11 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
             {$\mathbf{\epsilon}_t $};
         }}_\text{i.i.d}
 \end{equation*}
+}
+The columns of $\beta$ contains the cointegration vectors and the rows of
+$\alpha$ correspond with the adjusted vectors. $\beta$ is obtained by Johansen
+procedure whereas $\alpha$ has to be determined as a
+variable in the VECM.
 
 \end{frame}
 
@@ -372,25 +384,17 @@ and the matrix $\Omega$ can be expressed as $\Omega =
 \alpha \beta^\top$, where $\alpha$ and $\beta$ are $(l \times r)$
 matrices and $rank(\alpha)=rank(\beta)=r$.
 \end{itemize}
-The columns of $\beta$ contains the cointegration vectors and the rows of
-$\alpha$ correspond with the adjusted vectors. $\beta$ is obtained by Johansen
-procedure whereas $\alpha$ has to be determined as a
-variable in the VECM.
 \end{frame}
 
 
 \begin{frame}
 \frametitle{VECM limitations}
-
 The Vector Error correction model (VECM) is used to model cointegrated time series but only with batch data and rarely used with high frequency data  mainly due to computational limitations:
-
 \begin{itemize}
 \item Calculation of the cointegration vectors
 \item VECM parameters are obtained using the ordinary least squares (OLS) method.
 \end{itemize}
-
 \end{frame}
-
 
 
 
@@ -398,12 +402,10 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
 \begin{frame}
 \frametitle{Proposal}
 \begin{block}{Proposal}
-To adapt VECM to be used with high frequency data, where the best parameters are updated when new data.
+To adapt VECM to be used with high frequency data, where the best parameters are updated when new data arrives.
 \end{block}
-
 \begin{block}{Hypothesis}
-An algorithm based on cointegration and high
-performance computing will allow faster forecasting
+An algorithm based on cointegration and high performance computing will allow faster forecasting
 algorithms for financial time series to be obtained while maintaining good accuracy levels.
 \end{block}
 \end{frame}
@@ -411,7 +413,32 @@ algorithms for financial time series to be obtained while maintaining good accur
 \section{First Contribution}
 \begin{frame}
 \frametitle{First approach}
-To use VECM with high frequency data, where optimised parameters are obtained when new data. The optimisation was made in a distributed environment.
+An adaptive Vector Error Correction algorithm that:
+\begin{itemize}
+\item considers the last most recent data (windows size L)
+\item finds optimal parameters of VECM in that window.
+\item the optimisation is made in a distributed environment.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{First approach idea}
+\begin{figure}
+\includegraphics[width=0.65\textwidth]{img/slidingwindow}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{How to choose L?}
+  \begin{figure}[!h]
+  %\vspace{-0.8cm}
+  \centering
+   \includegraphics[width=0.65\textwidth]{img/51_Fig1}
+  \caption[Distribution of the number of cointegration vectors using $p=1$ lags]{Distribution of the number of cointegration vectors using $p=1$ lags.
+  Four possible values for windows size $L$ are shown (2, 6, 10 and 14) hours (1
+  hour = 360 data points).}
+  \label{fig:hists}
+\end{figure}
 \end{frame}
 
 
@@ -427,22 +454,14 @@ database which gives access to the Swiss Foreign Exchange marketplace.
 from the 11th to the 15th of August 2014. 
 %\item Since one day corresponds to 8640 data points and we used 5 days of data, we have 43,200 data points in total.
 \end{itemize}
+ \begin{figure}[!h]
+    \includegraphics[width=0.2\textwidth]{img/dukascopy}
+ \end{figure}
 \end{frame}
 
 
 
-\begin{frame}
-\frametitle{Cointegration vectors distribution}
-  \begin{figure}[!h]
-  %\vspace{-0.8cm}
-  \centering
-   \includegraphics[width=0.65\textwidth]{img/51_Fig1}
-  \caption[Distribution of the number of cointegration vectors using $p=1$ lags]{Distribution of the number of cointegration vectors using $p=1$ lags.
-  Four possible values for windows size $L$ are shown (2, 6, 10 and 14) hours (1
-  hour = 360 data points).}
-  \label{fig:hists}
-\end{figure}
-\end{frame}
+
 
 
 
@@ -689,7 +708,6 @@ time step. Therefore, we named them SLVECM and SLARIMA.
 \begin{frame}
 \frametitle{Parameters optimization}
 VECM order and ARIMA parameters were selected using AIC.
-
 \begin{table}[ht]
 \label{tab:params}
 \begin{center}
