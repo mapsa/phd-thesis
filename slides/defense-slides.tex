@@ -1,5 +1,5 @@
 \documentclass{beamer}
-\usetheme{Warsaw}
+\usetheme{CambridgeUS}
 %\usecolortheme{lily}
 %\usetheme{metropolis}
 %\usepackage[spanish,activeacute]{babel}
@@ -59,10 +59,10 @@
 %    }
 %    \makeatother
 
-\usebackgroundtemplate{%             declare it
-\tikz[overlay,remember picture] \node[opacity=0.2, at=(current page.center)] {
-   \includegraphics[height=\paperheight,width=\paperwidth]{img/background}};
-}
+%\usebackgroundtemplate{%             declare it
+%\tikz[overlay,remember picture] \node[opacity=0.2, at=(current page.center)] {
+%   \includegraphics[height=\paperheight,width=\paperwidth]{img/background}};
+%}
 
 \author[Paola Arce]{Paola Arce \\ Departamento de Inform\'atica, UTFSM \\ Thesis advisor: Luis Salinas}
 \date{December 15, 2017}
@@ -81,12 +81,12 @@
 \begin{frame}[plain]
 \titlepage
 \end{frame}
-\usebackgroundtemplate{ } 
+%\usebackgroundtemplate{ } 
 
 \begin{frame}
 \frametitle{Outline}
 \begin{itemize}
-\item Motivation: economic relations
+\item Motivation: Financial time series and HFT
 \item Cointegration and Integration concepts
 \item VECM model
 \item Proposal
@@ -98,23 +98,60 @@
 \section{Introduction}
 
 \begin{frame}
-\frametitle{Motivation}
-Most financial time series are non-stationary in nature. This implies that the statistical properties, such as mean and variance of the data change over time. Therefore, financial time series forecasting is still a challenge.
+\frametitle{HFT: High Frequency Trading}
+High frequency trading has motivated computer-driven strategies capable of processing large amount of data in short periods of time.
 \begin{figure}
-\includegraphics[width=0.4\paperwidth]{img/forecast}
+\includegraphics[width=0.7\paperwidth]{img/HFTmarket}
+\caption{Percentage of HFT trades of total US Equity Trading. Source: TABB group}
 \end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{HFT Revenue}
+However, the revenues have fallen dramatically mainly because of more regulation, increasing cost of HFT infrastructure and competition.
+\begin{figure}
+\includegraphics[width=0.7\paperwidth]{img/HFTmarket2}
+\caption{Revenue in the US. Source: TABB group}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{High Frequency data}
+High frequency time series are commonly:
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+\item Non-stationary
+\item Irregularly spaced over time.
+%\item Heterogeneity
+\item Heteroscedastic
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=0.35\paperwidth]{img/forecast}
+\end{figure}
+\end{column}
+\end{columns}
+\vspace{5mm}
+This imply that classical statistical models can't be used. Therefore, financial time series forecasting is still a challenge.
 \end{frame}
 
 \begin{frame}
 \frametitle{Stationarity}
 \begin{block}{Strong definition}
-
-The hole distribution of the variable does not depend on time, more precisely:
+A strictly stationary time series $y_t \in \mathbb{R}$, $\forall t \in \mathbb{Z}$ is one for which the probabilistic behaviour of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
+to that of the time shifted set, more precisely:
 \small
+
 \begin{equation*}
+{\color{blue}
 P\{y_{t_1} \leq
-c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspace\forall L \in \mathbb{N}, \forall h \in \mathbb{Z}
+c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspace }\forall L \in \mathbb{N}, \forall h \in \mathbb{Z}
 \end{equation*}
+\noindent where $c_1,\dots,c_L$ are constants.
 \end{block}
 \end{frame}
 
@@ -130,6 +167,11 @@ A weakly stationary time series is a process which mean, variance and auto covar
 \mathbb{N} \\ \lambda(s,t)&=&\lambda(s+h,t+h) \quad \forall s,t \in \mathbb{N},
 \forall h \in \mathbb{Z} \end{eqnarray*}}
 \end{block}
+\noindent with $\lambda(s,t) = E[(y_s-\mu)(y_t - \mu)]$ 
+\end{frame}
+
+\begin{frame}
+\frametitle{Stationarity: consequences}
 One of the consequences of stationary processes is how they recover from a shock. A shock represents an unexpected change in a variable or a in its error term in a particular period of time. For stationary time series, shocks to the system will gradually die away. 
 \end{frame}
 
@@ -137,135 +179,79 @@ One of the consequences of stationary processes is how they recover from a shock
 \begin{frame}
 \frametitle{Non-stationary processes}
 There are different types of non-stationary time series models often found in economics:
-\begin{block}{Deterministic trend}
- Deterministic trend or trend stationary
-processes have the following form:
-{\color{blue}
-\[
-y_t = f(t) + \epsilon_{t}
-\]}
-\noindent where $\epsilon_{t}$ represents a stationary error term (with mean 0 and variance $\sigma^2$) and $f(t)$ is a deterministic function of time.
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Non-stationary processes}
-
 \begin{block}{Stochastic trend}
-Stochastic trend processes are also called {\color{red}unit root or I(1)} and have the following form:
+Stochastic trend processes are also called {\color{red}unit root or I(1)} if they have the following form:
 {\color{blue}
 \[
 y_t = \mu + y_{t-1} + \epsilon_t
 \]}
 \noindent where $\epsilon_t$ is a stationary process. When $\mu = 0 $ the process is called pure random walk and when $\mu \neq 0$  the process is called random walk with drift.
 \end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Integration }
-\begin{block}{Integration of order $d$}
-A time series $\mathbf{y}$ is said to be integrated of order $d$ if after
-differentiating the variable $d$ times, we get an stationary process, more precisely:
-\[
-(1-L)^d \mathbf{y} \sim \text{I(0)} \, ,
-\]
-\noindent where I(0) is a stationary time series and $L$ is the lag operator:
-\[
-(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
-\]
-\end{block}
-\end{frame}
-
-\begin{frame}
-\frametitle{Integration example}
-\begin{columns}
-\column[t]{5cm}
-High frequency financial time series are commonly an I(1) process 
-\begin{center}
-\includegraphics[width=0.85\textwidth]{img/EURUSD}
-\end{center}
-\column[t]{5cm}
-Since their differences are stationary (I(0) process).
-\newline
-\begin{center}
-\includegraphics[width=0.85\textwidth]{img/DEURUSD}
-\end{center}
-\end{columns}
-\end{frame}
-
-
-
-
-\begin{frame}
-\frametitle{Spurious regression}
-Standard regression techniques are applied to non-stationary data.
-The use of non-stationary data can lead to spurious regressions.  
-
-%\begin{block}{Spurious regression}
-%If two stationary
-%variables are generated as independent random series and are trending over time, when one of those variables is regressed on the other, they could have a high coefficient of determination ($R^2$) even if the two are totally unrelated. 
+%\begin{block}{Deterministic trend}
+% Deterministic trend or trend stationary
+%processes have the following form:
+%{\color{blue}
+%\[
+%y_t = f(t) + \epsilon_{t}
+%\]}
+%\noindent where $\epsilon_{t}$ represents a stationary error term (with mean 0 and variance $\sigma^2$) and $f(t)$ is a deterministic function of time.
 %\end{block}
-
-\begin{columns}
-\begin{column}{.45\linewidth}<1->
-\begin{figure}
-\includegraphics[width=0.4\paperwidth]{img/spurious1}
-\end{figure}
-\end{column}
-\begin{column}{.45\linewidth}<2->
-\begin{figure}
-\includegraphics[width=0.4\paperwidth]{img/spurious2}
-\end{figure}
-\end{column}
-\end{columns}
 \end{frame}
 
 
-\begin{frame}[t,fragile]{Random walk Illustration}
- \begin{itemize}
-  \item<1-> The drunkard's walk
-  \item<2-> The dog's walk
-  %\item<3-> The drunk and dog's walk
- \end{itemize}
- 
-\begin{columns}
-\begin{column}{.4\linewidth}<1->
-\begin{center}
-        \begin{tikzpicture}[overlay]
-            \node[yshift=-50] (img2) {\includegraphics[scale=1.4]{img/drunk}};
-        \end{tikzpicture}
-\end{center}
-\end{column}
-\begin{column}{.08\linewidth}<2->
-        \begin{tikzpicture}[overlay]
-            \node[yshift=-50] (img2) {\includegraphics[scale=0.1]{img/dog}};
-        \end{tikzpicture}
-\end{column}
-%\begin{column}{.5\linewidth}<3->
+%\begin{frame}[t,fragile]{Random walk Illustration}
+% \begin{itemize}
+%  \item<1-> The drunkard's walk
+%  \item<2-> The dog's walk
+%  %\item<3-> The drunk and dog's walk
+% \end{itemize}
+% 
+%\begin{columns}
+%\begin{column}{.4\linewidth}<1->
+%\begin{center}
+%        \begin{tikzpicture}[overlay]
+%            \node[yshift=-50] (img2) {\includegraphics[scale=1.4]{img/drunk}};
+%        \end{tikzpicture}
+%\end{center}
+%\end{column}
+%\begin{column}{.08\linewidth}<2->
+%        \begin{tikzpicture}[overlay]
+%            \node[yshift=-50] (img2) {\includegraphics[scale=0.1]{img/dog}};
+%        \end{tikzpicture}
+%\end{column}
+%%\begin{column}{.5\linewidth}<3->
+%%    \begin{center}
+%%        \begin{tikzpicture}[overlay]
+%%            \node[yshift=-50] (img2) {\includegraphics[scale=0.1]{img/mananddog}};
+%%        \end{tikzpicture}
+%%    \end{center}
+%%\end{column}
+%\end{columns}
+%\end{frame}
+%
+%\begin{frame}[t,fragile]{Random walk and Cointegration Illustration}
+% \begin{itemize}
+%  \item The drunk and dog's walk
+% \end{itemize}
 %    \begin{center}
 %        \begin{tikzpicture}[overlay]
-%            \node[yshift=-50] (img2) {\includegraphics[scale=0.1]{img/mananddog}};
+%            \node[yshift=-60] (img2) {\includegraphics[scale=0.7]{img/mananddog}};
 %        \end{tikzpicture}
 %    \end{center}
-%\end{column}
-\end{columns}
-\end{frame}
+%\end{frame}
 
-\begin{frame}[t,fragile]{Random walk and Cointegration Illustration}
- \begin{itemize}
-  \item The drunk and dog's walk
- \end{itemize}
-    \begin{center}
-        \begin{tikzpicture}[overlay]
-            \node[yshift=-60] (img2) {\includegraphics[scale=0.7]{img/mananddog}};
-        \end{tikzpicture}
-    \end{center}
-\end{frame}
 
 
 \begin{frame}
-\hspace*{-4mm}
-\includegraphics[width=0.9\paperwidth]{img/motivation.png}
+\frametitle{Irregularly spaced over time}
+\begin{figure}
+\includegraphics[width=\paperwidth]{img/hft-ticks-zoom.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Heteroscedastic}
+%HASTA AQUI
 \end{frame}
 
 
@@ -853,6 +839,13 @@ still provide responses before new data arrives.
 \end{center}
 \end{frame}
 
+%\begin{frame}
+%\hspace*{-4mm}
+%\includegraphics[width=\paperwidth]{img/hft-ticks.png}
+%\end{frame}
+%
+
+
 
 %Have a slide for each of the following
 %9 Problem statement or Hypothesis
@@ -869,5 +862,65 @@ still provide responses before new data arrives.
 
 
 
+\begin{frame}
+\frametitle{Integration }
+\begin{block}{Integration of order $d$}
+A time series $\mathbf{y}$ is said to be integrated of order $d$ if after
+differentiating the variable $d$ times, we get an stationary process, more precisely:
+\[
+(1-L)^d \mathbf{y} \sim \text{I(0)} \, ,
+\]
+\noindent where I(0) is a stationary time series and $L$ is the lag operator:
+\[
+(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
+\]
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Integration example}
+\begin{columns}
+\column[t]{5cm}
+High frequency financial time series are commonly an I(1) process 
+\begin{center}
+\includegraphics[width=0.85\textwidth]{img/EURUSD}
+\end{center}
+\column[t]{5cm}
+Since their differences are stationary (I(0) process).
+\newline
+\begin{center}
+\includegraphics[width=0.85\textwidth]{img/DEURUSD}
+\end{center}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Spurious regression}
+Standard regression techniques are applied to non-stationary data.
+The use of non-stationary data can lead to spurious regressions.  
+
+%\begin{block}{Spurious regression}
+%If two stationary
+%variables are generated as independent random series and are trending over time, when one of those variables is regressed on the other, they could have a high coefficient of determination ($R^2$) even if the two are totally unrelated. 
+%\end{block}
+
+\begin{columns}
+\begin{column}{.45\linewidth}<1->
+\begin{figure}
+\includegraphics[width=0.4\paperwidth]{img/spurious1}
+\end{figure}
+\end{column}
+\begin{column}{.45\linewidth}<2->
+\begin{figure}
+\includegraphics[width=0.4\paperwidth]{img/spurious2}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
 % Financial time series are not the only ones with this behaviour, this study can be extended to other non-stationary time series such as: weather, earthquakes, energy demand and sales forecasting.
+
+\bibliographystyle{amscls/amsalpha}
+\bibliography{reference}
 \end{document}
