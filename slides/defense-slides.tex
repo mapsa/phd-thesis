@@ -1,7 +1,4 @@
 \documentclass{beamer}
-\usetheme{CambridgeUS}
-%\usecolortheme{lily}
-%\usetheme{metropolis}
 %\usepackage[spanish,activeacute]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
@@ -23,51 +20,48 @@
 \def\R{{\mathbb R }}
 \def\N{{\mathbb N }}
 
-%   \definecolor{myblue1}{RGB}{35,119,189}
-%    \definecolor{myblue2}{RGB}{95,179,238}
-%    \definecolor{myblue3}{RGB}{129,168,207}
-%    \definecolor{myblue4}{RGB}{26,89,142}
-%
-%    \setbeamercolor*{structure}{fg=myblue1,bg=blue}
-%    \setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
-%    \setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
-%    \setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
-%    \setbeamercolor*{palette quaternary}{fg=black,bg=white}
-%
-%    \setbeamercolor*{item projected}{fg=red,bg=myblue3!80}
-%    \setbeamercolor*{block title example}{fg=white,bg=myblue4}
-%    \setbeamercolor*{frametitle}{fg=black}
-%
-%    \setbeamertemplate{blocks}[rounded][shadow=true]
-%
-%    \makeatletter
-%    \pgfdeclarehorizontalshading[frametitle.bg,frametitle right.bg]{beamer@frametitleshade}{\paperheight}{%
-%      color(0pt)=(myblue2);
-%      color(\paperwidth)=(white)}
-%
-%    \defbeamertemplate*{footline}{mysplit theme}
-%    {%
-%      \leavevmode%
-%      \hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fill,rightskip=.3cm]{author in head/foot}%
-%        \usebeamerfont{author in head/foot}\insertshortauthor
-%      \end{beamercolorbox}%
-%      \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
-%        \usebeamerfont{title in head/foot}\insertshorttitle\hfill
-%        \insertframenumber/\inserttotalframenumber\hspace*{0.5em}
-%      \end{beamercolorbox}}%
-%      \vskip0pt%
-%    }
-%    \makeatother
+\usetheme{metropolis}
 
-%\usebackgroundtemplate{%             declare it
-%\tikz[overlay,remember picture] \node[opacity=0.2, at=(current page.center)] {
-%   \includegraphics[height=\paperheight,width=\paperwidth]{img/background}};
+
+\definecolor{BlueTOL}{HTML}{222255}
+\definecolor{BrownTOL}{HTML}{666633}
+\definecolor{GreenTOL}{HTML}{225522}
+\setbeamercolor{normal text}{fg=BlueTOL,bg=white}
+\setbeamercolor{alerted text}{fg=BrownTOL}
+\setbeamercolor{example text}{fg=GreenTOL}
+
+\metroset{block=fill}
+
+\setbeamercolor{block title alerted}{use=alerted text,
+    fg=alerted text.fg,
+    bg=alerted text.bg!80!alerted text.fg}
+\setbeamercolor{block body alerted}{use={block title alerted, alerted text},
+    fg=alerted text.fg,
+    bg=block title alerted.bg!50!alerted text.bg}
+\setbeamercolor{block title example}{use=example text,
+    fg=example text.fg,
+    bg=example text.bg!80!example text.fg}
+\setbeamercolor{block body example}{use={block title example, example text},
+    fg=example text.fg,
+    bg=block title example.bg!50!example text.bg}
+
+
+%\author[Paola Arce]{Paola Arce \\ Departamento de Inform\'atica, UTFSM \\ Thesis advisor: Luis Salinas}
+%\date{December 15, 2017}
+%\title[Thesis defense]{Online learning methods for financial time series forecasting}
+%\subtitle{PhD Thesis Defense}
+%
+%\titlegraphic{
+%    \tikz[overlay,remember picture]
+%        \node[at=(current page.south east), anchor=south east] {
+%            \includegraphics[height=1.5cm]{img/DIT}
+%        };
 %}
 
 \author[Paola Arce]{Paola Arce \\ Departamento de Inform\'atica, UTFSM \\ Thesis advisor: Luis Salinas}
-\date{December 15, 2017}
-\title[Thesis defense]{Online learning methods for financial time series forecasting}
-\subtitle{PhD Thesis Defense}
+\date{December 11, 2017}
+\title[Thesis defense]{Fast and adaptive cointegration based model for forecasting financial time series}
+\subtitle{Seminario Inform\'atica CCTVal}
 
 \titlegraphic{
     \tikz[overlay,remember picture]
@@ -109,7 +103,7 @@ High frequency trading has motivated computer-driven strategies capable of proce
 
 \begin{frame}
 \frametitle{HFT Revenue}
-However, the revenues have fallen dramatically mainly because of more regulation, increasing cost of HFT infrastructure and competition.
+However, the revenues have fallen dramatically mainly because of more regulation, increasing cost of HFT infrastructure and more competitive algorithms.
 \begin{figure}
 \includegraphics[width=0.7\paperwidth]{img/HFTmarket2}
 \caption{Revenue in the US. Source: TABB group}
@@ -127,6 +121,7 @@ High frequency time series are commonly:
 \item Irregularly spaced over time.
 %\item Heterogeneity
 \item Heteroscedastic
+%\item Volatility
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
@@ -142,16 +137,14 @@ This imply that classical statistical models can't be used. Therefore, financial
 \begin{frame}
 \frametitle{Stationarity}
 \begin{block}{Strong definition}
-A strictly stationary time series $y_t \in \mathbb{R}$, $\forall t \in \mathbb{Z}$ is one for which the probabilistic behaviour of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
+A {\color{red}strictly stationary time series} $y_t \in \mathbb{R}$, $\forall t \in \mathbb{Z}$ is one for which the probabilistic behaviour of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
 to that of the time shifted set, more precisely:
-\small
-
 \begin{equation*}
 {\color{blue}
 P\{y_{t_1} \leq
-c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspace }\forall L \in \mathbb{N}, \forall h \in \mathbb{Z}
+c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspace }
 \end{equation*}
-\noindent where $c_1,\dots,c_L$ are constants.
+\noindent $\forall L \in \mathbb{N}, \forall h \in \mathbb{Z}$ where $c_1,\dots,c_L$ are constants.
 \end{block}
 \end{frame}
 
@@ -251,7 +244,11 @@ y_t = \mu + y_{t-1} + \epsilon_t
 
 \begin{frame}
 \frametitle{Heteroscedastic}
-%HASTA AQUI
+Conditional heteroskedasticity identifies non-constant volatility.
+Volatility gives a measure of uncertainty about future returns. Many factors affect volatility such as: historical prices, trends, monetary policies and news.
+\begin{figure}
+\includegraphics[width=0.8\paperwidth]{img/vix}
+\end{figure}
 \end{frame}
 
 
