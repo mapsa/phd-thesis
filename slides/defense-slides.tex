@@ -1,10 +1,12 @@
 \documentclass{beamer}
 %\usepackage[spanish,activeacute]{babel}
+\usetheme{metropolis}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{color}
 \usepackage{tikz}
+\usetikzlibrary{positioning}
 \usepackage{array}
 %\usepackage{graphicx}
 \usepackage{adjustbox}
@@ -20,11 +22,11 @@
 \def\R{{\mathbb R }}
 \def\N{{\mathbb N }}
 
-\usetheme{metropolis}
+
 
 
 \definecolor{BlueTOL}{HTML}{222255}
-\definecolor{BrownTOL}{HTML}{666633}
+\definecolor{BrownTOL}{HTML}{f43d00}%666633}
 \definecolor{GreenTOL}{HTML}{225522}
 \setbeamercolor{normal text}{fg=BlueTOL,bg=white}
 \setbeamercolor{alerted text}{fg=BrownTOL}
@@ -36,7 +38,7 @@
     fg=alerted text.fg,
     bg=alerted text.bg!80!alerted text.fg}
 \setbeamercolor{block body alerted}{use={block title alerted, alerted text},
-    fg=alerted text.fg,
+    fg=normal text.fg,
     bg=block title alerted.bg!50!alerted text.bg}
 \setbeamercolor{block title example}{use=example text,
     fg=example text.fg,
@@ -58,38 +60,40 @@
 %        };
 %}
 
-\author[Paola Arce]{Paola Arce \\ Departamento de Inform\'atica, UTFSM \\ Thesis advisor: Luis Salinas}
+\author[Paola Arce]{Paola Arce \\ Thesis advisor: Luis Salinas}
 \date{December 11, 2017}
 \title[Thesis defense]{Fast and adaptive cointegration based model for forecasting financial time series}
 \subtitle{Seminario Inform\'atica CCTVal}
 
-\titlegraphic{
-    \tikz[overlay,remember picture]
-        \node[at=(current page.south east), anchor=south east] {
-            \includegraphics[height=1.5cm]{img/DIT}
-        };
-}
+
 
 \begin{document}
 
 \begin{frame}[plain]
 \titlepage
+\begin{tikzpicture}[overlay, remember picture]
+\node[above right=0.4cm and 1.2cm of current page.south west] {\includegraphics[width=2.5cm]{img/UTFSM}};
+%\node[above =0.5cm of current page.south] {\includegraphics[width=2cm]{img/DIT}};
+\node[above left=0.5cm and .8cm of current page.south east] {\includegraphics[width=5cm]{img/logo-di}};
+\end{tikzpicture}
+
 \end{frame}
 %\usebackgroundtemplate{ } 
 
 \begin{frame}
 \frametitle{Outline}
 \begin{itemize}
-\item Motivation: Financial time series and HFT
-\item Cointegration and Integration concepts
-\item VECM model
-\item Proposal
+\item Motivation: High Frequency trading
+\item Cointegration and the VECM model
+\item Challenges and Hypothesis
+\item Contributions
 \item Experiments
 \item Conclusions
+\item Future work
 \end{itemize}
 \end{frame}
 
-\section{Introduction}
+\section{Motivation}
 
 \begin{frame}
 \frametitle{HFT: High Frequency Trading}
@@ -121,7 +125,7 @@ High frequency time series are commonly:
 \item Irregularly spaced over time.
 %\item Heterogeneity
 \item Heteroscedastic
-%\item Volatility
+\item Potentially cointegrated
 \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
@@ -165,80 +169,47 @@ A weakly stationary time series is a process which mean, variance and auto covar
 
 \begin{frame}
 \frametitle{Stationarity: consequences}
-One of the consequences of stationary processes is how they recover from a shock. A shock represents an unexpected change in a variable or a in its error term in a particular period of time. For stationary time series, shocks to the system will gradually die away. 
+One of the consequences of stationary processes is how they recover from a shock. A shock represents an unexpected change in a variable in a particular period of time. For stationary time series, shocks to the system will gradually die away. 
+\begin{figure}
+\includegraphics[width=0.6\paperwidth]{img/shock}
+\end{figure}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Non-stationary processes}
-There are different types of non-stationary time series models often found in economics:
-\begin{block}{Stochastic trend}
-Stochastic trend processes are also called {\color{red}unit root or I(1)} if they have the following form:
+There are different types of non-stationary time series models often found in economics. Unit root process is one of them commonly used to model prices:
+\begin{block}{Unit root process}
+{\color{red}Unit root or I(1)} processes are also called stochastic trend if they have the following form:
 {\color{blue}
 \[
 y_t = \mu + y_{t-1} + \epsilon_t
 \]}
-\noindent where $\epsilon_t$ is a stationary process. When $\mu = 0 $ the process is called pure random walk and when $\mu \neq 0$  the process is called random walk with drift.
+\noindent where $\epsilon_t$ is a stationary process. When $\mu = 0 $ the process is called {\bf pure random walk} and when $\mu \neq 0$  the process is called {\bf random walk with drift}.
 \end{block}
-%\begin{block}{Deterministic trend}
-% Deterministic trend or trend stationary
-%processes have the following form:
-%{\color{blue}
-%\[
-%y_t = f(t) + \epsilon_{t}
-%\]}
-%\noindent where $\epsilon_{t}$ represents a stationary error term (with mean 0 and variance $\sigma^2$) and $f(t)$ is a deterministic function of time.
-%\end{block}
 \end{frame}
 
 
-%\begin{frame}[t,fragile]{Random walk Illustration}
-% \begin{itemize}
-%  \item<1-> The drunkard's walk
-%  \item<2-> The dog's walk
-%  %\item<3-> The drunk and dog's walk
-% \end{itemize}
-% 
-%\begin{columns}
-%\begin{column}{.4\linewidth}<1->
-%\begin{center}
-%        \begin{tikzpicture}[overlay]
-%            \node[yshift=-50] (img2) {\includegraphics[scale=1.4]{img/drunk}};
-%        \end{tikzpicture}
-%\end{center}
-%\end{column}
-%\begin{column}{.08\linewidth}<2->
-%        \begin{tikzpicture}[overlay]
-%            \node[yshift=-50] (img2) {\includegraphics[scale=0.1]{img/dog}};
-%        \end{tikzpicture}
-%\end{column}
-%%\begin{column}{.5\linewidth}<3->
-%%    \begin{center}
-%%        \begin{tikzpicture}[overlay]
-%%            \node[yshift=-50] (img2) {\includegraphics[scale=0.1]{img/mananddog}};
-%%        \end{tikzpicture}
-%%    \end{center}
-%%\end{column}
-%\end{columns}
-%\end{frame}
-%
-%\begin{frame}[t,fragile]{Random walk and Cointegration Illustration}
-% \begin{itemize}
-%  \item The drunk and dog's walk
-% \end{itemize}
-%    \begin{center}
-%        \begin{tikzpicture}[overlay]
-%            \node[yshift=-60] (img2) {\includegraphics[scale=0.7]{img/mananddog}};
-%        \end{tikzpicture}
-%    \end{center}
-%\end{frame}
-
-
+\begin{frame}
+\frametitle{Integration }
+\begin{block}{Integration of order $d$}
+A time series $\mathbf{y}$ is said to be I(d), or integrated of order $d$, if after
+differentiating the variable $d$ times, we get an stationary process, more precisely:
+\[
+{\color{blue}
+(1-L)^d \mathbf{y} \sim \text{I(0)}} \, ,
+\]
+\noindent where I(0) is a stationary time series and $L$ is the lag operator:
+\[
+(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
+\]
+\end{block}
+\end{frame}
 
 \begin{frame}
 \frametitle{Irregularly spaced over time}
 \begin{figure}
-\includegraphics[width=\paperwidth]{img/hft-ticks-zoom.png}
+\includegraphics[width=0.8\paperwidth]{img/hft-ticks-zoom.png}
 \end{figure}
 \end{frame}
 
@@ -251,33 +222,41 @@ Volatility gives a measure of uncertainty about future returns. Many factors aff
 \end{figure}
 \end{frame}
 
-
+\section{Cointegration and the VECM model}
 \begin{frame}
-\frametitle{Motivation}
-
-The relationship between non-stationary time series can be modelled if a stationary linear combination is shown to exist.
-%Financial time series are mainly non-stationary.  However, one or more linear
-%combinations of non-stationary time series can be stationary even though
-%individually they are not. 
-When this happens it is said they have a long-run
-equilibrium relationship and the variables are {\color{red} cointegrated}.
+\frametitle{Cointegration}
+\begin{figure}
+\includegraphics[width=0.8\paperwidth]{img/motivation}
+\end{figure}
 \end{frame}
 
 \begin{frame}
-\frametitle{Cointegration}
+\frametitle{Cointegration definition}
+
+\begin{block}{Cointegration}
+The relationship between non-stationary time series can be modelled if a {\bf stationary linear combination} is shown to exist.
+When this happens it is said they have a {\bf long-run
+equilibrium} relationship and the variables are {\color{red} cointegrated}.
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Cointegration: formal definition}
 \begin{block}{Cointegration definition}
 Let {\color{blue}$\mathbf{y} = \{\mathbf{y}^1, \dots, \mathbf{y}^l\}$} be a set of $l$
 time series of order I(1) which are said to be cointegrated if a vector
-$\beta=[\beta(1),\dots,\beta(l)]^\top \in \mathbb{R}^l$  exists such that the
+${\color{blue}\boldsymbol\beta=[\beta(1),\dots,\beta(l)]^\top} \in \mathbb{R}^l$  exists such that the
 time series,
 
 \begin{equation*}
- \mathbf{Z}_t:= \beta^\top \mathbf{y} = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
+ \mathbf{Z}_t:= \boldsymbol \beta^\top \mathbf{y} = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
  \text{I(0)}\, .
 \end{equation*}
 \end{block}
-In other words, a set of I(1) variables is said to be cointegrated if
-a linear combination of them exists which is I(0).
+%In other words, a set of I(1) variables is said to be cointegrated if
+%a linear combination of them exists which is I(0).
 
 \end{frame}
 
@@ -288,7 +267,7 @@ a linear combination of them exists which is I(0).
 \frametitle{The Vector Error correction}
 \tikzstyle{na} = [baseline=-.5ex]
 
-The Vector Error correction model (VECM) is used to model cointegrated time series.
+The Vector Error correction model (VECM) is used to model cointegrated time series:
 
 {\Large
 \begin{equation*}
@@ -315,88 +294,61 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
         }}_\text{i.i.d}
 \end{equation*}
 }
-The columns of $\beta$ contains the cointegration vectors and the rows of
-$\alpha$ correspond with the adjusted vectors. $\beta$ is obtained by Johansen
-procedure whereas $\alpha$ has to be determined as a
-variable in the VECM.
-
+\noindent where $p$ is the number of lags and $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\top$. The columns of $\boldsymbol\beta$ contains the cointegration vectors and the rows of $\boldsymbol\alpha$ correspond with the adjusted vectors.
 \end{frame}
 
-\begin{frame}
-\frametitle{VECM matrix form}
-\small
-\begin{equation*}
-\underbrace{
-      \begin{bmatrix}
-       \mathbf{\Delta y}_{p+1}  \\ 
-       \mathbf{\Delta y}_{p+2}  \\ 
-       \vdots                   \\ 
-       \mathbf{\Delta y}_N      
-      \end{bmatrix}}_{\mathbf{B} } =
-\arraycolsep=1.4pt  
-\underbrace{\begin{bmatrix}
-   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
-  \end{bmatrix}}_{\mathbf{X}^\top}
-\underbrace{\begin{bmatrix}
- \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
- \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
- \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
- \vdots                  & \vdots                 & \ddots&  \vdots                   \\
- \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
- 1                      & 1                       & \dots     & 1   
- \end{bmatrix}}_{\mathbf{A}^\top}
-+
-\underbrace{\begin{bmatrix}
-              \mathbf{\epsilon}_{p+1} \\ 
-              \mathbf{\epsilon}_{p+2} \\ 
-              \vdots \\ 
-              \mathbf{\epsilon}_N
-             \end{bmatrix}}_{\mathbf{E}^\top}
-\end{equation*}
-\end{frame}
 
 \begin{frame}
-\frametitle{$\Omega$ matrix properties}
-The matrix $\Omega$ has the following properties:
+\frametitle{$\boldsymbol \Omega$ matrix properties}
+The matrix $\boldsymbol \Omega$ has the following properties:
 \begin{itemize}
-\item If $\Omega = 0$ there is no cointegration
-\item If $rank(\Omega)=l$ i.e full rank, then the time series are not
+\item If ${\color{blue}\boldsymbol \Omega = 0}$ there is no cointegration
+\item If ${\color{blue}rank(\boldsymbol\Omega)=l}$ i.e full rank, then the time series are not
 I(1) but stationary
-\item If $rank(\Omega)=r,\quad 0 < r < l$ then, there is cointegration
-and the matrix $\Omega$ can be expressed as $\Omega =
-\alpha \beta^\top$, where $\alpha$ and $\beta$ are $(l \times r)$
-matrices and $rank(\alpha)=rank(\beta)=r$.
+\item If ${\color{blue}rank(\boldsymbol\Omega)=r,\quad 0 < r < l}$ then, there is cointegration.
+%where $\boldsymbol\alpha$ and $\boldsymbol\beta$ are $(l \times r)$
+%matrices and $rank(\boldsymbol\alpha)=rank(\boldsymbol\beta)=r$.
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{VECM limitations}
-The Vector Error correction model (VECM) is used to model cointegrated time series but only with batch data and rarely used with high frequency data  mainly due to computational limitations:
+
+\begin{alertblock}{VECM limitations}
+The Vector Error correction model is used to model cointegrated time series but only with {\bf batch data and rarely used with high frequency data} mainly due to {\bf computational limitations}:
 \begin{itemize}
-\item Calculation of the cointegration vectors
-\item VECM parameters are obtained using the ordinary least squares (OLS) method.
+\item Calculation of the cointegration vectors $\boldsymbol \beta$ is obtained by the Johansen procedure which is of order $O(n^3)$.
+%whereas $\alpha$ has to be determined as a variable in the VECM.
+\item VECM parameters are obtained using the ordinary least squares ({\bf OLS}) method.
 \end{itemize}
+\end{alertblock}
 \end{frame}
 
 
-
-\section{Proposal}
+\section{Challenges and Hypothesis}
 \begin{frame}
-\frametitle{Proposal}
+\frametitle{Challenge}
 \begin{block}{Proposal}
 To adapt VECM to be used with high frequency data, where the best parameters are updated when new data arrives.
 \end{block}
-\begin{block}{Hypothesis}
+\begin{exampleblock}{Hypothesis}
 An algorithm based on cointegration and high performance computing will allow faster forecasting
 algorithms for financial time series to be obtained while maintaining good accuracy levels.
-\end{block}
+\end{exampleblock}
 \end{frame}
 
-\section{First Contribution}
+\section{Contributions}
 \begin{frame}
-\frametitle{First approach}
-An adaptive Vector Error Correction algorithm that:
+\frametitle{First contribution: Adaptive VECM}
+\begin{figure}
+\includegraphics[width=\textwidth]{img/slidingwindow}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{First approach idea}
+An adaptive Vector Error Correction (AVECM) algorithm that:
 \begin{itemize}
 \item considers the last most recent data (windows size L)
 \item finds optimal parameters of VECM in that window.
@@ -405,44 +357,16 @@ An adaptive Vector Error Correction algorithm that:
 \end{frame}
 
 \begin{frame}
-\frametitle{First approach idea}
-\begin{figure}
-\includegraphics[width=0.65\textwidth]{img/slidingwindow}
-\end{figure}
-\end{frame}
-
-\begin{frame}
 \frametitle{How to choose L?}
   \begin{figure}[!h]
   %\vspace{-0.8cm}
   \centering
-   \includegraphics[width=0.65\textwidth]{img/51_Fig1}
-  \caption[Distribution of the number of cointegration vectors using $p=1$ lags]{Distribution of the number of cointegration vectors using $p=1$ lags.
-  Four possible values for windows size $L$ are shown (2, 6, 10 and 14) hours (1
-  hour = 360 data points).}
+   \includegraphics[width=0.85\textwidth]{img/51_Fig1}
+  \caption[Distribution of the number of cointegration vectors using $p=1$ lags]{Distribution of the number of cointegration vectors using $p=1$ lags.}
+  %Four possible values for windows size $L$ are shown (2, 6, 10 and 14) hours (1 hour = 360 data points).}
   \label{fig:hists}
 \end{figure}
 \end{frame}
-
-
-\subsection{Data}
-\begin{frame}
-\frametitle{Data}
-\begin{itemize}
-\item Tests were carried out using four foreign exchange rates all related to
-USD: EURUSD, GBPUSD, USDCHF and USDJPY. 
-\item This data was collected from Dukascopy, a free
-database which gives access to the Swiss Foreign Exchange marketplace.
-\item The tests were done using 10-seconds frequency from ask prices
-from the 11th to the 15th of August 2014. 
-%\item Since one day corresponds to 8640 data points and we used 5 days of data, we have 43,200 data points in total.
-\end{itemize}
- \begin{figure}[!h]
-    \includegraphics[width=0.2\textwidth]{img/dukascopy}
- \end{figure}
-\end{frame}
-
-
 
 
 
@@ -463,21 +387,42 @@ PC =
 \end{block}
 \end{frame}
 
+\begin{frame}
+\frametitle{Data}
+\begin{columns}
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+\item This data was collected from {\bf Dukascopy}, a free
+database which gives access to the {\bf Swiss Foreign Exchange marketplace}.
+\item Tests were carried out using four foreign exchange rates all related to
+USD: {\bf EURUSD, GBPUSD, USDCHF} and {\bf USDJPY}. 
+\item The tests were done using 10-seconds frequency from ask prices
+from the 11th to the 15th of August 2014. 
+%\item Since one day corresponds to 8640 data points and we used 5 days of data, we have 43,200 data points in total.
+\end{itemize}
+\end{column}
+\begin{column}{0.3\textwidth}
+ \begin{figure}[!h]
+    \includegraphics[width=\textwidth]{img/dukascopy}
+ \end{figure}
+\end{column}
+\end{columns}
+\end{frame}
 
-%\begin{frame}
-%\frametitle{PC vs MSE}
-%\begin{figure}[ht!]
-%  %\vspace{-0.8cm}
-%  \centering
-%  \includegraphics[width=0.7\textwidth]{img/MSE-offset20520-p-2-freq-10s}
-%  \caption{MSE versus the percentage of cointegration considering 1000
-%  iterations. }
-%  \label{fig:cointvsmse}
-%\end{figure}
-%\end{frame}
+
+\begin{frame}
+\frametitle{PC vs MSE}
+\begin{figure}[ht!]
+  %\vspace{-0.8cm}
+  \centering
+  \includegraphics[width=0.7\textwidth]{img/51_Fig2}
+  \caption{MSE versus the percentage of cointegration considering 1000
+  iterations. }
+  \label{fig:cointvsmse}
+\end{figure}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-\subsection{AVECM}
 \begin{frame}
 \frametitle{Adaptive VECM algorithm (AVECM)}
 \begin{itemize}
@@ -636,9 +581,6 @@ between 1 and 5.
 \end{figure}
 \end{frame}
 
-
-\section{Conclusions}
-\subsection{Uno}
 \begin{frame}
 \frametitle{Conclusions}
 \begin{itemize}
@@ -857,22 +799,41 @@ still provide responses before new data arrives.
 %9 “What’s beyond this thesis?”
 %9 Roadmap of Thesis
 
-
-
 \begin{frame}
-\frametitle{Integration }
-\begin{block}{Integration of order $d$}
-A time series $\mathbf{y}$ is said to be integrated of order $d$ if after
-differentiating the variable $d$ times, we get an stationary process, more precisely:
-\[
-(1-L)^d \mathbf{y} \sim \text{I(0)} \, ,
-\]
-\noindent where I(0) is a stationary time series and $L$ is the lag operator:
-\[
-(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
-\]
-\end{block}
+\frametitle{VECM(p) matrix form}
+If we have $N$ data points, with $N>p$, we can estimate the model parameters $\mathbf{X}$ using the following matrix form:
+\small
+\begin{equation*}
+\underbrace{
+      \begin{bmatrix}
+       \mathbf{\Delta y}_{p+1}  \\ 
+       \mathbf{\Delta y}_{p+2}  \\ 
+       \vdots                   \\ 
+       \mathbf{\Delta y}_N      
+      \end{bmatrix}}_{\mathbf{B} } =
+\arraycolsep=1.4pt  
+\underbrace{\begin{bmatrix}
+   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
+  \end{bmatrix}}_{\mathbf{X}^\top}
+\underbrace{\begin{bmatrix}
+ \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
+ \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
+ \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
+ \vdots                  & \vdots                 & \ddots&  \vdots                   \\
+ \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
+ 1                      & 1                       & \dots     & 1   
+ \end{bmatrix}}_{\mathbf{A}^\top}
++
+\underbrace{\begin{bmatrix}
+              \mathbf{\epsilon}_{p+1} \\ 
+              \mathbf{\epsilon}_{p+2} \\ 
+              \vdots \\ 
+              \mathbf{\epsilon}_N
+             \end{bmatrix}}_{\mathbf{E}^\top}
+\end{equation*}
 \end{frame}
+
+
 
 \begin{frame}
 \frametitle{Integration example}
