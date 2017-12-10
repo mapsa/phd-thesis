@@ -325,6 +325,33 @@ The Vector Error correction model is used to model cointegrated time series but 
 \end{alertblock}
 \end{frame}
 
+\begin{frame}
+\frametitle{Online VECM}
+Recently, online learning algorithms have been proposed to solve problems with large data sets main because: 
+\begin{itemize}
+\item Their simplicity
+\item Process one instance at a time
+\item The hypothesis is updated every new data arrives
+\end{itemize} 
+\end{frame}
+
+\begin{frame}
+\frametitle{Online learning algorithms}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+    \STATE Receives input $\mathbf{x}_t$
+    \STATE Makes prediction $\mathbf{\hat{y}}_t$
+    \STATE Receives response $\mathbf{y}_t$
+    \STATE Incurs loss $l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)$
+\end{algorithmic}
+\caption{Structure of an Online Learning System}
+\end{algorithm}
+Performance is later measured after $T$ trials as:
+\begin{equation*}
+L_T = \sum_{t=1}^T l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)
+\end{equation*}
+\end{frame}
+
 
 \section{Challenges and Hypothesis}
 \begin{frame}
@@ -340,7 +367,7 @@ algorithms for financial time series to be obtained while maintaining good accur
 
 \section{Contributions}
 \begin{frame}
-\frametitle{First contribution: Adaptive VECM}
+\frametitle{Adaptive VECM}
 \hspace*{-9mm}
 \includegraphics[width=1.15\textwidth]{img/slidingwindow}
 \end{frame}
@@ -553,134 +580,127 @@ seconds.
 \end{itemize}
 \end{frame}
 
-\section{Second Contribution}
-
-\begin{frame}
-\frametitle{Second approach}
- Recently, online learning algorithms have been proposed to solve problems with large data sets because of their simplicity and their ability to update the model when new data is
-available.
-\begin{figure}
-\includegraphics[width=0.6\paperwidth]{img/onlinelearning}
-\end{figure} 
-\end{frame}
 
 
-\begin{frame}
-\frametitle{Proposal: Online VECM algorithm (OVECM)}
-\begin{itemize}
-\item Considers only a sliding window of the $L$ most recent data. 
-\item Since cointegration vectors represent long-run relationships they vary
-little in time. OVECM obtains these vectors only when they need to be updated. 
-\item This updating is done when MAPEs of the last $n$ inputs is above a certain
-error given by a threshold 
-\item OVECM also implements matrix optimisations in order to reduce execution time,
-such as updating matrices with new data, removing old data and introducing new
-cointegration vectors.
-\end{itemize}
-\end{frame}
 
-\begin{frame}
-\frametitle{Methodology}
-OVECM were compared against VECM and ARIMA. VECM and ARIMA are called with a
-sliding window of the most recent data, whereby the models are updated at every
-time step. Therefore, we named them SLVECM and SLARIMA.
-\end{frame}
 
-\subsection{Parameters}
-\begin{frame}
-\frametitle{Parameters optimization}
-VECM order and ARIMA parameters were selected using AIC.
-\begin{table}[ht]
-\label{tab:params}
-\begin{center}
-\begin{tabular}{|c|c|c|}
-\hline
-Windows size $L$ & VECM & ARIMA\\
- $L$ & order $(p)$ & order $(p,d,q)$ \\
-\hline
-100 & 2 & p=2,d=1,q=1\\
-400 & 5 & p=1,d=1,q=1\\
-700 & 3 &p=2,d=1,q=1\\
-1000 &3 & p=2,d=1,q=1\\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
-\end{frame}
 
-\begin{frame}
-\frametitle{Execution times}
-We ran 400 iterations of OVECM and SLVECM . SLARIMA was based on the ARIMA procedure
-of the statsmodels library and therefore its execution time is excluded.
-%because its is not comparable with OVECM and SLVECM. SLARIMA was created based
-%on statsmodels library routine ARIMA.
-\begin{center}
-\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
-           max width=\textwidth}{
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline
-& $L$ & order & e  & Time[s] \\
-\hline
-OVECM & 100 &p=2  & 0      & 2.492\\
-OVECM & 100 &p=2  & 0.0026  & 1.606\\
-SLVECM & 100 &p=2& -- & 2.100\\
-\hline
-OVECM & 400 & p=5  & 0      & 3.513\\
-OVECM & 400 &p=5  & 0.0041  & 2.569\\
-SLVECM & 400 & p=5 & -- & 3.222\\
-\hline
-OVECM & 700 &p=3  & 0      & 3.296\\
-OVECM & 700 &p=3  & 0.0032  & 2.856\\
-SLVECM & 700 &p=3 & -- & 3.581\\
-\hline
-OVECM & 1000 & p=3 & 0      & 4.387\\
-OVECM & 1000 & p=3  & 0.0022  & 2.408\\
-SLVECM & 1000 & p=3  & -- & 3.609\\
-\hline
-\end{tabular}
-}\end{center}
-\end{frame}
-
-\begin{frame}
-\frametitle{Performance accuracy}
-\tiny
-\begin{table}[H]
-\caption{Model measures}
-\label{tab:stats}
-\begin{center}
-\begin{tabular}{|l|l|c|c|c|c|c|c|c|}
-\hline
-\multicolumn{3}{|c|}{Model} & \multicolumn{3}{|c|}{In-sample} &
-\multicolumn{3}{|c|}{Out-of-sample} \\ 
-\hline
-\hline
-Method & $L$ & Parameters &  
-MAPE & MAE& RMSE& 
-MAPE & MAE& RMSE \\
-\hline
- OVECM  &   100  &  P=2 e=0.0026 &  0.00263&  0.00085&  0.00114&  0.00309&  0.00094&  0.00131\\
- OVECM  &   400  &  P=5 e=0.0041&  0.00378&  0.00095&  0.00127&  0.00419&  0.00103&  0.00143\\
- OVECM  &   700  &  P=3 e=0.0032&  0.00323&  0.00099&  0.00130&  0.00322&  0.00097&  0.00132\\
- OVECM  &   1000 &  P=3 e=0.0022&  
- \textbf{0.00175}&  \textbf{0.00062}&  \textbf{0.00087} &  
- \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
-\hline
- SLVECM  &   100 &  P=2 &  0.00262&  0.00085&  0.00113&  0.00310&  0.00095&  0.00132\\
- SLVECM  &   400 &  P=5 &  0.00375&  0.00095&  0.00126&  0.00419&  0.00103&  0.00143\\
- SLVECM  &   700 &  P=3 &  0.00324&  0.00099&  0.00130&  0.00322&  0.00098&  0.00132\\
- SLVECM  &   1000&  P=3 &  
- \textbf{0.00174}&  \textbf{0.00061}&  \textbf{0.00087}&  
- \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
-\hline
-SLARIMA & 100  &p=2 d=1 q=1 & 0.00285  &  0.00110  &  0.00308  &  0.00312  &0.00098  &  0.00144 \\
-SLARIMA & 400  &p=1 d=1 q=1 & 0.00377  &  0.00101  &  0.00128  &  0.00418 & 0.00106 & 0.00145 \\
-SLARIMA & 700  &p=2 d=1 q=1 & 0.00329  &  0.00102  &  0.00136  &  0.00324  & 0.00097  &  0.00133 \\
-SLARIMA & 1000 &p=2 d=1 q=1 & \textbf{0.00281}  & \textbf{0.00074}  &  \textbf{0.00105}  &  \textbf{0.00177} & \textbf{0.00063}  &  \textbf{0.00092} \\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
-\end{frame}
+%\begin{frame}
+%\frametitle{Proposal: Online VECM algorithm (OVECM)}
+%\begin{itemize}
+%\item Considers only a sliding window of the $L$ most recent data. 
+%\item Since cointegration vectors represent long-run relationships they vary
+%little in time. OVECM obtains these vectors only when they need to be updated. 
+%\item This updating is done when MAPEs of the last $n$ inputs is above a certain
+%error given by a threshold 
+%\item OVECM also implements matrix optimisations in order to reduce execution time,
+%such as updating matrices with new data, removing old data and introducing new
+%cointegration vectors.
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}
+%\frametitle{Methodology}
+%OVECM were compared against VECM and ARIMA. VECM and ARIMA are called with a
+%sliding window of the most recent data, whereby the models are updated at every
+%time step. Therefore, we named them SLVECM and SLARIMA.
+%\end{frame}
+%
+%\subsection{Parameters}
+%\begin{frame}
+%\frametitle{Parameters optimization}
+%VECM order and ARIMA parameters were selected using AIC.
+%\begin{table}[ht]
+%\label{tab:params}
+%\begin{center}
+%\begin{tabular}{|c|c|c|}
+%\hline
+%Windows size $L$ & VECM & ARIMA\\
+% $L$ & order $(p)$ & order $(p,d,q)$ \\
+%\hline
+%100 & 2 & p=2,d=1,q=1\\
+%400 & 5 & p=1,d=1,q=1\\
+%700 & 3 &p=2,d=1,q=1\\
+%1000 &3 & p=2,d=1,q=1\\
+%\hline
+%\end{tabular}
+%\end{center}
+%\end{table}
+%\end{frame}
+%
+%\begin{frame}
+%\frametitle{Execution times}
+%We ran 400 iterations of OVECM and SLVECM . SLARIMA was based on the ARIMA procedure
+%of the statsmodels library and therefore its execution time is excluded.
+%%because its is not comparable with OVECM and SLVECM. SLARIMA was created based
+%%on statsmodels library routine ARIMA.
+%\begin{center}
+%\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+%           max width=\textwidth}{
+%\begin{tabular}{|l|c|c|c|c|c|}
+%\hline
+%& $L$ & order & e  & Time[s] \\
+%\hline
+%OVECM & 100 &p=2  & 0      & 2.492\\
+%OVECM & 100 &p=2  & 0.0026  & 1.606\\
+%SLVECM & 100 &p=2& -- & 2.100\\
+%\hline
+%OVECM & 400 & p=5  & 0      & 3.513\\
+%OVECM & 400 &p=5  & 0.0041  & 2.569\\
+%SLVECM & 400 & p=5 & -- & 3.222\\
+%\hline
+%OVECM & 700 &p=3  & 0      & 3.296\\
+%OVECM & 700 &p=3  & 0.0032  & 2.856\\
+%SLVECM & 700 &p=3 & -- & 3.581\\
+%\hline
+%OVECM & 1000 & p=3 & 0      & 4.387\\
+%OVECM & 1000 & p=3  & 0.0022  & 2.408\\
+%SLVECM & 1000 & p=3  & -- & 3.609\\
+%\hline
+%\end{tabular}
+%}\end{center}
+%\end{frame}
+%
+%\begin{frame}
+%\frametitle{Performance accuracy}
+%\tiny
+%\begin{table}[H]
+%\caption{Model measures}
+%\label{tab:stats}
+%\begin{center}
+%\begin{tabular}{|l|l|c|c|c|c|c|c|c|}
+%\hline
+%\multicolumn{3}{|c|}{Model} & \multicolumn{3}{|c|}{In-sample} &
+%\multicolumn{3}{|c|}{Out-of-sample} \\ 
+%\hline
+%\hline
+%Method & $L$ & Parameters &  
+%MAPE & MAE& RMSE& 
+%MAPE & MAE& RMSE \\
+%\hline
+% OVECM  &   100  &  P=2 e=0.0026 &  0.00263&  0.00085&  0.00114&  0.00309&  0.00094&  0.00131\\
+% OVECM  &   400  &  P=5 e=0.0041&  0.00378&  0.00095&  0.00127&  0.00419&  0.00103&  0.00143\\
+% OVECM  &   700  &  P=3 e=0.0032&  0.00323&  0.00099&  0.00130&  0.00322&  0.00097&  0.00132\\
+% OVECM  &   1000 &  P=3 e=0.0022&  
+% \textbf{0.00175}&  \textbf{0.00062}&  \textbf{0.00087} &  
+% \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
+%\hline
+% SLVECM  &   100 &  P=2 &  0.00262&  0.00085&  0.00113&  0.00310&  0.00095&  0.00132\\
+% SLVECM  &   400 &  P=5 &  0.00375&  0.00095&  0.00126&  0.00419&  0.00103&  0.00143\\
+% SLVECM  &   700 &  P=3 &  0.00324&  0.00099&  0.00130&  0.00322&  0.00098&  0.00132\\
+% SLVECM  &   1000&  P=3 &  
+% \textbf{0.00174}&  \textbf{0.00061}&  \textbf{0.00087}&  
+% \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
+%\hline
+%SLARIMA & 100  &p=2 d=1 q=1 & 0.00285  &  0.00110  &  0.00308  &  0.00312  &0.00098  &  0.00144 \\
+%SLARIMA & 400  &p=1 d=1 q=1 & 0.00377  &  0.00101  &  0.00128  &  0.00418 & 0.00106 & 0.00145 \\
+%SLARIMA & 700  &p=2 d=1 q=1 & 0.00329  &  0.00102  &  0.00136  &  0.00324  & 0.00097  &  0.00133 \\
+%SLARIMA & 1000 &p=2 d=1 q=1 & \textbf{0.00281}  & \textbf{0.00074}  &  \textbf{0.00105}  &  \textbf{0.00177} & \textbf{0.00063}  &  \textbf{0.00092} \\
+%\hline
+%\end{tabular}
+%\end{center}
+%\end{table}
+%\end{frame}
 
 \begin{frame}
 \frametitle{Conclusions}
