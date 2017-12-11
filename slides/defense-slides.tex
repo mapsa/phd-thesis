@@ -61,7 +61,7 @@
 %        };
 %}
 
-\author[Paola Arce]{Paola Arce \\ Thesis advisor: Luis Salinas}
+\author[Paola Arce]{Paola Arce}% \\ Thesis advisor: Luis Salinas}
 \date{December 11, 2017}
 \title[Thesis defense]{Fast and adaptive cointegration based model for forecasting financial time series}
 \subtitle{Seminario Inform\'atica CCTVal}
@@ -84,13 +84,12 @@
 \begin{frame}
 \frametitle{Outline}
 \begin{itemize}
-\item Motivation: High Frequency trading
+\item Motivation: High Frequency Trading
 \item Cointegration and the VECM model
 \item Challenges and Hypothesis
 \item Contributions
-\item Experiments
-\item Conclusions
-\item Future work
+\item Limitations and Applicability
+\item Conclusions and Future Research
 \end{itemize}
 \end{frame}
 
@@ -98,7 +97,7 @@
 
 \begin{frame}
 \frametitle{HFT: High Frequency Trading}
-High frequency trading has motivated computer-driven strategies capable of processing large amount of data in short periods of time.
+High Frequency Trading has motivated computer-driven strategies capable of processing large amounts of data in short periods of time.
 \begin{figure}
 \includegraphics[width=0.7\paperwidth]{img/HFTmarket}
 \caption{Percentage of HFT trades of total US Equity Trading. Source: TABB group}
@@ -108,7 +107,7 @@ High frequency trading has motivated computer-driven strategies capable of proce
 
 \begin{frame}
 \frametitle{HFT Revenue}
-However, the revenues have fallen dramatically mainly because of more regulation, increasing cost of HFT infrastructure and more competitive algorithms.
+However, the revenues have fallen dramatically mainly because of more regulation, increasing the cost of HFT infrastructure and more competitive algorithms.
 \begin{figure}
 \includegraphics[width=0.7\paperwidth]{img/HFTmarket2}
 \caption{Revenue in the US. Source: TABB group}
@@ -125,7 +124,7 @@ High frequency time series are commonly:
 \item Non-stationary
 \item Irregularly spaced over time.
 %\item Heterogeneity
-\item Heteroscedastic
+%\item Heteroscedastic
 \item Potentially cointegrated
 \end{itemize}
 \end{column}
@@ -136,20 +135,20 @@ High frequency time series are commonly:
 \end{column}
 \end{columns}
 \vspace{5mm}
-This imply that classical statistical models can't be used. Therefore, financial time series forecasting is still a challenge.
+This implies that classical statistical models as such can't be used. Therefore, financial time series forecasting is still a challenge.
 \end{frame}
 
 \begin{frame}
 \frametitle{Stationarity}
 \begin{block}{Strong definition}
-A {\color{red}strictly stationary time series} $y_t \in \mathbb{R}$, $\forall t \in \mathbb{Z}$ is one for which the probabilistic behaviour of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
+A {\color{red}strictly stationary time series} $y_t \in \mathbb{R}$, $\forall t \in \mathbb{Z}$, is one for which the probabilistic behaviour of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
 to that of the time shifted set, more precisely:
 \begin{equation*}
 {\color{blue}
 P\{y_{t_1} \leq
 c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspace }
 \end{equation*}
-\noindent $\forall L \in \mathbb{N}, \forall h \in \mathbb{Z}$ where $c_1,\dots,c_L$ are constants.
+\noindent $\forall L \in \mathbb{N}, \forall h \in \mathbb{Z}$, where $c_1,\dots,c_L$ are constants.
 \end{block}
 \end{frame}
 
@@ -157,7 +156,7 @@ c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspac
 \frametitle{Stationarity}
 \begin{block}{Weak definition}
 
-A weakly stationary time series is a process which mean, variance and auto covariance do not change over time:
+A weakly stationary time series is a process where the  mean, variance and auto covariance do not change over time:
 \small
 {\color{blue}
  \begin{eqnarray*} E(y_t) &=& \mu  \quad
@@ -209,23 +208,25 @@ differentiating the variable $d$ times, we get an stationary process, more preci
 
 \begin{frame}
 \frametitle{Irregularly spaced over time}
-\begin{figure}
-\includegraphics[width=0.8\paperwidth]{img/hft-ticks-zoom.png}
-\end{figure}
+\centerline{
+\includegraphics[width=\paperwidth,height=0.7\paperheight]{img/hft-ticks-zoom.png}
+}
 \end{frame}
 
-\begin{frame}
-\frametitle{Heteroscedastic}
-Conditional heteroskedasticity identifies non-constant volatility.
-Volatility gives a measure of uncertainty about future returns. Many factors affect volatility such as: historical prices, trends, monetary policies and news.
-\begin{figure}
-\includegraphics[width=0.8\paperwidth]{img/vix}
-\end{figure}
-\end{frame}
+%\begin{frame}
+%\frametitle{Heteroscedastic}
+%Conditional Heteroscedasticity identifies non-constant volatility.
+%Volatility gives a measure of uncertainty about future returns. Many factors affect volatility such as: historical prices, trends, monetary policies and news.
+%\begin{figure}
+%\includegraphics[width=0.8\paperwidth]{img/vix}
+%\end{figure}
+%\end{frame}
 
 \section{Cointegration and the VECM model}
+
 \begin{frame}
 \frametitle{Cointegration}
+Cointegration reflects the idea of that some set of non-stationary variables cannot wander too far from each other.
 \begin{figure}
 \includegraphics[width=0.8\paperwidth]{img/motivation}
 \end{figure}
@@ -233,14 +234,12 @@ Volatility gives a measure of uncertainty about future returns. Many factors aff
 
 \begin{frame}
 \frametitle{Cointegration definition}
-
+%The idea of cointegration is that there is an I(1) process, underlying two or more processes.
 \begin{block}{Cointegration}
 The relationship between non-stationary time series can be modelled if a {\bf stationary linear combination} is shown to exist.
 When this happens it is said they have a {\bf long-run
 equilibrium} relationship and the variables are {\color{red} cointegrated}.
 \end{block}
-
-
 \end{frame}
 
 \begin{frame}
@@ -328,11 +327,11 @@ The Vector Error correction model is used to model cointegrated time series but 
 
 \begin{frame}
 \frametitle{Online VECM}
-Recently, online learning algorithms have been proposed to solve problems with large data sets main because: 
+Recently, online learning algorithms have been proposed to solve problems with large data sets mainly because of: 
 \begin{itemize}
 \item Their simplicity
-\item Process one instance at a time
-\item The hypothesis is updated every new data arrives
+\item They process one instance at a time
+\item The hypothesis is updated every time new data arrives
 \end{itemize} 
 \end{frame}
 
@@ -376,6 +375,29 @@ algorithms for financial time series to be obtained while maintaining good accur
 
 \begin{frame}
 \frametitle{VECM(p) matrix form}
+\begin{equation*}
+ \Delta \mathbf{y}_t = \underbrace{
+        \tikz[baseline]{
+            \node[fill=red!20,ellipse,anchor=base] (t1)
+            {$ \Omega\mathbf{y}_{t-1}$};
+        }}_\text{Error correction term} +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=blue!20,anchor=base] (t2)
+            {$\sum_{i=1}^{p-1} \phi_i^* \Delta \mathbf{y}_{t-i} $};
+        }}_\text{Autorregresive term} +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=green!20,anchor=base] (t3)
+            {$c$};
+        }}_\text{Intercept}
+        +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=yellow!20,anchor=base] (t3)
+            {$\mathbf{\epsilon}_t $};
+        }}_\text{i.i.d}
+\end{equation*}
 If we have $N$ data points, with $N>p$, the VECM matrix form is as follows:
 \small
 {\color{blue}
@@ -419,12 +441,12 @@ If we have $N$ data points, with $N>p$, the VECM matrix form is as follows:
 }_{\mathbf{E}}
 \end{equation*}}
 
-We can estimate the model parameters $\mathbf{W}$ using OLS:
-\begin{equation}
-{\color{blue}
-\mathbf{Y} = \mathbf{X}\mathbf{W}+\mathbf{E}
-}
-\end{equation}
+%We can estimate the model parameters $\mathbf{W}$ using OLS:
+%\begin{equation}
+%{\color{blue}
+%\mathbf{Y} = \mathbf{X}\mathbf{W}+\mathbf{E}
+%}
+%\end{equation}
 
 \end{frame}
 
@@ -473,10 +495,9 @@ and $\mathbf{b}=\displaystyle \sum_{t=1}^L \mathbf{x}_t \mathbf{y}^\intercal_{t}
 \mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal  $
         \STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
 \mathbf{A}^{-1}\mathbf{x}_t$
-        \STATE Read new $y_t$
-        \STATE $\mathbf{b} = \mathbf{b} + y_t \mathbf{x}_t$
+        \STATE Read new $\mathbf{y}_t$
+        \STATE $\mathbf{b} = \mathbf{b} + \mathbf{x}_t \mathbf{y}^\intercal_{t}$
 \ENDFOR
-
 \end{algorithmic}
 \caption{Online Ordinary Least Squares}
 \label{alg:SLAAR}
@@ -553,9 +574,9 @@ from the 11th to the 15th of August 2014.
 \frametitle{Adaptive VECM algorithm (AVECM)}
 AVECM has the following features: 
 \begin{enumerate}
-\item Uses VECM only considering a sliding windows of size $L$ of data.
+\item It uses VECM only considering a sliding windows of size $L$ of data.
 \item We proposed to choose $L$ and the number of lags $p$ in order to maximise the percentage of cointegration $PC$ in the near past. This process was done every time that new data was processed. 
-\item To use a distributed environment to make this parameters search, since this is the most expensive routine.
+\item And to use a distributed environment to make this parameters search, since this is the most expensive routine.
 \end{enumerate}
 \end{frame}
 
@@ -656,6 +677,19 @@ Parameter settings:
 \end{figure}
 \end{frame}
 
+\section{Limitations and Applicability}
+
+\begin{frame}
+\frametitle{Limitations and Applicability}
+\begin{itemize}
+\item Cointegration information can be used as an integration tool to detect arbitrage opportunities.
+\item Use with stocks, forex rates and crypto-currency?
+\item Applicable to other non-stationary but cointegrated time series
+\end{itemize}
+\end{frame}
+
+\section{Conclusions and Future Research}
+
 \begin{frame}
 \frametitle{Conclusions I}
 \begin{itemize}
@@ -674,19 +708,16 @@ Parameter settings:
 more than 9 times and therefore a response time was obtain before 10
 seconds.
 \item We showed that VECM computational limitations can be tackled using a an online approach in a distributed environment.
-\item Cointegration information can be used as an integration tool to detect arbitrage opportunities.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Future research}
 \begin{itemize}
-\item To explore the relationship between cointegration and performance for different assets (stocks, other forex rates).
-\item To include more explicative variables such as bid-ask spread and change in volume.
-\item The online approach for other econometrics models it will be also worthy of  study.% Many of them could be adapted and used with higher frequency data.
-\item  In this thesis, the online version of OLS was studied, but the online version of
-ridge regression could also be applied to obtain a solution with better
-generalisation capabilities.
+\item To add {\bf matrix optimizations} to obtain VECM parameters.
+\item To add a regularization parameter to get better generalisation capabilities using {\bf Ridge Regression} and the {\bf Aggregating Algorithm for Regression}.
+\item To include {\bf more explicative variables} such as bid-ask spread and change in volume.
+\item The online approach for {\bf other econometrics models} it is also worthy of  study.% Many of them could be adapted and used with higher frequency data.
 \end{itemize}
 \end{frame}
 
@@ -719,14 +750,19 @@ generalisation capabilities.
 %9 Assumptions and Constraints
 %9 Initial Results (Promise of Great Things to Come)
 %9 Validation Plan
-%9 Limitations and Applicability
+
 %9 Expected Contributions
 %9 “What’s beyond this thesis?”
 %9 Roadmap of Thesis
 
 \appendix
 
-
+\begin{frame}
+\frametitle{The order book}
+\begin{figure}
+\includegraphics[width=0.7\textwidth]{img/orderbook}
+\end{figure}
+\end{frame}
 
 
 \begin{frame}
@@ -770,7 +806,6 @@ The use of non-stationary data can lead to spurious regressions.
 \end{columns}
 \end{frame}
 
-%\subsection{Model comparison} 
 \begin{frame}
 \frametitle{Random walk}
 The random walk model is defined as:
