@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{amsmath,amsfonts,amssymb}
+\usepackage{pmat}
 \usepackage{color}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
@@ -247,11 +248,11 @@ equilibrium} relationship and the variables are {\color{red} cointegrated}.
 \begin{block}{Cointegration definition}
 Let {\color{blue}$\mathbf{y} = \{\mathbf{y}^1, \dots, \mathbf{y}^l\}$} be a set of $l$
 time series of order I(1) which are said to be cointegrated if a vector
-${\color{blue}\boldsymbol\beta=[\beta(1),\dots,\beta(l)]^\top} \in \mathbb{R}^l$  exists such that the
+${\color{blue}\boldsymbol\beta=[\beta(1),\dots,\beta(l)]^\intercal} \in \mathbb{R}^l$  exists such that the
 time series,
 
 \begin{equation*}
- \mathbf{Z}_t:= \boldsymbol \beta^\top \mathbf{y} = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
+ \mathbf{Z}_t:= \boldsymbol \beta^\intercal \mathbf{y} = \beta(1) \mathbf{y}^1 + \dots + \beta(l) \mathbf{y}^l \sim
  \text{I(0)}\, .
 \end{equation*}
 \end{block}
@@ -294,7 +295,7 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
         }}_\text{i.i.d}
 \end{equation*}
 }
-\noindent where $p$ is the number of lags and $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\top$. The columns of $\boldsymbol\beta$ contains the cointegration vectors and the rows of $\boldsymbol\alpha$ correspond with the adjusted vectors.
+\noindent where $p$ is the number of lags and $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$. The columns of $\boldsymbol\beta$ contains the cointegration vectors and the rows of $\boldsymbol\alpha$ correspond with the adjusted vectors.
 \end{frame}
 
 
@@ -375,57 +376,82 @@ algorithms for financial time series to be obtained while maintaining good accur
 
 \begin{frame}
 \frametitle{VECM(p) matrix form}
-If we have $N$ data points, with $N>p$, we can estimate the model parameters $\mathbf{X}$ using the following matrix form:
+If we have $N$ data points, with $N>p$, the VECM matrix form is as follows:
 \small
+{\color{blue}
 \begin{equation*}
 \underbrace{
       \begin{bmatrix}
-       \mathbf{\Delta y}_{p+1}  \\ 
-       \mathbf{\Delta y}_{p+2}  \\ 
-       \vdots                   \\ 
-       \mathbf{\Delta y}_N      
-      \end{bmatrix}}_{\mathbf{B} } =
-\arraycolsep=1.4pt  
-\underbrace{\begin{bmatrix}
-   \alpha^\top & \phi^*_1 & \dots & \phi^*_{p-1} &\mathbf{c}   
-  \end{bmatrix}}_{\mathbf{X}^\top}
-\underbrace{\begin{bmatrix}
- \beta\mathbf{y}_p      & \beta\mathbf{y}_{p+1}   & \dots&   \beta\mathbf{y}_{N-1}   \\
- \mathbf{\Delta y}_{p}   & \mathbf{\Delta y}_{p+1}& \dots &  \mathbf{\Delta y}_{N-1} \\
- \mathbf{\Delta y}_{p-1} & \mathbf{\Delta y}_{p}  & \dots &  \mathbf{\Delta y}_{N-2}   \\
- \vdots                  & \vdots                 & \ddots&  \vdots                   \\
- \mathbf{\Delta y}_{2}   & \mathbf{\Delta y}_{3} & \dots &   \mathbf{\Delta y}_{N-p+1} \\
- 1                      & 1                       & \dots     & 1   
- \end{bmatrix}}_{\mathbf{A}^\top}
+   \Delta\mathbf{y}_{p+1}^\intercal \\
+   \Delta\mathbf{y}_{p+2}^\intercal \\
+   \vdots \\
+   \Delta\mathbf{y}_N^\intercal
+   \end{bmatrix}}_{\mathbf{Y} } =
+\arraycolsep=1.4pt
+\underbrace{
+\begin{pmat}[{....|}]
+   \mathbf{y}_p^\intercal \boldsymbol{\beta} & \Delta \mathbf{y}_p^\intercal & \Delta\mathbf{y}_{p-1}^\intercal & \dots 
+                    & \Delta\mathbf{y}_2^\intercal & 1 \cr
+   \mathbf{y}_{p+1}^\intercal  \boldsymbol{\beta} &\Delta\mathbf{y}_{p+1}^\intercal & \Delta\mathbf{y}_p^\intercal & \dots
+                       & \Delta\mathbf{y}_3^\intercal & 1 \cr
+   \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \cr
+   \mathbf{y}_{N-1}^\intercal  \boldsymbol{\beta} &\Delta\mathbf{y}_{N-1}^\intercal & \Delta\mathbf{y}_{N-2}^\intercal & \dots 
+                       & \Delta\mathbf{y}_{N-p-1}^\intercal & 1 \cr
+   \end{pmat}}_{\mathbf{X}}
+\underbrace{
+   \begin{bmatrix}
+   \boldsymbol{\alpha}^\intercal \\
+   \boldsymbol{\Phi}_1^{*\top} \\
+   \boldsymbol{\Phi}_2^{*\top} \\
+   \vdots \\
+   \boldsymbol{\Phi}_{p-1}^{*\top} \\
+   \mathbf{c}^\intercal
+   \end{bmatrix}
+}_{\mathbf{W}}
 +
-\underbrace{\begin{bmatrix}
-              \mathbf{\epsilon}_{p+1} \\ 
-              \mathbf{\epsilon}_{p+2} \\ 
-              \vdots \\ 
-              \mathbf{\epsilon}_N
-             \end{bmatrix}}_{\mathbf{E}^\top}
-\end{equation*}
+\underbrace{
+\begin{bmatrix}
+   \boldsymbol{\epsilon}_{p+1}^\intercal \\
+   \boldsymbol{\epsilon}_{p+2}^\intercal \\
+   \vdots \\
+   \boldsymbol{\epsilon}_N^\intercal \\
+   \end{bmatrix}
+}_{\mathbf{E}}
+\end{equation*}}
+
+We can estimate the model parameters $\mathbf{W}$ using OLS:
+\begin{equation}
+{\color{blue}
+\mathbf{Y} = \mathbf{X}\mathbf{W}+\mathbf{E}
+}
+\end{equation}
+
 \end{frame}
 
 
 \begin{frame}
-VECM can be solved using OLS. Using a sliding windows of data, the problem can be expressed as follows:
+\frametitle{Online version of VECM}
+VECM can be solved using a sliding windows of data, the problem can be expressed as follows:
  
+{\color{blue}
 \[
 \mathbf{X}(t) = 
 \begin{bmatrix} 
 \mathbf{x}_{t-L}^\intercal \\ \vdots \\ \mathbf{x}_t^\intercal
 \end{bmatrix} \; , 
-{\bf y}(t) = \begin{bmatrix} y_{t-L} \\ \vdots \\ y_t \end{bmatrix} \; .
+{\bf Y}(t) = \begin{bmatrix} \mathbf{y}^\intercal_{t-L} \\ \vdots \\ \mathbf{y}^\intercal_t \end{bmatrix} \; .
 \]
+}
 
-The optimal solution using a sliding windows is then:
+The optimal solution using a OLS is then:
 
-\begin{equation}
-{\bf w}(t)_*=({\bf X}(t)^\intercal{\bf X}(t))^{-1}{\bf X}(t)^\intercal{\bf y}(t) \, .
-=\displaystyle \sum_{t=1}^L \mathbf{x}_t
-\mathbf{x}_t^\intercal \displaystyle \sum_{t=1}^Ly_t \mathbf{x}_t
-\end{equation}
+{\color{blue}
+\begin{eqnarray}
+{\bf W}(t)_*&=&({\bf X}(t)^\intercal{\bf X}(t))^{-1}{\bf X}(t)^\intercal{\bf Y}(t) \\
+&=&\Big( \displaystyle \sum_{i=0}^L \mathbf{x}_{t-i}
+\mathbf{x}_{t-i}^\intercal \Big)^{-1} \displaystyle \sum_{i=0}^L \mathbf{x}_{t-i} \mathbf{y}^\intercal_{t-i}
+\end{eqnarray}
+}
 \end{frame}
 
 
@@ -433,15 +459,15 @@ The optimal solution using a sliding windows is then:
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \REQUIRE $\,$ \\
-$\{\mathbf{x}_1,\dots,\mathbf{x}_m \}$: $m$ input vectors \\
-$\{y_1,\dots,y_m \}$: $m$ targets \\
-$L$: sliding window size ($L<m$) \\
+$\{\mathbf{x}_1,\dots,\mathbf{x}_N \}$: $N$ input vectors \\
+$\{\mathbf{y}_1,\dots,\mathbf{y}_N \}$: $N$ targets \\
+$L$: sliding window size ($L<N$) \\
 \ENSURE  $\,$ \\
-$\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_m) \}$: model predictions \\
+$\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_N) \}$: model predictions \\
 \STATE Initialize $\mathbf{A}=\displaystyle \sum_{t=1}^L \mathbf{x}_t
-\mathbf{x}_t^\intercal + \gamma \mathbb{I}$
-and $\mathbf{b}=\displaystyle \sum_{t=1}^Ly_t \mathbf{x}_t$
-\FOR { $t = L+1$ to $m$ }
+\mathbf{x}_t^\intercal$
+and $\mathbf{b}=\displaystyle \sum_{t=1}^L \mathbf{x}_t \mathbf{y}^\intercal_{t}$
+\FOR { $t = L+1$ to $N$ }
         \STATE read new $\mathbf{x}_t$
         \STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal-
 \mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal  $
@@ -452,7 +478,7 @@ and $\mathbf{b}=\displaystyle \sum_{t=1}^Ly_t \mathbf{x}_t$
 \ENDFOR
 
 \end{algorithmic}
-\caption{Recursive Ridge Regression}
+\caption{Online Ordinary Least Squares}
 \label{alg:SLAAR}
 \end{algorithm}
 \end{frame}
@@ -497,7 +523,7 @@ PC =
 database which gives access to the {\bf Swiss Foreign Exchange marketplace}.
 \item Tests were carried out using four foreign exchange rates all related to
 USD: {\bf EURUSD, GBPUSD, USDCHF} and {\bf USDJPY}. 
-\item The tests were done using 10-seconds frequency from ask prices
+\item The tests were done using {\bf 10-seconds frequency} from ask prices
 from the 11th to the 15th of August 2014. 
 %\item Since one day corresponds to 8640 data points and we used 5 days of data, we have 43,200 data points in total.
 \end{itemize}
@@ -516,7 +542,7 @@ from the 11th to the 15th of August 2014.
 \begin{figure}[ht!]
   %\vspace{-0.8cm}
   \centering
-  \includegraphics[width=0.7\textwidth]{img/51_Fig2}
+  \includegraphics[width=0.8\textwidth]{img/51_Fig2}
   \caption{MSE versus the percentage of cointegration considering 1000
   iterations. }
   \label{fig:cointvsmse}
@@ -534,28 +560,6 @@ AVECM has the following features:
 \end{frame}
 
 
-\begin{frame}
-\frametitle{AVECM Algorithm}
-\small
-\begin{algorithmic}[1]
-\REQUIRE $\,$ \\
-$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
-$j$: Starting point of testing \\
-$it$: Ending point of testing \\
-$ps$: list of $p$ values \\
-$Ls$: list of $L$ values ($L<N$) \\
-$m$: Iterations to determine parameters ($m < N-L$)\\
-\ENSURE  $\,$ \\
-$\{ \hat{\mathbf{y}}[1],\dots,\hat{\mathbf{y}}[it]\}$: prediction vectors \\
-\FOR { $i =j$ to $it$ }
-   \STATE $\mathbf{Y} \gets \mathbf{y}[:,i-1]$
-    \STATE $L,p \gets
-    \texttt{get\_best\_params}(Ls,ps,m,\mathbf{Y})$
-        \STATE $model = \text{VECM}(\mathbf{Y},L, p)$
-        \STATE $\hat{\mathbf{y}}[i-j] = model.predict()$
-\ENDFOR
-\end{algorithmic}
-\end{frame}
 
 
 
@@ -653,186 +657,39 @@ Parameter settings:
 \end{frame}
 
 \begin{frame}
-\frametitle{Conclusions}
+\frametitle{Conclusions I}
 \begin{itemize}
 \item Cointegration relations change with time. We empirically showed that the Johansen method is sensitive to the number of lags but also to the amount of data considered.
 %\item We found that out-of-sample forecast performance MSE is related to the {\em percentage of cointegration\/}.  
-\item VECM improves performance measures by finding
-parameters of $L$ and $p$ maximising the percentage of cointegration.
-%\item Increasing the number of parameters will always lead to
-%better performance measures.
+\item AVECM improves performance measures by finding parameters of $L$ and $p$ maximising the percentage of cointegration.
+\item AVECM performance is superior to ARIMA and the naive random walk model in terms of MSE and $U$-statistic. 
+%This result is very important since it is still difficult to outperform ARIMA and the random walk model for standard econometric forecasting models  despite their simplicity.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusions II}
+\begin{itemize}
 \item The parallel implementation allowed the execution times to be reduced
 more than 9 times and therefore a response time was obtain before 10
-seconds. 
-\end{itemize}
-\end{frame}
-
-
-
-
-
-
-%\begin{frame}
-%\frametitle{Proposal: Online VECM algorithm (OVECM)}
-%\begin{itemize}
-%\item Considers only a sliding window of the $L$ most recent data. 
-%\item Since cointegration vectors represent long-run relationships they vary
-%little in time. OVECM obtains these vectors only when they need to be updated. 
-%\item This updating is done when MAPEs of the last $n$ inputs is above a certain
-%error given by a threshold 
-%\item OVECM also implements matrix optimisations in order to reduce execution time,
-%such as updating matrices with new data, removing old data and introducing new
-%cointegration vectors.
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Methodology}
-%OVECM were compared against VECM and ARIMA. VECM and ARIMA are called with a
-%sliding window of the most recent data, whereby the models are updated at every
-%time step. Therefore, we named them SLVECM and SLARIMA.
-%\end{frame}
-%
-%\subsection{Parameters}
-%\begin{frame}
-%\frametitle{Parameters optimization}
-%VECM order and ARIMA parameters were selected using AIC.
-%\begin{table}[ht]
-%\label{tab:params}
-%\begin{center}
-%\begin{tabular}{|c|c|c|}
-%\hline
-%Windows size $L$ & VECM & ARIMA\\
-% $L$ & order $(p)$ & order $(p,d,q)$ \\
-%\hline
-%100 & 2 & p=2,d=1,q=1\\
-%400 & 5 & p=1,d=1,q=1\\
-%700 & 3 &p=2,d=1,q=1\\
-%1000 &3 & p=2,d=1,q=1\\
-%\hline
-%\end{tabular}
-%\end{center}
-%\end{table}
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Execution times}
-%We ran 400 iterations of OVECM and SLVECM . SLARIMA was based on the ARIMA procedure
-%of the statsmodels library and therefore its execution time is excluded.
-%%because its is not comparable with OVECM and SLVECM. SLARIMA was created based
-%%on statsmodels library routine ARIMA.
-%\begin{center}
-%\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
-%           max width=\textwidth}{
-%\begin{tabular}{|l|c|c|c|c|c|}
-%\hline
-%& $L$ & order & e  & Time[s] \\
-%\hline
-%OVECM & 100 &p=2  & 0      & 2.492\\
-%OVECM & 100 &p=2  & 0.0026  & 1.606\\
-%SLVECM & 100 &p=2& -- & 2.100\\
-%\hline
-%OVECM & 400 & p=5  & 0      & 3.513\\
-%OVECM & 400 &p=5  & 0.0041  & 2.569\\
-%SLVECM & 400 & p=5 & -- & 3.222\\
-%\hline
-%OVECM & 700 &p=3  & 0      & 3.296\\
-%OVECM & 700 &p=3  & 0.0032  & 2.856\\
-%SLVECM & 700 &p=3 & -- & 3.581\\
-%\hline
-%OVECM & 1000 & p=3 & 0      & 4.387\\
-%OVECM & 1000 & p=3  & 0.0022  & 2.408\\
-%SLVECM & 1000 & p=3  & -- & 3.609\\
-%\hline
-%\end{tabular}
-%}\end{center}
-%\end{frame}
-%
-%\begin{frame}
-%\frametitle{Performance accuracy}
-%\tiny
-%\begin{table}[H]
-%\caption{Model measures}
-%\label{tab:stats}
-%\begin{center}
-%\begin{tabular}{|l|l|c|c|c|c|c|c|c|}
-%\hline
-%\multicolumn{3}{|c|}{Model} & \multicolumn{3}{|c|}{In-sample} &
-%\multicolumn{3}{|c|}{Out-of-sample} \\ 
-%\hline
-%\hline
-%Method & $L$ & Parameters &  
-%MAPE & MAE& RMSE& 
-%MAPE & MAE& RMSE \\
-%\hline
-% OVECM  &   100  &  P=2 e=0.0026 &  0.00263&  0.00085&  0.00114&  0.00309&  0.00094&  0.00131\\
-% OVECM  &   400  &  P=5 e=0.0041&  0.00378&  0.00095&  0.00127&  0.00419&  0.00103&  0.00143\\
-% OVECM  &   700  &  P=3 e=0.0032&  0.00323&  0.00099&  0.00130&  0.00322&  0.00097&  0.00132\\
-% OVECM  &   1000 &  P=3 e=0.0022&  
-% \textbf{0.00175}&  \textbf{0.00062}&  \textbf{0.00087} &  
-% \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
-%\hline
-% SLVECM  &   100 &  P=2 &  0.00262&  0.00085&  0.00113&  0.00310&  0.00095&  0.00132\\
-% SLVECM  &   400 &  P=5 &  0.00375&  0.00095&  0.00126&  0.00419&  0.00103&  0.00143\\
-% SLVECM  &   700 &  P=3 &  0.00324&  0.00099&  0.00130&  0.00322&  0.00098&  0.00132\\
-% SLVECM  &   1000&  P=3 &  
-% \textbf{0.00174}&  \textbf{0.00061}&  \textbf{0.00087}&  
-% \textbf{0.00172}&  \textbf{0.00061}&  \textbf{0.00090}\\
-%\hline
-%SLARIMA & 100  &p=2 d=1 q=1 & 0.00285  &  0.00110  &  0.00308  &  0.00312  &0.00098  &  0.00144 \\
-%SLARIMA & 400  &p=1 d=1 q=1 & 0.00377  &  0.00101  &  0.00128  &  0.00418 & 0.00106 & 0.00145 \\
-%SLARIMA & 700  &p=2 d=1 q=1 & 0.00329  &  0.00102  &  0.00136  &  0.00324  & 0.00097  &  0.00133 \\
-%SLARIMA & 1000 &p=2 d=1 q=1 & \textbf{0.00281}  & \textbf{0.00074}  &  \textbf{0.00105}  &  \textbf{0.00177} & \textbf{0.00063}  &  \textbf{0.00092} \\
-%\hline
-%\end{tabular}
-%\end{center}
-%\end{table}
-%\end{frame}
-
-\begin{frame}
-\frametitle{Conclusions}
-\begin{itemize}
-\item  OVECM considerably reduces execution times
-without compromising solution accuracy.  
-\item OVECM was compared with VECM and ARIMA
-with the same sliding window sizes and OVECM outperformed both in terms of
-execution time. 
-\item Traditional VECM slightly outperformed our proposal but the
-OVECM execution time is lower.
-\item We could see that our algorithm took much less than a minute at every
-step. This means that it could also be used with higher frequency data and would
-still provide responses before new data arrives.  
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Summary of Contributions}
-\begin{itemize}
-\item Two different approaches based on cointegration were presented: an adaptive version of VECM and an online approach.
-\item The concept of cointegration can now be used with high frequency time series.
-\item VECM computational limitations can either be tackled using a distribution computations or considering an online approach.
-\item An interesting connection between the percentage cointegration and forecasting performance.
+seconds.
+\item We showed that VECM computational limitations can be tackled using a an online approach in a distributed environment.
 \item Cointegration information can be used as an integration tool to detect arbitrage opportunities.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Author Contributions}
-\begin{itemize}
-\item 1
-\item 2
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}
 \frametitle{Future research}
 \begin{itemize}
-\item 1
-\item 2
+\item To explore the relationship between cointegration and performance for different assets (stocks, other forex rates).
+\item To include more explicative variables such as bid-ask spread and change in volume.
+\item The online approach for other econometrics models it will be also worthy of  study.% Many of them could be adapted and used with higher frequency data.
+\item  In this thesis, the online version of OLS was studied, but the online version of
+ridge regression could also be applied to obtain a solution with better
+generalisation capabilities.
 \end{itemize}
 \end{frame}
+
 
 
 \begin{frame}[plain,c]
@@ -938,6 +795,30 @@ A process can be modelled as an ARIMA$(p,d,q)$ if $\mathbf{x}_t = \Delta^d \math
 \noindent with coefficients $\phi_p \neq 0$, $\theta_q \neq 0$ and $\sigma_{\epsilon}^2 > 0$.
 \end{frame}
 
+
+
+\begin{frame}
+\frametitle{AVECM Algorithm}
+\small
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\mathbf{y}$: matrix with $N$ input vectors and $l$ time series\\
+$j$: Starting point of testing \\
+$it$: Ending point of testing \\
+$ps$: list of $p$ values \\
+$Ls$: list of $L$ values ($L<N$) \\
+$m$: Iterations to determine parameters ($m < N-L$)\\
+\ENSURE  $\,$ \\
+$\{ \hat{\mathbf{y}}[1],\dots,\hat{\mathbf{y}}[it]\}$: prediction vectors \\
+\FOR { $i =j$ to $it$ }
+   \STATE $\mathbf{Y} \gets \mathbf{y}[:,i-1]$
+    \STATE $L,p \gets
+    \texttt{get\_best\_params}(Ls,ps,m,\mathbf{Y})$
+        \STATE $model = \text{VECM}(\mathbf{Y},L, p)$
+        \STATE $\hat{\mathbf{y}}[i-j] = model.predict()$
+\ENDFOR
+\end{algorithmic}
+\end{frame}
 
 % Financial time series are not the only ones with this behaviour, this study can be extended to other non-stationary time series such as: weather, earthquakes, energy demand and sales forecasting.
 
