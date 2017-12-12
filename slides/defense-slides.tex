@@ -1,6 +1,6 @@
 \documentclass{beamer}
 %\usepackage[spanish,activeacute]{babel}
-\usetheme{metropolis}
+\usetheme[sectionpage=none,progressbar=frametitle]{metropolis}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{amsmath,amsfonts,amssymb}
@@ -22,8 +22,13 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \def\R{{\mathbb R }}
 \def\N{{\mathbb N }}
+\def\Z{{\mathbb Z }}
 
-
+\makeatletter
+%\setlength{\metropolis@titleseparator@linewidth}{2pt}
+\setlength{\metropolis@progressonsectionpage@linewidth}{2pt}
+\setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
+\makeatother
 
 
 \definecolor{BlueTOL}{HTML}{222255}
@@ -49,10 +54,10 @@
     bg=block title example.bg!50!example text.bg}
 
 
-%\author[Paola Arce]{Paola Arce \\ Departamento de Inform\'atica, UTFSM \\ Thesis advisor: Luis Salinas}
-%\date{December 15, 2017}
-%\title[Thesis defense]{Online learning methods for financial time series forecasting}
-%\subtitle{PhD Thesis Defense}
+\author[Paola Arce]{Paola Arce \\ Thesis advisor: Luis Salinas}
+\date{December 15, 2017}
+\title[Thesis defense]{Online learning methods for financial time series forecasting}
+\subtitle{PhD Thesis Defense}
 %
 %\titlegraphic{
 %    \tikz[overlay,remember picture]
@@ -60,11 +65,11 @@
 %            \includegraphics[height=1.5cm]{img/DIT}
 %        };
 %}
-
-\author[Paola Arce]{Paola Arce}% \\ Thesis advisor: Luis Salinas}
-\date{December 11, 2017}
-\title[Thesis defense]{Fast and adaptive cointegration based model for forecasting financial time series}
-\subtitle{Seminario Inform\'atica CCTVal}
+%
+%\author[Paola Arce]{Paola Arce}% \\ Thesis advisor: Luis Salinas}
+%\date{December 11, 2017}
+%\title[Thesis defense]{Fast and adaptive cointegration based model for forecasting financial time series}
+%\subtitle{Seminario Inform\'atica CCTVal}
 
 
 
@@ -124,7 +129,7 @@ High frequency time series are commonly:
 \item Non-stationary
 \item Irregularly spaced over time.
 %\item Heterogeneity
-%\item Heteroscedastic
+\item Heteroscedastic
 \item Potentially cointegrated
 \end{itemize}
 \end{column}
@@ -141,8 +146,7 @@ This implies that classical statistical models as such can't be used. Therefore,
 \begin{frame}
 \frametitle{Stationarity}
 \begin{block}{Strong definition}
-A {\color{red}strictly stationary time series} $y_t \in \mathbb{R}$, $\forall t \in \mathbb{Z}$, is one for which the probabilistic behaviour of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical
-to that of the time shifted set, more precisely:
+A {\color{red}strictly stationary time series} $y_t: r.v$ with values in $\mathbb{R}$ defined for $t \in \mathbb{Z}$, is one for which the probabilistic behaviour of every collection of values $\{y_{t_1},y_{t_2},\dots,y_{t_L}\}$ is identical to that of the time shifted set, more precisely:
 \begin{equation*}
 {\color{blue}
 P\{y_{t_1} \leq
@@ -212,7 +216,7 @@ differentiating the variable $d$ times, we get an stationary process, more preci
 \includegraphics[width=\paperwidth,height=0.7\paperheight]{img/hft-ticks-zoom.png}
 }
 \end{frame}
-
+%
 %\begin{frame}
 %\frametitle{Heteroscedastic}
 %Conditional Heteroscedasticity identifies non-constant volatility.
@@ -279,7 +283,7 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
         \underbrace{
         \tikz[baseline]{
             \node[fill=blue!20,anchor=base] (t2)
-            {$\sum_{i=1}^{p-1} \phi_i^* \Delta \mathbf{y}_{t-i} $};
+            {$\sum_{i=1}^{p-1} {\boldsymbol\phi}_i^* \Delta \mathbf{y}_{t-i} $};
         }}_\text{Autorregresive term} +
         \underbrace{
         \tikz[baseline]{
@@ -290,11 +294,11 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
         \underbrace{
         \tikz[baseline]{
             \node[fill=yellow!20,anchor=base] (t3)
-            {$\mathbf{\epsilon}_t $};
+            {$\boldsymbol{\epsilon}_t $};
         }}_\text{i.i.d}
 \end{equation*}
 }
-\noindent where $p$ is the number of lags and $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$. The columns of $\boldsymbol\beta$ contains the cointegration vectors and the rows of $\boldsymbol\alpha$ correspond with the adjusted vectors.
+\noindent where $\mathbf{y}_t = [y^1_t,\dots,y^l_t]^\intercal$, $p$ is the number of lags and $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$. The columns of $\boldsymbol\beta$ contains the cointegration vectors and the rows of $\boldsymbol\alpha$ correspond with the adjusted vectors.
 \end{frame}
 
 
@@ -711,6 +715,15 @@ seconds.
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Articles and conferences}
+\nocite{arce+salinas2012,icpram15,Arce2017}
+\bibliographystyle{apalike}
+\bibliography{reference}
+\end{frame}
+
+
 \begin{frame}
 \frametitle{Future research}
 \begin{itemize}
@@ -730,9 +743,7 @@ seconds.
 \end{center}
 \end{frame}
 
-\nocite{arce+salinas2012,icpram15,Arce2017}
-\bibliographystyle{apalike}
-\bibliography{reference}
+
 
 %\begin{frame}
 %\hspace*{-4mm}
@@ -758,10 +769,27 @@ seconds.
 \appendix
 
 \begin{frame}
+\frametitle{Stationarity}
+A time series $y_t: \Z \to \R $ is said to be strictly stationary if, for a finite set of $L$ indices $\{t_{1},\dots,t_{L}\}  \, \forall L \in \Z_{\ge 0}$, the joint probability distribution of the random variables $\{y_{t_{1}},y_{t_{2}},\dots,y_{t_{L}}\}$ remains unchanged for any time shifted $h$.
+The probability distribution for the random variable $y_{t_1}$ is:
+
+\begin{equation}
+P\{y_{t} \leq c_1 \} = P\{t \in \Z:  y_t \in  ]-\infty, c_1] \} 
+\end{equation}
+
+
+\end{frame}
+
+\begin{frame}
 \frametitle{The order book}
 \begin{figure}
 \includegraphics[width=0.7\textwidth]{img/orderbook}
 \end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Unit root process}
+
 \end{frame}
 
 
