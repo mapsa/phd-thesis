@@ -89,8 +89,7 @@
 \begin{frame}
 \frametitle{Outline}
 \begin{itemize}
-\item Motivation: High Frequency Trading
-\item Cointegration and the VECM model
+\item Motivation: High Frequency Trading and Cointegration
 \item Challenges and Hypothesis
 \item Contributions
 \item Limitations and Applicability
@@ -99,6 +98,31 @@
 \end{frame}
 
 \section{Motivation}
+
+
+\begin{frame}
+\frametitle{Motivation: HFT}
+\begin{block}{High Frequency Trading}
+High Frequency Trading (HFT) is a technology that implements different trading strategies to buy or sell an stock using sophisticated infrastructure and high speed algorithms.
+\end{block}
+
+Today, the volume of data has rapidly increased:
+
+\begin{table}
+\begin{tabular}{ c | c }
+Period & Data precision \\
+\hline \hline
+1993-2003 & seconds \\
+2003-2015 & milliseconds \\
+27th July 2015-onwards & microseconds \\
+24th October 2016-onwards & nanoseconds
+\end{tabular}
+\caption{High Frequency data precision}
+\end{table}
+
+\end{frame}
+
+
 
 \begin{frame}
 \frametitle{HFT: High Frequency Trading}
@@ -116,6 +140,50 @@ However, the revenues have fallen dramatically mainly because of more regulation
 \begin{figure}
 \includegraphics[width=0.7\paperwidth]{img/HFTmarket2}
 \caption{Revenue in the US. Source: TABB group}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Motivation: HFT}
+\begin{alertblock}{Arbitrage}
+The practice of taking advantage of market inefficiency or discrepancies in the market price.
+\end{alertblock}
+\begin{columns}
+
+\begin{column}{0.4\textwidth}
+\begin{exampleblock}{Advantages}
+\begin{itemize}
+\item Increases liquidity
+\item Allows more efficient price formation
+\item Reduce the difference between buyers and sellers prices.
+\end{itemize}
+\end{exampleblock}
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{exampleblock}{Risks}
+\begin{itemize}
+\item Removal of human decision making could lead to failures in untested or incorrect strategies
+\end{itemize}
+\end{exampleblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Motivation: Cointegration}
+Cointegration reflects the idea of that some set of non-stationary variables cannot wander too far from each other.
+\begin{figure}
+\includegraphics[width=0.8\paperwidth]{img/motivation}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Contribution}
+This thesis contribution has several components:
+\begin{figure}
+\includegraphics[width=\textwidth]{img/contribution}
 \end{figure}
 \end{frame}
 
@@ -228,13 +296,6 @@ differentiating the variable $d$ times, we get an stationary process, more preci
 
 \section{Cointegration and the VECM model}
 
-\begin{frame}
-\frametitle{Cointegration}
-Cointegration reflects the idea of that some set of non-stationary variables cannot wander too far from each other.
-\begin{figure}
-\includegraphics[width=0.8\paperwidth]{img/motivation}
-\end{figure}
-\end{frame}
 
 \begin{frame}
 \frametitle{Cointegration definition}
@@ -242,8 +303,11 @@ Cointegration reflects the idea of that some set of non-stationary variables can
 \begin{block}{Cointegration}
 The relationship between non-stationary time series can be modelled if a {\bf stationary linear combination} is shown to exist.
 When this happens it is said they have a {\bf long-run
-equilibrium} relationship and the variables are {\color{red} cointegrated}.
+equilibrium} relationship and the variables are {\color{red} {\bf cointegrated}}.
 \end{block}
+\begin{figure}
+\includegraphics[width=0.8\paperwidth, height=0.4\paperheight]{img/motivation}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -271,7 +335,7 @@ time series,
 \frametitle{The Vector Error correction}
 \tikzstyle{na} = [baseline=-.5ex]
 
-The Vector Error correction model (VECM) is used to model cointegrated time series:
+The Vector Error correction model (VECM), considering $p$ lags, is used to model cointegrated time series:
 
 {\Large
 \begin{equation*}
@@ -298,18 +362,66 @@ The Vector Error correction model (VECM) is used to model cointegrated time seri
         }}_\text{i.i.d}
 \end{equation*}
 }
-\noindent where $\mathbf{y}_t = [y^1_t,\dots,y^l_t]^\intercal$, $p$ is the number of lags and $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$. The columns of $\boldsymbol\beta$ contains the cointegration vectors and the rows of $\boldsymbol\alpha$ correspond with the adjusted vectors.
+\noindent where 
+\begin{itemize}
+\item $\mathbf{y}_t = [y^1_t,\dots,y^l_t]^\intercal$,
+\item the errors $\mathbf{e}_t$ are assumed to follow i.i.d l-dimensional multivariate normal distribution $\mathcal{N}({\bf O,\Sigma})$, 
+\end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{The Vector Error correction}
+\tikzstyle{na} = [baseline=-.5ex]
+
+The Vector Error correction model (VECM), considering $p$ lags, is used to model cointegrated time series:
+
+{\Large
+\begin{equation*}
+ \Delta \mathbf{y}_t = \underbrace{
+        \tikz[baseline]{
+            \node[fill=red!20,ellipse,anchor=base] (t1)
+            {$ \Omega\mathbf{y}_{t-1}$};
+        }}_\text{Error correction term} +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=blue!20,anchor=base] (t2)
+            {$\sum_{i=1}^{p-1} {\boldsymbol\phi}_i^* \Delta \mathbf{y}_{t-i} $};
+        }}_\text{Autorregresive term} +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=green!20,anchor=base] (t3)
+            {$c$};
+        }}_\text{Intercept}
+        +
+        \underbrace{
+        \tikz[baseline]{
+            \node[fill=yellow!20,anchor=base] (t3)
+            {$\boldsymbol{\epsilon}_t $};
+        }}_\text{i.i.d}
+\end{equation*}
+}
+\noindent where 
+\begin{itemize}
+\item $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$. The columns of $\boldsymbol\beta$ contains the cointegration vectors and the rows of $\boldsymbol\alpha$ correspond with the adjusted vectors.
+\end{itemize}
+\end{frame}
 
 \begin{frame}
 \frametitle{$\boldsymbol \Omega$ matrix properties}
+
+Since $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$ we can also say that:
+
+$$\boldsymbol \Omega \mathbf{y} = \boldsymbol \alpha \boldsymbol \beta^\intercal \mathbf{y} = \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)}$$
+ 
+ 
 The matrix $\boldsymbol \Omega$ has the following properties:
 \begin{itemize}
-\item If ${\color{blue}\boldsymbol \Omega = 0}$ there is no cointegration
-\item If ${\color{blue}rank(\boldsymbol\Omega)=l}$ i.e full rank, then the time series are not
-I(1) but stationary
-\item If ${\color{blue}rank(\boldsymbol\Omega)=r,\quad 0 < r < l}$ then, there is cointegration.
+\item If ${\color{blue}rank(\boldsymbol \Omega) = 0}$ there is no cointegration
+\item If ${\color{blue}rank(\boldsymbol\Omega)=l}$ i.e full rank, $\boldsymbol\Omega$ is non-singular or invertible, therefore we can express $\mathbf{y}$ as follows:
+$$\mathbf{y} = \boldsymbol \Omega ^{-1} \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)} \, ,$$
+then the time series are not I(1) but stationary.
+\item If ${\color{blue}rank(\boldsymbol\Omega)=r,\quad 0 < r < l}$ then, r cointegration vectors exist such that: 
+$$\boldsymbol \Omega \mathbf{y} = \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)} \, .$$
 %where $\boldsymbol\alpha$ and $\boldsymbol\beta$ are $(l \times r)$
 %matrices and $rank(\boldsymbol\alpha)=rank(\boldsymbol\beta)=r$.
 \end{itemize}
@@ -370,6 +482,8 @@ algorithms for financial time series to be obtained while maintaining good accur
 \end{frame}
 
 \section{Contributions}
+
+
 \begin{frame}
 \frametitle{Adaptive VECM}
 \hspace*{-9mm}
