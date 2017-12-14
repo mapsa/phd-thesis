@@ -16,6 +16,8 @@
 %\usepackage{multicol}
 \usepackage{hhline}
 \usepackage{pgf}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.12}
 \usepackage{algorithm} 
 \usepackage{algorithmic}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -102,14 +104,13 @@
 
 \begin{frame}
 \frametitle{Motivation: HFT}
-\begin{block}{High Frequency Trading}
+\begin{alertblock}{High Frequency Trading}
 High Frequency Trading (HFT) is a technology that implements different trading strategies to buy or sell an stock using sophisticated infrastructure and high speed algorithms.
-\end{block}
-
-Today, the volume of data has rapidly increased:
-
+\end{alertblock}
+HFT challenges are related to {\bf time series forecasting} and also {\bf computational} (hardware and software). Today, the volume of data has rapidly increased:
 \begin{table}
-\begin{tabular}{ c | c }
+\small
+\begin{tabular}{ l | c }
 Period & Data precision \\
 \hline \hline
 1993-2003 & seconds \\
@@ -119,7 +120,6 @@ Period & Data precision \\
 \end{tabular}
 \caption{High Frequency data precision}
 \end{table}
-
 \end{frame}
 
 
@@ -146,23 +146,25 @@ However, the revenues have fallen dramatically mainly because of more regulation
 \begin{frame}
 \frametitle{Motivation: HFT}
 \begin{alertblock}{Arbitrage}
-The practice of taking advantage of market inefficiency or discrepancies in the market price.
+The practice of taking advantage of market inefficiency or discrepancies in the market price. Arbitrage contradicts the Efficient Market Hypothesis. 
+%that states, the current stock price fully reflects available information related to its value and there is no way to earn excess profit.
 \end{alertblock}
 \begin{columns}
 
-\begin{column}{0.4\textwidth}
+\begin{column}{0.5\textwidth}
 \begin{exampleblock}{Advantages}
 \begin{itemize}
 \item Increases liquidity
 \item Allows more efficient price formation
-\item Reduce the difference between buyers and sellers prices.
+\item Reduce the difference between buyers (bid) and sellers (ask) prices.
 \end{itemize}
 \end{exampleblock}
 \end{column}
-\begin{column}{0.4\textwidth}
-\begin{exampleblock}{Risks}
+\begin{column}{0.5\textwidth}
+\begin{exampleblock}{Disadvantages}
 \begin{itemize}
 \item Removal of human decision making could lead to failures in untested or incorrect strategies
+\item fairness
 \end{itemize}
 \end{exampleblock}
 \end{column}
@@ -284,15 +286,63 @@ differentiating the variable $d$ times, we get an stationary process, more preci
 \includegraphics[width=\paperwidth,height=0.7\paperheight]{img/hft-ticks-zoom.png}
 }
 \end{frame}
-%
-%\begin{frame}
-%\frametitle{Heteroscedastic}
-%Conditional Heteroscedasticity identifies non-constant volatility.
-%Volatility gives a measure of uncertainty about future returns. Many factors affect volatility such as: historical prices, trends, monetary policies and news.
-%\begin{figure}
-%\includegraphics[width=0.8\paperwidth]{img/vix}
-%\end{figure}
-%\end{frame}
+
+\begin{frame}
+\frametitle{Heteroscedastic}
+
+\begin{block}{Heteroscedasticity}
+Heteroscedasticity identifies {\bf non-constant volatility}.
+Volatility gives a measure of uncertainty about future returns. It can either be obtained from historical returns or implied from derivatives such as options. 
+\end{block}
+
+\begin{figure}
+\begin{tikzpicture}[ % Define Normal Probability Function
+declare function={
+            normal(\x,\m,\s) = 1/(2*\s*sqrt(pi))*exp(-(\x-\m)^2/(2*\s^2));
+        }
+       ]
+\begin{axis}[
+    no markers,
+    domain=0:12,
+    zmin=0, zmax=1,
+    xmin=0, xmax=3,
+    samples=200,
+   samples y=0,
+    axis lines=middle,
+    xtick={0.5,1.5,2.5},
+    xmajorgrids,
+    xticklabels={},
+    ytick=\empty,
+    xticklabels={$\mathbf{y}_{t_1}$, $\mathbf{y}_{t_2}$, $\mathbf{y}_{t_3}$},
+    ztick=\empty,
+    xlabel=$t$, xlabel style={at={(rel axis cs:1,0,0)}, anchor=west},
+    ylabel=$\mathbf{y}$, ylabel style={at={(rel axis cs:0,1,0)}, anchor=south west},
+    zlabel=Probability density, zlabel style={at={(rel axis cs:0,0,0.5)}, rotate=90, anchor=south},
+    set layers
+  ]
+
+
+\addplot3 [samples=2, samples y=0, domain=0:3] (x, {1.5*(x-0.5)+3}, 0);
+\addplot3 [cyan!50!black, thick] (0.5, x, {normal(x, 3, 0.5)});
+\addplot3 [cyan!50!black, thick] (1.5, x, {normal(x, 4.5, 1)});
+\addplot3 [cyan!50!black, thick] (2.5, x, {normal(x, 6, 1.5)});
+
+\pgfplotsextra{
+\begin{pgfonlayer}{axis background}
+\draw [on layer=axis background] (0.5, 3, 0) -- (0.5, 3, {normal(0,0,0.5)}) (0.5,0,0) -- (0.5,12,0);
+\draw (1.5, 4.5, 0) -- (1.5, 4.5, {normal(0,0,1)}) (1.5,0,0) -- (1.5,12,0);
+\draw (2.5, 6, 0) -- (2.5, 6, {normal(0,0,1.5)}) (2.5,0,0) -- (2.5,12,0);
+\end{pgfonlayer}
+}
+\end{axis}
+
+
+\end{tikzpicture}
+\end{figure}
+% An option is a contract which gives the owner the right but not the obligation to buy or sell an underlying asset at a given price called strike price.
+
+
+\end{frame}
 
 \section{Cointegration and the VECM model}
 
@@ -406,26 +456,7 @@ The Vector Error correction model (VECM), considering $p$ lags, is used to model
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{$\boldsymbol \Omega$ matrix properties}
 
-Since $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$ we can also say that:
-
-$$\boldsymbol \Omega \mathbf{y} = \boldsymbol \alpha \boldsymbol \beta^\intercal \mathbf{y} = \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)}$$
- 
- 
-The matrix $\boldsymbol \Omega$ has the following properties:
-\begin{itemize}
-\item If ${\color{blue}rank(\boldsymbol \Omega) = 0}$ there is no cointegration
-\item If ${\color{blue}rank(\boldsymbol\Omega)=l}$ i.e full rank, $\boldsymbol\Omega$ is non-singular or invertible, therefore we can express $\mathbf{y}$ as follows:
-$$\mathbf{y} = \boldsymbol \Omega ^{-1} \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)} \, ,$$
-then the time series are not I(1) but stationary.
-\item If ${\color{blue}rank(\boldsymbol\Omega)=r,\quad 0 < r < l}$ then, r cointegration vectors exist such that: 
-$$\boldsymbol \Omega \mathbf{y} = \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)} \, .$$
-%where $\boldsymbol\alpha$ and $\boldsymbol\beta$ are $(l \times r)$
-%matrices and $rank(\boldsymbol\alpha)=rank(\boldsymbol\beta)=r$.
-\end{itemize}
-\end{frame}
 
 
 \begin{frame}
@@ -558,16 +589,13 @@ If we have $N$ data points, with $N>p$, the VECM matrix form is as follows:
    \end{bmatrix}
 }_{\mathbf{E}}
 \end{equation*}}
-
 %We can estimate the model parameters $\mathbf{W}$ using OLS:
 %\begin{equation}
 %{\color{blue}
 %\mathbf{Y} = \mathbf{X}\mathbf{W}+\mathbf{E}
 %}
 %\end{equation}
-
 \end{frame}
-
 
 \begin{frame}
 \frametitle{Online version of VECM}
@@ -622,6 +650,22 @@ and $\mathbf{b}=\displaystyle \sum_{t=1}^L \mathbf{x}_t \mathbf{y}^\intercal_{t}
 \end{algorithm}
 \end{frame}
 
+\begin{frame}
+\frametitle{How to choose $L$?: $\boldsymbol \Omega$ matrix properties}
+Since $\boldsymbol \Omega = \boldsymbol \alpha \boldsymbol \beta^\intercal$ we can also say that:
+$$\boldsymbol \Omega \mathbf{y} = \boldsymbol \alpha \boldsymbol \beta^\intercal \mathbf{y} = \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)}$$
+The matrix $\boldsymbol \Omega$ has the following properties:
+\begin{itemize}
+\item If ${\color{blue}rank(\boldsymbol \Omega) = 0}$ there is no cointegration
+\item If ${\color{blue}rank(\boldsymbol\Omega)=l}$ i.e full rank, $\boldsymbol\Omega$ is non-singular or invertible, therefore we can express $\mathbf{y}$ as follows:
+$$\mathbf{y} = \boldsymbol \Omega ^{-1} \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)} \, ,$$
+then the time series are not I(1) but stationary.
+\item If ${\color{blue}rank(\boldsymbol\Omega)=r,\quad 0 < r < l}$ then, r cointegration vectors exist such that: 
+$$\boldsymbol \Omega \mathbf{y} = \boldsymbol \alpha \mathbf{Z}_t \sim \text{I(0)} \, .$$
+%where $\boldsymbol\alpha$ and $\boldsymbol\beta$ are $(l \times r)$
+%matrices and $rank(\boldsymbol\alpha)=rank(\boldsymbol\beta)=r$.
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}
@@ -690,7 +734,6 @@ from the 11th to the 15th of August 2014.
 
 \begin{frame}
 \frametitle{Adaptive VECM algorithm (AVECM)}
-AVECM has the following features: 
 \begin{enumerate}
 \item It uses VECM only considering a sliding windows of size $L$ of data.
 \item We proposed to choose $L$ and the number of lags $p$ in order to maximise the percentage of cointegration $PC$ in the near past. This process was done every time that new data was processed. 
@@ -754,17 +797,17 @@ frequency.}
 \frametitle{Performance accuracy}
 \small
 \begin{tabular}{ccccccc}
-& \multicolumn{3}{l}{MSE} & &
-\multicolumn{2}{c}{$U$-statistic} \\ 
+& \multicolumn{3}{l}{{\bf MSE}} & &
+\multicolumn{2}{c}{{\bf $\mathbf{U}$-statistic}} \\ 
 \hhline{~---~--} \\
  & AVECM & ARIMA & p-value & &
 AVECM & ARIMA \\ 
 
 \hline
- EURUSD & 1.0702 e-09 & 1.1481 e-09 &  9.250 e-12 & & 0.6863 & 0.7108\\
- GBPUSD & 1.6630 e-09 & 1.7408 e-09 &  6.951 e-02 & & 0.6866 & 0.7025\\
- USDCHF & 5.8503 e-10 & 6.3545 e-10 &  2.899 e-14 & & 0.6803 & 0.7091\\
- USDJPY  & 6.3483 e-06 & 6.5194 e-06 &  6.853 e-05 & & 0.6964 & 0.7057
+ EURUSD & 1.0702 e-09 & 1.1481 e-09 &  \bf{9.250 e-12} & & {\color{GreenTOL}\bf{0.6863}} & {\color{red}\bf{0.7108}}\\
+ GBPUSD & 1.6630 e-09 & 1.7408 e-09 &  6.951 e-02 & & {\color{GreenTOL}\bf{0.6866}} & {\color{red}\bf{0.7025}}\\
+ USDCHF & 5.8503 e-10 & 6.3545 e-10 &  \bf{2.899 e-14} & & {\color{GreenTOL}\bf{0.6803}} & {\color{red}\bf{0.7091}}\\
+ USDJPY  & 6.3483 e-06 & 6.5194 e-06 &  \bf{6.853 e-05} & & {\color{GreenTOL}\bf{0.6964}} & {\color{red}\bf{0.7057}}
  \end{tabular}
  \end{frame}
 %%For AVECM we considered different number of iterations (parameter $m$ in algorithm \ref{alg:AVECM}): 10, 50 and 100. We tried 12, 24 and 47 different pair of combinations for $L$ and $p$. Possible values for $L$ were in the interval $[100,4000]$ and $p$ can have values in between $[1,5]$. Best AVECM performance was compared against ARIMA and the random walk model.
@@ -774,12 +817,12 @@ AVECM & ARIMA \\
 %
 \begin{frame}
 \frametitle{Parallel implementation}
-The function that get optimal parameters $L$ and $p$ was implemented using MPI in Python. Tests ran in a cluster with 2 servers Xeon E5-2667 (2.90GHz) of 24 cores each (48 cores in total) and 24GB RAM.
+The function that get optimal parameters $L$ and $p$ was implemented using MPI in Python. Tests ran in our cluster {\bf hpc.utfsm.cl} considering 2 servers Xeon E5-2667 (2.90GHz) of 24 cores each (48 cores in total) and 24GB RAM.
 
 Parameter settings:
 \begin{itemize}
 %\item Parameter $it=100$
-\item The $L$ parameter was always chosen between 100 and 4000 and $p$ always took values between 1 and 5. 
+\item The $L$ parameter was always chosen between 100 and 4000 (1 hour=360 data points) and $p$ always took values between 1 and 5. 
 \item Parameter $nparams$ represents the number of pairs ($L$,$p$) used to maximise the percentage of cointegration. 
 \end{itemize}
 \end{frame}
@@ -793,6 +836,18 @@ Parameter settings:
   upper figure. Speed-up is shown below.}
   \label{fig:extimes}
 \end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Contributions}
+%\begin{figure}
+%\includegraphics[width=0.7\textwidth]{img/contribution}
+%\end{figure}
+\begin{description}
+\item[Cointegration]Cointegration relations change with time. We empirically showed that the number of coitegration vectors is sensitive to the number of lags but also to the amount of data considered. The percentage of cointegration is used to find VECM parameters.
+\item[Online learning] The adaptation of the VECM to be used in an online context expressing the OLS method with matrix actualization.
+\item[Distributed environment] The use of a distributed environment to calculate $L$ and $p$ and obtain a response below 10 seconds.
+\end{description}
 \end{frame}
 
 \section{Limitations and Applicability}
@@ -809,22 +864,12 @@ Parameter settings:
 \section{Conclusions and Future Research}
 
 \begin{frame}
-\frametitle{Conclusions I}
+\frametitle{Conclusions}
 \begin{itemize}
-\item Cointegration relations change with time. We empirically showed that the Johansen method is sensitive to the number of lags but also to the amount of data considered.
 %\item We found that out-of-sample forecast performance MSE is related to the {\em percentage of cointegration\/}.  
 \item AVECM improves performance measures by finding parameters of $L$ and $p$ maximising the percentage of cointegration.
 \item AVECM performance is superior to ARIMA and the naive random walk model in terms of MSE and $U$-statistic. 
 %This result is very important since it is still difficult to outperform ARIMA and the random walk model for standard econometric forecasting models  despite their simplicity.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Conclusions II}
-\begin{itemize}
-\item The parallel implementation allowed the execution times to be reduced
-more than 9 times and therefore a response time was obtain before 10
-seconds.
 \item We showed that VECM computational limitations can be tackled using a an online approach in a distributed environment.
 \end{itemize}
 \end{frame}
