@@ -1159,4 +1159,25 @@ inverse of $\mathbf{A}$ as follows:
 \end{equation}
 \end{frame}
 
+\section{Volatility models}
+
+\begin{frame}
+\frametitle{Volatility models}
+For many years the most popular methods for estimating financial volatility were
+the autoregressive conditional heteroskedasticity (ARCH) models
+and the general ARCH (GARCH) models. For instance, the
+GARCH(1,1) defines returns $y_t$ and volatility $\sigma_t$ as:
+
+\begin{eqnarray*}
+    y_t &=& \sigma_t \epsilon_t \\
+     \sigma_t^2 &=& \alpha_0 + \alpha_1 \epsilon_{t-1}^2 + \beta_1
+     \sigma_{t-1}^2
+\end{eqnarray*}
+
+\noindent where $\epsilon_t$ is standard Gaussian white noise,
+$\alpha_0,\alpha_1,\beta_1 \geq 0$ are required to ensure that the
+variance will never be negative and $\alpha_1+\beta_1 <1$ is needed to
+guarantee a weakly stationary process.
+\end{frame}
+
 \end{document}
