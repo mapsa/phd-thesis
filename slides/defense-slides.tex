@@ -123,26 +123,6 @@ Period & Data precision \\
 \end{frame}
 
 
-
-\begin{frame}
-\frametitle{HFT: High Frequency Trading}
-High Frequency Trading has motivated computer-driven strategies capable of processing large amounts of data in short periods of time.
-\begin{figure}
-\includegraphics[width=0.7\paperwidth]{img/HFTmarket}
-\caption{Percentage of HFT trades of total US Equity Trading. Source: TABB group}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{HFT Revenue}
-However, the revenues have fallen dramatically mainly because of more regulation, increasing the cost of HFT infrastructure and more competitive algorithms.
-\begin{figure}
-\includegraphics[width=0.7\paperwidth]{img/HFTmarket2}
-\caption{Revenue in the US. Source: TABB group}
-\end{figure}
-\end{frame}
-
 \begin{frame}
 \frametitle{Motivation: HFT}
 \begin{alertblock}{Arbitrage}
@@ -233,22 +213,13 @@ c_1,..,y_{t_L} \leq c_L\} = P\{y_{t_1+h} \leq c_1,..,y_{t_L+h} \leq c_L\}\enspac
 A weakly stationary time series is a process where the  mean, variance and auto covariance do not change over time:
 \small
 {\color{blue}
- \begin{eqnarray*} E(y_t) &=& \mu  \quad
-\forall t \in \mathbb{N} \\ E(y^2_t) &=& \sigma^2  \quad \forall t \in
+ \begin{eqnarray*} E[y_t] &=& \mu  \quad
+\forall t \in \mathbb{N} \\ E[y^2_t] &=& \sigma^2  \quad \forall t \in
 \mathbb{N} \\ \lambda(s,t)&=&\lambda(s+h,t+h) \quad \forall s,t \in \mathbb{N},
 \forall h \in \mathbb{Z} \end{eqnarray*}}
 \end{block}
-\noindent with $\lambda(s,t) = E[(y_s-\mu)(y_t - \mu)]$ 
+\noindent with $\lambda(s,t) = E[(y_s-\mu)(y_t - \mu)]$ and $E[y_t]= \displaystyle \int_0^\infty t p(t)dt$. 
 \end{frame}
-
-\begin{frame}
-\frametitle{Stationarity: consequences}
-One of the consequences of stationary processes is how they recover from a shock. A shock represents an unexpected change in a variable in a particular period of time. For stationary time series, shocks to the system will gradually die away. 
-\begin{figure}
-\includegraphics[width=0.6\paperwidth]{img/shock}
-\end{figure}
-\end{frame}
-
 
 \begin{frame}
 \frametitle{Non-stationary processes}
@@ -263,22 +234,6 @@ y_t = \mu + y_{t-1} + \epsilon_t
 \end{block}
 \end{frame}
 
-
-\begin{frame}
-\frametitle{Integration }
-\begin{block}{Integration of order $d$}
-A time series $\mathbf{y}$ is said to be I(d), or integrated of order $d$, if after
-differentiating the variable $d$ times, we get an stationary process, more precisely:
-\[
-{\color{blue}
-(1-L)^d \mathbf{y} \sim \text{I(0)}} \, ,
-\]
-\noindent where I(0) is a stationary time series and $L$ is the lag operator:
-\[
-(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
-\]
-\end{block}
-\end{frame}
 
 \begin{frame}
 \frametitle{Irregularly spaced over time}
@@ -482,23 +437,6 @@ Recently, online learning algorithms have been proposed to solve problems with l
 \end{itemize} 
 \end{frame}
 
-\begin{frame}
-\frametitle{Online learning algorithms}
-\begin{algorithm}[H]
-\begin{algorithmic}[1]
-    \STATE Receives input $\mathbf{x}_t$
-    \STATE Makes prediction $\mathbf{\hat{y}}_t$
-    \STATE Receives response $\mathbf{y}_t$
-    \STATE Incurs loss $l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)$
-\end{algorithmic}
-\caption{Structure of an Online Learning System}
-\end{algorithm}
-Performance is later measured after $T$ trials as:
-\begin{equation*}
-L_T = \sum_{t=1}^T l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)
-\end{equation*}
-\end{frame}
-
 
 \section{Challenges and Hypothesis}
 \begin{frame}
@@ -637,10 +575,10 @@ $\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_N) \}$: model predictions \\
 and $\mathbf{b}=\displaystyle \sum_{t=1}^L \mathbf{x}_t \mathbf{y}^\intercal_{t}$
 \FOR { $t = L+1$ to $N$ }
         \STATE read new $\mathbf{x}_t$
-        \STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal-
-\mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal  $
         \STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
 \mathbf{A}^{-1}\mathbf{x}_t$
+\STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal-
+\mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal  $
         \STATE Read new $\mathbf{y}_t$
         \STATE $\mathbf{b} = \mathbf{b} + \mathbf{x}_t \mathbf{y}^\intercal_{t}$
 \ENDFOR
@@ -735,9 +673,9 @@ from the 11th to the 15th of August 2014.
 \begin{frame}
 \frametitle{Adaptive VECM algorithm (AVECM)}
 \begin{enumerate}
-\item It uses VECM only considering a sliding windows of size $L$ of data.
-\item We proposed to choose $L$ and the number of lags $p$ in order to maximise the percentage of cointegration $PC$ in the near past. This process was done every time that new data was processed. 
-\item And to use a distributed environment to make this parameters search, since this is the most expensive routine.
+\item It uses VECM only considering a {\bf sliding windows of size $L$} of data.
+\item We proposed to choose $L$ and the number of lags $p$ in order to {\bf maximise the percentage of cointegration $PC$} in the near past. This process was done every time that new data was processed. 
+\item And to use a {\bf distributed environment to make this parameters search}, since this is the most expensive routine.
 \end{enumerate}
 \end{frame}
 
@@ -771,7 +709,7 @@ from the 11th to the 15th of August 2014.
 Augmented Dickey Fuller (ADF) test with lags $p=1,2,3,4,5$.
 \begin{table}[ht]
 \centering
-\small
+\tiny
 \begin{tabular}{llllll}
 \toprule
 {Variable} & {ADF(1)} & {ADF(2)} & {ADF(3)} & {ADF(4)} & {ADF(5)}\\ 
@@ -788,7 +726,7 @@ $\Delta$ USDJPY & -135.1*  & -135.1*  & -101.2* & -101.2*   & -101.2*\\
 \addlinespace[1ex]
 \end{tabular}
 \caption{Unit roots tests for EURUSD, GBPUSD, USDCHF and USDJPY at 10-second
-frequency.}
+frequency. MacKinnon critical values for rejection of hypothesis of a unit root are: -2.62 (1\%), -1.94 (5\%) and -1.62 (10\%)}
 \label{tab:adf}
 \end{table}
 \end{frame}
@@ -844,7 +782,7 @@ Parameter settings:
 %\includegraphics[width=0.7\textwidth]{img/contribution}
 %\end{figure}
 \begin{description}
-\item[Cointegration]Cointegration relations change with time. We empirically showed that the number of coitegration vectors is sensitive to the number of lags but also to the amount of data considered. The percentage of cointegration is used to find VECM parameters.
+\item[Cointegration]Cointegration relations change with time. We empirically showed that the number of cointegration vectors is sensitive to the number of lags but also to the amount of data considered. The percentage of cointegration is used to find VECM parameters.
 \item[Online learning] The adaptation of the VECM to be used in an online context expressing the OLS method with matrix actualization.
 \item[Distributed environment] The use of a distributed environment to calculate $L$ and $p$ and obtain a response below 10 seconds.
 \end{description}
@@ -927,16 +865,24 @@ Parameter settings:
 
 \appendix
 
+\section{HFT}
 \begin{frame}
-\frametitle{Stationarity}
-A time series $y_t: \Z \to \R $ is said to be strictly stationary if, for a finite set of $L$ indices $\{t_{1},\dots,t_{L}\}  \, \forall L \in \Z_{\ge 0}$, the joint probability distribution of the random variables $\{y_{t_{1}},y_{t_{2}},\dots,y_{t_{L}}\}$ remains unchanged for any time shifted $h$.
-The probability distribution for the random variable $y_{t_1}$ is:
+\frametitle{HFT: High Frequency Trading}
+High Frequency Trading has motivated computer-driven strategies capable of processing large amounts of data in short periods of time.
+\begin{figure}
+\includegraphics[width=0.7\paperwidth]{img/HFTmarket}
+\caption{Percentage of HFT trades of total US Equity Trading. Source: TABB group}
+\end{figure}
+\end{frame}
 
-\begin{equation}
-P\{y_{t} \leq c_1 \} = P\{t \in \Z:  y_t \in  ]-\infty, c_1] \} 
-\end{equation}
 
-
+\begin{frame}
+\frametitle{HFT Revenue}
+However, the revenues have fallen dramatically mainly because of more regulation, increasing the cost of HFT infrastructure and more competitive algorithms.
+\begin{figure}
+\includegraphics[width=0.7\paperwidth]{img/HFTmarket2}
+\caption{Revenue in the US. Source: TABB group}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -946,11 +892,33 @@ P\{y_{t} \leq c_1 \} = P\{t \in \Z:  y_t \in  ]-\infty, c_1] \}
 \end{figure}
 \end{frame}
 
-\begin{frame}
-\frametitle{Unit root process}
+\section{Shock}
 
+\begin{frame}
+\frametitle{Stationarity: consequences}
+One of the consequences of stationary processes is how they recover from a shock. A shock represents an unexpected change in a variable in a particular period of time. For stationary time series, shocks to the system will gradually die away. 
+\begin{figure}
+\includegraphics[width=0.6\paperwidth]{img/shock}
+\end{figure}
 \end{frame}
 
+
+\section{Order of Integration}
+\begin{frame}
+\frametitle{Integration }
+\begin{block}{Integration of order $d$}
+A time series $\mathbf{y}$ is said to be I(d), or integrated of order $d$, if after
+differentiating the variable $d$ times, we get an stationary process, more precisely:
+\[
+{\color{blue}
+(1-L)^d \mathbf{y} \sim \text{I(0)}} \, ,
+\]
+\noindent where I(0) is a stationary time series and $L$ is the lag operator:
+\[
+(1-L)\mathbf{y} = \Delta \mathbf{y}=\mathbf{y}_t  -\mathbf{y}_{t-1} \quad \forall t
+\]
+\end{block}
+\end{frame}
 
 \begin{frame}
 \frametitle{Integration example}
@@ -969,6 +937,7 @@ Since their differences are stationary (I(0) process).
 \end{columns}
 \end{frame}
 
+\section{Spurious regression}
 \begin{frame}
 \frametitle{Spurious regression}
 Standard regression techniques are applied to non-stationary data.
@@ -980,12 +949,12 @@ The use of non-stationary data can lead to spurious regressions.
 %\end{block}
 
 \begin{columns}
-\begin{column}{.45\linewidth}<1->
+\begin{column}{.45\linewidth}
 \begin{figure}
 \includegraphics[width=0.4\paperwidth]{img/spurious1}
 \end{figure}
 \end{column}
-\begin{column}{.45\linewidth}<2->
+\begin{column}{.45\linewidth}
 \begin{figure}
 \includegraphics[width=0.4\paperwidth]{img/spurious2}
 \end{figure}
@@ -993,6 +962,7 @@ The use of non-stationary data can lead to spurious regressions.
 \end{columns}
 \end{frame}
 
+\section{Random walk forecast}
 \begin{frame}
 \frametitle{Random walk}
 The random walk model is defined as:
@@ -1008,6 +978,7 @@ The naive forecast of the time series difference $\hat{\mathbf{y}}_{t+1}$ for th
 \end{frame}
 %
 %
+\section{ARIMA}
 \begin{frame}
 \frametitle{ARIMA}
 A process can be modelled as an ARIMA$(p,d,q)$ if $\mathbf{x}_t = \Delta^d \mathbf{y}_t $, is an ARMA$(p,q)$. An ARMA$(p,q)$ model is the following:
@@ -1017,6 +988,23 @@ A process can be modelled as an ARIMA$(p,d,q)$ if $\mathbf{x}_t = \Delta^d \math
 \noindent with coefficients $\phi_p \neq 0$, $\theta_q \neq 0$ and $\sigma_{\epsilon}^2 > 0$.
 \end{frame}
 
+\section{Online Learning System}
+\begin{frame}
+\frametitle{Online learning algorithms}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+    \STATE Receives input $\mathbf{x}_t$
+    \STATE Makes prediction $\mathbf{\hat{y}}_t$
+    \STATE Receives response $\mathbf{y}_t$
+    \STATE Incurs loss $l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)$
+\end{algorithmic}
+\caption{Structure of an Online Learning System}
+\end{algorithm}
+Performance is later measured after $T$ trials as:
+\begin{equation*}
+L_T = \sum_{t=1}^T l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)
+\end{equation*}
+\end{frame}
 
 
 \begin{frame}
@@ -1042,7 +1030,133 @@ $\{ \hat{\mathbf{y}}[1],\dots,\hat{\mathbf{y}}[it]\}$: prediction vectors \\
 \end{algorithmic}
 \end{frame}
 
+\section{Online Ridge Regression}
+
+\begin{frame}
+\frametitle{Online Ridge Regression}
+\begin{eqnarray*}
+\label{eq:RReapand}
+\mathbf{\mathbf{W}}_{\text{ridge}}&=&(\mathbf{X}^\top \mathbf{X}+ \lambda
+\mathbb{I})^{-1}\mathbf{X}^\top \mathbf{Y} \\
+&=& \displaystyle \big (\sum_{t=1}^m
+\mathbf{x}_t \mathbf{x}_t  ^\top + \lambda \mathbb{I}\big )^{-1}
+\sum_{t=1}^m \mathbf{x}_t \mathbf{y}_t \, .
+\end{eqnarray*}
+\end{frame}
+
+\begin{frame}
+%\lambda \mathbb{I}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{x}_1,\dots,\mathbf{x}_N \}$: $N$ input vectors \\
+$\{\mathbf{y}_1,\dots,\mathbf{y}_N \}$: $N$ targets \\
+$L$: sliding window size ($L<N$) \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_N) \}$: model predictions \\
+\STATE Initialize $\mathbf{A}=\displaystyle \sum_{t=1}^L \mathbf{x}_t
+\mathbf{x}_t^\intercal + {\color{red}\lambda \mathbb{I}}$
+and $\mathbf{b}=\displaystyle \sum_{t=1}^L \mathbf{x}_t \mathbf{y}^\intercal_{t}$
+\FOR { $t = L+1$ to $N$ }
+        \STATE read new $\mathbf{x}_t$
+        \STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
+\mathbf{A}^{-1}\mathbf{x}_t$
+\STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal-
+\mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal  $
+        \STATE Read new $\mathbf{y}_t$
+        \STATE $\mathbf{b} = \mathbf{b} + \mathbf{x}_t \mathbf{y}^\intercal_{t}$
+\ENDFOR
+\end{algorithmic}
+\caption{Online Ridge Regression}
+\label{alg:SLAAR}
+\end{algorithm}
+\end{frame}
+
+
+\begin{frame}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{x}_1,\dots,\mathbf{x}_N \}$: $N$ input vectors \\
+$\{\mathbf{y}_1,\dots,\mathbf{y}_N \}$: $N$ targets \\
+$L$: sliding window size ($L<N$) \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{x}_{L+1}),\dots,f(\mathbf{x}_N) \}$: model predictions \\
+\STATE Initialize $\mathbf{A}=\displaystyle \sum_{t=1}^L \mathbf{x}_t
+\mathbf{x}_t^\intercal + {\color{red}\lambda \mathbb{I}}$
+and $\mathbf{b}=\displaystyle \sum_{t=1}^L \mathbf{x}_t \mathbf{y}^\intercal_{t}$
+\FOR { $t = L+1$ to $N$ }
+        \STATE read new $\mathbf{x}_t$
+        \STATE {\color{red} $\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal-
+\mathbf{x}_{t-L-1} \mathbf{x}_{t-L-1}^\intercal$}
+        \STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal
+\mathbf{A}^{-1}\mathbf{x}_t$
+        \STATE Read new $\mathbf{y}_t$
+        \STATE $\mathbf{b} = \mathbf{b} + \mathbf{x}_t \mathbf{y}^\intercal_{t}$
+\ENDFOR
+\end{algorithmic}
+\caption{The Aggregating Algorithm for Regression}
+\label{alg:SLAAR}
+\end{algorithm}
+\end{frame}
 % Financial time series are not the only ones with this behaviour, this study can be extended to other non-stationary time series such as: weather, earthquakes, energy demand and sales forecasting.
 
+\section{The Johansen method}
+
+\begin{frame}
+\frametitle{The Johansen method}
+Johansen in 1988 suggests a method for determining
+cointegration vectors. 
+There are two statistics for cointegration under Johansen approach: the trace
+(shown in equation \ref{eq:johansentrace}) and the maximum-eigenvalue statistic
+(shown in equation \ref{eq:johansenmax}):
+\begin{equation}
+\label{eq:johansentrace}
+\lambda_{\text{trace}} (r) = -T \sum_{i=r+1}^g \ln(1-\hat{\lambda_i})
+\end{equation}
+\begin{equation}
+\label{eq:johansenmax}
+\lambda_{\text{max}} (r,r+1) = -T \ln(1-\hat{\lambda_{r+1}})
+\end{equation}
+\noindent where $r$ is the number of cointegration vectors and
+$\hat{\lambda}_i$ is the estimated value for the ith ordered eigenvalue.
+$\lambda_{\text{trace}}$ null hypothesis is that the number of cointegration
+vectors is less than or equal to $r$ against that there are more than $r$.
+$\lambda_{\text{max}}$ has the null hypothesis that the number of cointegration
+vectors is $r$ against an alternative of $r +1$.
+\end{frame}
+
+\section{Evaluation methods}
+\begin{frame}
+\frametitle{Evaluation methods}
+\begin{description}
+\item[MSE]  Mean Square Error measures the distance between forecasts
+and the true values and large deviations from the true value have a
+large impact due to squaring forecast error.
+\begin{equation}\label{eq:MSE}
+\text{MSE} = 
+\frac{\displaystyle \sum_{t=1}^{N} (\mathbf{y}_t-\hat{\mathbf{y}}_t)^2}{N}
+\end{equation}
+\item[$U$-statistic] the Theil's $U$-statistic, presented by, is a unit free measure obtained as the ratio between the root
+MSE (RMSE) of a model and the RMSE of the naive random walk model. 
+\end{description}
+\end{frame}
+
+
+\section{Inverse calculation}
+\begin{frame}
+\frametitle{Sherman-Morrison-Woodbury}
+The Sherman-Morrison-Woodbury formula can be used to reduce inverse matrix
+This
+formula allows to get the inverse of a
+the matrix $\mathbf{A+uv^\top}$ if we already calculated the
+inverse of $\mathbf{A}$ as follows:
+
+\begin{equation}
+\label{eq:SMW}
+(\mathbf{A+uv^\top})^{-1}=\mathbf{A}^{-1}-
+\frac{\mathbf{A^{-1}uv^\top A^{-1}}}{\mathbf{1+v^\top A^{-1}u}}
+\end{equation}
+\end{frame}
 
 \end{document}
