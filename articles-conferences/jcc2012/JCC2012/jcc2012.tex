@@ -1,0 +1,84 @@
+\documentclass[10pt, conference, compsocconf]{IEEEtran}
+\usepackage{verbatim}
+\usepackage{subfigure}
+\usepackage{savesym}
+\savesymbol{AND}
+\usepackage{color}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\usepackage{amssymb}
+\def\R{{\mathbb R }}
+\def\N{{\mathbb N }}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\ifCLASSINFOpdf
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+
+\title{Online Ridge Regression method using sliding windows}
+
+\author{\IEEEauthorblockN{Paola Arce}
+\IEEEauthorblockA{Center for Technological Innovation \\�in High Performance Computing\\
+CTI-HPC, UTFSM\\
+Valpara\'iso, Chile\\
+Email: paola.arce@usm.cl}
+\and
+\IEEEauthorblockN{Luis Salinas}
+\IEEEauthorblockA{Informatics Dpt. and Centro Cient\'ifico-\\
+� � � � Tecnol\'ogico de Valpara\'iso - CCTVal\\
+UTFSM\\
+Valpara\'iso, Chile\\
+Email: lsalinas@inf.utfsm.cl}
+}
+
+
+\maketitle
+
+
+\begin{abstract}
+A new regression method based on the {\em aggregating algorithm for
+regression} (AAR) is presented. The proposal shows how {\em ridge
+regression} can be modified in order to reduce the number of
+operations by avoiding the inverse matrix calculation only considering
+a sliding window of the last input values. This modification allows
+algorithm expression in a recursive way and therefore its use in an
+online context. Ridge regression, AAR and our proposal were compared
+using the closing stock prices of 45 stocks from the technology market
+from 2000 to 2012. Empirical results show that our proposal performs
+better than the other two methods in 28 of 45 stocks analyzed, due to
+the lower MSE error.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Ridge Regression; Machine Learning; Online Learning;
+
+\end{IEEEkeywords}
+
+
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+\input{src/intro}
+\input{src/RR}
+\input{src/AAR}
+\input{src/model}
+\input{src/experiments}
+
+\section*{Acknowledgment}
+Partially supported by FONDECYT research grant 1100805.
+
+\bibliographystyle{IEEEtran}
+\bibliography{reference}
+\end{document}
+
+

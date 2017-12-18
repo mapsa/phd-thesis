@@ -1,0 +1,167 @@
+\section{Experimental Results}
+
+In order to measure performance of our algorithm, we used daily stock
+returns of 45 stocks from the technology sector dated from the 1st of
+January 2000 to the 1st of July 2012. 
+
+
+
+\begin{figure}[h]
+  \centering
+  \subfigure[AAR v/s the target for SPY]{
+  \includegraphics[width=0.4\textwidth]{img/AAR}
+  %\caption{AAR v/s the target for SPY}
+  \label{fig:data}
+  }
+  \subfigure[RR v/s the target for SPY]{
+  \includegraphics[width=0.4\textwidth]{img/RR}
+  %\caption{AAR v/s the target for SPY}
+  \label{fig:data2}
+  }
+  \subfigure[SLAAR v/s the target for SPY]{
+  \includegraphics[width=0.4\textwidth]{img/SLAAR}
+  %\caption{AAR v/s the target for SPY}
+  \label{fig:data3}
+  }
+\end{figure}
+
+Returns $\{x_t\}_{t=1}^{m-1}$ were defined in based on stock prices
+$\{{p_t}\}_{t=1}^m$ and are related as:
+
+\begin{equation*}
+x_t = \frac{p_{t+1}-p_t}{p_t} \, .
+\end{equation*}
+
+The objective is to build a model of the returns of stock $k$ based on
+returns of other stocks of the same financial sector.
+
+Therefore, every input vector $\mathbf{x}_t$ will have 44 stock
+returns at time $t$ without considering information of stock $k$. The
+target vector $\mathbf{y}$ will be the stocks returns of stock $k$.
+
+We compared RR, AAR and our proposal called sliding windows AAR
+(SLAAR) and the results are shown in table~\ref{tab:results}. The MSE
+was shown in bold when our method was better than RR and AAR. The
+table shows that our method outperforms in 28 of 45 stocks.
+
+\begin{table}[h!]
+    \centering
+    \footnotesize
+    \begin{tabular}{*{5}{r}}
+        \toprule
+          & AAR & RR & SLAAR& Best L \\
+         \midrule
+Stock  &  AAR error  &   RR error  &   SLAAR error  &   Best L  \\
+IBM  &  0.230307  &  0.231317  &  \textbf{0.228963}  &  70   \\
+MMM  &  0.199237  &  0.197172  &  \textbf{ 0.195550} &  990\\
+CVX  &  0.155454  &  0.152070  &  0.155150  &  750\\
+UTX  &  0.260980  &  0.268351  &  0.261140  &  340\\
+CAT  &  0.223338  &  0.222240  &  \textbf{ 0.210500} &  360\\
+MCD  &  0.268211  &  0.266997  &  0.267182  &  990\\
+BA  &  0.292699  &  0.295623  &  \textbf{ 0.292180} &  150\\
+XOM  &  0.160376  &  0.157125  &  0.159074  &  780\\
+JNJ  &  0.213276  &  0.214747  &  \textbf{ 0.212601}  &  680\\
+PG  &  0.494937  &  0.493036  &  0.495395  &  950\\
+KO  &  0.272203  &  0.274337  &  \textbf{ 0.270888} &  870\\
+WMT  &  0.272945  &  0.269190  &  \textbf{ 0.254820}  &  630\\
+HPQ  &  0.276595  &  0.275459  &  0.280236  &  980\\
+AXP  &  0.204162  &  0.211216  &  \textbf{ 0.195888}  &  230\\
+DD  &  0.204220  &  0.202591  &  0.203177  &  330\\
+JPM  &  0.238405  &  0.255824  &  \textbf{ 0.204777}  &  290\\
+MRK  &  0.214294  &  0.211708  &  \textbf{ 0.196368}  &  850\\
+DIS  &  0.324324  &  0.326105  &  \textbf{ 0.297895}  &  290\\
+VZ  &  0.203936  &  0.206390  &  \textbf{ 0.196078}  &  490\\
+HD  &  0.236339  &  0.237688  &  0.242606  &  990\\
+T  &  0.235940  &  0.234002  &  \textbf{ 0.230230}  &  570\\
+MSFT  &  0.332521  &  0.331694  &  0.334283  &  710\\
+CSCO  &  0.227675  &  0.228196  &  0.233057  &  990\\
+INTC  &  0.262545  &  0.264391  &  0.271204  &  1000\\
+GE  &  0.168935  &  0.168258  &  0.168924  &  1000\\
+PFE  &  0.200335  &  0.199163  &  0.204552  &  1000\\
+BAC  &  0.299956  &  0.333396  &  \textbf{ 0.200134}  &  530\\
+AA  &  0.249913  &  0.250263  &  \textbf{ 0.246067}  &  1000\\
+XLF  &  0.300486  &  0.299604  &  0.301322  &  830\\
+EWH  &  0.186584  &  0.188475  &  \textbf{ 0.180674}  &  260\\
+EWG  &  0.156459  &  0.158946  &  \textbf{ 0.152092}  &  470\\
+EWA  &  0.231424  &  0.233347  &  \textbf{ 0.224692}  &  960\\
+XLV  &  0.140344  &  0.139772  &  \textbf{ 0.118340}  &  610\\
+XLI  &  0.089607  &  0.087342  &  \textbf{ 0.086304}  &  450\\
+XLU  &  0.107657  &  0.106929  &  \textbf{ 0.091362}  &  550\\
+XLY  &  0.103068  &  0.102359  &  \textbf{ 0.095318}  &  590\\
+XLB  &  0.105090  &  0.102791  &  \textbf{ 0.099280}  &  940\\
+XLE  &  0.118998  &  0.117319  &  \textbf{ 0.111371} &  1000\\
+SPY  &  0.073800  &  0.071908  &  \textbf{ 0.067655} &  230\\
+EWS  &  0.223738  &  0.223721  &  0.228166  &  990\\
+EWC  &  0.172954  &  0.174107  &  \textbf{ 0.164855} &  330\\
+EWU  &  0.146232  &  0.145031  &  0.146491  &  640\\
+EWW  &  0.205101  &  0.203012  &  \textbf{ 0.199228}  &  80\\
+EWM  &  0.249645  &  0.248694  &  0.257393  &  80\\
+XLK  &  0.098086  &  0.098599  &  \textbf{ 0.097944}  &  440  \\
+
+        \bottomrule
+    \end{tabular}
+    \caption{MSE and best L}
+    \label{tab:results}
+\end{table}
+
+
+%\begin{figure}[h!]
+%  \centering
+%    \includegraphics[width=0.55\textwidth]{img/results}
+%  \caption{Comparison AAR, RR and SLAAR for SPY}
+%  \label{fig:data}
+%\end{figure}
+
+%\begin{figure}[h!]
+%  \centering
+%    \includegraphics[width=0.45\textwidth]{img/RR}
+%  \caption{RR v/s the target for SPY}
+%  \label{fig:data2}
+%\end{figure}
+%
+%
+%\begin{figure}[h!]
+%  \centering
+%    \includegraphics[width=0.45\textwidth]{img/SLAAR}
+%  \caption{SLAAR v/s the target for SPY}
+%  \label{fig:data3}
+%\end{figure}
+
+The error was calculated considering the {\em mean squared error}
+(MSE) using the last 70 predictions made. 
+
+Table~\ref{tab:results} also shows that the smaller error in our
+method was for the SPY stock, which is an expected result considering
+that the SPY value is constructed based on the main stocks of the
+markets. 
+
+A graphical comparison between AAR, RR and SLAAR with the target for
+stock SPY is shown in figures~\ref{fig:data},\ref{fig:data2} and
+\ref{fig:data3}. It shows how AAR and our method fit better than RR to
+the target and also that our method is slightly better compared with
+AAR. It's also possible to notice that when returns change drastically
+none of the methods fit satisfactorily.
+
+\section{Discussion and Conclusion}
+
+The existing approaches to solve regression problems are well known,
+however they are not used in an online context because they involve
+many calculations and in order to make a prediction, they consider all
+the data available. However, in some cases, only a portion of data is
+needed or available to make a prediction and sometimes the accuracy
+could be improved considering less data.
+
+In this article, this historical dependence of data is studied and the
+results show that in some cases, if we use a sliding window of data
+instead of all the data, the MSE of the predictions is minimized.
+It's possible to check that there are some stocks which depend more on
+the historical data than others and this is valuable information for
+future algorithms.
+
+On the other hand, RR and AAR calculates an inverse matrix at every
+step, which is computationally very expensive. In our proposal, this
+inverse matrix calculation is avoided and therefore it's more suitable
+to be used in an online context.
+
+
+

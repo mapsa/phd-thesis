@@ -1,0 +1,49 @@
+\section{The Aggregating Algorithm for Regression}
+
+The AAR, proposed by~\cite{vovk2001}, is an application of the
+aggregating algorithm to the problem of regression. 
+
+The prediction formula for AAR is given by
+equation~(\ref{eq:predAAR}):
+
+\begin{equation}
+\label{eq:predAAR}
+f(\mathbf{x}_{m+1}) = \displaystyle \big( \sum_{t=1}^m y_t \mathbf{x}_t \big )^\intercal 
+  \big ( \sum_{t=1}^{m+1} \mathbf{x}_t \mathbf{x}_t  ^\intercal + \gamma
+\mathbb{I})\big )^{-1}  \mathbf{x}_{m+1} \, ,
+\end{equation}
+
+\noindent which is very similar to the RR method except because AAR includes
+information of the new input $\mathbf{x}_{m+1}$.  This means that AAR
+updates matrix $A$ with the new input $\mathbf{x}_{m+1}$ before the
+prediction $f(\mathbf{x}_{m+1})$ is made.
+
+Algorithm~\ref{alg:AAR} shows this procedure based on
+equation~(\ref{eq:predAAR}). This algorithm can be obtained by swapping lines 4 and 5 from
+algorithm~\ref{alg:RR}. 
+
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$\{\mathbf{x}_1,\dots,\mathbf{x}_m \}$: $m$ input vectors \\
+$\{y_1,\dots,y_m \}$: $m$ targets \\
+\ENSURE  $\,$ \\
+$\{f(\mathbf{x}_1),\dots,f(\mathbf{x}_m) \}$: model predictions \\
+\STATE Initialize $\mathbf{A}=\gamma \mathbb{I}$
+and $\mathbf{b}=0$
+\FOR { $t = 1$ to $m$ }
+   	\STATE read new $\mathbf{x}_t$
+	\STATE $\mathbf{A} = \mathbf{A} + \mathbf{x}_t \mathbf{x}_t^\intercal$
+	\STATE output prediction $f(\mathbf{x}_t) =  \mathbf{b}^\intercal \mathbf{A}^{-1}\mathbf{x}_t$
+   	\STATE Read new $y_t$
+    	\STATE $\mathbf{b} = \mathbf{b} + y_t \mathbf{x}_t$
+\ENDFOR
+
+\end{algorithmic}
+\caption{{\em The aggregating algorithm for regression}}
+\label{alg:AAR}
+\end{algorithm}
+
+
+

@@ -1,0 +1,56 @@
+
+\section{Introduction}
+The learning from examples problem is an ill-posed problem which
+admits an infinite number of solutions.  In order to restrict the
+space of admissible solutions, the regression problem is usually
+formulated in terms of regularization theory~\cite{girosiETal1995} as
+an optimization problem, which minimizes the functional: 
+
+\begin{equation}
+\label{eq:problem} 
+J(\mathbf{w}) = \sum_{t=1}^m (y_t - f(\mathbf{x}_t))^2 + \gamma R(\mathbf{w})
+, \qquad f \in \mathcal{H} \, ,
+\end{equation}
+
+\noindent where $m$ is the number of samples $(\mathbf{x}_t ,y_t)$ with
+$\mathbf{x}_t \in \R^l$, $l$ correspond to the number of features, $y_t
+\in \R$ is the target, $R(\mathbf{w}) = ||w||^2$ where $||.||^2_K$ is a norm in a
+{\em reproducing kernel hilbert space} $\mathcal{H}$ defined by the
+positive definite form $K$, and $\gamma$ is a regularization
+parameter~\cite{evgeniouETal2000}.
+%Qué norma debe usarse? falta definir K
+When the hypothesis space is reduced, the risk of overfitting the training data
+decreases and therefore leading to better generalization capability. 
+%aclarar porqué se reduce el espacio de hipótesis
+{\em Ridge regression} (RR) is a batch method generally used to solve this
+problem, which is a generalization of least squares method (LS). 
+
+%RR is a batch method and it is not used in an online context mainly because
+%it uses large amount of data and the number of operations increases
+%with data size.
+
+However, online algorithms are more attractive than batch algorithms because
+their simplicity and ability to manage large data sets, this is why
+they are popular in financial applications.
+
+There are several popular online methods such as
+perceptron~\cite{rosenblatt58},
+passive-aggressive~\cite{crammerETall2006}, stochastic gradient
+descent~\cite{zhang2004}, aggregating algorithm~\cite{vovk2001} and
+the second order perceptron~\cite{cesa-bianchi2005}.
+In~\cite{cesa-bianchi2006} it is provided an in-deph analysis of
+online learning.
+
+The {\em aggregating algorithm for regression} (AAR) method formulates
+a recursive formulation of RR in an online way. AAR
+consider all data to make a prediction, but in highly variant
+scenarios the old data could be useless.
+
+In this paper, we propose an online method based on the idea presented
+by~\cite{vovk2001} considering in our case a single sliding window of
+the most recent data. This proposal also reduces the number of
+operations at every step of the algorithm by expressing the inverse
+matrix in an iterative form. Our algorithm is later tested with
+financial data from stock market.
+
+

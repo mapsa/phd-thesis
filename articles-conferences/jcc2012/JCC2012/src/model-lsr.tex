@@ -1,0 +1,217 @@
+\section{Least Squares with Regularization} \label{sec:proposal}
+
+The given data is a sequence $\left\{ \left(d(k),\mathbf{u}(k) \right) \right\}_{k\in\N}$ where $
+d(k)\in\R $ and $\mathbf{u}(k) = \big[ u_1(k), u_2(k), \dots\,, u_N(k) \big]^T\in\R^N\,$.
+
+For each fixed $k\in\N$, $k\geq L$, we want to find scalars $w_j\in\R$,
+$j\in\N$, $1\leq j\leq N$,
+which minimize the functional:
+
+\begin{eqnarray}
+J_k(\mathbf{w}) &=\sum_{i=k-L+1}^{k}\left( d(i) - \mathbf{w}^T \mathbf{u}(i)\right)^2 + \gamma \sum_{i=1}^{L} w_i^2 \nonumber\\
+&=\sum_{i=k-L+1}^{k}\left( d(i) - \sum_{j=0}^{N} w_j u_j(i)\right)^2 + \gamma \sum_{i=1}^{L} w_i^2
+\label{eq:f1}
+\end{eqnarray}
+
+
+Note that $w_j$ is the factor associated with the input data
+$u_j(k),u_j(k-1),u_j(k-2),\dots,u_j(k-L+1)$.
+
+The equivalent matricial representation of equation (\ref{eq:f1}) is the following:
+
+\begin{equation}
+J_k(\mathbf{w})=\bigg\| 
+\begin{bmatrix}
+d(k) \\ d(k-1) \\ d(k-2) \\ \vdots \\ d(k-L+1)
+\end{bmatrix}
+- \begin{bmatrix}
+\, & \mathbf{u}(k)^T & \, \\
+\, & \mathbf{u}(k-1)^T & \, \\
+\, & \mathbf{u}(k-2)^T & \, \\
+\,  & \vdots & \, \\
+\, & \mathbf{u}(k-L+1)^T & \,
+\end{bmatrix}
+\begin{bmatrix}
+w_1 \\ w_2 \\ w_3 \\ \vdots \\ w_N
+\end{bmatrix}
+\bigg\|_{L^2}^2
++
+\gamma \bigg\|
+\begin{bmatrix}
+w_1 \\ w_2 \\ w_3 \\ \vdots \\ w_N
+\end{bmatrix}
+\bigg\|_{L^2}^2
+\label{eq:f2}
+\end{equation}
+
+
+A reduced expression of (\ref{eq:f2}) is:
+
+\begin{equation}
+J_k(\mathbf{w})
+= \big\|\mathbf{d}(k)-\mathbf{U}(k)\mathbf{w} \big\|_{L^2}^2 + \gamma \big\| \mathbf{w} \big\|_{L^2}^2 \,,
+\end{equation}
+
+where $\mathbf{d}(k)\in\R^{L}\,,\;
+\mathbf{U}(k)=\left[ u_j(k) \right]_{(L)\times N}\in\R^{(L)\times N}\,,\;
+\mathbf{w}\in\R^{N}$.
+
+
+The solution of this optimization problem is:
+
+\begin{equation}\label{20120421:1}
+\mathbf{w} = \big(\mathbf{U}(k)^T\mathbf{U}(k) + \gamma \mathbb{I} \big)^{-1}\mathbf{U}(k)^T\mathbf{d}(k)\,.
+\end{equation}
+Equation (\ref{20120421:1}) gives the best value of the unknown
+$\mathbf{w}\in\R^N$ {\em at the instant\/} $k$, in de sense that it
+minimizes the value of $J_k(\mathbf{w})$.
+
+\subsection{Recursive formulation}
+
+
+If a new pair of data arrives$(d(k+1),\mathbf{w}(k+1))$ the matrix $\mathbf{U}(k+1)$ will be:
+
+\begin{equation}
+\mathbf{U}(k+1)=
+\begin{bmatrix}
+\, & \mathbf{u}(k+1)^T & \, \\
+\, & \mathbf{u}(k)^T & \, \\
+\, & \mathbf{u}(k-1)^T & \, \\
+\,  & \vdots & \, \\
+\, & \mathbf{u}(k-L+2)^T & \,
+\end{bmatrix}\, .
+\end{equation}
+
+Using the new information the best value of the
+unknown $\mathbf{w}\in\R^N$ at instant $k+1$ will be:
+
+\begin{equation}\label{eq:f3}
+\mathbf{w} = \big(\mathbf{U}(k+1)^T\mathbf{U}(k+1) + 
+\gamma \mathbb{I} \big)^{-1}\mathbf{U}(k+1)^T\mathbf{d}(k+1)\,.
+\end{equation}
+
+The matrix $\mathbf{U}(k+1)$ differs from the previous matrix 
+$\mathbf{U}(k)$ only because it was added the vector 
+$\mathbf{u}(k+1)$ and removed the last row ($\mathbf{u}(k-L+1)$).
+Using this fact, we will formulate a recursive form of the equation 
+(\ref{eq:f3}) based on that:
+
+\begin{equation}\label{eq:f4}
+\mathbf{U}(k+1)^T\mathbf{U}(k+1)= 
+\mathbf{U}(k)^T\mathbf{U}(k) + A(k)\, ,
+\end{equation}
+
+where, 
+\begin{equation}
+A(k) =\mathbf{u}(k+1) \mathbf{u}(k+1)^T - \mathbf{u}(k-L+1) \mathbf{u}(k-L+1)^T \; .
+\label{eq:f41}
+\end{equation}
+
+Considering equations (\ref{eq:f4}) and (\ref{eq:f41}) we can express the inverse term of equation (\ref{eq:f3}) as:
+
+\begin{align}
+\big(\mathbf{U}(k+1)^T\mathbf{U}(k+1) + 
+\gamma \mathbb{I} \big)^{-1}= &
+ \nonumber\\
+= \big(\mathbf{U}(k)^T\mathbf{U}(k) + A(&k) +
+\gamma \mathbb{I} \big)^{-1} \nonumber\\
+= \big( ( \mathbb{I} + A(k) \big(\mathbf{U}(k)^T&\mathbf{U}(k) +  \gamma \mathbb{I} \big)^{-1} ) 
+\big(\mathbf{U}(k)^T\mathbf{U}(k) + \gamma \mathbb{I} \big) \big)^{-1} \,
+\label{eq:f5}
+\end{align}
+
+and for simplicity we define:
+
+\begin{equation}
+	\Delta(k) = A(k) \big(\mathbf{U}(k)^T\mathbf{U}(k) +  \gamma \mathbb{I} \big)^{-1},
+\end{equation}
+
+so we can reduce the equation (\ref{eq:f5}) as the following:
+
+
+\begin{eqnarray}
+	\big(\mathbf{U}(k+1)^T\mathbf{U}(k+1) + 
+\gamma \mathbb{I} \big)^{-1}=&\big( ( \mathbb{I} + \Delta(k)) 
+\big(\mathbf{U}(k)^T\mathbf{U}(k) + \gamma \mathbb{I} \big) \big)^{-1} \nonumber \\
+=& \big(\mathbf{U}(k)^T\mathbf{U}(k) + \gamma \mathbb{I} \big) ^{-1} ( \mathbb{I} + \Delta(k)) ^{-1}.
+\label{eq:f6}
+\end{eqnarray}
+
+
+Equation (\ref{eq:f6}) can be approximated using the Taylor expansion for matrices:
+
+\begin{equation}
+\begin{split}
+	\big(\mathbf{U}(k+1)^T\mathbf{U}(k+1) + 
+\gamma \mathbb{I} \big)^{-1} & \approx \\
+\big(\mathbf{U}(k)^T\mathbf{U}(k) &+ \gamma \mathbb{I} \big) ^{-1} 
+( \mathbb{I} - \Delta(k) + \Delta(k)^2 \pm \dots),
+\end{split}
+\end{equation}
+
+where the term $\big(\mathbf{U}(k)^T\mathbf{U}(k) + 
+\gamma \mathbb{I} \big) ^{-1}$ has been previously calculated at time $k$.
+By this way is avoided the inverse calculation, which is the most expensive
+procedure in the algorithm. 
+
+
+\subsection{Matrix Inversion} \label{sec:matrixinv}
+
+The matrix inverse can be improved using the approximation used in \cite{obrien1982}. If we want to obtain the matrix inverse of $A \in Mat(n,n)$ by using some numerical approximation and we get $B$ then:
+
+\begin{equation} \label{eq:m1}
+A^{-1} = B + \epsilon \, ,
+\end{equation}
+
+where $\epsilon$ is a $n \times n$ matrix with the error approximations values. This $\epsilon$ matrix can be approximated by premultiplying by $BA$ in the equation (\ref{eq:m1}):
+
+\begin{align} \label{eq:m2}
+& A^{-1} = B + \epsilon  \nonumber \\
+& BAA^{-1} =  BAB + BA\epsilon \, ,
+\end{align}
+
+but $BAA^{-1}=B$ and considering that $BA\epsilon \approx \epsilon$ we can obtain an the following expression for $\epsilon$ using equation (\ref{eq:m2}):
+
+\begin{align} \label{eq:m3}
+B =  BAB + BA\epsilon \nonumber \\
+\epsilon \approx B-BAB \, .
+\end{align}
+
+Replacing expression (\ref{eq:m3}) in equation (\ref{eq:m1}) we have:
+
+\begin{align} \label{eq:m4}
+A^{-1} \approx B + B-BAB \nonumber \\
+A^{-1} \approx 2B - BAB
+\end{align}
+
+The equation (\ref{eq:m4}) allows us to improve the matrix inverse approximation.
+
+
+The algorithm (\ref{alg:rlms}) includes the recursive model formulation and the matrix inverse optimization. Every row of $X$ has an input vector and $Y$ has the corresponding input target. 
+In order to initialize the algorithm we need to get first the exact inverse calculation $\Gamma$ considering the first $L$ rows of $X$. For the next rows of $X$, the inverse calculation will be approximated by our proposal shown in section (\ref{sec:proposal}). We need to get first the matrices $A$ and $\Delta$ in lines 3 and 4 in order to express the new matrix inverse approximation using the Taylor expansion in line 5. In line 6 the improvement of the matrix inverse approximation is done as it was shown in section (\ref{sec:matrixinv}). Finally the model parameters $w$ can be updated using the matrix inverse approximation and the new information of the pair of data $(X_{i},d_{i})$.
+
+\begin{algorithm}[ht]
+\begin{algorithmic}[1]
+\REQUIRE $\,$ \\
+$L$: windows size \\
+$X$: matrix data with $n$ rows as input vectors \\
+$Y$: target with size $n$ \\ 
+\ENSURE  $\,$ \\
+$w$: model parameters vector\\
+\STATE Initialize $\Gamma=(X_{L:1}' X_{L:1} + \gamma \mathbb{I})^{-1}$
+
+\FOR { $i=L+1$ to $n$ } 
+  
+    \STATE $A=X_i X_i' - X_{i-L} X_{i-L}'$
+    \STATE $\Delta = A \Gamma$
+    \STATE $\Gamma=\Gamma (\mathbb{I} - \Delta + \Delta^2) \quad$  
+    \STATE $\Gamma=2\Gamma-\Gamma(X_{i:i-L+1}' X_{i:i-L+1})\Gamma$ 
+     \STATE $w_{i-L} = \Gamma X_{i:i-L+1}'d_{i:i-L+1}$
+\ENDFOR
+
+
+\end{algorithmic}
+\caption{Recursive Least Mean Square}
+\label{alg:rlms}
+\end{algorithm}
+
