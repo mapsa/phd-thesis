@@ -87,10 +87,10 @@ were run using four currency rates: Euro (EUR) to United States Dollar (USD)
 (EURUSD), British Pound (GBP) to USD (GBPUSD), USD to Swiss Franc (CHF) (USDCHF)
 and USD to Japanese Yen (JPY) (USDJPY) with a 10-second frequency.
 
-The AVECM algorithm is presented in section \ref{sec:51methodology}.
-In section \ref{sec:51results} we describe the tests carried on to assess the
+The AVECM algorithm is presented in section~\ref{sec:51methodology}.
+In section~\ref{sec:51results} we describe the tests carried on to assess the
 accuracy and the execution time of AVECM.  This section also includes a
-description of the test data.  Section \ref{sec:51conclusions} contains the
+description of the test data.  Section~\ref{sec:51conclusions} contains the
 conclusions and a discussion of future research.
 
 \section{Methodology} \label{sec:51methodology}
@@ -120,7 +120,7 @@ USDJPY with 10-second frequency. Data started at 13:00 GMT of the 13th of August
   \label{fig:hists}
 \end{figure}
 
-Figure \ref{fig:hists} shows the distribution of the number of cointegration
+Figure~\ref{fig:hists} shows the distribution of the number of cointegration
 vectors given by the Johansen method for different values of $L=[2,6,10,14]$
 hours and $p=1$ . This procedure was carried out by a sliding window of
 historical data moving 1000 times. We observed that the distribution of
@@ -130,7 +130,7 @@ Cointegration increased when $L=6$ hours and was maximum when $L=10$ hours where
 one cointegration vectors was found for all 1000 iterations. The ocurrence of
 cointegration started to decrease at $L=14$ hours.
 
-From section \ref{sec:vecm} we know that $r=0$ means no cointegration and
+From section~\ref{sec:vecm} we know that $r=0$ means no cointegration and
 $r=l$ (we are using four rates, so $l=4$) reveals that no process is I(1) but
 stationary.  The interesting cases of cointegration are those where $r$ lies
 strictly between $0$ and $4$, i.e. $0<r<4$.
@@ -145,7 +145,7 @@ PC =
 where c.v. stands for cointegration vectors and $it$ is the number of iterations.
 
 The goal of our next experiment was to find a relationship between the ratio $PC$
-and the performance measure MSE (see equation \ref{eq:MSE}). $L$ was defined
+and the performance measure MSE (see equation~\ref{eq:MSE}). $L$ was defined
 between $[2,14]$ hours, that corresponded to $[720, 5040]$ data points, and $p$
 took values between $[1,5]$.  
 
@@ -353,7 +353,7 @@ values between 1 and 5. Parameter $nparams$ represents the number of pairs
 ($L$,$p$) used to maximise the percentage of cointegration. 
 
 Execution time depends directly on $L$, $p$ and $nparams$ used, since they
-determine the size of matrix $\mathbf{A}$ (see equation \ref{eq:vecA}) and
+determine the size of matrix $\mathbf{A}$ (see equation~\ref{eq:vecA}) and
 therefore affect the OLS function execution time.  Therefore, if we try more
 combinations of $L$ and $p$ (increasing $nparams$) the serial algorithm will
 take longer. For this financial time series we are interested in execution times
@@ -367,7 +367,7 @@ below 10 seconds  (the time series frequency).
   \label{fig:extimes}
 \end{figure}
 
-The superior figure in \ref{fig:extimes} shows that best performance accuracy
+The superior figure in~\ref{fig:extimes} shows that best performance accuracy
 measurements are achieved in times near or below 10 seconds in the parallel
 version. Contrarily, serial times are higher, above 10 seconds in most cases.
 Figure~\ref{fig:extimes} also shows the speed-up in computing time for AVECM

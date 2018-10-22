@@ -127,10 +127,10 @@ $\{\mathbf{y}_{\text{pred}}[L+1],\dots,\mathbf{y}_{\text{pred}}[N]\}$: model pre
 \item The function \texttt{getJohansen} returns cointegration vectors given by
 the Johansen method considering the trace statistic test at 95\%
 significance level.
-\item The function \texttt{vecMatrix} returns the matrices~(\ref{eq:vecA})
-and~(\ref{eq:vecY}) that allows VECM to be solved.
+\item The function \texttt{vecMatrix} returns the matrices~\eqref{eq:vecA}
+and~\eqref{eq:vecY} that allows VECM to be solved.
 \item The function \texttt{vecMatrixOnline} returns the
-matrices~(\ref{eq:vecA}) and~(\ref{eq:vecY}) aggregating new data and removing
+matrices~\eqref{eq:vecA} and~\eqref{eq:vecY} aggregating new data and removing
 the old one, avoiding calculation of the matrix $\mathbf{A}$ from scratch.
 \item Out-of-sample outputs are saved in the variables 
 $\mathbf{Y}_{\text{true}}$ and $\mathbf{Y}_{\text{pred}}$.
@@ -144,7 +144,7 @@ MAPEs are stored in the variable $e$. If the average of MAPEs
 ($\texttt{mean}(e)$) is above a certain error given by the mean\_error threshold, cointegration vectors are updated.
 \item If new cointegration vectors are required, the function
 \texttt{vecMatrixUpdate} only updates the corresponding columns of matrix
-$\mathbf{A}$ affected by those vectors (see equation~\ref{eq:vecA}).
+$\mathbf{A}$ affected by those vectors (see equation~\eqref{eq:vecA}).
 \end{itemize}
 
 

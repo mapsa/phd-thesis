@@ -37,7 +37,7 @@ Since cointegration vectors represent a long-run relationship between the time
 series, they vary little in time. This proposal also includes to obtain new
 cointegration vectors only when this long-term relationship changes. This change
 is detected by tracking the Mean Absolute Percentage Error (MAPE) defined in the
-equation \ref{eq:MAPE}, of the last $n$ in-sample forecasts.
+equation~\eqref{eq:MAPE}, of the last $n$ in-sample forecasts.
 
 
 VECM($p$) matrix form is:
@@ -49,8 +49,8 @@ VECM($p$) matrix form is:
 \end{equation*}
 
 \noindent where matrix $\mathbf{B},\mathbf{X},\mathbf{E}$ and $\mathbf{A}$ were
-previously defined in equations \ref{eq:vecY} , \ref{eq:vecX} , \ref{eq:vecE} and
-\ref{eq:vecA} respectively.
+previously defined in equations~\eqref{eq:vecY} ,~\eqref{eq:vecX} ,~\eqref{eq:vecE} and
+\eqref{eq:vecA} respectively.
 
 In the traditional VECM the number of rows of matrix $\mathbf{A}$ increases with
 the number of observations $\mathbf{y}_t$. This proposal considers only the most
@@ -90,7 +90,7 @@ $\mathbf{A}(t)$ and $\mathbf{B}(t)$:
 \end{equation}
 
 
-The RR solution $\mathbf{\hat{X}}(t)$ of equation \ref{eq:vareqt1} using the
+The RR solution $\mathbf{\hat{X}}(t)$ of equation~\eqref{eq:vareqt1} using the
 sliding window matrices defined above is:
 
 \begin{equation}
@@ -154,7 +154,7 @@ Johansen method considering the trace statistic test at 95\% level of
 significance. This procedure is called at the first step of the algorithm and
 every time in-sample MAPE ($\mathbf{e}$) exceeds threshold error defined (mean\_error).
 \item The function \texttt{vecMatrix} returns VECM
-matrices $\mathbf{A}(t),\mathbf{B}(t)$ shown in equation~(\ref{eq:notation}). This
+matrices $\mathbf{A}(t),\mathbf{B}(t)$ shown in equation~\eqref{eq:notation}. This
 method is only required at the first step.
 \item The function \texttt{vecMatrixOnline} returns new rows $\mathbf{a}_t^\top$ and
 $\mathbf{b}_t^\top$ given new input data $\mathbf{y}_t$.
@@ -276,7 +276,7 @@ $\mathbf{e}$: in-sample MAPE \\
 
 \newpage
 The proposal was compared against an optimal online algorithm which is a time varying
-VECM (OVECM-OPT). Algorithm ~\ref{alg:OOVECM} shows this modification:
+VECM (OVECM-OPT). Algorithm~\ref{alg:OOVECM} shows this modification:
 
 
 \begin{algorithm}[ht!]

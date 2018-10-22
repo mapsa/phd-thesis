@@ -12,8 +12,7 @@ they can give a response in a short period of time.
 \vspace{0.5cm} 
 
 \section{Introduction}
-Machine Learning (ML) studies computer algorithms for learning something such as
-to complete a task, to make accurate predictions or to behave intelligently. The
+Machine Learning (ML) studies computer algorithms for learning patterns to complete a task, to make accurate predictions or to behave intelligently. The
 learning is always based on samples and the objective is about to do better in
 the future based on the past experiences in an automatic way. ML is a sub-area
 of artificial intelligence and broadly intersects with other fields such as
@@ -39,7 +38,7 @@ problem types in supervised learning: classification and regression problems
 \cite{bishop2006}. Its two mainstream approaches are: support vector machines
 (SVMs) \cite{vapnik1998} and ensemble learning \cite{breiman1998}. Furthermore,
 supervised learning can be categorised into offline or batch learning and online
-learning (see section \ref{sec:onoffline}). 
+learning (see section~\ref{sec:onoffline}). 
 \item[Unsupervised learning] also known as clustering \cite{ben2005}. In this
 type of learning no labels are given and the system has to find a structure on
 its own, discovering hidden patterns in data.
@@ -60,33 +59,6 @@ financial problems and the assessments of this method and their results in
 practice are fairly good. Therefore, in this thesis we will adhere to this trend
 and we will use supervised learning.
 
-%Supervised learning consists in finding a learning function $f: X \rightarrow Y$
-%which models a set of examples, called training set $S$, which have been drawn
-%randomly and independently according to a unknown joint distribution function
-%$p(x,y)$ on $X \times Y$:
-%
-%
-%$$
-%S = \{ (x_k,y_k)\in X\times Y : k=1,...,n \}
-%$$
-%
-%\noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ in case of
-%regression problems and $Y = \{1,-1\}$  if it is a classification problem. 
-%
-%
-%A learning algorithm $\mathcal{A}$ takes as input a data set $S \in
-%\mathscr{T}=\mathscr{P}(X\times Y)$ and selects from $\mathscr{H}$ a function
-%$f$ such that $f(\mathbf{x})\approx y $ in a predictive way:
-%
-%\begin{eqnarray*}
-%\mathcal{A}: \mathscr{T} &\rightarrow & \mathscr{H} \\
-%S &\rightarrow &\mathcal{A}(S) = f
-%\end{eqnarray*}
-%
-%\noindent where $\mathscr{H}$ is called the {\em hypothesis space}, i.e. the space
-%of functions that the algorithm is allowed to search. 
-
-%------------------------DRAFT PROFE -------------------------------
 The basic setting for supervised learning is a {\em data set\/} $X$, 
 and an  {\em outcome set\/} $Y$.
 For our purposes $X$ will be $\R^m$, $m\in\N$, and $Y$ either $\R$
@@ -112,16 +84,9 @@ $$
 S\mapsto\mathcal{A}(S)=f\quad\forall S\in\mathscr{T}\,.
 $$ 
 
-%------------------------FIN DRAFT PROFE -------------------------------
 {\em Supervised learning\/} consists then in finding a {\em learning function\/}
 $f:X\to Y$ that minimise the expected error of the loss function $V(f(\mathbf{x}),y): Y
 \times Y$ defined as:
-
-%\begin{eqnarray*}
-%\label{eq:lossfunction}
-% V & \rightarrow & \mathbb{R}^+ \\
-%  (f(\mathbf{x}), y) &\rightarrow & V(f(\mathbf{x}),y)
-%\end{eqnarray*}
 
 \begin{equation}\label{eq:lossfunction}
 V(f(\cdot),\cdot):X\times Y\to\R_0^+\,,\qquad
@@ -136,13 +101,12 @@ $X \times Y$, the expected error of $f$ is:
 
 \begin{equation}
 \label{eq:expetedrisk}
-%E[V(f(\mathbf{x}),y)] = \int_{X\times Y} V(f(\mathbf{x}),y)\;dp(x,y)\,,
 E\big[ V( f(\cdot),\cdot) \big]
-= \int_{X\times Y} V\big( f(\mathbf{x},y \big)\,dp(\mathbf{x},y)\,.
+= \int_{X\times Y} V\big( f(\mathbf{x},y) \big)\,dp(\mathbf{x},y)\,.
 \end{equation}
 
 
-For regression, the most common loss function is square loss or L2 loss function:
+For regression, the most common loss function is square loss or $L_{2}$ loss function:
 \begin{equation}
 \label{eq:l2loss}
 V(f(\mathbf{x}),y) = (f(\mathbf{x})-y)^2
@@ -172,11 +136,10 @@ R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i)
 \end{equation}
 
 The ERM is a Riemann sum approximation of the expected error of $f$ shown in
-equation \ref{eq:expetedrisk}. By the law of large numbers it is known that:
+equation~\eqref{eq:expetedrisk}. By the law of large numbers it is known that:
 
 \begin{equation}
-%\frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) \xrightarrow{n \rightarrow \infty}  E[V(f(\mathbf{x}),y)]
-\frac1n\,\sum_{i=1}^n V\big( f(\bfx_i,y_i \big)
+\frac1n\,\sum_{i=1}^n V\big( f(\bfx_i,y_i) \big)
 \overset{n\to\infty}{\longrightarrow} E\big[ V(f(\cdot),\cdot)\big]\,.
 \end{equation}
 
@@ -229,7 +192,7 @@ separated (shattered) by any plane in $\R^d$. Thus the VC-dimension in $\R^d$ ca
 
 \item[Generalisation accuracy on new examples] is the capability of the
 algorithm to generate the right output for an input instance outside the
-training set. It is measured by the expected risk (equation \ref{eq:expetedrisk}).
+training set. It is measured by the expected risk (equation~\eqref{eq:expetedrisk}).
 \item[The amount of training data] in most cases, generalisation accuracy
 increases as the amount of training data increases.
 \end{description}
@@ -297,13 +260,13 @@ prediction error in the test sample starts to increase (red curve).}
 
 Models learning error can be split into two main components: error due to bias
 and error due to variance. Bias measures the prediction error of the model
-$\hat{f}$ from the real value, see equation \ref{eq:biastrade}. Variance is
+$\hat{f}$ from the real value, see equation~\eqref{eq:biastrade}. Variance is
 taken as the variability of a model prediction for a given data point or its
 sensitivity to small fluctuations in the input data, see equation
 \ref{eq:variancetrade}.
 
 If we have a learning model $\hat{f}$, its expected generalisation error on a
-testing sample $x$ can be decomposed as shown in equation \ref{eq:bvtrade} (proof
+testing sample $x$ can be decomposed as shown in equation~\eqref{eq:bvtrade} (proof
 in \cite{geman1992neural}):
 
 \begin{align}
@@ -320,7 +283,7 @@ in \cite{geman1992neural}):
 
 Figure \ref{fig:bvtradeoff} shows how
 testing error can be decomposed into bias and variance components. 
-The bias shown in equation \ref{eq:biastrade} can be obtain through resampling
+The bias shown in equation~\eqref{eq:biastrade} can be obtain through resampling
 of the input data $x$, therefore an average of the predicted values can be
 calculated. If these prediction values are substantially different to the true
 value, the bias will be high.
@@ -406,7 +369,7 @@ R_{\text{emp}}[f] = \frac{1}{n} \sum_{i=1}^n V(f(x_i),y_i) + \lambda \mathcal{R}
 \end{equation}
 
 \noindent where $X \subseteq \mathbb{R}^m$ and $Y = \mathbb{R}$ , $V$ is the
-loss function defined in the equation \ref{eq:lossfunction} and $\mathcal{R}(f)$
+loss function defined in the equation~\eqref{eq:lossfunction} and $\mathcal{R}(f)$
 is the regulariser, a penalisation on $f$. One example of regularisation in
 linear models is Ridge Regression (RR), which is a regularised least squares
 method.
@@ -462,17 +425,17 @@ LS method consists of minimising the sum of squared errors:
 
 \noindent and $f(\mathbf{x}_t)={\mathbf{A}}^\top {\mathbf{x}}_t$. 
 
-To solve equation \ref{eq:lsm} is equivalent to find a solution of:
+To solve equation~\eqref{eq:lsm} is equivalent to find a solution of:
 \begin{equation}
 \label{eq:regproblem}
 \underset{m \times n}{\mathbf{A}} \enskip \underset{n \times
-l}{\mathbf{\mathbf{X}}} = \underset{m \times l}{\mathbf{Y}}
+l}{\mathbf{\mathbf{X}}} = \underset{m \times l}{\mathbf{Y}} \;.
 \end{equation}
 
 The optimal solution for $\mathbf{\mathbf{X}}$ is:
 \begin{equation}
 \label{eq:MP}
-\mathbf{\mathbf{X}}= \mathbf{A}^+ \mathbf{Y}
+\mathbf{\mathbf{X}}= \mathbf{A}^+ \mathbf{Y} \;,
 \end{equation}
 
 \noindent where $\mathbf{A}^+$ is the Moore-Penrose pseudo-inverse
@@ -484,41 +447,7 @@ which can be written as follows:
 \end{equation}
 
 
-%\textbf{Demo}\quad
-%
-%To solve equation~(\ref{eq:pseudoinverse}) is equivalent to solve the following
-%optimisation problem:
-%
-%
-%\begin{equation}
-%\label{eq:RRproblem2}
-%\underset{\mathbf{X}(\lambda)}{\text{min}} \quad \|
-%\mathbf{C}\mathbf{\mathbf{X}} - \mathbf{F} \|_2^2
-%\end{equation}
-%
-%\noindent where
-%
-%\begin{equation*}
-%	\mathbf{C}=
-%	\begin{bmatrix} \quad &\mathbf{A}& \quad \\ \hdashline \quad
-%& \sqrt\lambda\mathbb{I}&\quad  
-%\end{bmatrix} 
-%\quad \text{and} \quad
-%	\mathbf{F}=\begin{bmatrix} \quad &\mathbf{Y}& \quad \\ \hdashline \quad
-%& \mathbf{0}&\quad  \end{bmatrix} \, .
-%\end{equation*}
-%
-%Applying equation~(\ref{eq:MP}) and considering that $\mathbf{C}^\top
-%\mathbf{C} = \mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I}$ and 
-%$\mathbf{C}^\top \mathbf{F}=\mathbf{A}^\top \mathbf{Y} $ we have:
-%
-%\begin{eqnarray*}
-%\mathbf{X}(\lambda)&=&(\mathbf{C}^\top
-%\mathbf{C})^{-1}\mathbf{C}^\top \mathbf{F} \\
-%&=& (\mathbf{A}^\top \mathbf{A} + \lambda \mathbb{I})^{-1} \mathbf{A}^\top \mathbf{Y}
-%\end{eqnarray*}
-%
-%$\blacksquare$
+
 
 
 However, when $\mathbf{A}$ is not full rank, i.e
@@ -532,14 +461,14 @@ singular value decomposition (SVD) of $\mathbf{A}$:
     \underset{m \times n}{\mathbf{A}}=
     \underset{m \times k}{\mathbf{U_1}} \enskip
     \underset{k \times k}{\mathbf{\Sigma_1}} \enskip
-    \underset{k \times n}{\mathbf{V_1}^\top}
+    \underset{k \times n}{\mathbf{V_1}^\top} \;,
 \end{equation}
 
 \noindent as follows
 
 \begin{equation}
 \label{eq:pseudoinversesvd}
-\mathbf{A}^+ = \mathbf{V_1\Sigma_1^{-1}U_1^\top}
+\mathbf{A}^+ = \mathbf{V_1\Sigma_1^{-1}U_1^\top} \;.
 \end{equation}
 
 Proof can be found in the appendix section \ref{app:pseudoproof}.
@@ -550,14 +479,14 @@ In order to avoid the singularity of the matrix $\mathbf{A}^\top \mathbf{A}$, a 
 \begin{equation}
 \label{eq:RRproblem} 
 J(\mathbf{\mathbf{X}}) =  \| \mathbf{A}\mathbf{\mathbf{X}} - \mathbf{Y} \|_2^2  + \lambda
- \| \mathbf{\mathbf{X}}\| ^2
+ \| \mathbf{\mathbf{X}}\| ^2 \;,
 \end{equation}
 
 \noindent which optimal solution $\mathbf{\mathbf{X}}_*$ is well known: 
 
 \begin{equation}
 \label{eq:optsolRR}
-\mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \, ,
+\mathbf{\mathbf{X}}_*=(\mathbf{A}^\top \mathbf{A}+\lambda \mathbb{I})^{-1}\mathbf{A}^\top y \;.
 \end{equation}
 
 Proof can be found in section \ref{app:rroptsection}.
@@ -620,7 +549,7 @@ V}^\top + \lambda \mathbf{V} \mathbf{V}^\top\\ &=&\mathbf{V}
 \end{bmatrix}
 \end{equation*}
 
-where $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_n$.
+\noindent where $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_n$.
 
 Since the condition number of a matrix $\mathbf{A}$ is defined as:
 
@@ -631,11 +560,10 @@ Since the condition number of a matrix $\mathbf{A}$ is defined as:
 If matrix $\mathbf{A}$ is non-singular, its condition number can be
 expressed in terms of its singular values. The effect of adding the
 regularization term affects the condition number as follows:
-
 \begin{eqnarray*}
 \kappa_{ols} &=& \|\mathbf{A}\| \|\mathbf{A}^{-1}\|=\frac{\sigma_1}{\sigma_n} \\
 \kappa_{ridge} &=& \|\mathbf{A}^\intercal \mathbf{A} + \lambda \mathbb{I}\| 
-\|(\mathbf{A}^\intercal \mathbf{A} + \lambda \mathbb{I})^{-1}\|=\frac{\sigma_1+\lambda}{\sigma_n + \lambda} \,
+\|(\mathbf{A}^\intercal \mathbf{A} + \lambda \mathbb{I})^{-1}\|=\frac{\sigma_1+\lambda}{\sigma_n + \lambda} \;.
 \end{eqnarray*}
 
 It is easy to see that the term $\lambda$ improves the condition number: 
@@ -668,7 +596,7 @@ does not vanish.
 
 \subsection{Selection of Lambda}
 
-One of the ways to determine parameter $\lambda$ is using the bias-variance tradeoff (see section \ref{sec:biasvar}). This parameter is crucial for ridge regression since it could
+One of the ways to determine parameter $\lambda$ is using the bias-variance tradeoff (see section~\ref{sec:biasvar}). This parameter is crucial for ridge regression since it could
 reduce the expected prediction error by reducing variance, considering a biased
 estimator. 
 It is known that the prediction error can be express as a decomposition between bias and variance.
@@ -850,11 +778,8 @@ algorithms are often characterised as memoryless, because no memory of past data
 is required.  The algorithm is online but not incremental if it doesn't produce
 the same result for all observations that the corresponding batch algorithm
 would for these same observations.
-
-
-
+\newpage
 Algorithm~\ref{alg:onlinealg} shows the online learning algorithm structure:
-
 \begin{algorithm}[ht]
 \begin{algorithmic}[1]
     \STATE Receives input $\mathbf{x}_t$
@@ -865,14 +790,11 @@ Algorithm~\ref{alg:onlinealg} shows the online learning algorithm structure:
 \caption{Structure of a Learning System}
 \label{alg:onlinealg}
 \end{algorithm}
-
 \noindent where $l$ is some loss function. Performance is later measured after
 $T$ trials as:
-
 \begin{equation*}
 L_T = \sum_{t=1}^T l_t(\mathbf{y}_t,\mathbf{\hat{y}}_t)
 \end{equation*}
-
 The objective is to minimise this loss function for all instances.
 The quality of online learning algorithms is measured by a quantity known as
 regret which is the difference between the performance of the online algorithm
@@ -964,14 +886,14 @@ and $\mathbf{W}=0$
 
 \subsection{The Aggregating Algorithm for Regression}
 
-The AAR, proposed by~\cite{vovk2001} (also known as Vovk-Azoury-Warmuth predictor ~\cite{azoury2001}), is an application of the aggregating
+The AAR, proposed by Vovk~\cite{vovk2001} (also known as Vovk-Azoury-Warmuth predictor ~\cite{azoury2001}), is an application of the aggregating
 algorithm to the problem of regression. The idea is introduce the new input
 vector $\mathbf{x}_{m+1}$ to solve the model parameters: 
 
 \begin{equation}
 \label{eq:AARexpand}
-\mathbf{X}_{aar} = \displaystyle \big (\sum_{t=1}^{m+1}
-\mathbf{a}_t \mathbf{a}_t  ^\intercal + \gamma \mathbb{I}\big )^{-1}
+\mathbf{X}_{aar} = \displaystyle \left(\sum_{t=1}^{m+1}
+\mathbf{a}_t \mathbf{a}_t  ^\intercal + \gamma \mathbb{I} \right) ^{-1}
 \sum_{t=1}^m \mathbf{a}_t \mathbf{y}_t \, .
 \end{equation}
 
